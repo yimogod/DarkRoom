@@ -1,0 +1,216 @@
+﻿using System.Collections.Generic;
+using DarkRoom.Core;
+using UnityEngine;
+
+namespace xsj.AI {
+	/// <summary>
+	/// 寻路的总入口
+	/// 内部用直线探测, AStar, Nav Mesh的具体算法获取可通行值. 最终返回一个Int3的列表
+	/// 2017/03/30/v1 实现chunk内的局部寻路
+	/// Author. liuzhibin
+	/// </summary>
+	public class CPathPlanner : IPathPlanner {
+		//存储的所有的数据
+		private MapWalkableData m_globalMapData;
+
+		//用于局部寻路的类
+		private ALine m_aline = new ALine();
+		//我们这里默认a star只能用于32*32内部的寻路.
+		//如果超了, 我们就navmesh到附近然后再寻路
+		private AStar m_astar = new AStar(AStar.Connection.Eight);
+		//用于局部寻路的数据
+		private AStarGrid m_starGrid = new AStarGrid();
+		//m_starGrid 在 整张地图中的偏移
+		//如果一样大, 偏移就是0
+		private Int3 m_localStarGridOffset;
+
+		//用于chunk寻路的类
+		private Dijkstra m_dijkstra = new Dijkstra();
+		//chunk寻路数据
+		private List<GraphNode> m_graph = new List<GraphNode>();
+
+		//存储的路径列表. 外部只读. 不能修改
+		private List<Vector3> m_wayPoints = new List<Vector3>();
+
+		/// <summary>
+		/// 传入地图可通行数据构建寻路对象
+		/// </summary>
+		public CPathPlanner(MapWalkableData map){
+			m_globalMapData = map;
+			InitData();
+		}
+
+		/// <summary>
+		/// 在MapWalkableData赋值完数据后, 需要从MapWalkableData里面读取
+		/// 寻路亲和的数据结构
+		/// </summary>
+		public void InitData()
+		{
+			m_starGrid.Init(256, 256, false);
+			m_globalMapData.WriteChunkDataToGraph(m_graph);
+		}
+
+		/// <summary>
+		/// 寻路, 大地图只有一个chunk. 直接进行内部寻路即可
+		/// 比如说战斗地图
+		/// 这里的坐标是全局坐标, 会根据实际坐标和通行地图的偏移做处理
+		/// 如果找不到结果就返回 null
+		/// </summary>
+		public List<Vector3> FindPath(Vector3 start, Vector3 end)
+		{
+			return FindPath((int)start.z, (int)start.x, (int)end.z, (int)end.x);
+		}
+
+		public void FindPathAsyn(CPathResult result)
+		{
+			Debug.LogError("CPathPlanner do not have FindPathAsyn");
+		}
+
+		/// <summary>
+		/// 寻路, 大地图只有一个chunk. 直接进行内部寻路即可
+		/// 比如说战斗地图
+		/// 这里的坐标是全局坐标, 会根据实际坐标和通行地图的偏移做处理
+		/// 如果找不到结果就返回 null
+		/// </summary>
+		private List<Vector3> FindPath(int globalStartRow, int globalStartCol,
+											int globalEndRow, int globalEndCol){
+
+			m_wayPoints.Clear();
+            bool sameChunk = m_globalMapData.InSameChunk(globalStartRow, globalStartCol,
+														globalEndRow, globalEndCol);
+
+			if (sameChunk) {
+				FindInChunk(m_wayPoints, globalStartRow, globalStartCol, globalEndRow, globalEndCol);
+				return m_wayPoints;
+			}
+
+			List<MapChunkData> chunkDatas = new List<MapChunkData>();
+			FindChunk(chunkDatas, globalStartRow, globalStartCol, globalEndRow, globalEndCol);
+
+			//寻找起点到第一个protal的点
+			//因为寻路结果不包含起点,所以我们手动求了一下起点chunk
+			int chunkId = m_globalMapData.GetNodeOwner(globalStartRow, globalStartCol);
+			MapChunkData firstChunk = m_globalMapData.GetChunk(chunkId);
+			MapChunkPortal portal = firstChunk.GetPortal(chunkDatas[0].id);
+			int row1 = globalStartRow;
+			int col1 = globalStartCol;
+			int row2 = portal.portalRow;
+			int col2 = portal.portalCol;
+			FindInChunk(m_wayPoints, row1, col1, row2, col2);
+			
+			//第一个portal和第二个portal的连接点
+			//注意这也是下次chunk寻路的起点!!!
+			row1 = portal.linkedRow;
+			col1 = portal.linkedCol;
+			m_wayPoints.Add(new Vector3(col1, 0, row1));
+
+			//如果chunk的寻路结果是两个相邻的chunk
+			//就直接内部寻路返回
+			if (chunkDatas.Count == 1) {
+				row2 = globalEndRow;
+				col2 = globalEndCol;
+				FindInChunk(m_wayPoints, row1, col1, row2, col2);
+                return m_wayPoints;
+			}
+			
+
+			//如果多个chunk--------
+			//寻找中间portal的点
+			//因为FindChunk返回的结果包含终点所在的chunk数据
+			//而这个chunk数据对我们是无用的
+			int len = chunkDatas.Count - 1;
+            for (int i = 0; i < len; i++) {
+
+				//找到连接下一个chunk的portal
+	            MapChunkData startChunk = chunkDatas[i];
+				MapChunkData endChunk = chunkDatas[i + 1];
+				portal = startChunk.GetPortal(endChunk.id);
+				row2 = portal.portalRow;
+				col2 = portal.portalCol;
+				FindInChunk(m_wayPoints, row1, col1, row2, col2);
+
+
+				//下一次寻路的起点
+	            row1 = portal.linkedRow;
+	            col1 = portal.linkedCol;
+				m_wayPoints.Add(new Vector3(col1, 0, row1));
+			}
+
+
+			//寻找最后一个portal和终点的连接点
+			row2 = globalEndRow;
+			col2 = globalEndCol;
+			FindInChunk(m_wayPoints, row1, col1, row2, col2);
+
+			return m_wayPoints;
+		}
+
+		/// <summary>
+		/// 寻找chunk路线, 注意返回的chunk列表包含终点的chunk
+		/// </summary>
+		private void FindChunk(List<MapChunkData> chunks, int globalStartRow, int globalStartCol,
+							int globalEndRow, int globalEndCol)
+		{
+			int chunk1 = m_globalMapData.GetNodeOwner(globalStartRow, globalStartCol);
+			int chunk2 = m_globalMapData.GetNodeOwner(globalEndRow, globalEndCol);
+			m_dijkstra.FindPath(m_graph, chunk1, chunk2);
+
+			Stack<GraphNode> path = m_dijkstra.path;
+            while (path.Count > 0) {
+				MapChunkData chunk = m_globalMapData.GetChunk(path.Pop().id);
+				chunks.Add(chunk);
+			}
+		}
+
+		// chunk内部寻找节点
+		private void FindInChunk(List<Vector3> path, int globalStartRow, int globalStartCol,
+											int globalEndRow, int globalEndCol)
+		{
+			//先在超大地图中做直线查探
+			bool result = m_aline.FindPath(m_globalMapData, globalStartRow, globalStartCol, globalEndRow, globalEndCol);
+			if (result) {
+				//这里path为空, 但其实直线寻路成功.
+				//为了和AStar寻路结果保持一直,手动添加end node
+				path.Add(new Vector3(globalEndCol, 0, globalEndRow));
+				return;
+			}
+
+
+			//这里判断尺寸要稍小一些. 是放置在数据边缘因为小数取证造成的边界不确定
+			//最后造成寻路失败.
+			int dr = System.Math.Abs(globalEndRow - globalStartRow);
+			if (dr > (m_starGrid.NumRows - 2)) {
+				Debug.LogError("PathPlanner.Find Error -- Local Pos Delta Is Bigger Then A Star Grid");
+				return;
+			}
+
+			int dc = System.Math.Abs(globalEndCol - globalStartCol);
+			if (dc > (m_starGrid.NumCols - 2)) {
+				Debug.LogError("PathPlanner.Find Error -- Local Pos Delta Is Bigger Then A Star Grid");
+				return;
+			}
+
+			m_starGrid.CopyLocalMapData(m_globalMapData, globalStartRow, globalStartCol, globalEndRow, globalEndCol);
+
+			int localStartRow = globalStartRow - m_starGrid.OffsetRow;
+			int localStartCol = globalStartCol - m_starGrid.OffsetCol;
+			int localEndRow = globalEndRow - m_starGrid.OffsetRow;
+			int localEndCol = globalEndCol - m_starGrid.OffsetCol;
+			m_starGrid.SetStartNode(localStartRow, localStartCol);
+			m_starGrid.SetEndNode(localEndRow, localEndCol);
+
+			result = m_astar.FindPath(m_starGrid);
+			if (result) {
+				int oc = m_starGrid.OffsetCol;
+				int or = m_starGrid.OffsetRow;
+
+				Stack<AStarNode> astarPath = m_astar.path;
+				while (astarPath.Count > 0) {
+					AStarNode node = astarPath.Pop();
+					path.Add(new Vector3(oc + node.Col, 0, or + node.Row));
+				}
+			}
+
+		}
+	}
+}

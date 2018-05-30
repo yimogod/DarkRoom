@@ -1,0 +1,320 @@
+﻿// ========================================
+// Copyright (c) 2017 KingSoft, All rights reserved.
+// http://www.kingsoft.com
+// 
+// Sanguo
+// 
+// Filename: MapWalkableData.cs
+// Date:     2017/03/30
+// Author:   liuzhibin
+// ========================================
+
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace xsj.AI {
+	/// <summary>
+	/// 地图的通行数据类.
+	/// 提供了分块数据以处理超大地图的数据.
+	/// 所有数据以一维数组保存.
+	/// 2017/03/30/v1 构建基本对象
+	/// </summary>
+	public class MapWalkableData : IWalkable
+	{
+		//地图尺寸
+		public int numRows;
+		public int numCols;
+
+		//col, row, value
+		//基于gird的可通行数据
+		private int[,] m_walkableGrid;
+
+		//对于不规则的chunk, 我们为了保证统一性
+		//保存了一份这个node从属于那个chunk的数据
+		//对于规则chunk, 我们会实时计算出来这个数据
+		//然后放到这个数组中
+		private int[,] m_nodeOwnerChunkData;
+
+		//本地图的chunk数据.key 是 MapChunkData id
+		private Dictionary<int, MapChunkData> m_chunkData = new Dictionary<int, MapChunkData>();
+
+		/// <summary>
+		/// 传入地图的大小来初始化地图数据
+		/// </summary>
+		public MapWalkableData(int cols, int rows)
+		{
+			numRows = rows;
+			numCols = cols;
+			m_walkableGrid = new int[cols, rows];
+			m_nodeOwnerChunkData = new int[cols, rows];
+		}
+
+		/// <summary>
+		/// 设置地图所有的格子的walkable 为 value
+		/// </summary>
+		public void MakeAllWalkable(bool value) {
+			for (int row = 0; row < numRows; row++) {
+				for (int col = 0; col < numCols; col++) {
+					SetWalkable(col, row, value);
+				}
+			}
+		}
+
+		/// <summary>
+		/// 通过chunk的id获取chunk对象
+		/// </summary>
+		/// <param name="id">chunk id</param>
+		/// <returns>MapChunkData Object</returns>
+		public MapChunkData GetChunk(int id)
+		{
+			MapChunkData data = null;
+			m_chunkData.TryGetValue(id, out data);
+			return data;
+		}
+
+		/// <summary>
+		/// 保存超大地图的chunk数据
+		/// </summary>
+		/// <param name="chunk"></param>
+		public void AddChunk(MapChunkData chunk)
+		{
+            m_chunkData[chunk.id] = chunk;
+		}
+
+		/// <summary>
+		/// 将chunk数据写入graph图里面
+		/// </summary>
+		public void WriteChunkDataToGraph(List<GraphNode> graph)
+		{
+			Dictionary<int, GraphNode> dict = new Dictionary<int, GraphNode>();
+
+			foreach (KeyValuePair<int, MapChunkData> item in m_chunkData){
+				MapChunkData chunk = item.Value;
+				GraphNode node = new GraphNode(chunk.id);
+				dict[node.id] = node;
+				graph.Add(node);
+            }
+
+			foreach (KeyValuePair<int, MapChunkData> item in m_chunkData){
+				MapChunkData chunk = item.Value;
+				GraphNode node = dict[chunk.id];
+				foreach (var item2 in chunk.linkedChunks) {
+					GraphNode nodeLinked = dict[item2.Value.linkedChunk];
+					node.AddNeighbour(nodeLinked);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Row和Col代表的格子是否是有效格子
+		/// </summary>
+		/// <returns>当坐标小于 0 或者大于地图尺寸的时候, 格子就是不合法的. 返回false</returns>
+		public bool ValidNode(int col, int row)
+		{
+			if (row < 0 || col < 0) return false;
+			if (row >= numRows) return false;
+			if (col >= numCols) return false;
+
+			return true;
+		}
+
+		//设置格子的可通行性
+		public void SetWalkable(int col, int row, bool walkable)
+		{
+			bool b = ValidNode(col, row);
+			if (!b) return;
+			m_walkableGrid[col, row] = walkable ? 1 : 0;
+		}
+
+		//获取格子的可通行性
+		public bool IsWalkable(int col, int row)
+		{
+			bool b = ValidNode(col, row);
+			if (!b) return false;
+
+			//if (m_walkableGrid[index] == 0) {
+			//	Debug.Log("not walkable");
+			//}
+
+			return m_walkableGrid[col, row] == 1;
+		}
+
+		//设置node所属于的chunk
+		public void SetNodeOwner(int col, int row, int chunk)
+		{
+			m_nodeOwnerChunkData[col, row] = chunk;
+		}
+
+		//获取grid所属于的chunk
+		public int GetNodeOwner(int col, int row)
+		{
+			return m_nodeOwnerChunkData[col, row];
+		}
+
+		/// <summary>
+		/// 两个节点是否属于同一个chunk
+		/// </summary>
+		/// <param name="row">row 1</param>
+		/// <param name="col">col 1</param>
+		/// <param name="row2">row 2</param>
+		/// <param name="col2">col 2</param>
+		/// <returns></returns>
+		public bool InSameChunk(int col1, int row1, int col2, int row2)
+		{
+			int c1 = GetNodeOwner(col1, row1);
+			int c2 = GetNodeOwner(col2, row2);
+			return c1 == c2;
+		}
+	}
+
+	/// <summary>
+	/// 对于超大地图, 需要分块逐级处理.
+	/// 对于每一个分块, 我们称之为chunk
+	/// 对于小地图, 我们也可以视为一个chunk. 统一概念
+	/// 这些chunk有规则图形--
+	/// 目前规则图形我们仅处理, 九宫格形式. 它的邻接关系也很简单.就是4/8八方向
+	/// id规则行优先, 从左下开始, 见下图
+	/// 6 7 8
+	/// 3 4 5
+	/// 0 1 2
+	/// 而不规则图形chunk的数据存储只能基于tile, 每个tile存储自己所在的chunk id.
+	/// 而邻接关系只能通过配置读取, 个数也不固定
+	/// 2017/03/30/v1 构建基本对象
+	/// </summary>
+	public class MapChunkData
+	{
+		/// <summary>
+		/// 地图chunk数据的格式是否规则
+		/// 所谓规则指的是chunk是否是矩形形状
+		/// </summary>
+		public enum DataFormat
+		{
+			Regular, //规则的chunk
+			Irregular, //不规则的
+		}
+
+		//chunk id
+		public int id;
+
+		//chunk是规则还是不规则
+		private DataFormat m_format;
+
+		//作为规则矩形的尺寸和在整个map中的位置
+		private int m_size;
+		private int m_row;
+		private int m_col;
+
+		//存储的本chunk连接的各个chunk以及连接点
+		private Dictionary<int, MapChunkPortal> m_linkedChunks = new Dictionary<int, MapChunkPortal>();
+
+
+		public MapChunkData(int id, DataFormat format)
+		{
+			this.id = id;
+			this.m_format = format;
+		}
+
+		/// <summary>
+		/// 本chunk是否是规则形状的chunk
+		/// </summary>
+		public bool isRegular {
+			get { return m_format == DataFormat.Regular; }
+		}
+
+		/// <summary>
+		/// 和本chunk连接的chunk字典
+		/// </summary>
+		public Dictionary<int, MapChunkPortal> linkedChunks {
+			get { return m_linkedChunks; }
+		}
+
+		/// <summary>
+		/// 如果作为规则chunk, 则有行列和尺寸的概念
+		/// 我们需要传入这些值来自动计算node所属chunk的属性
+		/// </summary>
+		/// <param name="size">Size.</param>
+		/// <param name="row">Row.</param>
+		/// <param name="col">Col.</param>
+		public void SetRegularInfo(int size, int col, int row)
+		{
+			m_size = size;
+			m_row = row;
+			m_col = col;
+			m_format = DataFormat.Regular;
+		}
+
+		//获取于本chunk相连的节点信息
+		public MapChunkPortal GetPortal(int linkedChunk) { return m_linkedChunks[linkedChunk]; }
+
+		/// <summary>
+		/// 添加chunk和各个相邻chunk连接的的信息
+		/// col/row是世界还是局部坐标取决于chunk的类型
+		/// 如果chunk是规则的正方形, 则row, col就是局部坐标
+		/// </summary>
+		/// <param name="row">Row.</param>
+		/// <param name="col">Col.</param>
+		/// <param name="linkedChunk">Linked chunk.</param>
+		/// <param name="linkedRow">Linked row.</param>
+		/// <param name="linkedCol">Linked col.</param>
+		public void AddPortal(int col, int row, MapChunkData linkedChunk, int linkedCol, int linkedRow)
+		{
+			AddPortalSingleWay(col, row, linkedChunk.id, linkedCol, linkedRow);
+			linkedChunk.AddPortalSingleWay(linkedCol, linkedRow, id, col, row);
+		}
+
+		/// <summary>
+		/// 这个是单项添加连接信息.
+		/// 因为连接信息是双向的. 
+		/// 如果需要双向添加 用AddPortal方法
+		/// </summary>
+		/// <param name="row">Row.</param>
+		/// <param name="col">Col.</param>
+		/// <param name="linkedChunk">Linked chunk.</param>
+		/// <param name="linkedRow">Linked row.</param>
+		/// <param name="linkedCol">Linked col.</param>
+		public void AddPortalSingleWay(int col, int row, int linkedChunk, int linkedCol, int linkedRow)
+		{
+			MapChunkPortal portal = new MapChunkPortal();
+			portal.ownerChunk = this;
+			portal.portalRow = row;
+			portal.portalCol = col;
+
+			portal.linkedChunk = linkedChunk;
+			portal.linkedRow = linkedRow;
+			portal.linkedCol = linkedCol;
+
+			m_linkedChunks[linkedChunk] = portal;
+		}
+	}
+
+	/// <summary>
+	/// chunk和chunk相连接的点的数据结构
+	/// </summary>
+	public struct MapChunkPortal
+	{
+		/// <summary>
+		/// 本传送点所属chunk
+		/// </summary>
+		public MapChunkData ownerChunk;
+
+		/// <summary>
+		/// 本传送点的坐标. 为全局坐标
+		/// </summary>
+		public int portalRow;
+
+		public int portalCol;
+
+		/// <summary>
+		/// 本传送点连接的chunk信息
+		/// </summary>
+		public int linkedChunk;
+
+		/// <summary>
+		/// 本传送点传送到linkedChunk的那个坐标. 为全局坐标
+		/// </summary>
+		public int linkedRow;
+
+		public int linkedCol;
+	}
+}

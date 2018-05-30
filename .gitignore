@@ -1,0 +1,16 @@
+Debug/
+Temp/
+Library/
+Bundles/
+obj/
+*.userprefs
+*.csproj
+*.sln
+
+*.u3d
+*.manifest
+trunk/tank/Assets/StreamingAssets/Bundles
+trunk/tank/Assets/StreamingAssets/Bundles.meta
+trunk/tank/Assembly-UnityScript.unityproj
+*.suo
+trunk/tank/Assets/Bundles.meta
