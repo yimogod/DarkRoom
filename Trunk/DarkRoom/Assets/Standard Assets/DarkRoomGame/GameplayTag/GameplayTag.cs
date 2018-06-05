@@ -18,7 +18,7 @@
         /** Intentionally private so only the tag manager can use */
         protected FGameplayTag(string InTagName)
         {
-
+            TagName = InTagName;
         }
 
 
