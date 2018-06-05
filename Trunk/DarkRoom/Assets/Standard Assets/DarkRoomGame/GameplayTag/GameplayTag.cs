@@ -1,48 +1,52 @@
-﻿namespace DarkRoom.GamePlayAbility
+﻿namespace DarkRoom.Game
 {
     public enum EGameplayTagMatchType
     {
-        Explicit,           // This will check for a match against just this tag
-        IncludeParentTags,  // This will also check for matches against all parent tags
+        Explicit, // 仅仅判断指定的tag
+        IncludeParentTags, // 连父亲的tag也需要判断
     }
 
-    /** A single gameplay tag, which represents a hierarchical name of the form x.y that is registered in the GameplayTagsManager */
+    /**
+     * 游戏标签, 在 GameplayTagsManager 注册过. 形式是x.y.z
+     */
     public class FGameplayTag
     {
-        /** An empty Gameplay Tag */
-        public static FGameplayTag EmptyTag;
-
         /** This Tags Name */
         protected string TagName;
 
-        /** Intentionally private so only the tag manager can use */
-        protected FGameplayTag(string InTagName)
-        {
-            TagName = InTagName;
-        }
-
-
         /**
-	     * Gets the FGameplayTag that corresponds to the TagName
-	     *
-	     * @param TagName The Name of the tag to search for
-	     * 
-	     * @param ErrorIfNotfound: ensure() that tag exists.
-	     * 
-	     * @return Will return the corresponding FGameplayTag or an empty one if not found.
-	     */
+         * Gets the FGameplayTag that corresponds to the TagName
+         *
+         * @param TagName The Name of the tag to search for
+         * 
+         * @param ErrorIfNotfound: ensure() that tag exists.
+         * 
+         * @return Will return the corresponding FGameplayTag or an empty one if not found.
+         */
         public static FGameplayTag RequestGameplayTag(string TagName, bool ErrorIfNotFound = true)
         {
             return null;
         }
 
-	    /**
-	     * Determine if this tag matches TagToCheck, expanding our parent tags
-	     * "A.1".MatchesTag("A") will return True, "A".MatchesTag("A.1") will return False
-	     * If TagToCheck is not Valid it will always return False
-	     * 
-	     * @return True if this tag matches TagToCheck
-	     */
+        /** 注意, 本类只能在GameplayTagsManager里面实例化 */
+        public FGameplayTag(string InTagName)
+        {
+            TagName = InTagName;
+        }
+
+        public void EmptyTag()
+        {
+            TagName = string.Empty;
+        }
+
+
+        /**
+         * Determine if this tag matches TagToCheck, expanding our parent tags
+         * "A.1".MatchesTag("A") will return True, "A".MatchesTag("A.1") will return False
+         * If TagToCheck is not Valid it will always return False
+         * 
+         * @return True if this tag matches TagToCheck
+         */
         public bool MatchesTag(FGameplayTag TagToCheck)
         {
             return false;
@@ -56,26 +60,27 @@
          * @return True if TagToCheck is Valid and is exactly this tag
          */
         public bool MatchesTagExact(FGameplayTag TagToCheck)
-	    {
-		    if (!TagToCheck.IsValid())
-		    {
-			    return false;
-		    }
-		    // Only check check explicit tag list
-		    return TagName == TagToCheck.TagName;
-	    }
+        {
+            if (!TagToCheck.IsValid())
+            {
+                return false;
+            }
 
-	    /**
-	     * Check to see how closely two FGameplayTags match. Higher values indicate more matching terms in the tags.
-	     *
-	     * @param TagToCheck	Tag to match against
-	     *
-	     * @return The depth of the match, higher means they are closer to an exact match
-	     */
-	    public int MatchesTagDepth(FGameplayTag TagToCheck)
-	    {
-	        return 0;
-	    }
+            // Only check check explicit tag list
+            return TagName == TagToCheck.TagName;
+        }
+
+        /**
+         * Check to see how closely two FGameplayTags match. Higher values indicate more matching terms in the tags.
+         *
+         * @param TagToCheck	Tag to match against
+         *
+         * @return The depth of the match, higher means they are closer to an exact match
+         */
+        public int MatchesTagDepth(FGameplayTag TagToCheck)
+        {
+            return 0;
+        }
 
         /**
          * Checks if this tag matches ANY of the tags in the specified container, also checks against our parent tags
@@ -103,9 +108,9 @@
 
         /** Returns whether the tag is valid or not; Invalid tags are set to NAME_None and do not exist in the game-specific global dictionary */
         public bool IsValid()
-	    {
-		    return string.IsNullOrEmpty(TagName);
-	    }
+        {
+            return string.IsNullOrEmpty(TagName);
+        }
 
         /** Returns reference to a GameplayTagContainer containing only this tag */
         public FGameplayTagContainer GetSingleTagContainer()
@@ -133,20 +138,19 @@
 
         /** Displays gameplay tag as a string for blueprint graph usage */
         public string ToString()
-	    {
-		    return TagName.ToString();
-	    }
+        {
+            return TagName.ToString();
+        }
 
         /** Get the tag represented as a name */
         public string GetTagName()
-	    {
-		    return TagName;
-	    }
+        {
+            return TagName;
+        }
 
         /** Sets from a ImportText string, used in asset registry */
         void FromExportString(string ExportString)
         {
-
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DarkRoom.Game;
 
 namespace DarkRoom.GamePlayAbility
 {
@@ -17,13 +18,14 @@ namespace DarkRoom.GamePlayAbility
         Channel9,
 
         // Always keep last
-        Channel_MAX 
+        Channel_MAX
     }
 
     public enum EGameplayEffectAttributeCaptureSource
     {
         /** Source (caster) of the gameplay effect. */
         Source,
+
         /** Target (recipient) of the gameplay effect. */
         Target
     }
@@ -31,17 +33,19 @@ namespace DarkRoom.GamePlayAbility
     public enum EGameplayModOp
     {
         /** Numeric. */
-        Additive = 0,//        UMETA(DisplayName = "Add"),
+        Additive = 0, //        UMETA(DisplayName = "Add"),
+
         /** Numeric. */
-        Multiplicitive ,//     UMETA(DisplayName = "Multiply"),
+        Multiplicitive, //     UMETA(DisplayName = "Multiply"),
+
         /** Numeric. */
-        Division ,//           UMETA(DisplayName = "Divide"),
+        Division, //           UMETA(DisplayName = "Divide"),
 
         /** Other. */
-        Override,//            UMETA(DisplayName = "Override"),    // This should always be the first non numeric ModOp
+        Override, //            UMETA(DisplayName = "Override"),    // This should always be the first non numeric ModOp
 
         // This must always be at the end.
-        Max  //               UMETA(DisplayName = "Invalid")
+        Max //               UMETA(DisplayName = "Invalid")
     }
 
     public class FGameplayEffectConstants
@@ -56,17 +60,18 @@ namespace DarkRoom.GamePlayAbility
         public const float NO_PERIOD = -1f;
 
         /* No Level/Level not set */
-        public  const float INVALID_LEVEL = -1f;
+        public const float INVALID_LEVEL = -1f;
     }
 
     public struct FGameplayEffectModCallbackData
     {
-        public FGameplayEffectSpec EffectSpec;		// The spec that the mod came from
-        public  FGameplayModifierEvaluatedData EvaluatedData;	// The 'flat'/computed data to be applied to the target
+        public FGameplayEffectSpec EffectSpec; // The spec that the mod came from
+        public FGameplayModifierEvaluatedData EvaluatedData; // The 'flat'/computed data to be applied to the target
 
-        public  UAbilitySystemComponent Target;		// Target we intend to apply to
+        public UAbilitySystemComponent Target; // Target we intend to apply to
 
-        public FGameplayEffectModCallbackData(FGameplayEffectSpec InEffectSpec, FGameplayModifierEvaluatedData InEvaluatedData, UAbilitySystemComponent InTarget)
+        public FGameplayEffectModCallbackData(FGameplayEffectSpec InEffectSpec,
+            FGameplayModifierEvaluatedData InEvaluatedData, UAbilitySystemComponent InTarget)
         {
             EffectSpec = InEffectSpec;
             EvaluatedData = InEvaluatedData;
@@ -76,10 +81,9 @@ namespace DarkRoom.GamePlayAbility
 
     public class FGameplayEffectAttributeCaptureDefinition
     {
-
-        public FGameplayEffectAttributeCaptureDefinition(FGameplayAttribute InAttribute, EGameplayEffectAttributeCaptureSource InSource, bool InSnapshot)
+        public FGameplayEffectAttributeCaptureDefinition(FGameplayAttribute InAttribute,
+            EGameplayEffectAttributeCaptureSource InSource, bool InSnapshot)
         {
-
         }
 
         /* Gameplay attribute to capture */
@@ -134,13 +138,13 @@ namespace DarkRoom.GamePlayAbility
         {
             return null;
         }
-
     }
 
 
     public class FGameplayModifierEvaluatedData
     {
-        public FGameplayModifierEvaluatedData(FGameplayAttribute InAttribute, EGameplayModOp InModOp, float InMagnitude, FActiveGameplayEffectHandle InHandle)
+        public FGameplayModifierEvaluatedData(FGameplayAttribute InAttribute, EGameplayModOp InModOp, float InMagnitude,
+            FActiveGameplayEffectHandle InHandle)
         {
         }
 
@@ -175,14 +179,17 @@ namespace DarkRoom.GamePlayAbility
 
         public static void ResetGlobalHandleMap()
         {
-
         }
 
-        public FActiveGameplayEffectHandle() { }
+        public FActiveGameplayEffectHandle()
+        {
+        }
 
-        public FActiveGameplayEffectHandle(int InHandle) { }
+        public FActiveGameplayEffectHandle(int InHandle)
+        {
+        }
 
-        public bool IsValid() 
+        public bool IsValid()
         {
             return Handle != -1;
         }
@@ -199,7 +206,6 @@ namespace DarkRoom.GamePlayAbility
 
         public void RemoveFromGlobalMap()
         {
-
         }
 
         public int GetTypeHash(FActiveGameplayEffectHandle InHandle)
@@ -242,5 +248,4 @@ namespace DarkRoom.GamePlayAbility
             return "";
         }
     }
-
 }

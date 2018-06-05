@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DarkRoom.Core;
 using UnityEngine;
 
-namespace DarkRoom.GamePlayAbility
+namespace DarkRoom.Game
 {
     public enum EGameplayTagQueryExprType
     {
@@ -357,8 +357,8 @@ namespace DarkRoom.GamePlayAbility
 
         private bool EvalExpr(FGameplayTagContainer Tags, bool bSkip = false)
         {
-            EGameplayTagQueryExprType  ExprType = (EGameplayTagQueryExprType)GetToken();
-            if (bReadError)return false;
+            EGameplayTagQueryExprType ExprType = (EGameplayTagQueryExprType) GetToken();
+            if (bReadError) return false;
 
             switch (ExprType)
             {
@@ -382,19 +382,19 @@ namespace DarkRoom.GamePlayAbility
 
         private void ReadExpr(FGameplayTagQueryExpression E)
         {
-            E.ExprType = (EGameplayTagQueryExprType)GetToken();
-            if (bReadError)return;
+            E.ExprType = (EGameplayTagQueryExprType) GetToken();
+            if (bReadError) return;
 
             if (E.UsesTagSet())
             {
                 // parse tag set
                 byte NumTags = GetToken();
-                if (bReadError)return;
+                if (bReadError) return;
 
                 for (byte Idx = 0; Idx < NumTags; ++Idx)
                 {
                     byte TagIdx = GetToken();
-                    if (bReadError)return;
+                    if (bReadError) return;
 
                     FGameplayTag Tag = Query.GetTagFromIndex(TagIdx);
                     E.AddTag(Tag);
@@ -420,102 +420,86 @@ namespace DarkRoom.GamePlayAbility
 
         private bool EvalAnyTagsMatch(FGameplayTagContainer Tags, bool bSkip)
         {
-            bool bShortCircuit = bSkip;
-            bool Result = false;
-
             // parse tagset
             byte NumTags = GetToken();
-            if (bReadError)return false;
+            if (bReadError) return false;
 
             // 交叉比较传入的tag和我自带query的tag
-            for (byte Idx = 0; Idx < NumTags; ++Idx)
+            if (bSkip)
             {
-                byte TagIdx = GetToken();
-                if (bReadError)return false;
-
-                if (bShortCircuit == false)
+                GetTokenNext(NumTags);
+                if (bReadError) return false;
+            }
+            else
+            {
+                for (byte Idx = 0; Idx < NumTags; ++Idx)
                 {
-                    FGameplayTag Tag = Query.GetTagFromIndex(TagIdx);
+                    byte TagIdx = GetToken();
+                    if (bReadError) return false;
 
+                    FGameplayTag Tag = Query.GetTagFromIndex(TagIdx);
                     bool bHasTag = Tags.HasTag(Tag);
-                    if (bHasTag)
-                    {
-                        // one match is sufficient for a true result!
-                        bShortCircuit = true;
-                        Result = true;
-                    }
+                    if (bHasTag) return true;
                 }
             }
 
-            return Result;
+            return false;
         }
 
         private bool EvalAllTagsMatch(FGameplayTagContainer Tags, bool bSkip)
         {
-            bool bShortCircuit = bSkip;
-
-            // assume true until proven otherwise
-            bool Result = true;
-
             // parse tagset
             byte NumTags = GetToken();
-            if (bReadError)return false;
+            if (bReadError) return false;
 
-            //交叉比较, 有一个没有, 结果就是false
-            for (byte Idx = 0; Idx < NumTags; ++Idx)
+            if (bSkip)
             {
-                byte TagIdx = GetToken();
-                if (bReadError)return false;
-
-                if (bShortCircuit == false)
+                GetTokenNext(NumTags);
+                if (bReadError) return false;
+            }
+            else
+            {
+                //交叉比较, 有一个没有, 结果就是false
+                for (byte Idx = 0; Idx < NumTags; ++Idx)
                 {
+                    byte TagIdx = GetToken();
+                    if (bReadError) return false;
+
                     FGameplayTag Tag = Query.GetTagFromIndex(TagIdx);
                     bool bHasTag = Tags.HasTag(Tag);
-
-                    if (bHasTag == false)
-                    {
-                        // one failed match is sufficient for a false result
-                        bShortCircuit = true;
-                        Result = false;
-                    }
+                    if (bHasTag == false) return false;
                 }
             }
 
-            return Result;
+            return true;
         }
 
         private bool EvalNoTagsMatch(FGameplayTagContainer Tags, bool bSkip)
         {
-            bool bShortCircuit = bSkip;
-
-            // assume true until proven otherwise
-            bool Result = true;
-
             // parse tagset
             byte NumTags = GetToken();
-            if (bReadError)return false;
+            if (bReadError) return false;
 
-            //交叉比较, 如果有一个就结果失败
-            for (byte Idx = 0; Idx < NumTags; ++Idx)
+            if (bSkip)
             {
-                byte TagIdx = GetToken();
-                if (bReadError)return false;
-
-                if (bShortCircuit == false)
+                GetTokenNext(NumTags);
+                if (bReadError) return false;
+            }
+            else
+            {
+                //交叉比较, 如果有一个就结果失败
+                for (byte Idx = 0; Idx < NumTags; ++Idx)
                 {
+                    byte TagIdx = GetToken();
+                    if (bReadError) return false;
+
                     FGameplayTag Tag = Query.GetTagFromIndex(TagIdx);
                     bool bHasTag = Tags.HasTag(Tag);
-
-                    if (bHasTag == true)
-                    {
-                        // one match is sufficient for a false result
-                        bShortCircuit = true;
-                        Result = false;
-                    }
+                    if (bHasTag) return false;
                 }
             }
 
-            return Result;
+            return true;
         }
 
         private bool EvalAnyExprMatch(FGameplayTagContainer Tags, bool bSkip)
@@ -527,7 +511,7 @@ namespace DarkRoom.GamePlayAbility
 
             // parse exprset
             byte NumExprs = GetToken();
-            if (bReadError)return false;
+            if (bReadError) return false;
 
             for (byte Idx = 0; Idx < NumExprs; ++Idx)
             {
@@ -555,7 +539,7 @@ namespace DarkRoom.GamePlayAbility
 
             // parse exprset
             byte NumExprs = GetToken();
-            if (bReadError)return false;
+            if (bReadError) return false;
 
             for (byte Idx = 0; Idx < NumExprs; ++Idx)
             {
@@ -583,7 +567,7 @@ namespace DarkRoom.GamePlayAbility
 
             // parse exprset
             byte NumExprs = GetToken();
-            if (bReadError)return false;
+            if (bReadError) return false;
 
             for (byte Idx = 0; Idx < NumExprs; ++Idx)
             {
@@ -610,6 +594,20 @@ namespace DarkRoom.GamePlayAbility
                 return Query.QueryTokenStream[CurStreamIdx++];
             }
 
+            Debug.LogError("Error parsing FGameplayTagQuery!");
+            bReadError = true;
+            return 0;
+        }
+
+        public byte GetTokenNext(int offset)
+        {
+            CurStreamIdx += offset;
+            if (Query.QueryTokenStream.IsValidIndex(CurStreamIdx))
+            {
+                return Query.QueryTokenStream[CurStreamIdx];
+            }
+
+            CurStreamIdx -= offset;
             Debug.LogError("Error parsing FGameplayTagQuery!");
             bReadError = true;
             return 0;

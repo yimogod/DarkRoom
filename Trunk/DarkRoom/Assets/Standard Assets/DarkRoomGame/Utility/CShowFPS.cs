@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-namespace DarkRoom.Core
+namespace DarkRoom.Game
 {
 	public class CShowFPS : MonoBehaviour {
 		public static GUIStyle guiStyle = null;

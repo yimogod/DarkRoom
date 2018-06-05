@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
+using DarkRoom.Game;
 
 namespace DarkRoom.GamePlayAbility
 {
