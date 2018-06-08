@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DarkRoom.Core;
 
 namespace DarkRoom.Game
 {
@@ -9,83 +10,72 @@ namespace DarkRoom.Game
         All     //	Means the filter is only populated if all of the tags in this container match.
     }
 
+    /// <summary>
+    /// FGameplayTagContainer保存了GameplayTag列表
+    /// 明确的保存了通过add方法添加的gameplaytag
+    /// 且隐含的, 保存了gameplaytag的child tag
+    /// </summary>
     public class FGameplayTagContainer
     {
-        /** An empty Gameplay Tag Container */
-        static FGameplayTagContainer EmptyContainer;
-
         /** Array of gameplay tags */
         public List<FGameplayTag> GameplayTags = new List<FGameplayTag>();
 
         /** Array of expanded parent tags, in addition to GameplayTags. Used to accelerate parent searches. May contain duplicates in some cases */
         public List<FGameplayTag> ParentTags = new List<FGameplayTag>();
 
-        public FGameplayTagContainer()
+        public FGameplayTagContainer(){}
+
+        public FGameplayTagContainer(List<FGameplayTag> InGameplayTags)
         {
+            GameplayTags.AddRange(InGameplayTags);
         }
 
-        /** Creates a container from an array of tags, this is more efficient than adding them all individually */
+        /// <summary>
+        /// 根据传入的tag列表, 创建container
+        /// </summary>
         public static FGameplayTagContainer CreateFromArray(List<FGameplayTag> SourceTags)
         {
-            FGameplayTagContainer Container = new FGameplayTagContainer();
-            Container.GameplayTags.AddRange(SourceTags);
-            Container.FillParentTags();
-            return Container;
+            FGameplayTagContainer container = new FGameplayTagContainer();
+            container.GameplayTags.AddRange(SourceTags);
+            container.FillParentTags();
+            return container;
         }
 
-        /**
-         * Determine if TagToCheck is present in this container, also checking against parent tags
-         * {"A.1"}.HasTag("A") will return True, {"A"}.HasTag("A.1") will return False
-         * If TagToCheck is not Valid it will always return False
-         * 
-         * @return True if TagToCheck is in this container, false if it is not
-         */
+        /// <summary>
+        /// TagToCheck是否在本container中. 也会检查ParentTags
+        /// {"A.1"}.HasTag("A") will return True, {"A"}.HasTag("A.1") will return False
+        /// </summary>
         public bool HasTag(FGameplayTag TagToCheck)
         {
-            if (!TagToCheck.IsValid())
-            {
-                return false;
-            }
-
-            // Check explicit and parent tag list 
+            if (!TagToCheck.IsValid())return false;
+            
+            // 自己或者父亲有就可以
             return GameplayTags.Contains(TagToCheck) || ParentTags.Contains(TagToCheck);
         }
 
         /**
-         * Determine if TagToCheck is explicitly present in this container, only allowing exact matches
-         * {"A.1"}.HasTagExact("A") will return False
-         * If TagToCheck is not Valid it will always return False
-         * 
-         * @return True if TagToCheck is in this container, false if it is not
+         * 精确包含. 只判断GameplayTags列表
+         *{"A.1"}.HasTagExact("A") will return False
          */
         public bool HasTagExact(FGameplayTag TagToCheck)
         {
-            if (!TagToCheck.IsValid())
-            {
-                return false;
-            }
+            if (!TagToCheck.IsValid())return false;
 
             // Only check check explicit tag list
             return GameplayTags.Contains(TagToCheck);
         }
 
         /**
-         * Checks if this container contains ANY of the tags in the specified container, also checks against parent tags
+         * 本container是否包含ContainerToCheck的任意一个tag, 连ParentTags都会比较
          * {"A.1"}.HasAny({"A","B"}) will return True, {"A"}.HasAny({"A.1","B"}) will return False
-         * If ContainerToCheck is empty/invalid it will always return False
-         *
-         * @return True if this container has ANY of the tags of in ContainerToCheck
          */
         public bool HasAny(FGameplayTagContainer ContainerToCheck)
         {
-            if (ContainerToCheck.IsEmpty())
-            {
-                return false;
-            }
+            if (ContainerToCheck.IsEmpty())return false;
 
-            foreach (FGameplayTag OtherTag in ContainerToCheck.GameplayTags)
+            foreach (FGameplayTag otherTag in ContainerToCheck.GameplayTags)
             {
-                if (GameplayTags.Contains(OtherTag) || ParentTags.Contains(OtherTag))
+                if (GameplayTags.Contains(otherTag) || ParentTags.Contains(otherTag))
                 {
                     return true;
                 }
@@ -95,47 +85,33 @@ namespace DarkRoom.Game
         }
 
         /**
-         * Checks if this container contains ANY of the tags in the specified container, only allowing exact matches
+         * 本container是否  精确  包含ContainerToCheck的任意一个tag, 不会比较ParentTags
          * {"A.1"}.HasAny({"A","B"}) will return False
-         * If ContainerToCheck is empty/invalid it will always return False
-         *
-         * @return True if this container has ANY of the tags of in ContainerToCheck
          */
         public bool HasAnyExact(FGameplayTagContainer ContainerToCheck)
         {
-            if (ContainerToCheck.IsEmpty())
-            {
-                return false;
-            }
+            if (ContainerToCheck.IsEmpty())return false;
 
-            foreach (FGameplayTag OtherTag in ContainerToCheck.GameplayTags)
+            foreach (FGameplayTag otherTag in ContainerToCheck.GameplayTags)
             {
-                if (GameplayTags.Contains(OtherTag))
-                {
-                    return true;
-                }
+                if (GameplayTags.Contains(otherTag))return true;
             }
 
             return false;
         }
 
         /**
-         * Checks if this container contains ALL of the tags in the specified container, also checks against parent tags
-         * {"A.1","B.1"}.HasAll({"A","B"}) will return True, {"A","B"}.HasAll({"A.1","B.1"}) will return False
-         * If ContainerToCheck is empty/invalid it will always return True, because there were no failed checks
-         *
-         * @return True if this container has ALL of the tags of in ContainerToCheck, including if ContainerToCheck is empty
+         * GameplayTags 和 ParentTags 是否包含ContainerToCheck
+         * * {"A.1","B.1"}.HasAll({"A","B"}) will return True, {"A","B"}.HasAll({"A.1","B.1"}) will return False
          */
         public bool HasAll(FGameplayTagContainer ContainerToCheck)
         {
-            if (ContainerToCheck.IsEmpty())
-            {
-                return true;
-            }
+            //ContainerToCheck什么都没有,所以肯定返回true
+            if (ContainerToCheck.IsEmpty())return true;
 
             foreach (FGameplayTag OtherTag in ContainerToCheck.GameplayTags)
             {
-                if (!GameplayTags.Contains(OtherTag) & !ParentTags.Contains(OtherTag))
+                if (!GameplayTags.Contains(OtherTag) && !ParentTags.Contains(OtherTag))
                 {
                     return false;
                 }
@@ -145,31 +121,21 @@ namespace DarkRoom.Game
         }
 
         /**
-         * Checks if this container contains ALL of the tags in the specified container, only allowing exact matches
+         * GameplayTags 是否包含ContainerToCheck
          * {"A.1","B.1"}.HasAll({"A","B"}) will return False
-         * If ContainerToCheck is empty/invalid it will always return True, because there were no failed checks
-         *
-         * @return True if this container has ALL of the tags of in ContainerToCheck, including if ContainerToCheck is empty
          */
         public bool HasAllExact(FGameplayTagContainer ContainerToCheck)
         {
-            if (ContainerToCheck.IsEmpty())
-            {
-                return true;
-            }
+            if (ContainerToCheck.IsEmpty())return true;
 
             foreach (FGameplayTag OtherTag in ContainerToCheck.GameplayTags)
             {
-                if (!GameplayTags.Contains(OtherTag))
-                {
-                    return false;
-                }
+                if (!GameplayTags.Contains(OtherTag))return false;
             }
 
             return true;
         }
 
-        /** Returns the number of explicitly added tags */
         public int Num()
         {
             return GameplayTags.Count;
@@ -184,59 +150,81 @@ namespace DarkRoom.Game
         /** Returns true if container is empty */
         public bool IsEmpty()
         {
-            return GameplayTags.Count() == 0;
+            return GameplayTags.Count == 0;
         }
 
-        /** Returns a new container explicitly containing the tags of this container and all of their parent tags */
+        /** Returns a new container explicitly containing the tags of this container and all of their parent tags
+         * 返回一个新的container, 精确的包含了本container的所有GameplayTags和ParentTags
+         */
         public FGameplayTagContainer GetGameplayTagParents()
         {
-            return null;
+            FGameplayTagContainer container = new FGameplayTagContainer(GameplayTags);
+            foreach (var item in ParentTags)
+            {
+                container.GameplayTags.AddUnique(item);
+            }
+
+            return container;
         }
 
         /**
-         * Returns a filtered version of this container, returns all tags that match against any of the tags in OtherContainer, expanding parents
-         *
-         * @param OtherContainer		The Container to filter against
-         *
-         * @return A FGameplayTagContainer containing the filtered tags
+         * 返回一个新的container, 这个container包含的gameplaytag满足是本tag和OtherContainer的交集
          */
         public FGameplayTagContainer Filter(FGameplayTagContainer OtherContainer)
         {
-            return null;
+            FGameplayTagContainer container = new FGameplayTagContainer();
+
+            foreach (FGameplayTag tag in GameplayTags)
+            {
+                if (tag.MatchesAny(OtherContainer))container.AddTagFast(tag);
+            }
+
+            return container;
         }
 
         /**
-         * Returns a filtered version of this container, returns all tags that match exactly one in OtherContainer
-         *
-         * @param OtherContainer		The Container to filter against
-         *
-         * @return A FGameplayTagContainer containing the filtered tags
+         *返回一个新的container, 这个container包含的gameplaytag满足是本tag和OtherContainer的精确交集
          */
         public FGameplayTagContainer FilterExact(FGameplayTagContainer OtherContainer)
         {
-            return null;
+            FGameplayTagContainer container = new FGameplayTagContainer();
+
+            foreach (FGameplayTag tag in GameplayTags)
+            {
+                if (tag.MatchesAnyExact(OtherContainer)) container.AddTagFast(tag);
+            }
+
+            return container;
         }
 
-        /** 
-         * Checks if this container matches the given query.
-         *
-         * @param Query		Query we are checking against
-         *
-         * @return True if this container matches the query, false otherwise.
+        /**
+         * 本container是否满足参数query
          */
         public bool MatchesQuery(FGameplayTagQuery Query)
         {
-            return false;
+            return Query.Matches(this);
         }
 
         /** 
          * Adds all the tags from one container to this container 
          * NOTE: From set theory, this effectively is the union of the container this is called on with Other.
          *
-         * @param Other TagContainer that has the tags you want to add to this container 
+         * @param Other TagContainer that has the tags you want to add to this container
+         *
+         * 将other的gameplaytags添加到本gameplaytags列表
+         * 将other的parent tags添加到本parenttags列表
          */
         public void AppendTags(FGameplayTagContainer Other)
         {
+            foreach (FGameplayTag tag in Other.GameplayTags)
+            {
+                GameplayTags.AddUnique(tag);
+            }
+
+            foreach (FGameplayTag tag in Other.ParentTags)
+            {
+                ParentTags.AddUnique(tag);
+            }
         }
 
         /** 
@@ -251,51 +239,76 @@ namespace DarkRoom.Game
          *
          * @param OtherA TagContainer that has the matching tags you want to add to this container, these tags have their parents expanded
          * @param OtherB TagContainer used to check foreachmatching tags.  If the tag matches on any parent, it counts as a match.
+         *
+         * 将OtherA 匹配 OtherB 的子集添加进来
          */
         public void AppendMatchingTags(FGameplayTagContainer OtherA, FGameplayTagContainer OtherB)
         {
+            foreach (FGameplayTag otherATag in OtherA.GameplayTags)
+            {
+                if (otherATag.MatchesAny(OtherB))AddTag(otherATag);
+            }
         }
 
         /**
-         * Add the specified tag to the container
-         *
-         * @param TagToAdd Tag to add to the container
+         * 添加 TagToAdd 到 container 中
+         * 1. 添加TagToAdd 到 GameplayTags列表中
+         * 2. 添加TagToAdd所在的container的parent tags到 ParentTags列表中
          */
         public void AddTag(FGameplayTag TagToAdd)
         {
+            if (!TagToAdd.IsValid())return;
+            GameplayTags.AddUnique(TagToAdd);
+            AddParentsForTag(TagToAdd);
         }
 
         /**
-         * Add the specified tag to the container without checking foreachuniqueness
-         *
-         * @param TagToAdd Tag to add to the container
-         * 
-         * Useful when building container from another data struct (TMap foreachexample)
+         * 不做唯一性判断, 直接添加tag
          */
         public void AddTagFast(FGameplayTag TagToAdd)
         {
+            if (!TagToAdd.IsValid()) return;
+            GameplayTags.Add(TagToAdd);
+            AddParentsForTag(TagToAdd);
         }
 
         /**
-         * Adds a tag to the container and removes any direct parents, wont add if child already exists
-         *
-         * @param Tag			The tag to try and add to this container
-         * 
-         * @return True if tag was added
+         * 添加TagToAdd到container, 但会删除gameplaytags列表中TagToAdd相关的parent tag
+         * 如果TagToAdd已经在gameplaytags列表中, 就不会被添加
          */
         public bool AddLeafTag(FGameplayTag TagToAdd)
         {
-            return false;
+            // Check tag is not already explicitly in container
+            if (HasTagExact(TagToAdd))return true;
+
+            // If this tag is parent of explicitly added tag, fail
+            if (HasTag(TagToAdd))return false;
+
+            FGameplayTagContainer tagToAddContainer = UGameplayTagsManager.Instance.GetSingleTagContainer(TagToAdd);
+            if (tagToAddContainer == null)return false;
+
+            // Remove any tags in the container that are a parent to TagToAdd
+            foreach (FGameplayTag ParentTag in tagToAddContainer.ParentTags)
+            {
+                if (HasTagExact(ParentTag))RemoveTag(ParentTag);
+            }
+
+            // Add the tag
+            AddTag(TagToAdd);
+            return true;
         }
 
         /**
          * Tag to remove from the container
-         * 
-         * @param TagToRemove	Tag to remove from the container
          */
         public bool RemoveTag(FGameplayTag TagToRemove)
         {
-            return false;
+            bool succ = GameplayTags.Remove(TagToRemove);
+            if (!succ) return false;
+
+            // Have to recompute parent table from scratch because there could be duplicates providing the same parent tag
+            FillParentTags();
+            return true;
         }
 
         /**
@@ -305,18 +318,20 @@ namespace DarkRoom.Game
          */
         public void RemoveTags(FGameplayTagContainer TagsToRemove)
         {
+            bool removed = false;
+            foreach (var item in TagsToRemove.GameplayTags)
+            {
+                bool r = GameplayTags.Remove(item);
+                if (r) removed = true;
+            }
+
+            if (removed)FillParentTags();
         }
 
-        /** Remove all tags from the container. Will maintain slack by default */
-        public void Reset(int Slack = 0)
+        public void Reset()
         {
-        }
-
-
-        /** Returns string version of container in ImportText format */
-        public string ToString()
-        {
-            return "";
+            GameplayTags.Clear();
+            ParentTags.Clear();
         }
 
         /** Sets from a ImportText string, used in asset registry */
@@ -324,10 +339,20 @@ namespace DarkRoom.Game
         {
         }
 
-        /** Returns abbreviated human readable Tag list without parens or property names. If bQuoted is true it will quote each tag */
-        public string ToStringSimple(bool bQuoted = false)
+        public string ToStringSimple()
         {
-            return "";
+            string RetString = "";
+            for (int i = 0; i < GameplayTags.Count; ++i)
+            {
+                RetString += "\"";
+                RetString += GameplayTags[i].ToString();
+                RetString += "\"";
+                if (i < GameplayTags.Count - 1)
+                {
+                    RetString += ", ";
+                }
+            }
+            return RetString;
         }
 
         /** Returns human readable description of what match is being looked foreachon the readable tag list. */
@@ -339,23 +364,18 @@ namespace DarkRoom.Game
         /** Gets the explicit list of gameplay tags */
         public void GetGameplayTagArray(List<FGameplayTag> InOutGameplayTags)
         {
-            InOutGameplayTags = GameplayTags;
+            InOutGameplayTags.Clear();
+            InOutGameplayTags.AddRange(GameplayTags);
         }
 
         public bool IsValidIndex(int Index)
         {
-            if (Index < 0) return false;
-            if (Index >= GameplayTags.Count) return false;
-            return true;
+            return GameplayTags.IsValidIndex(Index);
         }
 
         public FGameplayTag GetByIndex(int Index)
         {
-            if (IsValidIndex(Index))
-            {
-                return GameplayTags[Index];
-            }
-
+            if (IsValidIndex(Index))return GameplayTags[Index];
             return null;
         }
 
@@ -369,138 +389,45 @@ namespace DarkRoom.Game
             return GameplayTags.Count > 0 ? GameplayTags.Last() : null;
         }
 
-
-        /** Version of above that is called from conditions where you know tag is valid */
-        public bool HasTagFast(FGameplayTag TagToCheck, EGameplayTagMatchType TagMatchType,
-            EGameplayTagMatchType TagToCheckMatchType)
-        {
-            bool bResult;
-            if (TagToCheckMatchType == EGameplayTagMatchType.Explicit)
-            {
-                // Always check explicit
-                bResult = GameplayTags.Contains(TagToCheck);
-                if (!bResult & TagMatchType == EGameplayTagMatchType.IncludeParentTags)
-                {
-                    // Check parent tags as well
-                    bResult = ParentTags.Contains(TagToCheck);
-                }
-            }
-            else
-            {
-                bResult = ComplexHasTag(TagToCheck, TagMatchType, TagToCheckMatchType);
-            }
-
-            return bResult;
-        }
-
         /**
-         * Determine if the container has the specified tag
-         * 
-         * @param TagToCheck			Tag to check if it is present in the container
-         * @param TagMatchType			Type of match to use foreachthe tags in this container
-         * @param TagToCheckMatchType	Type of match to use foreachthe TagToCheck Param
-         * 
-         * @return True if the tag is in the container, false if it is not
-         */
-        public bool ComplexHasTag(FGameplayTag TagToCheck, EGameplayTagMatchType TagMatchType,
-            EGameplayTagMatchType TagToCheckMatchType)
-        {
-            return false;
-        }
-
-        /**
-         * Checks if this container matches ANY of the tags in the specified container. Performs matching by expanding this container out
-         * to include its parent tags.
-         *
-         * @param Other					Container we are checking against
-         * @param bCountEmptyAsMatch	If true, the parameter tag container will count as matching even if it's empty
-         *
-         * @return True if this container has ANY the tags of the passed in container
-
-
-        /**
-         * Returns true if the tags in this container match the tags in OtherContainer foreachthe specified matching types.
-         *
-         * @param OtherContainer		The Container to filter against
-         * @param TagMatchType			Type of match to use foreachthe tags in this container
-         * @param OtherTagMatchType		Type of match to use foreachthe tags in the OtherContainer param
-         * @param ContainerMatchType	Type of match to use foreachfiltering
-         *
-         * @return Returns true if ContainerMatchType is Any and any of the tags in OtherContainer match the tags in this or ContainerMatchType is All and all of the tags in OtherContainer match at least one tag in this. Returns false otherwise.
-         */
-        public bool DoesTagContainerMatch(FGameplayTagContainer OtherContainer,
-            EGameplayTagMatchType TagMatchType,
-            EGameplayTagMatchType OtherTagMatchType, EGameplayContainerMatchType ContainerMatchType)
-        {
-            bool bResult;
-            if (OtherTagMatchType == EGameplayTagMatchType.Explicit)
-            {
-                // Start true foreachall, start false foreachany
-                bResult = (ContainerMatchType == EGameplayContainerMatchType.All);
-                foreach (FGameplayTag OtherTag in OtherContainer.GameplayTags)
-                {
-                    if (HasTagFast(OtherTag, TagMatchType, OtherTagMatchType))
-                    {
-                        if (ContainerMatchType == EGameplayContainerMatchType.Any)
-                        {
-                            bResult = true;
-                            break;
-                        }
-                    }
-                    else if (ContainerMatchType == EGameplayContainerMatchType.All)
-                    {
-                        bResult = false;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                FGameplayTagContainer OtherExpanded = OtherContainer.GetGameplayTagParents();
-                return DoesTagContainerMatch(OtherExpanded, TagMatchType, EGameplayTagMatchType.Explicit,
-                    ContainerMatchType);
-            }
-
-            return bResult;
-        }
-
-        /**
-         * Returns true if the tags in this container match the tags in OtherContainer foreachthe specified matching types.
-         *
-         * @param OtherContainer		The Container to filter against
-         * @param TagMatchType			Type of match to use foreachthe tags in this container
-         * @param OtherTagMatchType		Type of match to use foreachthe tags in the OtherContainer param
-         * @param ContainerMatchType	Type of match to use foreachfiltering
-         *
-         * @return Returns true if ContainerMatchType is Any and any of the tags in OtherContainer match the tags in this or ContainerMatchType is All and all of the tags in OtherContainer match at least one tag in this. Returns false otherwise.
-         */
-        protected bool DoesTagContainerMatchComplex(FGameplayTagContainer OtherContainer,
-            EGameplayTagMatchType TagMatchType,
-            EGameplayTagMatchType OtherTagMatchType, EGameplayContainerMatchType ContainerMatchType)
-        {
-            return false;
-        }
-
-        /**
-         * If a Tag with the specified tag name explicitly exists, it will remove that tag and return true.  Otherwise, it 
-           returns false.  It does NOT check the TagName foreachvalidity (i.e. the tag could be obsolete and so not exist in
-           the table). It also does NOT check parents (because it cannot do so foreacha tag that isn't in the table).
-           NOTE: This function should ONLY ever be used by GameplayTagsManager when redirecting tags.  Do NOT make this
-           function public!
+         * 如果GameplayTags列表中有名字为TagName的tag, 就移除这个tag
+         * 不要public这个方法. 内部使用
          */
         protected bool RemoveTagByExplicitName(string TagName)
         {
+            foreach (var item in GameplayTags)
+            {
+                if (item.GetTagName() == TagName)
+                {
+                    RemoveTag(item);
+                    return true;
+                }
+            }
+
             return false;
         }
 
-        /** Adds parent tags foreacha single tag */
-        protected void AddParentsForTag(FGameplayTag Tag)
+        /** 添加InTag所在的container的parent tags 到 本ParentTags中*/
+        protected void AddParentsForTag(FGameplayTag InTag)
         {
+            FGameplayTagContainer inContainer = UGameplayTagsManager.Instance.GetSingleTagContainer(InTag);
+            if (inContainer == null)return;
+
+            // Add Parent tags from this tag to our own
+            foreach (FGameplayTag ParentTag in inContainer.ParentTags)
+            {
+                ParentTags.AddUnique(ParentTag);
+            }
         }
 
-        /** Fills in ParentTags from GameplayTags */
+        /** 根据GameplayTags填充ParentTags  */
         protected void FillParentTags()
         {
+            ParentTags.Clear();
+            foreach (var item in GameplayTags)
+            {
+                AddParentsForTag(item);
+            }
         }
     }
 }
