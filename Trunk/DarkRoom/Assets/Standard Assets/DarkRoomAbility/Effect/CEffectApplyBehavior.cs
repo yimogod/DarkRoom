@@ -28,7 +28,7 @@ namespace DarkRoom.GamePlayAbility {
 		/// </summary>
 		public override void Apply(CAIController from, Vector3 to) {
 			if (m_meta.AttachTarget) {
-				Debug.Log(m_meta.IdKey+" can not apply buff to pos with WhichUnit = Target");
+				Debug.Log(m_meta.Id + " can not apply buff to pos with WhichUnit = Target");
 				return;
 			}
 

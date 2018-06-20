@@ -5,16 +5,17 @@ namespace DarkRoom.Game
 {
     /**
      * 用于gameplaytag的简单树状节点. 保存特殊tag的元数据
+     * 每个node都持有一个1对1的conatiner. 该container包含此node对应的完整tag
      */
     public class FGameplayTagNode
     {
         /**
          * 完整tag所在node的tag值
-         * 比如a.b.c, 那么这个Tag就是a或者b或者c
+         * 比如a.b.c, 那么这个Tag就是c
          */
         private string Tag;
 
-        /** This complete tag is at GameplayTags[0], with parents in ParentTags[]
+        /**
          * 辅助存储tag的变量.
          * GameplayTags列表的第一个tag就是完整的tag. a.b.c
          * ParentTags包含了此节点tag的所有的父亲tag

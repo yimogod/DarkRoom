@@ -10,7 +10,7 @@ namespace DarkRoom.Item {
 		
 		}
 
-		public void Init(int id){
+		public void Init(string id){
 			_meta = CItemMetaManager.GetMeta(id);
 		}
 

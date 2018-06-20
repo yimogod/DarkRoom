@@ -6,14 +6,14 @@ namespace DarkRoom.Game
 {
     public enum EGameplayContainerMatchType
     {
-        Any,	//	Means the filter is populated by any tag matches in this container.
-        All     //	Means the filter is only populated if all of the tags in this container match.
+        Any,    //Means the filter is populated by any tag matches in this container.
+        All     //Means the filter is only populated if all of the tags in this container match.
     }
 
     /// <summary>
     /// FGameplayTagContainer保存了GameplayTag列表
     /// 明确的保存了通过add方法添加的gameplaytag
-    /// 且隐含的, 保存了gameplaytag的child tag
+    /// 且隐含的保存了gameplaytag的child tag
     /// </summary>
     public class FGameplayTagContainer
     {
@@ -153,9 +153,9 @@ namespace DarkRoom.Game
             return GameplayTags.Count == 0;
         }
 
-        /** Returns a new container explicitly containing the tags of this container and all of their parent tags
-         * 返回一个新的container, 精确的包含了本container的所有GameplayTags和ParentTags
-         */
+        /// <summary>
+        /// 返回一个新的container, 精确的包含了本container的所有GameplayTags和ParentTags
+        /// </summary>
         public FGameplayTagContainer GetGameplayTagParents()
         {
             FGameplayTagContainer container = new FGameplayTagContainer(GameplayTags);

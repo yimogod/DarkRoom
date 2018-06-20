@@ -113,11 +113,11 @@ namespace DarkRoom.GamePlayAbility {
 
 		public static void AddMeta(CAbilityMeta meta)
 		{
-			if(m_dict.ContainsKey(meta.IdKey)) {
-				Debug.LogError(string.Format("CAbilityMetaManager ALREADY CONTAIN the ability with id -- {0} ", meta.IdKey));
+			if(m_dict.ContainsKey(meta.Id)) {
+				Debug.LogError(string.Format("CAbilityMetaManager ALREADY CONTAIN the ability with id -- {0} ", meta.Id));
 			}
 
-			m_dict[meta.IdKey] = meta;
+			m_dict[meta.Id] = meta;
 		}
 
 		public static CAbilityMeta GetMeta(string id)
@@ -189,7 +189,7 @@ namespace DarkRoom.GamePlayAbility {
 
 
 		private void Parse_Base(XmlElement root, CAbilityMeta meta) {
-			meta.IdKey = root.GetAttribute("id");
+			meta.Id = root.GetAttribute("id");
 			m_xreader.TryReadChildNodeAttr(root, "Clip", "value", ref meta.Clip);
 
 			CAbilityMetaManager.AddMeta(meta);

@@ -59,14 +59,14 @@ namespace DarkRoom.Item{
 
 	#region manager
 	public class CItemMetaManager{
-		private static Dictionary<int, CItemMeta> _itemDict = new Dictionary<int, CItemMeta>();
+		private static Dictionary<string, CItemMeta> _itemDict = new Dictionary<string, CItemMeta>();
 		public CItemMetaManager (){}
 
 		public static void AddMeta(CItemMeta meta){
 			_itemDict.Add(meta.Id, meta);
 		}
 
-		public static CItemMeta GetMeta(int id){
+		public static CItemMeta GetMeta(string id){
 			return _itemDict[id];
 		}
 	}

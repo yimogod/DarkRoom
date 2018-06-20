@@ -12,7 +12,7 @@
     public class FGameplayTag
     {
         /**
-         * 目前认为是tag的完整名称. a.b.c
+         * tag的完整名称. a.b.c
          */
         protected string TagName;
 
@@ -54,7 +54,7 @@
         }
 
         /**
-         * 精确匹配, A.b 只能匹配A.b
+         * 精确匹配, A.b 只能匹配 A.b
          */
         public bool MatchesTagExact(FGameplayTag TagToCheck)
         {
@@ -63,7 +63,7 @@
         }
 
         /**
-         * 检测 两个tag有多相近, 返回值越好说明越相近
+         * 检测 两个tag有多相近, 返回值越小说明越相近
          * 比如A.b.c 和A.b.d 就比 A.b.c和A.c更相近
          */
         public int MatchesTagDepth(FGameplayTag TagToCheck)
@@ -135,13 +135,6 @@
         public string GetTagName()
         {
             return TagName;
-        }
-
-        /** Sets from a ImportText string, used in asset registry
-         * TODO delete
-         */
-        public void FromExportString(string ExportString)
-        {
         }
     }
 }

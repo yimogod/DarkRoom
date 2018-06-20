@@ -1,5 +1,4 @@
-﻿using System.Runtime.Remoting.Messaging;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DarkRoom.Game {
 	/// <summary>
@@ -17,9 +16,9 @@ namespace DarkRoom.Game {
 		public CBaseMeta(int id){ m_idKey = id.ToString(); }
 		public CBaseMeta(string id) { m_idKey = id; }
 
-		//有些需要string的id
 		public string Id {
 			get { return m_idKey; }
+		    set { m_idKey = value; }
 		}
 
 	    public int nId
@@ -34,7 +33,7 @@ namespace DarkRoom.Game {
 	        }
 	    }
 
-		public string Name{
+		public virtual string Name{
 			get{ return NameKey; }
 		}
 	}

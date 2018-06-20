@@ -30,27 +30,13 @@ namespace DarkRoom.Game
         }
     }
 
+    /// <summary>
+    /// tag管理器, 单例.
+    /// 保存着所有的tag元数据.
+    /// 可以创建单个tag
+    /// </summary>
     public class UGameplayTagsManager : CSingleton<UGameplayTagsManager>
     {
-        public Action OnLastChanceToAddNativeTags;
-
-        public Dictionary<FGameplayTag, int> ReplicationCountMap;
-        public Dictionary<FGameplayTag, int> ReplicationCountMap_SingleTags;
-        public Dictionary<FGameplayTag, int> ReplicationCountMap_Containers;
-
-        /** Cached number of bits we need to replicate tags. That is, Log2(Number of Tags). Will always be <= 16. */
-        //public int NetIndexTrueBitNum;
-
-        /** The length in bits of the first segment when net serializing tags. We will serialize NetIndexFirstBitSegment + 1 bit to indicatore "more" (more = second segment that is NetIndexTrueBitNum - NetIndexFirstBitSegment) */
-        //public int NetIndexFirstBitSegment;
-
-        /** Numbers of bits to use for replicating container size. This can be set via config. */
-        //public int NumBitsForContainerSize;
-
-        /** This is the actual value for an invalid tag "None". This is computed at runtime as (Total number of tags) + 1 */
-       // public int InvalidTagNetIndex;
-
-
         /** Roots of gameplay tag nodes */
         private FGameplayTagNode GameplayRootTag;
 
@@ -59,36 +45,23 @@ namespace DarkRoom.Game
          */
         private Dictionary<string, FGameplayTagNode> GameplayTagNodeMap = new Dictionary<string, FGameplayTagNode>();
 
-        /** Our aggregated, sorted list of commonly replicated tags. These tags are given lower indices to ensure they replicate in the first bit segment. */
-        //private List<FGameplayTag> CommonlyReplicatedTags = new List<FGameplayTag>();
-
-        /** List of native tags to add when reconstructing tree
-         *  本地tag, 重建tag树的时候需要
-         */
-        //private HashSet<string> NativeTagsToAdd = new HashSet<string>();
-
-        /** Cached runtime value for whether we are using fast replication or not. Initialized from config setting. */
-        //private bool bUseFastReplication;
-
         /** Cached runtime value for whether we should warn when loading invalid tags */
         private bool bShouldWarnOnInvalidTags;
 
-        /** True if native tags have all been added and flushed */
-        //private bool bDoneAddingNativeTags;
-
-        /** Sorted list of nodes, used for network replication */
-        //private List<FGameplayTagNode> NetworkGameplayTagNodeIndex;
-
         /**
-         * 所有可用tag的元数据
+         * 所有可用tag的元数据, 就是所谓metamanamger
          */
         private List<CGameplayTagMeta> GameplayTagTables = new List<CGameplayTagMeta>();
 
-        /** The map of ini-configured tag redirectors */
-        //private Dictionary<string, FGameplayTag> TagRedirects;
-
         /** 我们请求创建的不存在的tagname列表 */
-        private HashSet<string> MissingTagName;
+        private HashSet<string> MissingTagName = new HashSet<string>();
+
+        /** Initializes the manager */
+        private static void InitializeManager()
+        {
+            m_instance.LoadGameplayTagTables();
+            m_instance.ConstructGameplayTagTree();
+        }
 
         /**
          * 根据传入的TagName创建FGameplayTag
@@ -97,7 +70,7 @@ namespace DarkRoom.Game
          */
         public FGameplayTag RequestGameplayTag(string TagName, bool ErrorIfNotFound = true)
         {
-            if (GameplayTagNodeMap.ContainsKey(TagName))return null;
+            if (GameplayTagNodeMap.ContainsKey(TagName))return new FGameplayTag(TagName);
 
             if (ErrorIfNotFound && !MissingTagName.Contains(TagName))
             {
@@ -107,54 +80,31 @@ namespace DarkRoom.Game
             return null;
         }
 
-        /**
-         *	Searches for a gameplay tag given a partial string. This is slow and intended mainly for console commands/utilities to make
-         *	developer life's easier. This will attempt to match as best as it can. If you pass "A.b" it will match on "A.b." before it matches "a.b.c".
-         */
-        public FGameplayTag FindGameplayTagFromPartialString_Slow(string PartialString)
-        {
-            return null;
-        }
-
-        /**
-         * Registers the given name as a gameplay tag, and tracks that it is being directly referenced from code
-         * This can only be called during engine initialization, the table needs to be locked down before replication
-         *
-         * @param TagName The Name of the tag to add
-         * @param TagDevComment The developer comment clarifying the usage of the tag
-         * 
-         * @return Will return the corresponding FGameplayTag
-         */
-        public FGameplayTag AddNativeGameplayTag(string TagName, string TagDevComment = "(Native)")
-        {
-            return null;
-        }
-
-        /** Call to flush the list of native tags, once called it is unsafe to add more */
-        public void DoneAddingNativeTags()
-        {
-        }
-
-        public void CallOrRegister_OnDoneAddingNativeTagsDelegate(Action Delegate)
-        {
-        }
-
-        /** 返回包含本tag的所有父亲tag的container */
+        /// <summary>
+        /// 返回包含本tag以及所有父亲tag的container
+        /// 比如传入的a.b.c 那么 此container会包含a, a.b, a.b.c
+        /// </summary>
         public FGameplayTagContainer RequestGameplayTagParents(FGameplayTag GameplayTag)
         {
+            FGameplayTagContainer container = GetSingleTagContainer(GameplayTag);
+            if (container != null)return container.GetGameplayTagParents();
             return null;
         }
 
-        /**
-         * Gets a Tag Container containing the all tags in the hierarchy that are children of this tag. Does not return the original tag
-         *
-         * @param GameplayTag					The Tag to use at the parent tag
-         * 
-         * @return A Tag Container with the supplied tag and all its parents added explicitly
-         */
+        /// <summary>
+        /// 获取传入tag所有的子tag组成的container, 不包含传入tag
+        /// 例如传入a.b, 则返回的conatiner包含a.b.c, a.b.d, a.b.c.e
+        /// </summary>
         public FGameplayTagContainer RequestGameplayTagChildren(FGameplayTag GameplayTag)
         {
-            return null;
+            FGameplayTagContainer TagContainer = new FGameplayTagContainer();
+
+            FGameplayTagNode GameplayTagNode = FindTagNode(GameplayTag);
+            if (GameplayTagNode.IsValid())
+            {
+                AddChildrenTags(TagContainer, GameplayTagNode, true, true);
+            }
+            return TagContainer;
         }
 
         /**
@@ -163,45 +113,40 @@ namespace DarkRoom.Game
          */
         public FGameplayTag RequestGameplayTagDirectParent(FGameplayTag GameplayTag)
         {
+            FGameplayTagNode GameplayTagNode = FindTagNode(GameplayTag);
+            if (!GameplayTagNode.IsValid()) return null;
+
+            var parent = GameplayTagNode.GetParentTagNode();
+            if (parent.IsValid())return parent.GetCompleteTag();
             return null;
         }
 
-        /**
-         * Helper function to get the stored TagContainer containing only this tag, which has searchable ParentTags
-         * @param GameplayTag		Tag to get single container of
-         * @return					Pointer to container with this tag
-         */
+        /// <summary>
+        /// 在node树中查找传入tag对应的container, 此container仅包含传入的tag
+        /// </summary>
         public FGameplayTagContainer GetSingleTagContainer(FGameplayTag GameplayTag)
         {
-            FGameplayTagNode TagNode = FindTagNode(GameplayTag);
-            if (TagNode.IsValid())
+            FGameplayTagNode node = FindTagNode(GameplayTag);
+            if (node.IsValid())
             {
-                return TagNode.GetSingleTagContainer();
+                return node.GetSingleTagContainer();
             }
 
             return null;
         }
 
-        /**
-         * Checks node tree to see if a FGameplayTagNode with the tag exists
-         *
-         * @param TagName	The name of the tag node to search for
-         *
-         * @return A shared pointer to the FGameplayTagNode found, or NULL if not found.
-         */
+        /// <summary>
+        /// 找到tag对应的node
+        /// </summary>
         public FGameplayTagNode FindTagNode(FGameplayTag GameplayTag)
         {
             FGameplayTagNode Node = GameplayTagNodeMap[GameplayTag.GetTagName()];
             return Node;
         }
 
-        /**
-         * Checks node tree to see if a FGameplayTagNode with the name exists
-         *
-         * @param TagName	The name of the tag node to search for
-         *
-         * @return A shared pointer to the FGameplayTagNode found, or NULL if not found.
-         */
+        /// <summary>
+        /// 找到tag对应的node
+        /// </summary>
         public FGameplayTagNode FindTagNode(string TagName)
         {
             FGameplayTag PossibleTag = new FGameplayTag(TagName);
@@ -236,22 +181,40 @@ namespace DarkRoom.Game
         /** 销毁整个 tag 树 */
         public void DestroyGameplayTagTree()
         {
+            GameplayRootTag.ResetNode();
+            GameplayTagNodeMap.Clear();
         }
 
-        /** Splits a tag such as x.y.z into an array of names {x,y,z} */
-        public void SplitGameplayTagstring(FGameplayTag Tag, List<string> OutNames)
+        /// <summary>
+        /// 将tag a.b.c 变成数组[a, b, c]
+        /// </summary>
+        public void SplitGameplayTagFName(FGameplayTag Tag, List<string> OutNames)
         {
+            var list = Tag.GetTagName().Split('.');
+            OutNames.AddRange(list);
         }
 
-        /** Gets the list of all tags in the dictionary */
+        /// <summary>
+        /// 获取所有的gameplay tag
+        /// 如果你只添加了a.b.c那么其实会有3个tag--a, a.b, a.b.c
+        /// </summary>
         public void RequestAllGameplayTags(FGameplayTagContainer TagContainer, bool OnlyIncludeDictionaryTags)
         {
+            foreach(KeyValuePair<string, FGameplayTagNode> item in GameplayTagNodeMap)
+            {
+                if (OnlyIncludeDictionaryTags)continue;
+
+                var tag = item.Value.GetCompleteTag();
+                TagContainer.AddTagFast(tag);
+            }
         }
 
-        /** Returns true if if the passed in name is in the tag dictionary and can be created */
+        /// <summary>
+        /// 测试输入的tagname是否合法--即是否在预配置里面
+        /// </summary>
         public bool ValidateTagCreation(string TagName)
         {
-            return false;
+            return FindTagNode(TagName).IsValid();
         }
 
         /**
@@ -263,83 +226,11 @@ namespace DarkRoom.Game
             return 1;
         }
 
-        /** Returns true if we should import tags from UGameplayTagsSettings objects (configured by INI files) */
-        public bool ShouldImportTagsFromINI()
-        {
-            return false;
-        }
-
         /** Should we print loading errors when trying to load invalid tags */
         public bool ShouldWarnOnInvalidTags()
         {
             return bShouldWarnOnInvalidTags;
         }
-
-        /** Should use fast replication */
-        //public bool ShouldUseFastReplication()
-        //{
-        //    return bUseFastReplication;
-        //}
-
-        /** Handles redirectors for an entire container, will also error on invalid tags */
-        public void RedirectTagsForContainer(FGameplayTagContainer Container)
-        {
-        }
-
-        /** Handles redirectors for a single tag, will also error on invalid tag. This is only called for when individual tags are serialized on their own */
-        public void RedirectSingleGameplayTag(FGameplayTag Tag)
-        {
-        }
-
-        /** Handles establishing a single tag from an imported tag name (accounts for redirects too). Called when tags are imported via text. */
-        public bool ImportSingleGameplayTag(FGameplayTag Tag, string ImportedTagName)
-        {
-            return false;
-        }
-
-        /** Gets a tag name from net index and vice versa, used for replication efficiency */
-        public string GetTagNameFromNetIndex(int Index)
-        {
-            return "";
-        }
-
-        public int GetNetIndexFromTag(FGameplayTag InTag)
-        {
-            return 1;
-        }
-
-       // public List<FGameplayTagNode> GetNetworkGameplayTagNodeIndex()
-        //{
-        //    return NetworkGameplayTagNodeIndex;
-        //}
-
-        public bool IsNativelyAddedTag(FGameplayTag Tag)
-        {
-            return false;
-        }
-
-
-        public void PrintReplicationIndices()
-        {
-        }
-
-        /** Mechanism for tracking what tags are frequently replicated */
-        public void PrintReplicationFrequencyReport()
-        {
-        }
-
-        public void NotifyTagReplicated(FGameplayTag Tag, bool WasInContainer)
-        {
-        }
-
-
-        /** Initializes the manager */
-        private static void InitializeManager()
-        {
-        }
-
-        /** finished loading/adding native tags */
-        private Action OnDoneAddingNativeTagsDelegate;
 
         /**
          * Helper function to insert a tag into a tag node array
@@ -388,27 +279,30 @@ namespace DarkRoom.Game
 
             FGameplayTag GameplayTag = TagNode.GetCompleteTag();
             GameplayTagNodeMap.Add(GameplayTag.GetTagName(), TagNode);
+
+            return 1;
         }
 
+        /// <summary>
+        /// 将GameplayTagNode的children node对应的tag添加到TagContainer中去
+        /// RecurseAll表示在树状节点中, 就添加一层child还是循环一直往下找
+        /// </summary>
         private void AddChildrenTags(FGameplayTagContainer TagContainer, FGameplayTagNode GameplayTagNode,
             bool RecurseAll = true, bool OnlyIncludeDictionaryTags = false)
         {
-        }
+            if (!GameplayTagNode.IsValid())return;
 
-        /**
-         * Helper function for GameplayTagsMatch to get all parents when doing a parent match,
-         * NOTE: Must never be made public as it uses the strings which should never be exposed
-         * 
-         * @param NameList		The list we are adding all parent complete names too
-         * @param GameplayTag	The current Tag we are adding to the list
-         */
-        private void GetAllParentNodeNames(HashSet<string> NamesList, FGameplayTagNode GameplayTag)
-        {
-        }
+            var ChildrenNodes = GameplayTagNode.GetChildTagNodes();
+            foreach (FGameplayTagNode ChildNode in ChildrenNodes)
+            {
+                if (!ChildNode.IsValid())continue;
 
-        /**ructs the net indices for each tag */
-        private void ConstructNetIndex()
-        {
+                TagContainer.AddTag(ChildNode.GetCompleteTag());
+                if (RecurseAll)
+                {
+                    AddChildrenTags(TagContainer, ChildNode, true, OnlyIncludeDictionaryTags);
+                }
+            }
         }
     }
 }

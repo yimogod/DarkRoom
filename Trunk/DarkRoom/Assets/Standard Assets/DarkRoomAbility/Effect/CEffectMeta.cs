@@ -72,11 +72,11 @@ namespace DarkRoom.GamePlayAbility {
 
 		public static void AddMeta(CEffectMeta meta)
 		{
-			if(m_dict.ContainsKey(meta.IdKey)) {
-				Debug.LogError("CEffectMetaManager ALREADY CONTAIN the ability with id -- " +  meta.IdKey);
+			if(m_dict.ContainsKey(meta.Id)) {
+				Debug.LogError("CEffectMetaManager ALREADY CONTAIN the ability with id -- " +  meta.Id);
 			}
 
-			m_dict[meta.IdKey] = meta;
+			m_dict[meta.Id] = meta;
 		}
 
 		public static CEffectMeta GetMeta(string id)

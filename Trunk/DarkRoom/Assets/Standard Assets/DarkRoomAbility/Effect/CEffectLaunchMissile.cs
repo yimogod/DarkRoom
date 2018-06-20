@@ -31,7 +31,7 @@ namespace DarkRoom.GamePlayAbility {
 			base.Apply(from, to);
 
 			//创建missle, 并且放在释放者身上的位置. 更详细的. 如果是武器, 其实应该是武器的位置
-			GameObject missle = new GameObject(m_meta.IdKey);
+			GameObject missle = new GameObject(m_meta.Id);
 			//TODO 自己的加载器
 			//UIUtil.SetAbilityEffect(missle.transform, m_meta.MisslePrefab);
 
