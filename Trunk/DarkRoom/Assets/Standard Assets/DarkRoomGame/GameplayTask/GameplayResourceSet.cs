@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace DarkRoom.Game
 {
+    /// <summary>
+    /// 资源集合, 用了交集差集
+    /// </summary>
     public struct FGameplayResourceSet
     {
         public static int MaxResources = 64;

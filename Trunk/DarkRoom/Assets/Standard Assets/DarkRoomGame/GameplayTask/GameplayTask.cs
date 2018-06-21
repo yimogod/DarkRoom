@@ -34,12 +34,22 @@ public enum EGameplayTaskEvent
 
     public enum ETaskResourceOverlapPolicy
     {
-        /** Pause overlapping same-priority tasks. */
+        /// <summary>
+        /// 暂停同样优先级的任务
+        /// </summary>
         StartOnTop,
 
-        /** Wait for other same-priority tasks to finish. */
+        /// <summary>
+        /// 等待其他优先级的任务完成
+        /// </summary>
         StartAtEnd,
     };
+
+    public enum FGameplayTaskPriority
+    {
+        DefaultPriority,
+        ScriptedPriority,
+    }
 
     public struct FGameplayTaskEventData
     {
@@ -55,31 +65,36 @@ public enum EGameplayTaskEvent
 
     public class UGameplayTask : IGameplayTaskOwnerInterface
     {
-        /* This name allows us to find the task later so that we can end it. */
+        /// <summary>
+        /// task名称
+        /// </summary>
         protected string InstanceName;
 
-        /* This controls how this task will be treaded in relation to other, already running tasks, 
-         *	provided GameplayTasksComponent is configured to care about priorities (the default behavior)*/
-        protected int Priority;
+        /// <summary>
+        /// 任务优先级
+        /// TODO 改为可配置的三种优先级, Important, Normal, Minor
+        /// </summary>
+        protected FGameplayTaskPriority Priority;
 
-        /* You should _never_ access it directly. We'll make it private once we have
-         *	a good way of "deprecating: direct access */
+        /// <summary>
+        /// 任务状态, 不要直接访问它
+        /// TODO 改为private, 如果找到合理的方案
+        /// </summary>
         protected EGameplayTaskState TaskState;
 
-
+        /// <summary>
+        /// 任务覆盖策略
+        /// </summary>
         protected ETaskResourceOverlapPolicy ResourceOverlapPolicy;
 
         /* If true, this task will receive TickTask calls from TasksComponent */
         protected bool bTickingTask = true;
 
-        /* Should this task run on simulated clients? This should only be used in rare cases, such as movement tasks. Simulated Tasks do not broadcast their end delegates.  */
-        protected bool bSimulatedTask = true;
-
-        /* Am I actually running this as a simulated task. (This will be true on clients that simulating. This will be false on the server and the owning client) */
-        protected bool bIsSimulating = true;
-
         protected bool bIsPausable = true;
 
+        /// <summary>
+        /// 是否关心优先级
+        /// </summary>
         protected bool bCaresAboutPriority = true;
 
         /* this is set to avoid duplicate calls to task's owner and TasksComponent when both are the same object */
@@ -89,103 +104,55 @@ public enum EGameplayTaskEvent
 
         protected bool bOwnerFinished = true;
 
-        /* Abstract "resource" IDs this task needs available to be able to get activated. */
+        /// <summary>
+        /// 此资源需要可用的, 任务才会被激活
+        /// </summary>
         protected FGameplayResourceSet RequiredResources;
 
-        /**
-         *	Resources that are going to be locked when this task gets activated, but are not required to get this task started
-         */
+        /// <summary>
+        /// 此任务激活, 这个资源会被锁死
+        /// </summary>
         protected FGameplayResourceSet ClaimedResources;
 
-        /* Task Owner that created us */
+        /// <summary>
+        /// 谁创建了这个任务
+        /// </summary>
         protected IGameplayTaskOwnerInterface TaskOwner;
 
+        /// <summary>
+        /// 持有本任务的组件, 一般也是taskowner
+        /// </summary>
         protected UGameplayTasksComponent TasksComponent;
 
-        /* child task instance */
+        /// <summary>
+        /// 子任务实例
+        /// </summary>
         protected UGameplayTask ChildTask;
 
+        /// <summary>
+        /// 帮助debug的调试信息
+        /// </summary>
         protected string DebugDescription;
 
         public UGameplayTask()
         {
+            bTickingTask = false;
+            bOwnedByTasksComponent = false;
+            bClaimRequiredResources = true;
+            bOwnerFinished = false;
+            TaskState = EGameplayTaskState.Uninitialized;
+            ResourceOverlapPolicy = ETaskResourceOverlapPolicy.StartOnTop;
+            Priority = FGameplayTaskPriority.DefaultPriority;
         }
 
-
-        public void ReadyForActivation()
+        protected static IGameplayTaskOwnerInterface ConvertToTaskOwner(GameObject OwnerObject)
         {
+            return OwnerObject.GetComponent<UGameplayTasksComponent>();
         }
 
-        /* Called to trigger the actual task once the delegates have been set up
-         *	Note that the default implementation does nothing and you don't have to call it */
-        protected virtual void Activate()
+        protected static IGameplayTaskOwnerInterface ConvertToTaskOwner(CUnitEntity OwnerActor)
         {
-        }
-
-        /* Initailizes the task with the task owner interface instance but does not actviate until Activate() is called */
-        public void InitTask(IGameplayTaskOwnerInterface InTaskOwner, int InPriority)
-        {
-        }
-
-
-        public virtual void InitSimulatedTask(UGameplayTasksComponent InGameplayTasksComponent)
-        {
-        }
-
-        /* Tick function for this task, if bTickingTask == true */
-        public virtual void TickTask(float DeltaTime)
-        {
-        }
-
-        /* Called when the task is asked to confirm from an outside node. What this means depends on the individual task. By default, this does nothing other than ending if bEndTask is true. */
-        public virtual void ExternalConfirm(bool bEndTask)
-        {
-        }
-
-        /* Called when the task is asked to cancel from an outside node. What this means depends on the individual task. By default, this does nothing other than ending the task. */
-        public virtual void ExternalCancel()
-        {
-        }
-
-        /* Return debug string describing task */
-        public virtual string GetDebugString()
-        {
-            return "";
-        }
-
-        /* Helper function for getting UWorld off a task */
-        /*public virtual UWorld GetWorld()
-        {
-        }*/
-
-        /* Proper way to get the owning actor of task owner. This can be the owner itself since the owner is given as a interface */
-        public CUnitEntity GetOwnerActor()
-        {
-            return null;
-        }
-
-        /* Proper way to get the avatar actor associated with the task owner (usually a pawn, tower, etc) */
-        public CUnitEntity GetAvatarActor()
-        {
-            return null;
-        }
-
-        /* Called when task owner has "ended" (before the task ends) kills the task. Calls OnDestroy. */
-        public void TaskOwnerEnded()
-        {
-        }
-
-        /* Called explicitly to end the task (usually by the task itself). Calls OnDestroy. 
-         *	@NOTE: you need to call EndTask before sending out any "on completed" delegates. 
-         *	If you don't the task will still be in an "active" state while the event receivers may
-         *	assume it's already "finished" */
-        public void EndTask()
-        {
-        }
-
-        public virtual bool IsSupportedForNetworking()
-        {
-            return bSimulatedTask;
+            return ConvertToTaskOwner(OwnerActor.gameObject);
         }
 
         public string GetInstanceName()
@@ -196,16 +163,6 @@ public enum EGameplayTaskEvent
         public bool IsTickingTask()
         {
             return bTickingTask;
-        }
-
-        public bool IsSimulatedTask()
-        {
-            return bSimulatedTask;
-        }
-
-        public bool IsSimulating()
-        {
-            return bIsSimulating;
         }
 
         public bool IsPausable()
@@ -220,9 +177,12 @@ public enum EGameplayTaskEvent
 
         public int GetPriority()
         {
-            return Priority;
+            return (int)Priority;
         }
 
+        /// <summary>
+        /// 本任务是否需要优先级或者资源依赖
+        /// </summary>
         public bool RequiresPriorityOrResourceManagement()
         {
             return bCaresAboutPriority || RequiredResources.IsEmpty() == false || ClaimedResources.IsEmpty() == false;
@@ -241,6 +201,11 @@ public enum EGameplayTaskEvent
         public EGameplayTaskState GetState()
         {
             return TaskState;
+        }
+
+        public ETaskResourceOverlapPolicy GetResourceOverlapPolicy()
+        {
+            return ResourceOverlapPolicy;
         }
 
         public bool IsActive()
@@ -274,6 +239,130 @@ public enum EGameplayTaskEvent
             return bOwnedByTasksComponent;
         }
 
+        public void ReadyForActivation()
+        {
+            if (RequiresPriorityOrResourceManagement())
+            {
+                TasksComponent.AddTaskReadyForActivation(this);
+            }
+            else
+            {
+                PerformActivation();
+            }
+        }
+
+        /* Called to trigger the actual task once the delegates have been set up
+         *	Note that the default implementation does nothing and you don't have to call it */
+        protected virtual void Activate()
+        {
+            Debug.LogWarning("Please override this method");
+        }
+
+        /// <summary>
+        /// 初始化任务, 但不激活. 激活需要调用Activate方法
+        /// </summary>
+        public void InitTask(IGameplayTaskOwnerInterface InTaskOwner, int InPriority)
+        {
+            //Priority = InPriority;
+            TaskOwner = InTaskOwner;
+            TaskState = EGameplayTaskState.AwaitingActivation;
+
+            if (bClaimRequiredResources)
+            {
+                ClaimedResources.AddSet(RequiredResources);
+            }
+
+            InTaskOwner.OnGameplayTaskInitialized(this);
+
+            TasksComponent = InTaskOwner.GetGameplayTasksComponent(this);
+            bOwnedByTasksComponent = (TaskOwner == TasksComponent);
+
+            //避免两次调用OnGameplayTaskInitialized方法
+            if (!bOwnedByTasksComponent)
+            {
+                TasksComponent.OnGameplayTaskInitialized(this);
+            }
+        }
+
+
+        /// <summary>
+        /// bTickingTask 为true时, 本方法才起作用
+        /// </summary>
+        public virtual void TickTask(float DeltaTime)
+        {
+            Debug.LogWarning("Please override this method");
+        }
+
+        /// <summary>
+        /// 外部调用完成任务
+        /// </summary>
+        public virtual void ExternalConfirm(bool bEndTask)
+        {
+            if (bEndTask)EndTask();
+        }
+
+        /// <summary>
+        /// 外部调用取消任务
+        /// </summary>
+        public virtual void ExternalCancel()
+        {
+            EndTask();
+        }
+
+        /* Return debug string describing task */
+        public virtual string GetDebugString()
+        {
+            return "";
+        }
+
+        /* Helper function for getting UWorld off a task */
+        /*public virtual UWorld GetWorld()
+        {
+        }*/
+
+        /// <summary>
+        /// 获取此task的owner所对应的unitentity
+        /// </summary>
+        public CUnitEntity GetOwnerActor()
+        {
+            if (TaskOwner != null)return TaskOwner.GetGameplayTaskOwner(this);
+            if (TasksComponent != null)return TasksComponent.GetGameplayTaskOwner(this);
+            return null;
+        }
+
+        /// <summary>
+        /// 获取和owner actor相关的avatar, 一般会是一个pawn或者tower之类的
+        /// </summary>
+        /// <returns></returns>
+        public CUnitEntity GetAvatarActor()
+        {
+            if (TaskOwner != null) return TaskOwner.GetGameplayTaskAvatar(this);
+            if (TasksComponent != null) return TasksComponent.GetGameplayTaskAvatar(this);
+            return null;
+        }
+
+        /// <summary>
+        /// 如果owner "ended", 那么本方法会被调用. 在OnDestroy中调用
+        /// </summary>
+        public void TaskOwnerEnded()
+        {
+            if(IsFinished())return;
+
+            bOwnerFinished = true;
+            // mark as finished, just to be on the safe side 
+            TaskState = EGameplayTaskState.Finished;
+        }
+
+        /// <summary>
+        /// 一般 task自己会调用此方法
+        /// TODO 注意, 在调用本方法之前, 需要派发"on completed" delegates
+        /// </summary>
+        public void EndTask()
+        {
+            if (IsFinished()) return;
+            TaskState = EGameplayTaskState.Finished;
+        }
+
         /* Marks this task as requiring specified resource which has a number of consequences,
          *	like task not being able to run if the resource is already taken.
          *
@@ -284,18 +373,14 @@ public enum EGameplayTaskEvent
         //public void AddRequiredResourceSet(List<TSubclassOf<UGameplayTaskResource>> RequiredResourceSet){}
         public void AddRequiredResourceSet(FGameplayResourceSet RequiredResourceSet)
         {
-
+            RequiredResources.AddSet(RequiredResourceSet);
         }
 
         //   public void AddClaimedResource(TSubclassOf<UGameplayTaskResource> ClaimedResource){}
         //   public void AddClaimedResourceSet(List<TSubclassOf<UGameplayTaskResource>> AdditionalResourcesToClaim){}
         public void AddClaimedResourceSet(FGameplayResourceSet AdditionalResourcesToClaim)
         {
-        }
-
-        public ETaskResourceOverlapPolicy GetResourceOverlapPolicy()
-        {
-            return ResourceOverlapPolicy;
+            ClaimedResources.AddSet(AdditionalResourcesToClaim);
         }
 
         public virtual bool IsWaitingOnRemotePlayerdata()
@@ -315,71 +400,134 @@ public enum EGameplayTaskEvent
          */
         protected virtual void OnDestroy(bool bInOwnerFinished)
         {
+            TaskState = EGameplayTaskState.Finished;
+            TasksComponent.OnGameplayTaskDeactivated(this);
         }
 
-        protected static IGameplayTaskOwnerInterface ConvertToTaskOwner(GameObject OwnerObject)
-        {
-            return null;
-        }
-
-        protected static IGameplayTaskOwnerInterface ConvertToTaskOwner(CUnitEntity OwnerActor)
-        {
-            return null;
-        }
-
-// protected by design. Not meant to be called outside from GameplayTaskComponent mechanics
+        // protected by design. Not meant to be called outside from GameplayTaskComponent mechanics
         protected virtual void Pause()
         {
+            TaskState = EGameplayTaskState.Paused;
+            TasksComponent.OnGameplayTaskDeactivated(this);
         }
 
         protected virtual void Resume()
         {
+            TaskState = EGameplayTaskState.Active;
+            TasksComponent.OnGameplayTaskActivated(this);
         }
 
-// IGameplayTaskOwnerInterface BEGIN
+        // IGameplayTaskOwnerInterface BEGIN
         public virtual UGameplayTasksComponent GetGameplayTasksComponent(UGameplayTask Task)
         {
-            return null;
+            return TasksComponent;
         }
 
         public virtual CUnitEntity GetGameplayTaskOwner(UGameplayTask Task)
         {
-            return null;
+            return ((Task == ChildTask) || (Task == this)) ? GetOwnerActor() : null;
         }
 
         public virtual CUnitEntity GetGameplayTaskAvatar(UGameplayTask Task)
         {
-            return null;
+            return ((Task == ChildTask) || (Task == this)) ? GetAvatarActor() : null;
         }
 
         public virtual int GetGameplayTaskDefaultPriority()
         {
-            return -1;
+            return GetPriority();
         }
 
         public virtual void OnGameplayTaskInitialized(UGameplayTask Task)
         {
+            // only one child task is allowed
+            if (ChildTask != null)
+            {
+                Debug.LogWarning(">> terminating previous child task: %s");
+                ChildTask.EndTask();
+            }
+
+            ChildTask = Task;
         }
 
         public virtual void OnGameplayTaskActivated(UGameplayTask Task)
         {
         }
+
         public virtual void OnGameplayTaskDeactivated(UGameplayTask Task)
         {
+            // cleanup after deactivation
+            if (Task != ChildTask)return;
+
+            Debug.LogWarning("%s> Child task deactivated: %s (state: %s)");
+            if (Task.IsFinished())ChildTask = null;
         }
         // IGameplayTaskOwnerInterface END
 
 
-        private void ActivateInTaskQueue()
+        public void ActivateInTaskQueue()
         {
+            switch (TaskState)
+            {
+                case EGameplayTaskState.Uninitialized:
+                    Debug.LogWarning("UGameplayTask.ActivateInTaskQueue Task %s passed for activation withouth having InitTask called on it!");
+                    break;
+                case EGameplayTaskState.AwaitingActivation:
+                    PerformActivation();
+                    break;
+                case EGameplayTaskState.Paused:
+                    Resume();
+                    break;
+                case EGameplayTaskState.Active:
+                    // nothing to do here
+                    break;
+                case EGameplayTaskState.Finished:
+                    // If a task has finished, and it's being revived let's just treat the same as AwaitingActivation
+                    PerformActivation();
+                    break;
+            }
         }
 
-        private void PauseInTaskQueue()
+        public void PauseInTaskQueue()
         {
+            switch (TaskState)
+            {
+                case EGameplayTaskState.Uninitialized:
+                    Debug.LogWarning("UGameplayTask.PauseInTaskQueue Task %s passed for pausing withouth having InitTask called on it!");
+                    break;
+                case EGameplayTaskState.AwaitingActivation:
+                    // nothing to do here. Don't change the state to indicate this task has never been run before
+                    break;
+                case EGameplayTaskState.Paused:
+                    // nothing to do here. Already paused
+                    break;
+                case EGameplayTaskState.Active:
+                    // pause!
+                    Pause();
+                    break;
+                case EGameplayTaskState.Finished:
+                    // nothing to do here. But sounds odd, so let's log this, just in case
+                    Debug.LogWarning("UGameplayTask.PauseInTaskQueue Task %s being pause while already marked as Finished");
+                    break;
+            }
         }
 
+        /// <summary>
+        /// 激活任务的入口
+        /// </summary>
         private void PerformActivation()
         {
+            if(IsActive())return;
+
+            TaskState = EGameplayTaskState.Active;
+            Activate();
+
+            //有些立即完成的任务, 激活即完成
+            //如果没完成, 我们才跟component打交道
+            if (IsFinished() == false)
+            {
+                TasksComponent.OnGameplayTaskActivated(this);
+            }
         }
 
 
@@ -397,23 +545,23 @@ public enum EGameplayTaskEvent
 
         public string GetTaskStateName()
         {
-            return "";
+            return TaskState.ToString();
         }
 
-/*T UGameplayTask.NewTask(UObject WorldContextObject, string InstanceName)
-{
-    IGameplayTaskOwnerInterface TaskOwner = ConvertToTaskOwner(WorldContextObject){ }
-    return (TaskOwner) ? NewTask<T>(*TaskOwner, InstanceName) : null;
-    }
+        /*T UGameplayTask.NewTask(UObject WorldContextObject, string InstanceName)
+        {
+            IGameplayTaskOwnerInterface TaskOwner = ConvertToTaskOwner(WorldContextObject){ }
+            return (TaskOwner) ? NewTask<T>(*TaskOwner, InstanceName) : null;
+            }
 
-T UGameplayTask.NewTask(IGameplayTaskOwnerInterface TaskOwner, string InstanceName)
-{
-    T MyObj = NewObject<T>(){}
-    MyObj->InstanceName = InstanceName;
-    MyObj->InitTask(TaskOwner, TaskOwner.GetGameplayTaskDefaultPriority()){}
-    return MyObj;
-}
+        T UGameplayTask.NewTask(IGameplayTaskOwnerInterface TaskOwner, string InstanceName)
+        {
+            T MyObj = NewObject<T>(){}
+            MyObj->InstanceName = InstanceName;
+            MyObj->InitTask(TaskOwner, TaskOwner.GetGameplayTaskDefaultPriority()){}
+            return MyObj;
+        }
 
- }*/
+         }*/
     }
 }

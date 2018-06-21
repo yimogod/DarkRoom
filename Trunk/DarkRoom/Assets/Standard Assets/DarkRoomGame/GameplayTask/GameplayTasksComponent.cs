@@ -4,13 +4,22 @@ using UnityEngine;
 
 namespace DarkRoom.Game
 {
+    /// <summary>
+    /// 处理task的组件, 外部调用添加或者删除接口
+    /// 内部 update 处理缓存的时间列表
+    /// </summary>
     public class UGameplayTasksComponent : MonoBehaviour, IGameplayTaskOwnerInterface
     {
+        /// <summary>
+        /// 锁定的资源变化了发起通知
+        /// </summary>
         public Action OnClaimedResourcesChange;
 
-        /** Tasks that run on simulated proxies */
-        protected List<UGameplayTask> SimulatedTasks;
+        protected static List<UGameplayTask> LocalTickingTasks = new List<UGameplayTask>();
 
+        /// <summary>
+        /// 权重重新排列的task
+        /// </summary>
         protected List<UGameplayTask> TaskPriorityQueue;
 
         /// <summary>
@@ -47,29 +56,6 @@ namespace DarkRoom.Game
             TopActivePriority = 0;
             bInEventProcessingInProgress = false;
         }
-
-        /// <summary>
-        /// 遍历模拟task, 然后启动他们
-        /// </summary>
-        public void OnRep_SimulatedTasks()
-        {
-            foreach (UGameplayTask SimulatedTask in SimulatedTasks)
-            {
-                // Temp check 
-                if (SimulatedTask.IsTickingTask() && !TickingTasks.Contains(SimulatedTask))
-                {
-                    SimulatedTask.InitSimulatedTask(this);
-                    if (TickingTasks.Count == 0)
-                    {
-                        UpdateShouldTick();
-                    }
-
-                    TickingTasks.Add(SimulatedTask);
-                }
-            }
-        }
-
-        static List<UGameplayTask> LocalTickingTasks = new List<UGameplayTask>();
 
         /// <summary>
         /// TODO 这里其实是处理任务的核心地方。 但感觉方法非常不舒服--可能C++只能这么干
@@ -243,7 +229,7 @@ namespace DarkRoom.Game
 
         public virtual CUnitEntity GetGameplayTaskAvatar(UGameplayTask Task)
         {
-            return null;
+            return Task.GetAvatarActor();
         }
 
         public int GetGameplayTaskDefaultPriority()
@@ -265,12 +251,6 @@ namespace DarkRoom.Game
                 // If this is our first ticking task, set this component as active so it begins ticking
                 if (TickingTasks.Count == 1) UpdateShouldTick();
             }
-
-            if (Task.IsSimulatedTask())
-            {
-                if (!SimulatedTasks.Contains(Task)) SimulatedTasks.Add(Task);
-            }
-
 
             if (!Task.IsOwnedByTasksComponent())
             {
@@ -310,11 +290,6 @@ namespace DarkRoom.Game
                 KnownTasks.Remove(Task);
             }
 
-            if (Task.IsSimulatedTask())
-            {
-                SimulatedTasks.Remove(Task);
-            }
-
             // Resource-using task
             if (Task.RequiresPriorityOrResourceManagement() && bIsFinished)
             {
@@ -352,14 +327,11 @@ namespace DarkRoom.Game
             return "";
         }
 
-
-        public void RequestTicking()
-        {
-        }
-
+        /// <summary>
+        /// 处理任务事件
+        /// </summary>
         private const int MaxIterations = 16;
-
-        public void ProcessTaskEvents()
+        protected void ProcessTaskEvents()
         {
             bInEventProcessingInProgress = true;
 
@@ -415,15 +387,63 @@ namespace DarkRoom.Game
 
         public void UpdateTaskActivations()
         {
+            FGameplayResourceSet ResourcesClaimed = new FGameplayResourceSet(0);
+
+            if (TaskPriorityQueue.Count > 0)
+            {
+                List<UGameplayTask> ActivationList = new List<UGameplayTask>();
+
+                FGameplayResourceSet ResourcesBlocked = new FGameplayResourceSet(0);
+                for (int TaskIndex = 0; TaskIndex < TaskPriorityQueue.Count; ++TaskIndex)
+                {
+                    FGameplayResourceSet RequiredResources = TaskPriorityQueue[TaskIndex].GetRequiredResources();
+                    FGameplayResourceSet ClaimedResources = TaskPriorityQueue[TaskIndex].GetClaimedResources();
+                    if (RequiredResources.GetOverlap(ResourcesBlocked).IsEmpty())
+                    {
+                        // postpone activations, it's some tasks (like MoveTo) require pausing old ones first
+                        ActivationList.Add(TaskPriorityQueue[TaskIndex]);
+                        ResourcesClaimed.AddSet(ClaimedResources);
+                    }
+                    else
+                    {
+                        TaskPriorityQueue[TaskIndex].PauseInTaskQueue();
+                    }
+
+                    ResourcesBlocked.AddSet(ClaimedResources);
+                }
+
+                for (int Idx = 0; Idx < ActivationList.Count; Idx++)
+                {
+                    // check if task wasn't already finished as a result of activating previous elements of this list
+                    if (ActivationList[Idx] != null
+                        && ActivationList[Idx].IsFinished() == false)
+                    {
+                        ActivationList[Idx].ActivateInTaskQueue();
+                    }
+                }
+            }
+
+            SetCurrentlyClaimedResources(ResourcesClaimed);
+
+         
         }
 
         public void SetCurrentlyClaimedResources(FGameplayResourceSet NewClaimedSet)
         {
+            if (CurrentlyClaimedResources != NewClaimedSet)
+            {
+                //FGameplayResourceSet ReleasedResources = new FGameplayResourceSet(CurrentlyClaimedResources).RemoveSet(NewClaimedSet);
+                //FGameplayResourceSet ClaimedResources = new FGameplayResourceSet(NewClaimedSet).RemoveSet(CurrentlyClaimedResources);
+                CurrentlyClaimedResources = NewClaimedSet;
+                //OnClaimedResourcesChange.Broadcast(ClaimedResources, ReleasedResources);
+            }
         }
 
         /** called when a task gets ended with an external call, meaning not coming from UGameplayTasksComponent mechanics */
         private void OnTaskEnded(UGameplayTask Task)
         {
+            if (Task.RequiresPriorityOrResourceManagement())
+                RemoveResourceConsumingTask(Task);
         }
 
         private void AddTaskToPriorityQueue(UGameplayTask NewTask)
