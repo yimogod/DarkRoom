@@ -34,6 +34,8 @@ namespace DarkRoom.GamePlayAbility {
 	/// Commit()提交资源或者cd. Activate()必须调用这个方法
 	/// CancelAbility()取消技能, 比如持续施法会被打断
 	/// EndAbility()技能完成. 技能自身调用告知自己技能完毕了
+	/// 
+	/// 技能还有一些自己的标签
 	/// </summary>
 	[RequireComponent(typeof(CController))]
 	public class CAbility : MonoBehaviour {

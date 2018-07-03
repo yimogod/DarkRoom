@@ -33,7 +33,6 @@ namespace DarkRoom.GamePlayAbility {
 		{
 			Attack, //攻击
 			EffectTarget, //需要选定目标的effect
-			//EffectPassive //被动技能
 		}
 
 		/// <summary>

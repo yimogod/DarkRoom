@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DarkRoom.Game;
+using UnityEngine;
 
 namespace DarkRoom.GamePlayAbility
 {
@@ -248,4 +249,171 @@ namespace DarkRoom.GamePlayAbility
             return "";
         }
     }
+
+
+    public class FGameplayEffectQuery
+    {
+        public FGameplayEffectQuery(FActiveGameplayEffectQueryCustomMatch InCustomMatchDelegate)
+        {
+        }
+
+        /** Native delegate for providing custom matching conditions. */
+        Action<FActiveGameplayEffect> CustomMatchDelegate;
+
+        /** BP-exposed delegate for providing custom matching conditions. */
+        Action<FActiveGameplayEffect, bool> CustomMatchDelegate_BP;
+
+        /** Query that is matched against tags this GE gives */
+        FGameplayTagQuery OwningTagQuery;
+
+        /** Query that is matched against tags this GE has */
+        FGameplayTagQuery EffectTagQuery;
+
+        /** Query that is matched against tags the source of this GE has */
+        FGameplayTagQuery SourceTagQuery;
+
+        /** Matches on GameplayEffects which modify given attribute. */
+        FGameplayAttribute ModifyingAttribute;
+
+        /** Matches on GameplayEffects which come from this source */
+        GameObject EffectSource;
+
+        /** Matches on GameplayEffects with this definition */
+        UGameplayEffect EffectDefinition;
+
+        /** Handles to ignore as matches, even if other criteria is met */
+        public List<FActiveGameplayEffectHandle> IgnoreHandles;
+
+        /** Returns true if Effect matches all specified criteria of this query, including CustomMatch delegates if bound. Returns false otherwise. */
+        public bool Matches(FActiveGameplayEffect Effect)
+        {
+            return false;
+        }
+
+        /** Returns true if Effect matches all specified criteria of this query. This does NOT check FActiveGameplayEffectQueryCustomMatch since this is performed on the spec (possibly prior to applying).
+         *	Note: it would be reasonable to support a custom delegate that operated on the FGameplayEffectSpec itself.
+         */
+        public bool Matches(FGameplayEffectSpec Effect)
+        {
+            return false;
+        }
+
+        /** Returns true if the query is empty/default. E.g., it has no data set. */
+        public  bool IsEmpty()
+        {
+            return false;
+        }
+
+        /** 
+         * Shortcuts for easily creating common query types 
+         * @todo: add more as dictated by use cases
+         */
+
+        /** Creates an effect query that will match if there are any common tags between the given tags and an ActiveGameplayEffect's owning tags */
+        public static FGameplayEffectQuery MakeQuery_MatchAnyOwningTags(FGameplayTagContainer InTags)
+        {
+            return null;
+        }
+
+        /** Creates an effect query that will match if all of the given tags are in the ActiveGameplayEffect's owning tags */
+        public static FGameplayEffectQuery MakeQuery_MatchAllOwningTags(FGameplayTagContainer InTags)
+        {
+            return null;
+        }
+
+        /** Creates an effect query that will match if there are no common tags between the given tags and an ActiveGameplayEffect's owning tags */
+        public static FGameplayEffectQuery MakeQuery_MatchNoOwningTags(FGameplayTagContainer InTags)
+        {
+            return null;
+        }
+
+        /** Creates an effect query that will match if there are any common tags between the given tags and an ActiveGameplayEffect's tags */
+        public static FGameplayEffectQuery MakeQuery_MatchAnyEffectTags(FGameplayTagContainer InTags)
+        {
+            return null;
+        }
+
+        /** Creates an effect query that will match if all of the given tags are in the ActiveGameplayEffect's tags */
+        public static FGameplayEffectQuery MakeQuery_MatchAllEffectTags(FGameplayTagContainer InTags)
+        {
+            return null; 
+        }
+
+        /** Creates an effect query that will match if there are no common tags between the given tags and an ActiveGameplayEffect's tags */
+        public static FGameplayEffectQuery MakeQuery_MatchNoEffectTags(FGameplayTagContainer InTags)
+        {
+            return null;
+        }
+
+        /** Creates an effect query that will match if there are any common tags between the given tags and an ActiveGameplayEffect's source tags */
+        public static FGameplayEffectQuery MakeQuery_MatchAnySourceTags(FGameplayTagContainer InTags)
+        {
+            return null;
+        }
+
+        /** Creates an effect query that will match if all of the given tags are in the ActiveGameplayEffect's source tags */
+        public static FGameplayEffectQuery MakeQuery_MatchAllSourceTags(FGameplayTagContainer InTags)
+        {
+            return null;
+        }
+
+        /** Creates an effect query that will match if there are no common tags between the given tags and an ActiveGameplayEffect's source tags */
+        public static FGameplayEffectQuery MakeQuery_MatchNoSourceTags(FGameplayTagContainer InTags)
+        {
+            return null;
+        }
+    }
+
+    public class FActiveGameplayEffectQuery
+    {
+        /** Bind this to override the default query-matching code. */
+        Action<FActiveGameplayEffect> CustomMatch;
+
+        /** Returns true if Effect matches the criteria of this query, which will be overridden by CustomMatch if it is bound. Returns false otherwise. */
+        public bool Matches(FActiveGameplayEffect Effect)
+        {
+            return false;
+        }
+
+        /** used to match with InheritableOwnedTagsContainer */
+        public FGameplayTagContainer OwningTagContainer;
+
+        /** used to match with InheritableGameplayEffectTags */
+        public FGameplayTagContainer EffectTagContainer;
+
+        /** used to reject matches with InheritableOwnedTagsContainer */
+        public FGameplayTagContainer OwningTagContainer_Rejection;
+
+        /** used to reject matches with InheritableGameplayEffectTags */
+        public FGameplayTagContainer EffectTagContainer_Rejection;
+
+        // Matches on GameplayEffects which modify given attribute
+        public FGameplayAttribute ModifyingAttribute;
+
+        // Matches on GameplayEffects which come from this source
+        public GameObject EffectSource;
+
+        // Matches on GameplayEffects with this definition
+        public UGameplayEffect EffectDef;
+
+        // Handles to ignore as matches, even if other criteria is met
+        List<FActiveGameplayEffectHandle> IgnoreHandles;
+    }
+
+
+    /**
+ * FGameplayEffectRemovalInfo
+ *	Data struct for containing information pertinent to GameplayEffects as they are removed.
+ */
+    public struct FGameplayEffectRemovalInfo
+    {
+        /** True when the gameplay effect's duration has not expired, meaning the gameplay effect is being forcefully removed.  */
+        bool bPrematureRemoval;
+
+        /** Number of Stacks this gameplay effect had before it was removed. */
+        int StackCount;
+
+        /** Actor this gameplay effect was targeting. */
+        FGameplayEffectContextHandle EffectContext;
+    };
 }

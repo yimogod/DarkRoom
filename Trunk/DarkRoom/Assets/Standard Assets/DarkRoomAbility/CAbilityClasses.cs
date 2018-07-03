@@ -28,6 +28,7 @@ namespace DarkRoom.GamePlayAbility {
 
 		public enum TargetType
 		{
+            None, //不需要目标, 可以选择地面
 			Me,
 			Friend,
 			Enemy,

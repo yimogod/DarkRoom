@@ -5,30 +5,43 @@ using UnityEngine;
 using DarkRoom.Game;
 
 namespace DarkRoom.GamePlayAbility {
-	/// <summary>
-	/// 技能系统, 挂在角色身上管理着身上的具体技能.
-	/// 根据SC会有三个主要组件Ability, Behavior, Effect
-	/// 
-	/// 
-	/// 根据UE会有Ability, Effect, Attribute.
-	/// 来源于UE的注释, system提供的主要方法有
-	/// Ability
-	///		提供赋予技能的接口
-	///		管理着技能实例
-	///		网络复制功能
-	///			技能状态必须可以自己复制. 另外CAbilitySystem提供RPC复制
-	/// 
-	/// Effect
-	///		提供一个FActiveGameplayEffectsContainer容器来管理所有活动着的Effect
-	///		提供接口应用Effect到目标身上
-	///		FActiveGameplayEffectsContainers里封装查询信息
-	///		提供接口清理Effect
-	/// 
-	/// Attribute
-	///		提供属性初始化/设置器
-	///		提供方法获取属性
-	/// </summary>
-	public class CAbilitySystem : MonoBehaviour
+    /// <summary>
+    /// 技能系统, 挂在角色身上管理着身上的具体技能.
+    /// 根据SC会有三个主要组件Ability, Behavior, Effect
+    /// 
+    /// 
+    /// 根据UE会有Ability, Effect, Attribute.
+    /// 来源于UE的注释, system提供的主要方法有
+    /// Ability
+    ///		提供赋予技能的接口
+    ///		管理着技能实例
+    /// 
+    /// Effect
+    ///		提供一个FActiveGameplayEffectsContainer容器来管理所有活动着的Effect
+    ///		提供接口应用Effect到目标身上
+    ///		FActiveGameplayEffectsContainers里封装查询信息
+    ///		提供接口清理Effect
+    /// 
+    /// Attribute
+    ///		提供属性初始化/设置器
+    ///		提供方法获取属性
+    /// 
+    /// 在UE中, Cability是通过调用CAbilitySystem来 ApplyEffect 的
+    /// CAbilitySystem相当于一个代理, 提供了技能系统的入口和很多实用方法, 比如
+    /// 设置owner和avatar
+    /// 获取owner身上的指定buff, 以及buff的开始时间, 剩余时间, 叠加层数/或者实例个数
+    /// 移除buff, 可以根据类型, id等
+    /// 查询tag
+    /// 
+    /// 特别奇怪(好像也不奇怪). 针对CAbility,  此类的责任有
+    /// 1. 管理技能的实例(因为技能分3个instance类型), 我之前的ability都是一个实例
+    ///     怀疑这里的instance类型可以匹配到我的Effect instance 类型--不能对应. 
+    ///     因为Effect的对象不一定是自己, 而Ability肯定是自己
+    /// 2. ActiviteAbility
+    /// 3. CancelAbility
+    /// 4. 通过Tag禁言技能
+    /// </summary>
+    public class CAbilitySystem : MonoBehaviour
 	{
 		protected CAIController m_owner;
 		//角色目前选中的技能
