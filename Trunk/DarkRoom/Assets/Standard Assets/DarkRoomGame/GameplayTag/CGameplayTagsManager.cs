@@ -35,15 +35,15 @@ namespace DarkRoom.Game
     /// 保存着所有的tag元数据.
     /// 可以创建单个tag
     /// </summary>
-    public class UGameplayTagsManager : CSingleton<UGameplayTagsManager>
+    public class CGameplayTagsManager : CSingleton<CGameplayTagsManager>
     {
         /** Roots of gameplay tag nodes */
-        private FGameplayTagNode GameplayRootTag;
+        private CGameplayTagNode GameplayRootTag;
 
         /**
          * key 是tag name, 内部使用
          */
-        private Dictionary<string, FGameplayTagNode> GameplayTagNodeMap = new Dictionary<string, FGameplayTagNode>();
+        private Dictionary<string, CGameplayTagNode> GameplayTagNodeMap = new Dictionary<string, CGameplayTagNode>();
 
         /** Cached runtime value for whether we should warn when loading invalid tags */
         private bool bShouldWarnOnInvalidTags;
@@ -68,9 +68,9 @@ namespace DarkRoom.Game
          * 会使用TagName去GameplayTagManager里面搜索看是否存在此tag
          * 如果ErrorIfNotFound为true, 且搜索未发现TagName, 则返回null
          */
-        public FGameplayTag RequestGameplayTag(string TagName, bool ErrorIfNotFound = true)
+        public CGameplayTag RequestGameplayTag(string TagName, bool ErrorIfNotFound = true)
         {
-            if (GameplayTagNodeMap.ContainsKey(TagName))return new FGameplayTag(TagName);
+            if (GameplayTagNodeMap.ContainsKey(TagName))return new CGameplayTag(TagName);
 
             if (ErrorIfNotFound && !MissingTagName.Contains(TagName))
             {
@@ -84,9 +84,9 @@ namespace DarkRoom.Game
         /// 返回包含本tag以及所有父亲tag的container
         /// 比如传入的a.b.c 那么 此container会包含a, a.b, a.b.c
         /// </summary>
-        public FGameplayTagContainer RequestGameplayTagParents(FGameplayTag GameplayTag)
+        public CGameplayTagContainer RequestGameplayTagParents(CGameplayTag GameplayTag)
         {
-            FGameplayTagContainer container = GetSingleTagContainer(GameplayTag);
+            CGameplayTagContainer container = GetSingleTagContainer(GameplayTag);
             if (container != null)return container.GetGameplayTagParents();
             return null;
         }
@@ -95,11 +95,11 @@ namespace DarkRoom.Game
         /// 获取传入tag所有的子tag组成的container, 不包含传入tag
         /// 例如传入a.b, 则返回的conatiner包含a.b.c, a.b.d, a.b.c.e
         /// </summary>
-        public FGameplayTagContainer RequestGameplayTagChildren(FGameplayTag GameplayTag)
+        public CGameplayTagContainer RequestGameplayTagChildren(CGameplayTag GameplayTag)
         {
-            FGameplayTagContainer TagContainer = new FGameplayTagContainer();
+            CGameplayTagContainer TagContainer = new CGameplayTagContainer();
 
-            FGameplayTagNode GameplayTagNode = FindTagNode(GameplayTag);
+            CGameplayTagNode GameplayTagNode = FindTagNode(GameplayTag);
             if (GameplayTagNode.IsValid())
             {
                 AddChildrenTags(TagContainer, GameplayTagNode, true, true);
@@ -111,9 +111,9 @@ namespace DarkRoom.Game
          * 返回直系的父亲
          * calling on x.y will return x
          */
-        public FGameplayTag RequestGameplayTagDirectParent(FGameplayTag GameplayTag)
+        public CGameplayTag RequestGameplayTagDirectParent(CGameplayTag GameplayTag)
         {
-            FGameplayTagNode GameplayTagNode = FindTagNode(GameplayTag);
+            CGameplayTagNode GameplayTagNode = FindTagNode(GameplayTag);
             if (!GameplayTagNode.IsValid()) return null;
 
             var parent = GameplayTagNode.GetParentTagNode();
@@ -124,9 +124,9 @@ namespace DarkRoom.Game
         /// <summary>
         /// 在node树中查找传入tag对应的container, 此container仅包含传入的tag
         /// </summary>
-        public FGameplayTagContainer GetSingleTagContainer(FGameplayTag GameplayTag)
+        public CGameplayTagContainer GetSingleTagContainer(CGameplayTag GameplayTag)
         {
-            FGameplayTagNode node = FindTagNode(GameplayTag);
+            CGameplayTagNode node = FindTagNode(GameplayTag);
             if (node.IsValid())
             {
                 return node.GetSingleTagContainer();
@@ -138,18 +138,18 @@ namespace DarkRoom.Game
         /// <summary>
         /// 找到tag对应的node
         /// </summary>
-        public FGameplayTagNode FindTagNode(FGameplayTag GameplayTag)
+        public CGameplayTagNode FindTagNode(CGameplayTag GameplayTag)
         {
-            FGameplayTagNode Node = GameplayTagNodeMap[GameplayTag.GetTagName()];
+            CGameplayTagNode Node = GameplayTagNodeMap[GameplayTag.GetTagName()];
             return Node;
         }
 
         /// <summary>
         /// 找到tag对应的node
         /// </summary>
-        public FGameplayTagNode FindTagNode(string TagName)
+        public CGameplayTagNode FindTagNode(string TagName)
         {
-            FGameplayTag PossibleTag = new FGameplayTag(TagName);
+            CGameplayTag PossibleTag = new CGameplayTag(TagName);
             return FindTagNode(PossibleTag);
         }
 
@@ -164,13 +164,13 @@ namespace DarkRoom.Game
         {
             if (!GameplayRootTag.IsValid())return;
 
-            FGameplayTagNode currNode = GameplayRootTag;
+            CGameplayTagNode currNode = GameplayRootTag;
             foreach (var item in GameplayTagTables)
             {
                 var subTags = item.SubTags;
                 for (int i = 0; i < subTags.Count; i++)
                 {
-                    List<FGameplayTagNode> childTags = currNode.GetChildTagNodes();
+                    List<CGameplayTagNode> childTags = currNode.GetChildTagNodes();
                     int insertIndex = InsertTagIntoNodeArray(subTags[i], currNode, childTags);
                     currNode = childTags[insertIndex];
                 }
@@ -188,7 +188,7 @@ namespace DarkRoom.Game
         /// <summary>
         /// 将tag a.b.c 变成数组[a, b, c]
         /// </summary>
-        public void SplitGameplayTagFName(FGameplayTag Tag, List<string> OutNames)
+        public void SplitGameplayTagFName(CGameplayTag Tag, List<string> OutNames)
         {
             var list = Tag.GetTagName().Split('.');
             OutNames.AddRange(list);
@@ -198,9 +198,9 @@ namespace DarkRoom.Game
         /// 获取所有的gameplay tag
         /// 如果你只添加了a.b.c那么其实会有3个tag--a, a.b, a.b.c
         /// </summary>
-        public void RequestAllGameplayTags(FGameplayTagContainer TagContainer, bool OnlyIncludeDictionaryTags)
+        public void RequestAllGameplayTags(CGameplayTagContainer TagContainer, bool OnlyIncludeDictionaryTags)
         {
-            foreach(KeyValuePair<string, FGameplayTagNode> item in GameplayTagNodeMap)
+            foreach(KeyValuePair<string, CGameplayTagNode> item in GameplayTagNodeMap)
             {
                 if (OnlyIncludeDictionaryTags)continue;
 
@@ -221,7 +221,7 @@ namespace DarkRoom.Game
         * 检测 两个tag有多相近, 返回值越好说明越相近
         * 比如A.b.c 和A.b.d 就比 A.b.c和A.c更相近
         */
-        public int GameplayTagsMatchDepth(FGameplayTag GameplayTagOne, FGameplayTag GameplayTagTwo)
+        public int GameplayTagsMatchDepth(CGameplayTag GameplayTagOne, CGameplayTag GameplayTagTwo)
         {
             return 1;
         }
@@ -240,7 +240,7 @@ namespace DarkRoom.Game
          * @param NodeArray				Node array to insert the new node into, if necessary (if the tag already exists, no insertion will occur)
          * @return Index of the node of the tag
          */
-        private int InsertTagIntoNodeArray(string Tag, FGameplayTagNode ParentNode, List<FGameplayTagNode> NodeArray)
+        private int InsertTagIntoNodeArray(string Tag, CGameplayTagNode ParentNode, List<CGameplayTagNode> NodeArray)
         {
             int InsertionIdx = -1;
             int WhereToInsert = -1;
@@ -271,13 +271,13 @@ namespace DarkRoom.Game
             if (WhereToInsert == -1)WhereToInsert = NodeArray.Count;
 
             // Don't add the root node as parent
-            FGameplayTagNode TagNode = new FGameplayTagNode(Tag, ParentNode != GameplayRootTag ? ParentNode : null);
+            CGameplayTagNode TagNode = new CGameplayTagNode(Tag, ParentNode != GameplayRootTag ? ParentNode : null);
 
             // Add at the sorted location
             NodeArray.Insert(WhereToInsert, TagNode);
             InsertionIdx = WhereToInsert;
 
-            FGameplayTag GameplayTag = TagNode.GetCompleteTag();
+            CGameplayTag GameplayTag = TagNode.GetCompleteTag();
             GameplayTagNodeMap.Add(GameplayTag.GetTagName(), TagNode);
 
             return 1;
@@ -287,13 +287,13 @@ namespace DarkRoom.Game
         /// 将GameplayTagNode的children node对应的tag添加到TagContainer中去
         /// RecurseAll表示在树状节点中, 就添加一层child还是循环一直往下找
         /// </summary>
-        private void AddChildrenTags(FGameplayTagContainer TagContainer, FGameplayTagNode GameplayTagNode,
+        private void AddChildrenTags(CGameplayTagContainer TagContainer, CGameplayTagNode GameplayTagNode,
             bool RecurseAll = true, bool OnlyIncludeDictionaryTags = false)
         {
             if (!GameplayTagNode.IsValid())return;
 
             var ChildrenNodes = GameplayTagNode.GetChildTagNodes();
-            foreach (FGameplayTagNode ChildNode in ChildrenNodes)
+            foreach (CGameplayTagNode ChildNode in ChildrenNodes)
             {
                 if (!ChildNode.IsValid())continue;
 

@@ -21,7 +21,7 @@ namespace DarkRoom.GamePlayAbility
         CUnitEntity SourceObject;
 
         // SetbyCaller Magnitudes that were passed in to this ability by a GE (GE's that grant abilities). Made available so that 
-        Dictionary<FGameplayTag, float> SetByCallerTagMagnitudes;
+        Dictionary<CGameplayTag, float> SetByCallerTagMagnitudes;
 
         /** This handle can be set if the SpecDef is used to create a real FGameplaybilitySpec */
         //FGameplayAbilitySpecHandle AssignedHandle;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DarkRoom.Game
 {
-    public enum EGameplayTagQueryExprType
+    public enum CGameplayTagQueryExprType
     {
         Undefined = 0,
 
@@ -20,71 +20,71 @@ namespace DarkRoom.Game
         NoExprMatch,
     }
 
-    public class FGameplayTagQueryExpression
+    public class CGameplayTagQueryExpression
     {
         /** 表达式类型 */
-        public EGameplayTagQueryExprType ExprType;
+        public CGameplayTagQueryExprType ExprType;
 
         /** 表达式列表, 形成树状结构 */
-        public List<FGameplayTagQueryExpression> ExprSet;
+        public List<CGameplayTagQueryExpression> ExprSet;
 
         /** 表达式涉及到的tag */
-        public List<FGameplayTag> TagSet;
+        public List<CGameplayTag> TagSet;
 
-        public FGameplayTagQueryExpression AnyTagsMatch()
+        public CGameplayTagQueryExpression AnyTagsMatch()
         {
-            ExprType = EGameplayTagQueryExprType.AnyTagsMatch;
+            ExprType = CGameplayTagQueryExprType.AnyTagsMatch;
             return this;
         }
 
-        public FGameplayTagQueryExpression AllTagsMatch()
+        public CGameplayTagQueryExpression AllTagsMatch()
         {
-            ExprType = EGameplayTagQueryExprType.AllTagsMatch;
+            ExprType = CGameplayTagQueryExprType.AllTagsMatch;
             return this;
         }
 
-        public FGameplayTagQueryExpression NoTagsMatch()
+        public CGameplayTagQueryExpression NoTagsMatch()
         {
-            ExprType = EGameplayTagQueryExprType.NoTagsMatch;
+            ExprType = CGameplayTagQueryExprType.NoTagsMatch;
             return this;
         }
 
-        public FGameplayTagQueryExpression AnyExprMatch()
+        public CGameplayTagQueryExpression AnyExprMatch()
         {
-            ExprType = EGameplayTagQueryExprType.AnyExprMatch;
+            ExprType = CGameplayTagQueryExprType.AnyExprMatch;
             return this;
         }
 
-        public FGameplayTagQueryExpression AllExprMatch()
+        public CGameplayTagQueryExpression AllExprMatch()
         {
-            ExprType = EGameplayTagQueryExprType.AllExprMatch;
+            ExprType = CGameplayTagQueryExprType.AllExprMatch;
             return this;
         }
 
-        public FGameplayTagQueryExpression NoExprMatch()
+        public CGameplayTagQueryExpression NoExprMatch()
         {
-            ExprType = EGameplayTagQueryExprType.NoExprMatch;
+            ExprType = CGameplayTagQueryExprType.NoExprMatch;
             return this;
         }
 
-        public FGameplayTagQueryExpression AddTag(string TagName)
+        public CGameplayTagQueryExpression AddTag(string TagName)
         {
             return this;
         }
 
-        public FGameplayTagQueryExpression AddTag(FGameplayTag Tag)
+        public CGameplayTagQueryExpression AddTag(CGameplayTag Tag)
         {
             TagSet.Add(Tag);
             return this;
         }
 
-        public FGameplayTagQueryExpression AddTags(FGameplayTagContainer Tags)
+        public CGameplayTagQueryExpression AddTags(CGameplayTagContainer Tags)
         {
             TagSet.AddRange(Tags.GameplayTags);
             return this;
         }
 
-        public FGameplayTagQueryExpression AddExpr(FGameplayTagQueryExpression Expr)
+        public CGameplayTagQueryExpression AddExpr(CGameplayTagQueryExpression Expr)
         {
             ExprSet.Add(Expr);
             return this;
@@ -93,23 +93,23 @@ namespace DarkRoom.Game
         /** 如果ExprType是tag相关返回true */
         public bool UsesTagSet()
         {
-            return ExprType == EGameplayTagQueryExprType.AllTagsMatch ||
-                   ExprType == EGameplayTagQueryExprType.AnyTagsMatch ||
-                   ExprType == EGameplayTagQueryExprType.NoTagsMatch;
+            return ExprType == CGameplayTagQueryExprType.AllTagsMatch ||
+                   ExprType == CGameplayTagQueryExprType.AnyTagsMatch ||
+                   ExprType == CGameplayTagQueryExprType.NoTagsMatch;
         }
 
         /** 如果ExprType是表达式相关返回true */
         public bool UsesExprSet()
         {
-            return ExprType == EGameplayTagQueryExprType.AllExprMatch ||
-                   ExprType == EGameplayTagQueryExprType.AnyExprMatch ||
-                   ExprType == EGameplayTagQueryExprType.NoExprMatch;
+            return ExprType == CGameplayTagQueryExprType.AllExprMatch ||
+                   ExprType == CGameplayTagQueryExprType.AnyExprMatch ||
+                   ExprType == CGameplayTagQueryExprType.NoExprMatch;
         }
 
         /**
          * 将本表达式信息和传入的TagDictionary信息写入TokenStream里面
          */
-        public void EmitTokens(List<byte> TokenStream, List<FGameplayTag> TagDictionary)
+        public void EmitTokens(List<byte> TokenStream, List<CGameplayTag> TagDictionary)
         {
             // emit exprtype
             TokenStream.Add((byte) ExprType);
@@ -118,9 +118,9 @@ namespace DarkRoom.Game
             switch (ExprType)
             {
                 //tags
-                case EGameplayTagQueryExprType.AnyTagsMatch:
-                case EGameplayTagQueryExprType.AllTagsMatch:
-                case EGameplayTagQueryExprType.NoTagsMatch:
+                case CGameplayTagQueryExprType.AnyTagsMatch:
+                case CGameplayTagQueryExprType.AllTagsMatch:
+                case CGameplayTagQueryExprType.NoTagsMatch:
                     // emit tagset
                     byte NumTags = (byte) TagSet.Count;
                     TokenStream.Add(NumTags);
@@ -133,9 +133,9 @@ namespace DarkRoom.Game
                     break;
 
                 //expression
-                case EGameplayTagQueryExprType.AnyExprMatch:
-                case EGameplayTagQueryExprType.AllExprMatch:
-                case EGameplayTagQueryExprType.NoExprMatch:
+                case CGameplayTagQueryExprType.AnyExprMatch:
+                case CGameplayTagQueryExprType.AllExprMatch:
+                case CGameplayTagQueryExprType.NoExprMatch:
                     // emit tagset
                     byte NumExprs = (byte) ExprSet.Count;
                     TokenStream.Add(NumExprs);
@@ -179,7 +179,7 @@ namespace DarkRoom.Game
         private int TokenStreamVersion;
 
         /** 本查询包含的 tag */
-        private List<FGameplayTag> TagDictionary;
+        private List<CGameplayTag> TagDictionary;
 
         /** 本条查询涉及的数据 */
         public List<byte> QueryTokenStream;
@@ -197,32 +197,32 @@ namespace DarkRoom.Game
         /**
         * 创建 有任何一个tag匹配 的查询
         */
-        public static FGameplayTagQuery MakeQuery_MatchAnyTags(FGameplayTagContainer InTags)
+        public static FGameplayTagQuery MakeQuery_MatchAnyTags(CGameplayTagContainer InTags)
         {
-            var qe = new FGameplayTagQueryExpression();
+            var qe = new CGameplayTagQueryExpression();
             return BuildQuery(qe.AnyTagsMatch().AddTags(InTags));
         }
 
         /**
         * 创建 有完全匹配tag的查询
         */
-        public static FGameplayTagQuery MakeQuery_MatchAllTags(FGameplayTagContainer InTags)
+        public static FGameplayTagQuery MakeQuery_MatchAllTags(CGameplayTagContainer InTags)
         {
-            var qe = new FGameplayTagQueryExpression();
+            var qe = new CGameplayTagQueryExpression();
             return BuildQuery(qe.AllTagsMatch().AddTags(InTags));
         }
 
         /**
         * 创建 有完全没有tag匹配的查询
         */
-        public static FGameplayTagQuery MakeQuery_MatchNoTags(FGameplayTagContainer InTags)
+        public static FGameplayTagQuery MakeQuery_MatchNoTags(CGameplayTagContainer InTags)
         {
-            var qe = new FGameplayTagQueryExpression();
+            var qe = new CGameplayTagQueryExpression();
             return BuildQuery(qe.NoTagsMatch().AddTags(InTags));
         }
 
         /** 创建一个query */
-        public static FGameplayTagQuery BuildQuery(FGameplayTagQueryExpression RootQueryExpr, string InDescription = "")
+        public static FGameplayTagQuery BuildQuery(CGameplayTagQueryExpression RootQueryExpr, string InDescription = "")
         {
             FGameplayTagQuery Q = new FGameplayTagQuery();
             Q.Build(RootQueryExpr, InDescription);
@@ -233,7 +233,7 @@ namespace DarkRoom.Game
          * 获取tag
          * TODO 注意对index做包含
          */
-        public FGameplayTag GetTagFromIndex(int Index)
+        public CGameplayTag GetTagFromIndex(int Index)
         {
             return TagDictionary[Index];
         }
@@ -243,7 +243,7 @@ namespace DarkRoom.Game
          * Replaces existing tags with passed in tags. Does not modify the tag query expression logic.
          * Useful when you need to cache off and update often used query.
          */
-        public void ReplaceTagsFast(FGameplayTagContainer Tags)
+        public void ReplaceTagsFast(CGameplayTagContainer Tags)
         {
             TagDictionary.Clear();
             TagDictionary.AddRange(Tags.GameplayTags);
@@ -254,14 +254,14 @@ namespace DarkRoom.Game
          * Replaces existing tags with passed in tag. Does not modify the tag query expression logic.
          * Useful when you need to cache off and update often used query.
          */
-        public void ReplaceTagFast(FGameplayTag Tag)
+        public void ReplaceTagFast(CGameplayTag Tag)
         {
             TagDictionary.Clear();
             TagDictionary.Add(Tag);
         }
 
         /** Tags 是否有匹配的标签. */
-        public bool Matches(FGameplayTagContainer Tags)
+        public bool Matches(CGameplayTagContainer Tags)
         {
             FQueryEvaluator eval = new FQueryEvaluator(this);
             return eval.Eval(Tags);
@@ -279,7 +279,7 @@ namespace DarkRoom.Game
         }
 
         /** 创建查询byte数据, 根据传入的查询表达式. */
-        public void Build(FGameplayTagQueryExpression RootQueryExpr, string InUserDescription)
+        public void Build(CGameplayTagQueryExpression RootQueryExpr, string InUserDescription)
         {
             UserDescription = InUserDescription;
 
@@ -292,7 +292,7 @@ namespace DarkRoom.Game
         }
 
         /** Builds a FGameplayTagQueryExpression from this query. */
-        public void GetQueryExpr(FGameplayTagQueryExpression OutExpr)
+        public void GetQueryExpr(CGameplayTagQueryExpression OutExpr)
         {
             //根据传入的steam token创建表达式树
             FQueryEvaluator QE = new FQueryEvaluator(this);
@@ -320,7 +320,7 @@ namespace DarkRoom.Game
         }
 
         /** 评估传入的tag是否满足query的查询条件 */
-        public bool Eval(FGameplayTagContainer Tags)
+        public bool Eval(CGameplayTagContainer Tags)
         {
             CurStreamIdx = 0;
             if (bReadError) return false;
@@ -338,7 +338,7 @@ namespace DarkRoom.Game
         }
 
         /** 解析 the token stream 数据 传入到 FGameplayTagQueryExpression. */
-        public void Read(FGameplayTagQueryExpression E)
+        public void Read(CGameplayTagQueryExpression E)
         {
             CurStreamIdx = 0;
 
@@ -355,34 +355,34 @@ namespace DarkRoom.Game
             }
         }
 
-        private bool EvalExpr(FGameplayTagContainer Tags, bool bSkip = false)
+        private bool EvalExpr(CGameplayTagContainer Tags, bool bSkip = false)
         {
-            EGameplayTagQueryExprType ExprType = (EGameplayTagQueryExprType) GetToken();
+            CGameplayTagQueryExprType ExprType = (CGameplayTagQueryExprType) GetToken();
             if (bReadError) return false;
 
             switch (ExprType)
             {
-                case EGameplayTagQueryExprType.AnyTagsMatch:
+                case CGameplayTagQueryExprType.AnyTagsMatch:
                     return EvalAnyTagsMatch(Tags, bSkip);
-                case EGameplayTagQueryExprType.AllTagsMatch:
+                case CGameplayTagQueryExprType.AllTagsMatch:
                     return EvalAllTagsMatch(Tags, bSkip);
-                case EGameplayTagQueryExprType.NoTagsMatch:
+                case CGameplayTagQueryExprType.NoTagsMatch:
                     return EvalNoTagsMatch(Tags, bSkip);
 
-                case EGameplayTagQueryExprType.AnyExprMatch:
+                case CGameplayTagQueryExprType.AnyExprMatch:
                     return EvalAnyExprMatch(Tags, bSkip);
-                case EGameplayTagQueryExprType.AllExprMatch:
+                case CGameplayTagQueryExprType.AllExprMatch:
                     return EvalAllExprMatch(Tags, bSkip);
-                case EGameplayTagQueryExprType.NoExprMatch:
+                case CGameplayTagQueryExprType.NoExprMatch:
                     return EvalNoExprMatch(Tags, bSkip);
             }
 
             return false;
         }
 
-        private void ReadExpr(FGameplayTagQueryExpression E)
+        private void ReadExpr(CGameplayTagQueryExpression E)
         {
-            E.ExprType = (EGameplayTagQueryExprType) GetToken();
+            E.ExprType = (CGameplayTagQueryExprType) GetToken();
             if (bReadError) return;
 
             if (E.UsesTagSet())
@@ -396,7 +396,7 @@ namespace DarkRoom.Game
                     byte TagIdx = GetToken();
                     if (bReadError) return;
 
-                    FGameplayTag Tag = Query.GetTagFromIndex(TagIdx);
+                    CGameplayTag Tag = Query.GetTagFromIndex(TagIdx);
                     E.AddTag(Tag);
                 }
             }
@@ -411,14 +411,14 @@ namespace DarkRoom.Game
 
                 for (byte Idx = 0; Idx < NumExprs; ++Idx)
                 {
-                    FGameplayTagQueryExpression Exp = new FGameplayTagQueryExpression();
+                    CGameplayTagQueryExpression Exp = new CGameplayTagQueryExpression();
                     ReadExpr(Exp);
                     Exp.AddExpr(Exp);
                 }
             }
         }
 
-        private bool EvalAnyTagsMatch(FGameplayTagContainer Tags, bool bSkip)
+        private bool EvalAnyTagsMatch(CGameplayTagContainer Tags, bool bSkip)
         {
             // parse tagset
             byte NumTags = GetToken();
@@ -437,7 +437,7 @@ namespace DarkRoom.Game
                     byte TagIdx = GetToken();
                     if (bReadError) return false;
 
-                    FGameplayTag Tag = Query.GetTagFromIndex(TagIdx);
+                    CGameplayTag Tag = Query.GetTagFromIndex(TagIdx);
                     bool bHasTag = Tags.HasTag(Tag);
                     if (bHasTag) return true;
                 }
@@ -446,7 +446,7 @@ namespace DarkRoom.Game
             return false;
         }
 
-        private bool EvalAllTagsMatch(FGameplayTagContainer Tags, bool bSkip)
+        private bool EvalAllTagsMatch(CGameplayTagContainer Tags, bool bSkip)
         {
             // parse tagset
             byte NumTags = GetToken();
@@ -465,7 +465,7 @@ namespace DarkRoom.Game
                     byte TagIdx = GetToken();
                     if (bReadError) return false;
 
-                    FGameplayTag Tag = Query.GetTagFromIndex(TagIdx);
+                    CGameplayTag Tag = Query.GetTagFromIndex(TagIdx);
                     bool bHasTag = Tags.HasTag(Tag);
                     if (bHasTag == false) return false;
                 }
@@ -474,7 +474,7 @@ namespace DarkRoom.Game
             return true;
         }
 
-        private bool EvalNoTagsMatch(FGameplayTagContainer Tags, bool bSkip)
+        private bool EvalNoTagsMatch(CGameplayTagContainer Tags, bool bSkip)
         {
             // parse tagset
             byte NumTags = GetToken();
@@ -493,7 +493,7 @@ namespace DarkRoom.Game
                     byte TagIdx = GetToken();
                     if (bReadError) return false;
 
-                    FGameplayTag Tag = Query.GetTagFromIndex(TagIdx);
+                    CGameplayTag Tag = Query.GetTagFromIndex(TagIdx);
                     bool bHasTag = Tags.HasTag(Tag);
                     if (bHasTag) return false;
                 }
@@ -502,7 +502,7 @@ namespace DarkRoom.Game
             return true;
         }
 
-        private bool EvalAnyExprMatch(FGameplayTagContainer Tags, bool bSkip)
+        private bool EvalAnyExprMatch(CGameplayTagContainer Tags, bool bSkip)
         {
             bool bShortCircuit = bSkip;
 
@@ -530,7 +530,7 @@ namespace DarkRoom.Game
             return Result;
         }
 
-        private bool EvalAllExprMatch(FGameplayTagContainer Tags, bool bSkip)
+        private bool EvalAllExprMatch(CGameplayTagContainer Tags, bool bSkip)
         {
             bool bShortCircuit = bSkip;
 
@@ -558,7 +558,7 @@ namespace DarkRoom.Game
             return Result;
         }
 
-        private bool EvalNoExprMatch(FGameplayTagContainer Tags, bool bSkip)
+        private bool EvalNoExprMatch(CGameplayTagContainer Tags, bool bSkip)
         {
             bool bShortCircuit = bSkip;
 

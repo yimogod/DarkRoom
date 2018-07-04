@@ -236,13 +236,13 @@ namespace DarkRoom.GamePlayAbility
         }
 
         /* Needed for delegate callback for tag prediction */
-        public void RemoveOneTagCount_NoReturn(FGameplayTag Tag)
+        public void RemoveOneTagCount_NoReturn(CGameplayTag Tag)
         {
             //UpdateTagMap(Tag, -1);
         }
 
         /* Called for predictively added gameplay cue. Needs to remove tag count and possible invoke OnRemove event if misprediction */
-        public void OnPredictiveGameplayCueCatchup(FGameplayTag Tag)
+        public void OnPredictiveGameplayCueCatchup(CGameplayTag Tag)
         {
         }
 

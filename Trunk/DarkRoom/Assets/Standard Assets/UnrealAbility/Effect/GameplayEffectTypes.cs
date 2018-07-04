@@ -115,27 +115,27 @@ namespace DarkRoom.GamePlayAbility
 
     public class FTagContainerAggregator
     {
-        private FGameplayTagContainer CapturedSpecTags;
-        private FGameplayTagContainer ScopedTags;
+        private CGameplayTagContainer CapturedSpecTags;
+        private CGameplayTagContainer ScopedTags;
 
-        private FGameplayTagContainer CachedAggregator;
+        private CGameplayTagContainer CachedAggregator;
         private bool CacheIsValid;
 
         public FTagContainerAggregator(FTagContainerAggregator Other)
         {
         }
 
-        public FGameplayTagContainer GetActorTags()
+        public CGameplayTagContainer GetActorTags()
         {
             return null;
         }
 
-        public FGameplayTagContainer GetSpecTags()
+        public CGameplayTagContainer GetSpecTags()
         {
             return null;
         }
 
-        public FGameplayTagContainer GetAggregatedTags()
+        public CGameplayTagContainer GetAggregatedTags()
         {
             return null;
         }
@@ -229,12 +229,12 @@ namespace DarkRoom.GamePlayAbility
     public struct FGameplayTagRequirements
     {
         /** All of these tags must be present */
-        public FGameplayTagContainer RequireTags;
+        public CGameplayTagContainer RequireTags;
 
         /** None of these tags may be present */
-        public FGameplayTagContainer IgnoreTags;
+        public CGameplayTagContainer IgnoreTags;
 
-        public bool RequirementsMet(FGameplayTagContainer Container)
+        public bool RequirementsMet(CGameplayTagContainer Container)
         {
             return false;
         }
@@ -310,55 +310,55 @@ namespace DarkRoom.GamePlayAbility
          */
 
         /** Creates an effect query that will match if there are any common tags between the given tags and an ActiveGameplayEffect's owning tags */
-        public static FGameplayEffectQuery MakeQuery_MatchAnyOwningTags(FGameplayTagContainer InTags)
+        public static FGameplayEffectQuery MakeQuery_MatchAnyOwningTags(CGameplayTagContainer InTags)
         {
             return null;
         }
 
         /** Creates an effect query that will match if all of the given tags are in the ActiveGameplayEffect's owning tags */
-        public static FGameplayEffectQuery MakeQuery_MatchAllOwningTags(FGameplayTagContainer InTags)
+        public static FGameplayEffectQuery MakeQuery_MatchAllOwningTags(CGameplayTagContainer InTags)
         {
             return null;
         }
 
         /** Creates an effect query that will match if there are no common tags between the given tags and an ActiveGameplayEffect's owning tags */
-        public static FGameplayEffectQuery MakeQuery_MatchNoOwningTags(FGameplayTagContainer InTags)
+        public static FGameplayEffectQuery MakeQuery_MatchNoOwningTags(CGameplayTagContainer InTags)
         {
             return null;
         }
 
         /** Creates an effect query that will match if there are any common tags between the given tags and an ActiveGameplayEffect's tags */
-        public static FGameplayEffectQuery MakeQuery_MatchAnyEffectTags(FGameplayTagContainer InTags)
+        public static FGameplayEffectQuery MakeQuery_MatchAnyEffectTags(CGameplayTagContainer InTags)
         {
             return null;
         }
 
         /** Creates an effect query that will match if all of the given tags are in the ActiveGameplayEffect's tags */
-        public static FGameplayEffectQuery MakeQuery_MatchAllEffectTags(FGameplayTagContainer InTags)
+        public static FGameplayEffectQuery MakeQuery_MatchAllEffectTags(CGameplayTagContainer InTags)
         {
             return null; 
         }
 
         /** Creates an effect query that will match if there are no common tags between the given tags and an ActiveGameplayEffect's tags */
-        public static FGameplayEffectQuery MakeQuery_MatchNoEffectTags(FGameplayTagContainer InTags)
+        public static FGameplayEffectQuery MakeQuery_MatchNoEffectTags(CGameplayTagContainer InTags)
         {
             return null;
         }
 
         /** Creates an effect query that will match if there are any common tags between the given tags and an ActiveGameplayEffect's source tags */
-        public static FGameplayEffectQuery MakeQuery_MatchAnySourceTags(FGameplayTagContainer InTags)
+        public static FGameplayEffectQuery MakeQuery_MatchAnySourceTags(CGameplayTagContainer InTags)
         {
             return null;
         }
 
         /** Creates an effect query that will match if all of the given tags are in the ActiveGameplayEffect's source tags */
-        public static FGameplayEffectQuery MakeQuery_MatchAllSourceTags(FGameplayTagContainer InTags)
+        public static FGameplayEffectQuery MakeQuery_MatchAllSourceTags(CGameplayTagContainer InTags)
         {
             return null;
         }
 
         /** Creates an effect query that will match if there are no common tags between the given tags and an ActiveGameplayEffect's source tags */
-        public static FGameplayEffectQuery MakeQuery_MatchNoSourceTags(FGameplayTagContainer InTags)
+        public static FGameplayEffectQuery MakeQuery_MatchNoSourceTags(CGameplayTagContainer InTags)
         {
             return null;
         }
@@ -376,16 +376,16 @@ namespace DarkRoom.GamePlayAbility
         }
 
         /** used to match with InheritableOwnedTagsContainer */
-        public FGameplayTagContainer OwningTagContainer;
+        public CGameplayTagContainer OwningTagContainer;
 
         /** used to match with InheritableGameplayEffectTags */
-        public FGameplayTagContainer EffectTagContainer;
+        public CGameplayTagContainer EffectTagContainer;
 
         /** used to reject matches with InheritableOwnedTagsContainer */
-        public FGameplayTagContainer OwningTagContainer_Rejection;
+        public CGameplayTagContainer OwningTagContainer_Rejection;
 
         /** used to reject matches with InheritableGameplayEffectTags */
-        public FGameplayTagContainer EffectTagContainer_Rejection;
+        public CGameplayTagContainer EffectTagContainer_Rejection;
 
         // Matches on GameplayEffects which modify given attribute
         public FGameplayAttribute ModifyingAttribute;

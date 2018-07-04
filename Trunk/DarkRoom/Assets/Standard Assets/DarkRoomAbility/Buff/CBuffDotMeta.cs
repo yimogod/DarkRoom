@@ -2,31 +2,16 @@
 using DarkRoom.Game;
 
 namespace DarkRoom.GamePlayAbility {
+    /// <summary>
+    /// 以period的间断来修改某个Attribute
+    /// 一般比如中毒或者喝血
+    /// </summary>
     public class CBuffDotMeta : CBuffMeta
     {
         /// <summary>
-        /// 效果产生作用的前置条件
-        /// </summary>
-        public List<string> Requirements;
-
-        /// <summary>
-        /// 该buff可以在同一个单位身上存在几个实例
-        /// 比如英雄联盟的血瓶, 可以吃多个, 加快回血速度
-        /// </summary>
-        public int MaxStackCount;
-
-        /// <summary>
-        /// buff时长
-        /// 小于0表明永远有效果, 除非角色死亡
-        /// 等于0表明立刻销毁
-        /// </summary>
-        public float Duration = 0f;
-
-        /// <summary>
         /// buff产生作用的时间间隔.
         /// 如果是0.就持续产生作用(每帧都起作用)
-        /// 如果是小于0, 则表明没有效果产生. 可能仅仅是修改state
-        /// 否则就是间隔产生效果. 比如没1s造成伤害
+        /// 否则就是间隔产生效果. 比如每1s造成伤害
         /// 跟PeriodicEffect成对出现
         /// </summary>
         public float Period = -1;
@@ -37,21 +22,10 @@ namespace DarkRoom.GamePlayAbility {
         /// </summary>
         public string PeriodicEffect;
 
-
         /// <summary>
-        /// buff初始化时的效果
+        /// 刚附着本buff时是否执行PeriodicEffect
         /// </summary>
-        public string InitialEffect;
-
-        /// <summary>
-        /// buff完成时的效果
-        /// </summary>
-        public string FinalEffect;
-
-        /// <summary>
-        /// buff失效时产生的效果
-        /// </summary>
-        public string ExpireEffect;
+        public bool ExecutePeriodicEffectOnApply = true;
 
         /// <summary>
         /// 伤害反映
@@ -72,27 +46,6 @@ namespace DarkRoom.GamePlayAbility {
         /// </summary>
         public float TimeScale = 1f;
 
-        /// <summary>
-        /// 状态标记. 没明白为何星际2分开了不同的flag
-        /// 内置的状态state有
-        /// 暴漏进程, 被动, 不可拖动, 不可选择, 不可阻止, 不可作为目标, 沉默
-        /// 单位属性修改--轻甲, 重甲, 生物, 机械, 灵能, 建筑, 英雄
-        /// 不让攻击, 不让隐形, 不让碰撞, 不让战斗, 不让侦测, 不让提供/使用人口
-        /// 不让乘客, 不让有视野. 
-        /// </summary>
-        public Dictionary<CPawnVO.State, int> StateFlags = new Dictionary<CPawnVO.State, int>();
-
-        /// <summary>
-        /// 禁用技能类别, 比如目标技能, 普通攻击, 采集, 合体, 变形, 建造
-        /// </summary>
-        public List<CAbilityMeta.AbilityType> AbilClassDisableList =
-            new List<CAbilityMeta.AbilityType>();
-
-        /// <summary>
-        /// buff修改的单位属性
-        /// </summary>
-        public CAbilityEnum.BuffModification ModifyProperty =
-            new CAbilityEnum.BuffModification();
 
         public CBuffDotMeta(string idKey) : base(idKey)
         {

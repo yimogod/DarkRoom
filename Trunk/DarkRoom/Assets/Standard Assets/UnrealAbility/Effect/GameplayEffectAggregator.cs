@@ -190,17 +190,17 @@ namespace DarkRoom.GamePlayAbility
 
     public class FAggregatorEvaluateParameters
     {
-        public FGameplayTagContainer SourceTags;
-        public FGameplayTagContainer TargetTags;
+        public CGameplayTagContainer SourceTags;
+        public CGameplayTagContainer TargetTags;
 
         /** Any mods with one of these handles will be ignored during evaluation */
         public List<FActiveGameplayEffectHandle> IgnoreHandles;
 
         /** If any tags are specified in the filter, a mod's owning active gameplay effect's source tags must match ALL of them in order for the mod to count during evaluation */
-        public FGameplayTagContainer AppliedSourceTagFilter;
+        public CGameplayTagContainer AppliedSourceTagFilter;
 
         /** If any tags are specified in the filter, a mod's owning active gameplay effect's target tags must match ALL of them in order for the mod to count during evaluation */
-        public FGameplayTagContainer AppliedTargetTagFilter;
+        public CGameplayTagContainer AppliedTargetTagFilter;
 
         public bool IncludePredictiveMods;
     }

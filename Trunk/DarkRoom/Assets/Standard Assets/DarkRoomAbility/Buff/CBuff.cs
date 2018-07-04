@@ -4,9 +4,7 @@ using DarkRoom.Game;
 
 namespace DarkRoom.GamePlayAbility {
 	/// <summary>
-	/// 行为, 根据SC2, 典型的一个behavior就是添加buff
-	/// 
-	/// 在UE4中, effect用来做buff了
+	/// buff, 我们分为dot和状态. 这样策划可以更明确些
 	/// </summary>
 	[RequireComponent(typeof(CAIController))]
 	public class CBuff : MonoBehaviour {
@@ -14,7 +12,6 @@ namespace DarkRoom.GamePlayAbility {
 		/// buff 名称, 要跟meta名称对应
 		/// </summary>
 		public string BuffName;
-
 
 		//buff在我的身上
 		protected CAIController m_owner;

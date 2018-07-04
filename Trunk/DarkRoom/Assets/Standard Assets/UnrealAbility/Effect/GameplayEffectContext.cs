@@ -52,7 +52,7 @@ namespace DarkRoom.GamePlayAbility
         }
 
         /* Returns the list of gameplay tags applicable to this effect, defaults to the owner's tags */
-        public virtual void GetOwnedGameplayTags(ref FGameplayTagContainer ActorTagContainer, ref FGameplayTagContainer SpecTagContainer)
+        public virtual void GetOwnedGameplayTags(ref CGameplayTagContainer ActorTagContainer, ref CGameplayTagContainer SpecTagContainer)
         {
 
         }
@@ -217,7 +217,7 @@ namespace DarkRoom.GamePlayAbility
         }
 
         /* Returns the list of gameplay tags applicable to this effect, defaults to the owner's tags */
-        public void GetOwnedGameplayTags(ref FGameplayTagContainer ActorTagContainer, ref FGameplayTagContainer SpecTagContainer)
+        public void GetOwnedGameplayTags(ref CGameplayTagContainer ActorTagContainer, ref CGameplayTagContainer SpecTagContainer)
         {
             if (IsValid())
             {

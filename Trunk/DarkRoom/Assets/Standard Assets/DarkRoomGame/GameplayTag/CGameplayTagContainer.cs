@@ -4,7 +4,7 @@ using DarkRoom.Core;
 
 namespace DarkRoom.Game
 {
-    public enum EGameplayContainerMatchType
+    public enum CGameplayContainerMatchType
     {
         Any,    //Means the filter is populated by any tag matches in this container.
         All     //Means the filter is only populated if all of the tags in this container match.
@@ -15,17 +15,17 @@ namespace DarkRoom.Game
     /// 明确的保存了通过add方法添加的gameplaytag
     /// 且隐含的保存了gameplaytag的child tag
     /// </summary>
-    public class FGameplayTagContainer
+    public class CGameplayTagContainer
     {
         /** Array of gameplay tags */
-        public List<FGameplayTag> GameplayTags = new List<FGameplayTag>();
+        public List<CGameplayTag> GameplayTags = new List<CGameplayTag>();
 
         /** Array of expanded parent tags, in addition to GameplayTags. Used to accelerate parent searches. May contain duplicates in some cases */
-        public List<FGameplayTag> ParentTags = new List<FGameplayTag>();
+        public List<CGameplayTag> ParentTags = new List<CGameplayTag>();
 
-        public FGameplayTagContainer(){}
+        public CGameplayTagContainer(){}
 
-        public FGameplayTagContainer(List<FGameplayTag> InGameplayTags)
+        public CGameplayTagContainer(List<CGameplayTag> InGameplayTags)
         {
             GameplayTags.AddRange(InGameplayTags);
         }
@@ -33,9 +33,9 @@ namespace DarkRoom.Game
         /// <summary>
         /// 根据传入的tag列表, 创建container
         /// </summary>
-        public static FGameplayTagContainer CreateFromArray(List<FGameplayTag> SourceTags)
+        public static CGameplayTagContainer CreateFromArray(List<CGameplayTag> SourceTags)
         {
-            FGameplayTagContainer container = new FGameplayTagContainer();
+            CGameplayTagContainer container = new CGameplayTagContainer();
             container.GameplayTags.AddRange(SourceTags);
             container.FillParentTags();
             return container;
@@ -45,7 +45,7 @@ namespace DarkRoom.Game
         /// TagToCheck是否在本container中. 也会检查ParentTags
         /// {"A.1"}.HasTag("A") will return True, {"A"}.HasTag("A.1") will return False
         /// </summary>
-        public bool HasTag(FGameplayTag TagToCheck)
+        public bool HasTag(CGameplayTag TagToCheck)
         {
             if (!TagToCheck.IsValid())return false;
             
@@ -57,7 +57,7 @@ namespace DarkRoom.Game
          * 精确包含. 只判断GameplayTags列表
          *{"A.1"}.HasTagExact("A") will return False
          */
-        public bool HasTagExact(FGameplayTag TagToCheck)
+        public bool HasTagExact(CGameplayTag TagToCheck)
         {
             if (!TagToCheck.IsValid())return false;
 
@@ -69,11 +69,11 @@ namespace DarkRoom.Game
          * 本container是否包含ContainerToCheck的任意一个tag, 连ParentTags都会比较
          * {"A.1"}.HasAny({"A","B"}) will return True, {"A"}.HasAny({"A.1","B"}) will return False
          */
-        public bool HasAny(FGameplayTagContainer ContainerToCheck)
+        public bool HasAny(CGameplayTagContainer ContainerToCheck)
         {
             if (ContainerToCheck.IsEmpty())return false;
 
-            foreach (FGameplayTag otherTag in ContainerToCheck.GameplayTags)
+            foreach (CGameplayTag otherTag in ContainerToCheck.GameplayTags)
             {
                 if (GameplayTags.Contains(otherTag) || ParentTags.Contains(otherTag))
                 {
@@ -88,11 +88,11 @@ namespace DarkRoom.Game
          * 本container是否  精确  包含ContainerToCheck的任意一个tag, 不会比较ParentTags
          * {"A.1"}.HasAny({"A","B"}) will return False
          */
-        public bool HasAnyExact(FGameplayTagContainer ContainerToCheck)
+        public bool HasAnyExact(CGameplayTagContainer ContainerToCheck)
         {
             if (ContainerToCheck.IsEmpty())return false;
 
-            foreach (FGameplayTag otherTag in ContainerToCheck.GameplayTags)
+            foreach (CGameplayTag otherTag in ContainerToCheck.GameplayTags)
             {
                 if (GameplayTags.Contains(otherTag))return true;
             }
@@ -104,12 +104,12 @@ namespace DarkRoom.Game
          * GameplayTags 和 ParentTags 是否包含ContainerToCheck
          * * {"A.1","B.1"}.HasAll({"A","B"}) will return True, {"A","B"}.HasAll({"A.1","B.1"}) will return False
          */
-        public bool HasAll(FGameplayTagContainer ContainerToCheck)
+        public bool HasAll(CGameplayTagContainer ContainerToCheck)
         {
             //ContainerToCheck什么都没有,所以肯定返回true
             if (ContainerToCheck.IsEmpty())return true;
 
-            foreach (FGameplayTag OtherTag in ContainerToCheck.GameplayTags)
+            foreach (CGameplayTag OtherTag in ContainerToCheck.GameplayTags)
             {
                 if (!GameplayTags.Contains(OtherTag) && !ParentTags.Contains(OtherTag))
                 {
@@ -124,11 +124,11 @@ namespace DarkRoom.Game
          * GameplayTags 是否包含ContainerToCheck
          * {"A.1","B.1"}.HasAll({"A","B"}) will return False
          */
-        public bool HasAllExact(FGameplayTagContainer ContainerToCheck)
+        public bool HasAllExact(CGameplayTagContainer ContainerToCheck)
         {
             if (ContainerToCheck.IsEmpty())return true;
 
-            foreach (FGameplayTag OtherTag in ContainerToCheck.GameplayTags)
+            foreach (CGameplayTag OtherTag in ContainerToCheck.GameplayTags)
             {
                 if (!GameplayTags.Contains(OtherTag))return false;
             }
@@ -156,9 +156,9 @@ namespace DarkRoom.Game
         /// <summary>
         /// 返回一个新的container, 精确的包含了本container的所有GameplayTags和ParentTags
         /// </summary>
-        public FGameplayTagContainer GetGameplayTagParents()
+        public CGameplayTagContainer GetGameplayTagParents()
         {
-            FGameplayTagContainer container = new FGameplayTagContainer(GameplayTags);
+            CGameplayTagContainer container = new CGameplayTagContainer(GameplayTags);
             foreach (var item in ParentTags)
             {
                 container.GameplayTags.AddUnique(item);
@@ -170,11 +170,11 @@ namespace DarkRoom.Game
         /**
          * 返回一个新的container, 这个container包含的gameplaytag满足是本tag和OtherContainer的交集
          */
-        public FGameplayTagContainer Filter(FGameplayTagContainer OtherContainer)
+        public CGameplayTagContainer Filter(CGameplayTagContainer OtherContainer)
         {
-            FGameplayTagContainer container = new FGameplayTagContainer();
+            CGameplayTagContainer container = new CGameplayTagContainer();
 
-            foreach (FGameplayTag tag in GameplayTags)
+            foreach (CGameplayTag tag in GameplayTags)
             {
                 if (tag.MatchesAny(OtherContainer))container.AddTagFast(tag);
             }
@@ -185,11 +185,11 @@ namespace DarkRoom.Game
         /**
          *返回一个新的container, 这个container包含的gameplaytag满足是本tag和OtherContainer的精确交集
          */
-        public FGameplayTagContainer FilterExact(FGameplayTagContainer OtherContainer)
+        public CGameplayTagContainer FilterExact(CGameplayTagContainer OtherContainer)
         {
-            FGameplayTagContainer container = new FGameplayTagContainer();
+            CGameplayTagContainer container = new CGameplayTagContainer();
 
-            foreach (FGameplayTag tag in GameplayTags)
+            foreach (CGameplayTag tag in GameplayTags)
             {
                 if (tag.MatchesAnyExact(OtherContainer)) container.AddTagFast(tag);
             }
@@ -214,14 +214,14 @@ namespace DarkRoom.Game
          * 将other的gameplaytags添加到本gameplaytags列表
          * 将other的parent tags添加到本parenttags列表
          */
-        public void AppendTags(FGameplayTagContainer Other)
+        public void AppendTags(CGameplayTagContainer Other)
         {
-            foreach (FGameplayTag tag in Other.GameplayTags)
+            foreach (CGameplayTag tag in Other.GameplayTags)
             {
                 GameplayTags.AddUnique(tag);
             }
 
-            foreach (FGameplayTag tag in Other.ParentTags)
+            foreach (CGameplayTag tag in Other.ParentTags)
             {
                 ParentTags.AddUnique(tag);
             }
@@ -242,9 +242,9 @@ namespace DarkRoom.Game
          *
          * 将OtherA 匹配 OtherB 的子集添加进来
          */
-        public void AppendMatchingTags(FGameplayTagContainer OtherA, FGameplayTagContainer OtherB)
+        public void AppendMatchingTags(CGameplayTagContainer OtherA, CGameplayTagContainer OtherB)
         {
-            foreach (FGameplayTag otherATag in OtherA.GameplayTags)
+            foreach (CGameplayTag otherATag in OtherA.GameplayTags)
             {
                 if (otherATag.MatchesAny(OtherB))AddTag(otherATag);
             }
@@ -255,7 +255,7 @@ namespace DarkRoom.Game
          * 1. 添加TagToAdd 到 GameplayTags列表中
          * 2. 添加TagToAdd所在的container的parent tags到 ParentTags列表中
          */
-        public void AddTag(FGameplayTag TagToAdd)
+        public void AddTag(CGameplayTag TagToAdd)
         {
             if (!TagToAdd.IsValid())return;
             GameplayTags.AddUnique(TagToAdd);
@@ -265,7 +265,7 @@ namespace DarkRoom.Game
         /**
          * 不做唯一性判断, 直接添加tag
          */
-        public void AddTagFast(FGameplayTag TagToAdd)
+        public void AddTagFast(CGameplayTag TagToAdd)
         {
             if (!TagToAdd.IsValid()) return;
             GameplayTags.Add(TagToAdd);
@@ -276,7 +276,7 @@ namespace DarkRoom.Game
          * 添加TagToAdd到container, 但会删除gameplaytags列表中TagToAdd相关的parent tag
          * 如果TagToAdd已经在gameplaytags列表中, 就不会被添加
          */
-        public bool AddLeafTag(FGameplayTag TagToAdd)
+        public bool AddLeafTag(CGameplayTag TagToAdd)
         {
             // Check tag is not already explicitly in container
             if (HasTagExact(TagToAdd))return true;
@@ -284,11 +284,11 @@ namespace DarkRoom.Game
             // If this tag is parent of explicitly added tag, fail
             if (HasTag(TagToAdd))return false;
 
-            FGameplayTagContainer tagToAddContainer = UGameplayTagsManager.Instance.GetSingleTagContainer(TagToAdd);
+            CGameplayTagContainer tagToAddContainer = CGameplayTagsManager.Instance.GetSingleTagContainer(TagToAdd);
             if (tagToAddContainer == null)return false;
 
             // Remove any tags in the container that are a parent to TagToAdd
-            foreach (FGameplayTag ParentTag in tagToAddContainer.ParentTags)
+            foreach (CGameplayTag ParentTag in tagToAddContainer.ParentTags)
             {
                 if (HasTagExact(ParentTag))RemoveTag(ParentTag);
             }
@@ -301,7 +301,7 @@ namespace DarkRoom.Game
         /**
          * Tag to remove from the container
          */
-        public bool RemoveTag(FGameplayTag TagToRemove)
+        public bool RemoveTag(CGameplayTag TagToRemove)
         {
             bool succ = GameplayTags.Remove(TagToRemove);
             if (!succ) return false;
@@ -316,7 +316,7 @@ namespace DarkRoom.Game
          *
          * @param TagsToRemove	Tags to remove from the container
          */
-        public void RemoveTags(FGameplayTagContainer TagsToRemove)
+        public void RemoveTags(CGameplayTagContainer TagsToRemove)
         {
             bool removed = false;
             foreach (var item in TagsToRemove.GameplayTags)
@@ -356,13 +356,13 @@ namespace DarkRoom.Game
         }
 
         /** Returns human readable description of what match is being looked foreachon the readable tag list. */
-        public string ToMatchingText(EGameplayContainerMatchType MatchType, bool bInvertCondition)
+        public string ToMatchingText(CGameplayContainerMatchType MatchType, bool bInvertCondition)
         {
             return "";
         }
 
         /** Gets the explicit list of gameplay tags */
-        public void GetGameplayTagArray(List<FGameplayTag> InOutGameplayTags)
+        public void GetGameplayTagArray(List<CGameplayTag> InOutGameplayTags)
         {
             InOutGameplayTags.Clear();
             InOutGameplayTags.AddRange(GameplayTags);
@@ -373,18 +373,18 @@ namespace DarkRoom.Game
             return GameplayTags.IsValidIndex(Index);
         }
 
-        public FGameplayTag GetByIndex(int Index)
+        public CGameplayTag GetByIndex(int Index)
         {
             if (IsValidIndex(Index))return GameplayTags[Index];
             return null;
         }
 
-        public FGameplayTag First()
+        public CGameplayTag First()
         {
             return GameplayTags.Count > 0 ? GameplayTags[0] : null;
         }
 
-        public FGameplayTag Last()
+        public CGameplayTag Last()
         {
             return GameplayTags.Count > 0 ? GameplayTags.Last() : null;
         }
@@ -408,13 +408,13 @@ namespace DarkRoom.Game
         }
 
         /** 添加InTag所在的container的parent tags 到 本ParentTags中*/
-        protected void AddParentsForTag(FGameplayTag InTag)
+        protected void AddParentsForTag(CGameplayTag InTag)
         {
-            FGameplayTagContainer inContainer = UGameplayTagsManager.Instance.GetSingleTagContainer(InTag);
+            CGameplayTagContainer inContainer = CGameplayTagsManager.Instance.GetSingleTagContainer(InTag);
             if (inContainer == null)return;
 
             // Add Parent tags from this tag to our own
-            foreach (FGameplayTag ParentTag in inContainer.ParentTags)
+            foreach (CGameplayTag ParentTag in inContainer.ParentTags)
             {
                 ParentTags.AddUnique(ParentTag);
             }

@@ -6,6 +6,11 @@ using DarkRoom.Core;
 using DarkRoom.Game;
 
 namespace DarkRoom.GamePlayAbility {
+
+    /// <summary>
+    /// 有几个注意点
+    /// 1. 我们的buff没有成功几率一说, 是否成功我们移到了Effect中去
+    /// </summary>
 	public class CBuffMeta : CBaseMeta
 	{
 		/// <summary>
@@ -18,6 +23,62 @@ namespace DarkRoom.GamePlayAbility {
 		}
 
 	    public BuffType Type;
+
+	    /// <summary>
+	    /// Buff的目标身上有这些Tag, Buff才会生效
+	    /// </summary>
+	    public List<CGameplayTagRequirement> TargetRequirements;
+
+        /// <summary>
+        /// buff时长
+        /// 小于0表明永远有效果, 除非角色死亡
+        /// 等于0表明立刻销毁
+        /// </summary>
+        public float Duration = 0f;
+
+        /// <summary>
+        /// 是否永远有效, 比如学习了被动效果
+        /// 但能被外部移除, 比如卸载技能
+        /// 当然驱散也不能移除永久性的buff
+        /// </summary>
+        public bool Infinite
+        {
+            get { return Duration < 0; }
+        }
+
+	    /// <summary>
+	    /// 该buff可以在同一个单位身上存在几个实例
+	    /// 比如英雄联盟的血瓶, 可以吃多个, 加快回血速度
+	    /// 也比如第4次技能会有晕眩效果
+	    /// </summary>
+	    public int MaxStackCount;
+
+
+	    /// <summary>
+	    /// buff初始化时的效果
+	    /// </summary>
+	    public string InitialEffect;
+
+	    /// <summary>
+	    /// buff完成时的效果
+	    /// </summary>
+	    public string FinalEffect;
+
+	    /// <summary>
+	    /// buff失效时产生的效果
+	    /// </summary>
+	    public string ExpireEffect;
+
+        /// <summary>
+        /// 本buff对属性的修改列表
+        /// </summary>
+	    public List<CBuffModifierInfo> Modifiers;
+
+        /// <summary>
+        /// buff修改的单位属性
+        /// </summary>
+        public CAbilityEnum.BuffModification ModifyProperty =
+	        new CAbilityEnum.BuffModification();
 
         public CBuffMeta(string idKey) : base(idKey) { }
 	}
@@ -69,7 +130,7 @@ namespace DarkRoom.GamePlayAbility {
 			foreach (XmlElement node in m_xreader.rootChildNodes) {
 				switch (node.LocalName) {
 					case BuffType_Status:
-						ParseBeh_Buff(node);
+						Parse_Status(node);
 						break;
 				}
 			}
@@ -77,13 +138,13 @@ namespace DarkRoom.GamePlayAbility {
 
 
 		//解析 buff行为
-		private void ParseBeh_Buff(XmlElement root) {
+		private void Parse_Status(XmlElement root) {
 			string str = string.Empty;
 			var meta = new CBuffStatusMeta(root.GetAttribute("id"));
 
 			m_xreader.TryReadChildNodeAttr(root, "Duration", "value", ref meta.Duration);
-			m_xreader.TryReadChildNodeAttr(root, "Period", "value", ref meta.Period);
-			m_xreader.TryReadChildNodeAttr(root, "PeriodicEffect", "value", ref meta.PeriodicEffect);
+			//m_xreader.TryReadChildNodeAttr(root, "Period", "value", ref meta.Period);
+			//m_xreader.TryReadChildNodeAttr(root, "PeriodicEffect", "value", ref meta.PeriodicEffect);
 
 
 			//read modify

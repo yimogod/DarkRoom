@@ -50,7 +50,7 @@ namespace DarkRoom.GamePlayAbility
             return (Duration == FGameplayEffectConstants.INFINITE_DURATION ? -1.0f : Duration + StartWorldTime);
         }
 
-        public void CheckOngoingTagRequirements(FGameplayTagContainer OwnerTags,
+        public void CheckOngoingTagRequirements(CGameplayTagContainer OwnerTags,
             FActiveGameplayEffectsContainer OwningContainer,
             bool bInvokeGameplayCueEvents = false)
         {

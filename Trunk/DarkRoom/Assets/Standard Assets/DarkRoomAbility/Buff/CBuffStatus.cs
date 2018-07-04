@@ -40,12 +40,12 @@ namespace DarkRoom.GamePlayAbility {
 			}
 
 
-			if (MBuffMeta.Period > 0) {
+			/*if (MBuffMeta.Period > 0) {
 				bool b = m_dotReg.Update();
 				if (b) OnPeriod();
 			}else if (CMathUtil.IsZero(MBuffMeta.Period)) {
 				OnPeriod();
-			}
+			}*/
 		}
 
 		public override void Apply(CAIController from, CAIController to) {
@@ -63,10 +63,10 @@ namespace DarkRoom.GamePlayAbility {
 				//Debug.Log("create duration time is " + m_meta.Duration);
             }
 
-			if (MBuffMeta.Period > 0) {
+			/*if (MBuffMeta.Period > 0) {
 				m_dotReg = new CTimeRegulator(MBuffMeta.Period);
 				OnPeriod();
-			}
+			}*/
 
 			ApplyModification();
 			ApplyState();
@@ -165,11 +165,11 @@ namespace DarkRoom.GamePlayAbility {
 		private void OnPeriod()
 		{
 			//正常结束时施加的效果
-			if (string.IsNullOrEmpty(MBuffMeta.PeriodicEffect))return;
+			//if (string.IsNullOrEmpty(MBuffMeta.PeriodicEffect))return;
 
-			var eff = CEffect.Create(MBuffMeta.PeriodicEffect, m_owner.gameObject, m_to.gameObject);
-			eff.Apply(m_owner, m_to);
-			eff.JobDown();
+			//var eff = CEffect.Create(MBuffMeta.PeriodicEffect, m_owner.gameObject, m_to.gameObject);
+			//eff.Apply(m_owner, m_to);
+			//eff.JobDown();
 		}
 
 		//buff生命周期正常结束

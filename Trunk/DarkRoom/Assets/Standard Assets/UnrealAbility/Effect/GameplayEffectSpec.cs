@@ -39,10 +39,10 @@ namespace DarkRoom.GamePlayAbility
         public FTagContainerAggregator CapturedTargetTags;
 
         /* Tags that are granted and that did not come from the UGameplayEffect def. These are replicated. */
-        public FGameplayTagContainer DynamicGrantedTags;
+        public CGameplayTagContainer DynamicGrantedTags;
 
         /* Tags that are on this effect spec and that did not come from the UGameplayEffect def. These are replicated. */
-        public FGameplayTagContainer DynamicAssetTags;
+        public CGameplayTagContainer DynamicAssetTags;
 
         public List<FModifierSpec> Modifiers;
 
@@ -61,7 +61,7 @@ namespace DarkRoom.GamePlayAbility
 
         /* Map of set by caller magnitudes */
         public Dictionary<string, float> SetByCallerNameMagnitudes;
-        public Dictionary<FGameplayTag, float> SetByCallerTagMagnitudes;
+        public Dictionary<CGameplayTag, float> SetByCallerTagMagnitudes;
 
         private FGameplayEffectContextHandle EffectContext; // This tells us how we got here (who / what applied us)
         private float Level;
@@ -98,7 +98,7 @@ namespace DarkRoom.GamePlayAbility
         }
 
         // Copies SetbuCallerMagnitudes, but only if magnitudes don't exist in our map (slower but preserves data)
-        public void MergeSetByCallerMagnitudes(Dictionary<FGameplayTag, float> Magnitudes)
+        public void MergeSetByCallerMagnitudes(Dictionary<CGameplayTag, float> Magnitudes)
         {
 
         }
@@ -173,13 +173,13 @@ namespace DarkRoom.GamePlayAbility
         }
 
         // Appends all tags granted by this gameplay effect spec
-        public void GetAllGrantedTags(ref FGameplayTagContainer Container)
+        public void GetAllGrantedTags(ref CGameplayTagContainer Container)
         {
 
         }
 
         // Appends all tags that apply to this gameplay effect spec
-        public void GetAllAssetTags(ref FGameplayTagContainer Container)
+        public void GetAllAssetTags(ref CGameplayTagContainer Container)
         {
 
         }
@@ -191,7 +191,7 @@ namespace DarkRoom.GamePlayAbility
         }
 
         /* Sets the magnitude of a SetByCaller modifier */
-        public void SetSetByCallerMagnitude(FGameplayTag DataTag, float Magnitude)
+        public void SetSetByCallerMagnitude(CGameplayTag DataTag, float Magnitude)
         {
 
         }
@@ -203,7 +203,7 @@ namespace DarkRoom.GamePlayAbility
         }
 
         /* Returns the magnitude of a SetByCaller modifier. Will return 0.f and Warn if the magnitude has not been set. */
-        public float GetSetByCallerMagnitude(FGameplayTag DataTag, bool WarnIfNotFound = true, float DefaultIfNotFound = 0f)
+        public float GetSetByCallerMagnitude(CGameplayTag DataTag, bool WarnIfNotFound = true, float DefaultIfNotFound = 0f)
         {
             return 1f;
         }

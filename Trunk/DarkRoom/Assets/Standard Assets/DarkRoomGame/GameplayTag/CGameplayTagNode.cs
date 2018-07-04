@@ -7,7 +7,7 @@ namespace DarkRoom.Game
      * 用于gameplaytag的简单树状节点. 保存特殊tag的元数据
      * 每个node都持有一个1对1的conatiner. 该container包含此node对应的完整tag
      */
-    public class FGameplayTagNode
+    public class CGameplayTagNode
     {
         /**
          * 完整tag所在node的tag值
@@ -20,25 +20,25 @@ namespace DarkRoom.Game
          * GameplayTags列表的第一个tag就是完整的tag. a.b.c
          * ParentTags包含了此节点tag的所有的父亲tag
          */
-        private FGameplayTagContainer CompleteTagWithParents = new FGameplayTagContainer();
+        private CGameplayTagContainer CompleteTagWithParents = new CGameplayTagContainer();
 
         /** 一级儿子node列表 */
-        private List<FGameplayTagNode> ChildTags;
+        private List<CGameplayTagNode> ChildTags;
 
         /** 父亲节点 */
-        private FGameplayTagNode ParentNode;
+        private CGameplayTagNode ParentNode;
 
-        public FGameplayTagNode()
+        public CGameplayTagNode()
         {
         }
 
-        public FGameplayTagNode(string InTag, FGameplayTagNode InParentNode)
+        public CGameplayTagNode(string InTag, CGameplayTagNode InParentNode)
         {
             Tag = InTag;
             ParentNode = InParentNode;
 
-            List<FGameplayTag> ParentCompleteTags = new List<FGameplayTag>();
-            FGameplayTagNode CurNode = InParentNode;
+            List<CGameplayTag> ParentCompleteTags = new List<CGameplayTag>();
+            CGameplayTagNode CurNode = InParentNode;
             // 只要有父亲node
             while (CurNode.IsValid())
             {
@@ -53,13 +53,13 @@ namespace DarkRoom.Game
                 CompleteTagString = string.Format("{0}.{1}", ParentCompleteTags[0].GetTagName(), InTag);
             }
 
-            FGameplayTag tag = new FGameplayTag(CompleteTagString);
+            CGameplayTag tag = new CGameplayTag(CompleteTagString);
             CompleteTagWithParents.GameplayTags.Add(tag);
             CompleteTagWithParents.ParentTags.AddRange(ParentCompleteTags);
         }
 
         /** Returns a correctly constructed container with only this tag, useful for doing container queries */
-        public FGameplayTagContainer GetSingleTagContainer()
+        public CGameplayTagContainer GetSingleTagContainer()
         {
             return CompleteTagWithParents;
         }
@@ -67,7 +67,7 @@ namespace DarkRoom.Game
         /**
          * 获取完整tag, a.b.c
          */
-        public FGameplayTag GetCompleteTag()
+        public CGameplayTag GetCompleteTag()
         {
             return CompleteTagWithParents.Num() > 0 ? CompleteTagWithParents.GameplayTags[0] : null;
         }
@@ -89,7 +89,7 @@ namespace DarkRoom.Game
         /**
          * 获取一级儿子列表
          */
-        public List<FGameplayTagNode> GetChildTagNodes()
+        public List<CGameplayTagNode> GetChildTagNodes()
         {
             return ChildTags;
         }
@@ -97,7 +97,7 @@ namespace DarkRoom.Game
         /**
          * 父节点
          */
-        public FGameplayTagNode GetParentTagNode()
+        public CGameplayTagNode GetParentTagNode()
         {
             return ParentNode;
         }

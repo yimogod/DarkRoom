@@ -18,8 +18,8 @@ namespace DarkRoom.GamePlayAbility {
 		//dot数据的计数器
 		private CTimeRegulator m_dotReg;
 
-		private CBuffStatusMeta MBuffMeta {
-			get { return MetaBase as CBuffStatusMeta; }
+		private CBuffDotMeta MBuffMeta {
+			get { return MetaBase as CBuffDotMeta; }
 		}
 
 		protected override void Awake()
@@ -113,10 +113,10 @@ namespace DarkRoom.GamePlayAbility {
 		//这是恰巧应用于同一个目标单位, 那么属性和状态就会被累加
 		//所以 TODO 如果buff的来源是同一个技能的话, 那我们就不接着apply了
 		private void ApplyState(){
-			if (MBuffMeta.StateFlags.Count == 0)return;
+			//if (MBuffMeta.StateFlags.Count == 0)return;
 			
 			var target = m_owner.BaseData.StateModifier;
-			foreach (var kv in MBuffMeta.StateFlags) {
+			/*foreach (var kv in MBuffMeta.StateFlags) {
 				//只要是指令移除, 那么就相当于驱散, 不管来源
 				if (kv.Value == 0 &&
 					target.ContainsKey(kv.Key)) {
@@ -140,25 +140,25 @@ namespace DarkRoom.GamePlayAbility {
 						//Debug.Log("ApplyState");
 					}
 				}
-			}
+			}*/
 
 		}
 
 		//移除状态修改
 		//单指时间到的正常移除
 		private void RemoveState() {
-			if (MBuffMeta.StateFlags.Count == 0) return;
+			//if (MBuffMeta.StateFlags.Count == 0) return;
 			//Debug.Log("remove state");
 
 			//移除之前添加的, 是我赋予的buff
 			var target = m_owner.BaseData.StateModifier;
-			foreach (var kv in MBuffMeta.StateFlags) {
+			/*foreach (var kv in MBuffMeta.StateFlags) {
 				if (kv.Value == 1 &&
 					target.ContainsKey(kv.Key) &&
 					target[kv.Key].Key == m_cid) {
 					target.Remove(kv.Key);
 				}
-			}
+			}*/
 		}
 
 		//dot的执行
