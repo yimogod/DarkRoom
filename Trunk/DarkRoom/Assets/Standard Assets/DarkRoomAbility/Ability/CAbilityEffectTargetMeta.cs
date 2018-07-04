@@ -6,7 +6,7 @@ namespace DarkRoom.GamePlayAbility {
 	/// <summary>
 	/// 需要选择目标的技能， 就是对他人使用的技能
 	/// </summary>
-	public class CAbilEffectTargetMeta : CAbilityMeta {
+	public class CAbilityEffectTargetMeta : CAbilityMeta {
 		/// <summary>
 		/// 准备阶段的时间.
 		/// 比如人族的大和炮要蓄能3秒
@@ -92,7 +92,7 @@ namespace DarkRoom.GamePlayAbility {
 		public string CursorEffect;
 
 
-		public CAbilEffectTargetMeta(string idKey) : base(idKey) {
+		public CAbilityEffectTargetMeta(string idKey) : base(idKey) {
 			Type = AbilityType.EffectTarget;
 		}
 	}

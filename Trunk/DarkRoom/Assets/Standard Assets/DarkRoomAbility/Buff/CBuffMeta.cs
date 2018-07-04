@@ -6,25 +6,27 @@ using DarkRoom.Core;
 using DarkRoom.Game;
 
 namespace DarkRoom.GamePlayAbility {
-	public class CBehaviorMeta : CBaseMeta
+	public class CBuffMeta : CBaseMeta
 	{
-		public enum BehaviorType {
-			ApplyBuff, //附着buff
-		}
-
 		/// <summary>
 		/// 行为的类型
 		/// </summary>
-		public BehaviorType Type = BehaviorType.ApplyBuff;
+		public enum BuffType
+        {
+		    Dot, 
+            Status
+		}
 
-		public CBehaviorMeta(string idKey) : base(idKey) { }
+	    public BuffType Type;
+
+        public CBuffMeta(string idKey) : base(idKey) { }
 	}
 
-	public class CBehaviorMetaManager {
-		private static Dictionary<string, CBehaviorMeta> m_dict = 
-			new Dictionary<string, CBehaviorMeta>();
+	public class CBuffMetaManager {
+		private static Dictionary<string, CBuffMeta> m_dict = 
+			new Dictionary<string, CBuffMeta>();
 
-		public static void AddMeta(CBehaviorMeta meta)
+		public static void AddMeta(CBuffMeta meta)
 		{
 			if(m_dict.ContainsKey(meta.Id)) {
 				Debug.LogError("CBehaviorMetaManager ALREADY CONTAIN the behavior with id -- " +  meta.Id);
@@ -33,9 +35,9 @@ namespace DarkRoom.GamePlayAbility {
 			m_dict[meta.Id] = meta;
 		}
 
-		public static CBehaviorMeta GetMeta(string id)
+		public static CBuffMeta GetMeta(string id)
 		{
-			CBehaviorMeta meta = null;
+			CBuffMeta meta = null;
 			bool v = m_dict.TryGetValue(id, out meta);
 			if(!v)Debug.LogError("CBehaviorMetaManager DO NOT CONTAIN the behavior with id -- " + id);
 
@@ -44,11 +46,21 @@ namespace DarkRoom.GamePlayAbility {
 	}
 
 	#region parser
-	public class CBehaviorMetaParser : CMetaParser {
-		public const string CBehType_Buff = "CBehaviorBuff";
+	public class CBuffMetaParser : CMetaParser {
+        /// <summary>
+        /// 持续修改Attribute的一个值
+        /// 比如增加100的力量或者进入晕眩的状态
+        /// </summary>
+		public const string BuffType_Status = "BuffStatus";
 
-		public CBehaviorMetaParser() : base() { }
-		public CBehaviorMetaParser(bool useXml) : base(useXml) { }
+        /// <summary>
+        /// 以period的间断来修改某个Attribute
+        /// 一般比如中毒或者喝血
+        /// </summary>
+	    public const string BuffType_Dot = "BuffDot";
+
+        public CBuffMetaParser() : base() { }
+		public CBuffMetaParser(bool useXml) : base(useXml) { }
 
 		public override void Execute(string content) {
 			base.Execute(content);
@@ -56,7 +68,7 @@ namespace DarkRoom.GamePlayAbility {
 			m_xreader.ReadRootNode();
 			foreach (XmlElement node in m_xreader.rootChildNodes) {
 				switch (node.LocalName) {
-					case CBehType_Buff:
+					case BuffType_Status:
 						ParseBeh_Buff(node);
 						break;
 				}
@@ -67,7 +79,7 @@ namespace DarkRoom.GamePlayAbility {
 		//解析 buff行为
 		private void ParseBeh_Buff(XmlElement root) {
 			string str = string.Empty;
-			var meta = new CBehaviorBuffMeta(root.GetAttribute("id"));
+			var meta = new CBuffStatusMeta(root.GetAttribute("id"));
 
 			m_xreader.TryReadChildNodeAttr(root, "Duration", "value", ref meta.Duration);
 			m_xreader.TryReadChildNodeAttr(root, "Period", "value", ref meta.Period);
@@ -91,7 +103,7 @@ namespace DarkRoom.GamePlayAbility {
 			}
 			//end state
 
-			CBehaviorMetaManager.AddMeta(meta);
+			CBuffMetaManager.AddMeta(meta);
 		}
 	}
 	#endregion

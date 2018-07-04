@@ -7,17 +7,17 @@ namespace DarkRoom.GamePlayAbility {
 	/// <summary>
 	/// 应用行为的效果. 一个很重要的作用就是添加buff
 	/// </summary>
-	public class CEffectApplyBehavior : CEffect
+	public class CEffectApplyBuff : CEffect
 	{
-		protected CEffectApplyBehaviorMeta m_meta {
-			get { return MetaBase as CEffectApplyBehaviorMeta; }
+		protected CEffectApplyBuffMeta m_meta {
+			get { return MetaBase as CEffectApplyBuffMeta; }
 		}
 
 		public override void Apply(CAIController from, CAIController to)
 		{
 			base.Apply(from, to);
 			//buff自己销毁自己
-			CBehavior beh = CBehavior.Create(m_meta.Behavior, m_owner.gameObject);
+			CBuff beh = CBuff.Create(m_meta.Behavior, m_owner.gameObject);
 			beh.Apply(from, to);
         }
 

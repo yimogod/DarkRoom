@@ -1,5 +1,5 @@
 ﻿namespace DarkRoom.GamePlayAbility {
-	public class CAbilEffectTarget : CAbility
+	public class CAbilitylEffectTarget : CAbility
 	{
 		/*protected AbilityObject m_abilityObject = null;
 		protected  Dictionary<string, AbilityObject> m_abilityObjectOhHit = null;

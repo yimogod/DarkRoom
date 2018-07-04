@@ -36,6 +36,11 @@ namespace DarkRoom.GamePlayAbility {
 	/// EndAbility()技能完成. 技能自身调用告知自己技能完毕了
 	/// 
 	/// 技能还有一些自己的标签
+	/// 
+	/// 我需要技能自带一些可能和Effect重合的信息, 用于GamePlay的判断. 这样可以做到Ability和Effect分离
+	/// Ability只ApplyEffect, 创建Effect的职责交给Target的AbilitySystem
+	/// 
+	/// 另外, 如果技能可以升级, 那么我们其实是替换为不同的技能
 	/// </summary>
 	[RequireComponent(typeof(CController))]
 	public class CAbility : MonoBehaviour {
@@ -52,19 +57,10 @@ namespace DarkRoom.GamePlayAbility {
 		[NonSerialized]
 		public int Index = -1;
 
-		//技能的图标
-		[HideInInspector]
-		public Texture2D Icon;
-
 		/// <summary>
 		/// 技能的名称, 要跟meta名称对应
 		/// </summary>
 		public string AbilityName;
-
-		/// <summary>
-		/// 技能的等级
-		/// </summary>
-		public int Level;
 
 		/// <summary>
 		/// 是否需要编辑器的动画文件
@@ -230,11 +226,11 @@ namespace DarkRoom.GamePlayAbility {
 			CAbilityMeta emeta = CAbilityMetaManager.GetMeta(meta);
 			switch (emeta.Type) {
 				case CAbilityMeta.AbilityType.Attack:
-					ability = go.AddComponent<CAbilAttack>();
+					ability = go.AddComponent<CAbilityAttack>();
 					ability.AbilityName = meta;
 					break;
 				case CAbilityMeta.AbilityType.EffectTarget:
-					ability = go.AddComponent<CAbilEffectTarget>();
+					ability = go.AddComponent<CAbilitylEffectTarget>();
 					ability.AbilityName = meta;
 					break;
 			}

@@ -158,7 +158,7 @@ namespace DarkRoom.GamePlayAbility {
 		//解析 buff效果
 		private void ParseEffect_Behavior(XmlElement root) {
 			string str = string.Empty;
-			var meta = new CEffectApplyBehaviorMeta(root.GetAttribute("id"));
+			var meta = new CEffectApplyBuffMeta(root.GetAttribute("id"));
 
 			m_xreader.TryReadChildNodeAttr(root, "WhichUnit", "value", ref str);
 			meta.WhichUnit = CAbilityUtil.GetLocation(str);

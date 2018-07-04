@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DarkRoom.Game;
 
 namespace DarkRoom.GamePlayAbility {
-	public class CEffectApplyBehaviorMeta : CEffectMeta {
+	public class CEffectApplyBuffMeta : CEffectMeta {
 		/// <summary>
 		/// 应用的行为id
 		/// </summary>
@@ -31,7 +31,7 @@ namespace DarkRoom.GamePlayAbility {
 		/// </summary>
 		public int Count = 0;
 
-		public CEffectApplyBehaviorMeta(string id) : base(id) {
+		public CEffectApplyBuffMeta(string id) : base(id) {
 			Type = EffectType.ApplyBehaviour;
 		}
 	}

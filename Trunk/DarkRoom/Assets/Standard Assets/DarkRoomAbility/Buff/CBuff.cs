@@ -9,13 +9,12 @@ namespace DarkRoom.GamePlayAbility {
 	/// 在UE4中, effect用来做buff了
 	/// </summary>
 	[RequireComponent(typeof(CAIController))]
-	public class CBehavior : MonoBehaviour {
+	public class CBuff : MonoBehaviour {
 		/// <summary>
 		/// buff 名称, 要跟meta名称对应
 		/// </summary>
-		public string BehaviorName;
+		public string BuffName;
 
-		public CBehaviorMeta.BehaviorType Type = CBehaviorMeta.BehaviorType.ApplyBuff;
 
 		//buff在我的身上
 		protected CAIController m_owner;
@@ -28,13 +27,13 @@ namespace DarkRoom.GamePlayAbility {
 		/// <summary>
 		/// 效果配置信息
 		/// </summary>
-		public CBehaviorMeta MetaBase {
+		public CBuffMeta MetaBase {
 			get {
-				if (string.IsNullOrEmpty(BehaviorName)) {
+				if (string.IsNullOrEmpty(BuffName)) {
 					Debug.LogError("Notice BehaviorName is null");
 					return null;
 				}
-				return CBehaviorMetaManager.GetMeta(BehaviorName);
+				return CBuffMetaManager.GetMeta(BuffName);
 			}
 		}
 
@@ -82,14 +81,14 @@ namespace DarkRoom.GamePlayAbility {
 		/// <summary>
 		/// 根据配表创建behavior
 		/// </summary>
-		public static CBehavior Create(string meta, GameObject go) {
-			CBehavior behavior = null;
+		public static CBuff Create(string meta, GameObject go) {
+			CBuff behavior = null;
 
-			CBehaviorMeta emeta = CBehaviorMetaManager.GetMeta(meta);
+			CBuffMeta emeta = CBuffMetaManager.GetMeta(meta);
 			switch (emeta.Type) {
-				case CBehaviorMeta.BehaviorType.ApplyBuff:
-					behavior = go.AddComponent<CBehaviorBuff>();
-					behavior.BehaviorName = meta;
+				case CBuffMeta.BuffType.Dot:
+					behavior = go.AddComponent<CBuffDot>();
+					behavior.BuffName = meta;
 					break;
 			}
 

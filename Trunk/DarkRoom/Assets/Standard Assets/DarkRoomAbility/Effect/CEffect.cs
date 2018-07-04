@@ -123,7 +123,7 @@ namespace DarkRoom.GamePlayAbility {
 					eff.EffectName = meta;
 					break;
 				case CEffectMeta.EffectType.ApplyBehaviour:
-					eff = go.AddComponent<CEffectApplyBehavior>();
+					eff = go.AddComponent<CEffectApplyBuff>();
 					eff.EffectName = meta;
 					break;
 				case CEffectMeta.EffectType.IssueOrder:

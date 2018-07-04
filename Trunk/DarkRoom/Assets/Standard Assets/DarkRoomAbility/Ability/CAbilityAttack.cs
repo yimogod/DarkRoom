@@ -9,7 +9,7 @@ namespace DarkRoom.GamePlayAbility {
 
 	//进行攻击的目标我们是有AI/鼠标进行选定的，除非取消这个技能， 否则会进行攻击判定
 	//即使target已经逃出攻击范围
-	public class CAbilAttack : CAbility
+	public class CAbilityAttack : CAbility
 	{
 		/*public CWeaponEntity primaryWeapon
 		{

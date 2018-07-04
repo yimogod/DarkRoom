@@ -2,7 +2,7 @@
 using DarkRoom.Game;
 
 namespace DarkRoom.GamePlayAbility {
-	public class CBehaviorBuffMeta : CBehaviorMeta {
+	public class CBuffStatusMeta : CBuffMeta {
 		/// <summary>
 		/// 效果产生作用的前置条件
 		/// </summary>
@@ -93,7 +93,7 @@ namespace DarkRoom.GamePlayAbility {
 		public CAbilityEnum.BuffModification ModifyProperty = 
 			new CAbilityEnum.BuffModification();
 
-		public CBehaviorBuffMeta(string idKey) : base(idKey) {}
+		public CBuffStatusMeta(string idKey) : base(idKey) {}
 
 		/// <summary>
 		/// 控制有该buff的单位受到伤害时会如何反映的参数

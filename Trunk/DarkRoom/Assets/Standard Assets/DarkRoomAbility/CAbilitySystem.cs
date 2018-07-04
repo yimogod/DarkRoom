@@ -67,14 +67,13 @@ namespace DarkRoom.GamePlayAbility {
 		/// actor掌握新技能
 		/// </summary>
 		/// <param name="meta"></param>
-		public CAbility MasterAbility(string name, int level)
+		public CAbility MasterAbility(string name)
 		{
 			if (string.IsNullOrEmpty(name))return null;
 
 			CAbility abi = CAbility.Create(name, gameObject);
 			if (abi == null)return null;
 
-			abi.Level = level;
 			abi.Index = m_abilityList.Count;
 
 			m_abilityList.Add(abi);

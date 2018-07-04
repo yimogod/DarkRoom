@@ -7,7 +7,7 @@ namespace DarkRoom.GamePlayAbility {
 	/// <summary>
 	/// 这个buff放在谁身上, 是由effect里面配置的
 	/// </summary>
-	public class CBehaviorBuff : CBehavior{
+	public class CBuffDot : CBuff{
 		private static int BuffCounter = 0;
 
 		private int m_cid = 0;
@@ -18,8 +18,8 @@ namespace DarkRoom.GamePlayAbility {
 		//dot数据的计数器
 		private CTimeRegulator m_dotReg;
 
-		private CBehaviorBuffMeta m_meta {
-			get { return MetaBase as CBehaviorBuffMeta; }
+		private CBuffStatusMeta MBuffMeta {
+			get { return MetaBase as CBuffStatusMeta; }
 		}
 
 		protected override void Awake()
@@ -34,16 +34,16 @@ namespace DarkRoom.GamePlayAbility {
 			base.Update();
 
 			//buff的持续周期
-			if (m_meta.Duration > 0) {
+			if (MBuffMeta.Duration > 0) {
 				bool b = m_durationReg.Update();
 				if (b)OnFinal();
 			}
 
 
-			if (m_meta.Period > 0) {
+			if (MBuffMeta.Period > 0) {
 				bool b = m_dotReg.Update();
 				if (b) OnPeriod();
-			}else if (CMathUtil.IsZero(m_meta.Period)) {
+			}else if (CMathUtil.IsZero(MBuffMeta.Period)) {
 				OnPeriod();
 			}
 		}
@@ -58,13 +58,13 @@ namespace DarkRoom.GamePlayAbility {
 				m_owner.Pawn.Instigator = m_from;
 			}
 
-			if (m_meta.Duration > 0) {
-				m_durationReg = new CTimeRegulator(m_meta.Duration);
+			if (MBuffMeta.Duration > 0) {
+				m_durationReg = new CTimeRegulator(MBuffMeta.Duration);
 				//Debug.Log("create duration time is " + m_meta.Duration);
             }
 
-			if (m_meta.Period > 0) {
-				m_dotReg = new CTimeRegulator(m_meta.Period);
+			if (MBuffMeta.Period > 0) {
+				m_dotReg = new CTimeRegulator(MBuffMeta.Period);
 				OnPeriod();
 			}
 
@@ -80,7 +80,7 @@ namespace DarkRoom.GamePlayAbility {
 				target[m_cid] = new Dictionary<CPawnVO.Property, float>();
 			}
 
-			var m = m_meta.ModifyProperty;
+			var m = MBuffMeta.ModifyProperty;
 
 			//速度增量
 			if (m.MoveSpeedBonus > 0) {
@@ -113,10 +113,10 @@ namespace DarkRoom.GamePlayAbility {
 		//这是恰巧应用于同一个目标单位, 那么属性和状态就会被累加
 		//所以 TODO 如果buff的来源是同一个技能的话, 那我们就不接着apply了
 		private void ApplyState(){
-			if (m_meta.StateFlags.Count == 0)return;
+			if (MBuffMeta.StateFlags.Count == 0)return;
 			
 			var target = m_owner.BaseData.StateModifier;
-			foreach (var kv in m_meta.StateFlags) {
+			foreach (var kv in MBuffMeta.StateFlags) {
 				//只要是指令移除, 那么就相当于驱散, 不管来源
 				if (kv.Value == 0 &&
 					target.ContainsKey(kv.Key)) {
@@ -127,7 +127,7 @@ namespace DarkRoom.GamePlayAbility {
 				if (kv.Value != 0) {
 					//计算时间, 给与更长的时间
 					long newTime = CTimeUtil.GetCurrentMillSecondStamp() +
-						(long)(m_meta.Duration * 1000f);
+						(long)(MBuffMeta.Duration * 1000f);
 
 					//如果有其他人给的状态, 那么更新他的值
 					if (target.ContainsKey(kv.Key)) {
@@ -147,12 +147,12 @@ namespace DarkRoom.GamePlayAbility {
 		//移除状态修改
 		//单指时间到的正常移除
 		private void RemoveState() {
-			if (m_meta.StateFlags.Count == 0) return;
+			if (MBuffMeta.StateFlags.Count == 0) return;
 			//Debug.Log("remove state");
 
 			//移除之前添加的, 是我赋予的buff
 			var target = m_owner.BaseData.StateModifier;
-			foreach (var kv in m_meta.StateFlags) {
+			foreach (var kv in MBuffMeta.StateFlags) {
 				if (kv.Value == 1 &&
 					target.ContainsKey(kv.Key) &&
 					target[kv.Key].Key == m_cid) {
@@ -165,9 +165,9 @@ namespace DarkRoom.GamePlayAbility {
 		private void OnPeriod()
 		{
 			//正常结束时施加的效果
-			if (string.IsNullOrEmpty(m_meta.PeriodicEffect))return;
+			if (string.IsNullOrEmpty(MBuffMeta.PeriodicEffect))return;
 
-			var eff = CEffect.Create(m_meta.PeriodicEffect, m_owner.gameObject, m_to.gameObject);
+			var eff = CEffect.Create(MBuffMeta.PeriodicEffect, m_owner.gameObject, m_to.gameObject);
 			eff.Apply(m_owner, m_to);
 			eff.JobDown();
 		}
@@ -176,7 +176,7 @@ namespace DarkRoom.GamePlayAbility {
 		private void OnFinal()
 		{
 			//正常结束时施加的效果
-			if (!string.IsNullOrEmpty(m_meta.FinalEffect)) {
+			if (!string.IsNullOrEmpty(MBuffMeta.FinalEffect)) {
 				
 			}
 

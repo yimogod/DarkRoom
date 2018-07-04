@@ -161,7 +161,7 @@ namespace DarkRoom.GamePlayAbility {
 		/// 解析目标类技能
 		/// </summary>
 		private void Parse_Target(XmlElement root) {
-			var meta = new CAbilEffectTargetMeta("null");
+			var meta = new CAbilityEffectTargetMeta("null");
 			Parse_Base(root, meta);
 
 			m_xreader.TryReadChildNodeAttr(root, "Effect", "value", ref meta.Effect);
@@ -178,7 +178,7 @@ namespace DarkRoom.GamePlayAbility {
 		/// </summary>
 		/// <param name="root"></param>
 		private void Parse_Attack(XmlElement root) {
-			var meta = new CAbilAttackMeta("null");
+			var meta = new CAbilityAttackMeta("null");
 			Parse_Base(root, meta);
 
 			m_xreader.TryReadChildNodeAttr(root, "MinAttackSpeedMultiplier", "value", ref meta.MinAttackSpeedMultiplier);
