@@ -50,7 +50,7 @@ namespace DarkRoom.Game {
 		/// </summary>
 		/// <param name="unit"></param>
 		public void AddUnit(CAIController unit) {
-			m_pawnEntityList.Add(unit.Pawn.cid, unit);
+			m_pawnEntityList.Add(unit.Pawn.CId, unit);
 
 			if (unit.Pawn.Team == CPawnEntity.TeamSide.Red) {
 				m_redGroup.Add(unit);

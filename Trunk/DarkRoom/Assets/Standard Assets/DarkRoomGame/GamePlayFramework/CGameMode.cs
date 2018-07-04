@@ -26,9 +26,6 @@ namespace DarkRoom.Game {
 
 		//public Vector3 selectedWorldPositon = RayConst.INVALID_VEC3;
 
-		//鼠标划过的单位, 为了高亮
-		protected CController m_mouseOverUnit = null;
-
 		//游戏是否启动
 		protected bool m_enabled = false;
 
@@ -89,7 +86,6 @@ namespace DarkRoom.Game {
 
 			m_enabled = false;
 			m_selectedPawnCtrl = null;
-			m_mouseOverUnit = null;
 		}
 
 		/// <summary>

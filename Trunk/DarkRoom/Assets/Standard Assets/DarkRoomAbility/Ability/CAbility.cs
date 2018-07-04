@@ -71,10 +71,6 @@ namespace DarkRoom.GamePlayAbility {
 		/// </summary>
 		public bool NeedEditorShow = false;
 
-		//技能相关的效果
-		//我们会在创建技能的时候创建相关效果
-		protected CEffect m_effect;
-
 		//技能的owner, 做个简单的约定, 只能是人
 		protected CAIController m_owner;
 

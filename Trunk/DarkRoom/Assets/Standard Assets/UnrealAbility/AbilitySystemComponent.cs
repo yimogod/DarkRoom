@@ -137,16 +137,6 @@ namespace DarkRoom.GamePlayAbility
             return 1f;
         }
 
-        // This is a list of GameplayAbilities that are predicted by the client and were triggered by abilities that were also predicted by the client
-        // When the server version of the predicted ability executes it should trigger copies of these and the copies will be associated with the correct prediction keys
-        public List<FPendingAbilityInfo> PendingClientActivatedAbilities;
-
-        // This is a list of GameplayAbilities that were activated on the server and can't yet execute on the client. It will try to execute these at a later point
-        public List<FPendingAbilityInfo> PendingServerActivatedAbilities;
-
-
-        public List<FExecutingAbilityInfo> ExecutingServerAbilities;
-
         // ----------------------------------------------------------------------------------------------------------------
         //
         //	GameplayEffects	
@@ -248,7 +238,7 @@ namespace DarkRoom.GamePlayAbility
         /* Needed for delegate callback for tag prediction */
         public void RemoveOneTagCount_NoReturn(FGameplayTag Tag)
         {
-            UpdateTagMap(Tag, -1);
+            //UpdateTagMap(Tag, -1);
         }
 
         /* Called for predictively added gameplay cue. Needs to remove tag count and possible invoke OnRemove event if misprediction */

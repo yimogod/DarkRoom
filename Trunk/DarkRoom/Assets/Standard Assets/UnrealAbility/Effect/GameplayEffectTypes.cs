@@ -253,9 +253,9 @@ namespace DarkRoom.GamePlayAbility
 
     public class FGameplayEffectQuery
     {
-        public FGameplayEffectQuery(FActiveGameplayEffectQueryCustomMatch InCustomMatchDelegate)
-        {
-        }
+        //public FGameplayEffectQuery(FActiveGameplayEffectQueryCustomMatch InCustomMatchDelegate)
+        //{
+        //}
 
         /** Native delegate for providing custom matching conditions. */
         Action<FActiveGameplayEffect> CustomMatchDelegate;

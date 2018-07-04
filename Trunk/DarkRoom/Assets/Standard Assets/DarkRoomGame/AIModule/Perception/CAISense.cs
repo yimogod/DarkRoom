@@ -167,7 +167,7 @@ namespace DarkRoom.AI {
 	public struct CAIStimulus
 	{
 		public int Id{
-			get{ return Source.Pawn.cid; }
+			get{ return Source.Pawn.CId; }
 		}
 
 		public bool Invalid

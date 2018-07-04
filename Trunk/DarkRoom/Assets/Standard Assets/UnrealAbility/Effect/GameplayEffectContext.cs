@@ -37,7 +37,7 @@ namespace DarkRoom.GamePlayAbility
         protected List<CUnitEntity> Actors;
 
         /* Trace information - may be NULL in many cases */
-        protected RaycastHit HitResult;
+        //protected RaycastHit HitResult;
 
         protected Vector3 WorldOrigin;
 
@@ -136,20 +136,20 @@ namespace DarkRoom.GamePlayAbility
 
         }
 
-        public virtual void AddHitResult(RaycastHit InHitResult, bool bReset = false)
-        {
+        //public virtual void AddHitResult(RaycastHit InHitResult, bool bReset = false)
+      //  {
 
-        }
+     //   }
 
         public virtual List<CUnitEntity> GetActors()
         {
             return Actors;
         }
 
-        public virtual RaycastHit GetHitResult()
-        {
-            return new RaycastHit();
-        }
+     //   public virtual RaycastHit GetHitResult()
+    //    {
+   //         return new RaycastHit();
+   //     }
 
         public virtual void AddOrigin(Vector3 InOrigin)
         {
@@ -367,13 +367,13 @@ namespace DarkRoom.GamePlayAbility
             }
         }
 
-        public void AddHitResult(RaycastHit InHitResult, bool bReset = false)
-        {
-            if (IsValid())
-            {
+  //      public void AddHitResult(RaycastHit InHitResult, bool bReset = false)
+  //      {
+  //          if (IsValid())
+  //          {
                 //Data->AddHitResult(InHitResult, bReset);
-            }
-        }
+   //         }
+   //     }
 
         public List<CUnitEntity> GetActors()
         {
@@ -381,15 +381,15 @@ namespace DarkRoom.GamePlayAbility
             return null;
         }
 
-        public RaycastHit GetHitResult()
-        {
-            if (IsValid())
-            {
+    //    public RaycastHit GetHitResult()
+   //     {
+   //         if (IsValid())
+   //         {
                 //return Data->GetHitResult();
-            }
-            RaycastHit a = new RaycastHit();
-            return a;
-        }
+     //       }
+     //       RaycastHit a = new RaycastHit();
+    //        return a;
+    //    }
 
         public void AddOrigin(Vector3 InOrigin)
         {

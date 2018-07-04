@@ -54,7 +54,7 @@ namespace DarkRoom.Game{
 		/// <summary>
 		/// 客户端每个单位的唯一id, 也有可能由服务器传入
 		/// </summary>
-		public int cid { get; set; }
+		public int CId { get; set; }
 
 		public CUnitViewComp View{
 			get { return m_view; }
@@ -144,7 +144,7 @@ namespace DarkRoom.Game{
 
 		protected virtual void Awake(){
 			UnitCounter++;
-			cid = UnitCounter;
+			CId = UnitCounter;
 
 			RegisterAllComponents();
 			PostRegisterAllComponents();
