@@ -10,6 +10,7 @@ namespace DarkRoom.GamePlayAbility {
     /// <summary>
     /// 有几个注意点
     /// 1. 我们的buff没有成功几率一说, 是否成功我们移到了Effect中去
+    /// 
     /// </summary>
 	public class CBuffMeta : CBaseMeta
 	{
@@ -24,10 +25,21 @@ namespace DarkRoom.GamePlayAbility {
 
 	    public BuffType Type;
 
+        /// <summary>
+        /// buff自己的tag, 其他buff或者特效可以通过这个tag来驱散这个buff或者免疫此buff
+        /// </summary>
+	    public CGameplayTag BuffTag;
+
 	    /// <summary>
 	    /// Buff的目标身上有这些Tag, Buff才会生效
 	    /// </summary>
-	    public List<CGameplayTagRequirement> TargetRequirements;
+	    public List<CGameplayTagRequirement> TargetTagRequirements;
+
+        /// <summary>
+        /// 当buff成功应用到目标是, 此目标对下面的tag免疫
+        /// 就是说这些tag不能附着到目标身上了
+        /// </summary>
+	    public CGameplayTagContainer TargetGrantedImmunityTags;
 
         /// <summary>
         /// buff时长

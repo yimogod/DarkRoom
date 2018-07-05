@@ -11,22 +11,6 @@ namespace DarkRoom.GamePlayAbility {
 	public class CAbilityMeta : CBaseMeta
 	{
 		/// <summary>
-		/// 技能消耗的资源种类
-		/// 这里有个暂时的考虑. 理论上CD也是资源, 但我们现在假定所有的ability都需要cd
-		/// </summary>
-		public enum CostType
-		{
-			MP, //蓝
-			HP, //红
-			Vital, //活力
-			UserDef_0,
-			UserDef_1,
-			UserDef_2,
-			UserDef_3,
-			Count,
-		}
-
-		/// <summary>
 		/// 技能类型的枚举定义
 		/// </summary>
 		public enum AbilityType
@@ -68,7 +52,7 @@ namespace DarkRoom.GamePlayAbility {
 		/// <summary>
 		/// 技能消耗的资源. index是CostType, 值是数量
 		/// </summary>
-		public int[] CostList = new int[(int)CostType.Count];
+		public List<Vector2Int> CostList = new List<Vector2Int>();
 
 		/// <summary>
 		/// 技能作用目标的过滤器

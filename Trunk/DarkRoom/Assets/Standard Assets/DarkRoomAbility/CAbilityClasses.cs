@@ -3,10 +3,21 @@ using System.Collections.Generic;
 using DarkRoom.Game;
 
 namespace DarkRoom.GamePlayAbility {
-	/// <summary>
-	/// 作为武器攻击或者指向性技能的过滤器
-	/// </summary>
-	public class CAbilityTargetFilter {
+    /// <summary>
+    /// 技能消耗的资源种类
+    /// </summary>
+    public enum AbilityCostType
+    {
+        MP, //蓝
+        HP, //红
+        Vital, //活力
+        Count,
+    }
+
+    /// <summary>
+    /// 作为武器攻击或者指向性技能的过滤器
+    /// </summary>
+    public class CAbilityTargetFilter {
 		/// <summary>
 		/// 过滤器枚举
 		/// </summary>
@@ -26,7 +37,7 @@ namespace DarkRoom.GamePlayAbility {
 			Count,
 		}
 
-		public enum TargetType
+		public enum TargetTeam
 		{
             None, //不需要目标, 可以选择地面
 			Me,
@@ -53,7 +64,7 @@ namespace DarkRoom.GamePlayAbility {
 		/// <summary>
 		/// 技能的目标, 默认我们是all
 		/// </summary>
-		public TargetType TargetValue;
+		public TargetTeam TargetValue;
 
 
 		public CAbilityTargetFilter()
@@ -65,7 +76,7 @@ namespace DarkRoom.GamePlayAbility {
 				FilterValue[i] = Value.Allowable;
 			}
 
-			TargetValue = TargetType.All;
+			TargetValue = TargetTeam.All;
 		}
 	}
 

@@ -117,7 +117,7 @@ namespace DarkRoom.GamePlayAbility {
 			m_selectedAbility = m_abilityDict[name];
 		}
 
-		public void Launch(int index, CAIController target){
+		public void Launch(int index, IGameplayAbilityOwner target){
 			SelectAbility(0);
 			Launch(target);
 		}
@@ -130,15 +130,15 @@ namespace DarkRoom.GamePlayAbility {
 		/// <summary>
 		/// 使用已经选中的技能
 		/// </summary>
-		public void Launch(CAIController target){
-			m_selectedAbility.Activate(target);
+		public void Launch(IGameplayAbilityOwner target){
+			m_selectedAbility.TryActivateAbility(target);
         }
 
 		/// <summary>
 		/// 使用已经选中的技能
 		/// </summary>
 		public void Launch(Vector3 target) {
-			m_selectedAbility.Activate(target);
+			m_selectedAbility.TryActivateAbility(target);
 		}
 
 		/// <summary>
