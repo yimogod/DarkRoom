@@ -24,7 +24,7 @@
 		/// <summary>
 		/// 查找目标时的过滤器
 		/// </summary>
-		public CAbilityTargetFilter SearchFilter;
+		public AbilityTargetTeam SearchTeamFilter;
 
 		/// <summary>
 		/// 查找范围

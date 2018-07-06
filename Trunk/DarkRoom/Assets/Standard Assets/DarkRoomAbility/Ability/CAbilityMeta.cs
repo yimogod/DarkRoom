@@ -7,6 +7,13 @@ using DarkRoom.Game;
 namespace DarkRoom.GamePlayAbility {
 	/// <summary>
 	/// 技能的定义
+	/// 
+	/// 有个问题, 记录一下
+	/// 如果target无敌, 我们在启动ability时, 可以通过目标进行测试判断.
+	/// 但如果传入的是坐标, 怎么办? 这个时候需要在Effect有同样的数据进行测试判断了.
+	/// 这样的话Ability和Effect的数据就有冗余. 我又不愿意在Effect上记录Ability的实例, 解耦
+	/// 暂时这样决定. Effect没有Tag, 只要调用就执行. 
+	/// Effect是否能起作用, 在Ability, Buff, SpawnActor上做判断
 	/// </summary>
 	public class CAbilityMeta : CBaseMeta
 	{
@@ -35,11 +42,6 @@ namespace DarkRoom.GamePlayAbility {
 		}
 
 		/// <summary>
-		/// 技能所属于的集合. 一个单位只能有同一个集合内的一个技能
-		/// </summary>
-		public string SetId;
-
-		/// <summary>
 		/// 技能类型
 		/// </summary>
 		public AbilityType Type = AbilityType.Attack;
@@ -54,10 +56,10 @@ namespace DarkRoom.GamePlayAbility {
 		/// </summary>
 		public List<Vector2Int> CostList = new List<Vector2Int>();
 
-		/// <summary>
-		/// 技能作用目标的过滤器
-		/// </summary>
-		public CAbilityTargetFilter TargetFilter = new CAbilityTargetFilter();
+	    /// <summary>
+	    /// 技能作用目标的团队关系
+	    /// </summary>
+	    public AbilityTargetTeam TargetTeamRequire = AbilityTargetTeam.All;
 
 		/// <summary>
 		/// 技能配合的动作clip
@@ -70,23 +72,69 @@ namespace DarkRoom.GamePlayAbility {
 		public string AbilityShowConfPath;
 
 		/// <summary>
-		/// 是否表演
-		/// </summary>
-		public bool StopGame = false;
-
-		/// <summary>
 		/// 整个技能持续的时间, 项目需要这个字段
+		/// 
+		/// 回头应该用Montage来做技能完成
 		/// </summary>
 		public float ShowTime = 2f;
 
-		/// <summary>
-		/// 技能感兴趣的位置.
-		/// 比如冲锋是方向
-		/// 射箭是目标, 项目需要这个字段
-		/// </summary>
-		public CAbilityEnum.Location TargetLocation;
+        /// <summary>
+        /// 技能感兴趣的位置.
+        /// 比如冲锋是方向
+        /// 射箭是目标, 项目需要这个字段
+        /// TODO 目前不知道啥用
+        /// </summary>
+        //public CAbilityEnum.Location TargetLocation;
 
-		public CAbilityMeta(string idKey) : base(idKey) {}
+
+        //--------------------------------- Tag Related -------------------------
+
+        /// <summary>
+        /// 本技能自身的tag
+        /// </summary>
+        public CGameplayTagContainer AbilityTags;
+
+        /// <summary>
+        /// 如果本技能成功启动, 则owner有下列tag的技能需要取消
+        /// </summary>
+	    public CGameplayTagContainer CancelAbilityWithTags;
+
+
+        /// <summary>
+        /// 本技能运行过程中, 给owner身上添加的tag
+        /// 目前没想到实际的技能实例
+        /// </summary>
+	    public CGameplayTagContainer AbilityTagsApplyToOwner;
+
+        /// <summary>
+        /// 本技能active需要owner身上有下列tag
+        /// 得满足所有的tag
+        /// </summary>
+	    public CGameplayTagContainer AbilityTagsRequiredToActive;
+
+	    /// <summary>
+	    /// owner有下列tag的任意一个, 本技能则不能运行
+	    /// 可以实现技能Set的功能
+	    /// </summary>
+	    public CGameplayTagContainer AbilityTagsToBlockActive;
+
+	    /// <summary>
+	    /// 本技能active需要target身上有下列tag, 比如目标身上有油, 你的点火技能才能用
+	    /// 得满足所有的tag
+	    /// </summary>
+	    public CGameplayTagContainer TargetAbilityTagsRequiredToActive;
+
+	    /// <summary>
+	    /// target有下列tag的任意一个, 本技能则不能运行, 比如目标的无敌
+	    /// </summary>
+	    public CGameplayTagContainer TargetAbilityTagsToBlockActive;
+        //--------------------------------- Tag Related End-------------------------
+
+        //TODO 此处添加Trigger, 用于被动触发. 要是有事件被派发
+        //TODO 就执行本技能, 问题: 我们是否建立被动技能这个类型?
+	    public List<CAbilityTriggerData> AbilityTriggers;
+
+        public CAbilityMeta(string idKey) : base(idKey) {}
 	}
 
 
@@ -154,7 +202,7 @@ namespace DarkRoom.GamePlayAbility {
 			m_xreader.TryReadChildNodeAttr(root, "Period", "value", ref meta.Period);
 			string str = String.Empty;
 			m_xreader.TryReadChildNodeAttr(root, "TargetLocation", "value", ref str);
-			meta.TargetLocation = CAbilityUtil.GetLocation(str);
+			//meta.TargetLocation = CAbilityUtil.GetLocation(str);
 		}
 
 		/// <summary>

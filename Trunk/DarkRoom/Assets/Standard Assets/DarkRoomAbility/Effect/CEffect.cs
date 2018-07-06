@@ -6,14 +6,10 @@ namespace DarkRoom.GamePlayAbility {
 	/// <summary>
 	/// 根据SC编辑器的数据. 效果是技能系统真正起作用的部分. 具体的效果类型有
 	///		传送, 持续性效果, 创造单位, 发射导弹物, 造成伤害,
-	///		搜索区域, 移除动能, 应用行为, 修改单位等
+	///		搜索区域, 移除动能, 应用Buff, 修改单位等
 	/// 
-	/// 根据UE4, Effect是个数据对象. 会修改属性和标签. 是一个专门的buff类.
-	/// 这跟星际的不一样
-	/// 
-	/// IMPORTANT!! 目前我们约定, effect apply之后会删除自己
-	/// 
-	/// 记住! ceffect的which unit是谁, 那么这个effect就挂在谁身上. 也意味着owner和target是谁
+	/// 我们的Effect都是别人应用的effect到我们身上, 也就是说挂载在我们身上的Effect都是被动接受的
+	/// 没有主动发起的. 当然自己对自己施加Effect也是自己被自己被动了
 	/// </summary>
 	public class CEffect : MonoBehaviour
 	{

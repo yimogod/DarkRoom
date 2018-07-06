@@ -48,10 +48,13 @@ namespace DarkRoom.GamePlayAbility {
 	public class CAbility : MonoBehaviour {
 		public enum AffectDectectResult{
 			Success, //成功碰到目标
-			NotReady, //技能没有准备好
+			CDNotReady, //技能没有准备好
+            StillRunning, //技能还在执行
 			TargetDeadOrNull, //目标死亡或者为空
 			TargetGroupNotMatch, //目标组不匹配
 			TargetInvalid, //目标无效
+		    TargetTagInvalid, //自身的tag不符合
+            OwnerTagInvalid, //自身的tag不符合
             OutOfRange, //超出作用范围
 		}
 
@@ -78,6 +81,9 @@ namespace DarkRoom.GamePlayAbility {
 		//上次施法的时间, 基于毫秒
 		private long m_lastFireTime = -1;
 
+        //是否正在运行, 调用EndAbility/CancelAbility结束技能
+        private bool m_running = false;
+
 		/// <summary>
 		/// 技能配置信息
 		/// </summary>
@@ -94,19 +100,35 @@ namespace DarkRoom.GamePlayAbility {
 		/// <summary>
 		/// cd是否好了
 		/// </summary>
-		public bool Ready{
-			get{
-				if (m_lastFireTime < 0)return true;
-				long delta = CTimeUtil.GetCurrentMillSecondStamp() - m_lastFireTime;
-
-				return delta >= (MetaBase.Period * 1000f);
+		public bool CD_Ready{
+			get
+			{
+			    int delta = CD_TimeRemaining;
+                return delta <= 0;
 			}
 		}
 
-		/// <summary>
-		/// 重置/消除cd
-		/// </summary>
-		public void ResetCD(){
+        /// <summary>
+        /// cd还剩的时间
+        /// </summary>
+        public int CD_TimeRemaining
+        {
+            get
+            {
+                if (m_lastFireTime < 0) return 0;
+
+                long delta = CTimeUtil.GetCurrentMillSecondStamp() - m_lastFireTime;
+                delta = (long)MetaBase.Period * 1000 - delta;
+                if (delta < 0) return 0;
+
+                return (int)delta;
+            }
+        }
+
+        /// <summary>
+        /// 重置/消除cd
+        /// </summary>
+        public void ResetCD(){
 			m_lastFireTime = -1;
 		}
 
@@ -115,7 +137,7 @@ namespace DarkRoom.GamePlayAbility {
 		/// 在ui上会有消息条
 		/// </summary>
 		public void ReportNotReady(){
-			if (Ready)return;
+			if (CD_Ready) return;
 
 			//Debug.Log("CD not Ready");
 		}
@@ -192,26 +214,50 @@ namespace DarkRoom.GamePlayAbility {
             return result;
 		}
 
+        /// <summary>
+        /// 技能正常结束
+        /// </summary>
+        public void EndAbility()
+        {
+            //TODO 添加结束通知
+            if (!m_running)return;
+
+            m_running = false;
+        }
+
 		/// <summary>
 		/// 技能是否能够对目标施展
 		/// </summary>
 		public virtual AffectDectectResult CanAffectOnTarget(IGameplayAbilityOwner target){
-			if(!Ready)return AffectDectectResult.NotReady;
-			
-			if (target == null || target.InValid)
+			if(!CD_Ready) return AffectDectectResult.CDNotReady;
+		    if (m_running) return AffectDectectResult.StillRunning;
+
+            if (target == null || target.InValid)
 				return AffectDectectResult.TargetDeadOrNull;
 
 		    bool b = IsTargetGroupMatch(target);
 			if (!b)return AffectDectectResult.TargetGroupNotMatch;
-			return AffectDectectResult.Success;
+
+		    b = IsActivationTagMatchForSelf();
+		    if (!b) return AffectDectectResult.OwnerTagInvalid;
+
+		    b = IsActivationTagMatchForTarget(target);
+		    if (!b) return AffectDectectResult.TargetTagInvalid;
+
+            return AffectDectectResult.Success;
 		}
 
 		/// <summary>
 		/// 技能是否能够对目的地
 		/// </summary>
-		public virtual AffectDectectResult CanAffectOnTarget(Vector3 target) {
-			if (!Ready)return AffectDectectResult.NotReady;
-			return AffectDectectResult.Success;
+		public virtual AffectDectectResult CanAffectOnTarget(Vector3 localPosition) {
+			if (!CD_Ready) return AffectDectectResult.CDNotReady;
+		    if (m_running) return AffectDectectResult.StillRunning;
+
+		    bool b = IsActivationTagMatchForSelf();
+		    if (!b) return AffectDectectResult.OwnerTagInvalid;
+
+            return AffectDectectResult.Success;
 		}
 
         /// <summary>
@@ -220,24 +266,36 @@ namespace DarkRoom.GamePlayAbility {
         protected bool IsTargetGroupMatch(IGameplayAbilityOwner target)
         {
             bool b = false;
-            CAbilityTargetFilter filter = MetaBase.TargetFilter;
-            switch (filter.TargetValue)
+            switch (MetaBase.TargetTeamRequire)
             {
-                case CAbilityTargetFilter.TargetTeam.All:
+                case AbilityTargetTeam.All:
                     b = true;
                     break;
-                case CAbilityTargetFilter.TargetTeam.Me:
+                case AbilityTargetTeam.Me:
                     b = (target == m_owner);
                     break;
-                case CAbilityTargetFilter.TargetTeam.Friend:
+                case AbilityTargetTeam.Friend:
                     b = m_owner.IsFriendTeam(target);
                     break;
-                case CAbilityTargetFilter.TargetTeam.Enemy:
+                case AbilityTargetTeam.Enemy:
                     b = m_owner.IsEnemyTeam(target);
                     break;
             }
 
             return b;
+        }
+
+        /// <summary>
+        /// require 或者 block tag是否满足
+        /// </summary>
+        protected bool IsActivationTagMatchForSelf()
+        {
+            return false;
+        }
+
+        protected bool IsActivationTagMatchForTarget(IGameplayAbilityOwner target)
+        {
+            return false;
         }
 
         /// <summary>

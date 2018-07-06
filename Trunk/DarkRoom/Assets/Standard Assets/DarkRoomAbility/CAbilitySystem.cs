@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DarkRoom.Core;
 using UnityEngine;
 using DarkRoom.Game;
 
@@ -43,12 +44,16 @@ namespace DarkRoom.GamePlayAbility {
     /// </summary>
     public class CAbilitySystem : MonoBehaviour
 	{
-		protected CAIController m_owner;
+	    private CPawnEntity m_owner;
 		//角色目前选中的技能
 		private CAbility m_selectedAbility;
 
-		//角色的技能列表
-		private List<CAbility> m_abilityList = new List<CAbility>();
+        //在ability go的下面有两个child, 分别用来挂在effect和buff
+	    private GameObject m_effectGo;
+	    private GameObject m_buffGo;
+
+        //角色的技能列表
+        private List<CAbility> m_abilityList = new List<CAbility>();
 		private Dictionary<string, CAbility> m_abilityDict = new Dictionary<string, CAbility>();
 
 		/// <summary>
@@ -60,14 +65,38 @@ namespace DarkRoom.GamePlayAbility {
 
 		void Start()
 		{
-			m_owner = gameObject.GetComponent<CAIController>();
-		}
+			m_owner = gameObject.GetComponent<CPawnEntity>();
 
-		/// <summary>
-		/// actor掌握新技能
-		/// </summary>
-		/// <param name="meta"></param>
-		public CAbility MasterAbility(string name)
+            //添加挂在effect和buff的go. 
+		    var effect = transform.Find("Effect");
+		    if (effect == null)
+		    {
+		        m_effectGo = new GameObject("Effect");
+		        CDarkUtil.AddChild(transform, m_effectGo.transform, Vector3.zero);
+		    }
+		    else
+		    {
+		        m_effectGo = effect.gameObject;
+		    }
+
+		    var buff = transform.Find("Buff");
+		    if (buff == null)
+		    {
+		        m_buffGo = new GameObject("Buff");
+		        CDarkUtil.AddChild(transform, m_buffGo.transform, Vector3.zero);
+		    }
+		    else
+		    {
+		        m_buffGo = buff.gameObject;
+		    }
+        }
+
+	    #region Ability
+        /// <summary>
+        /// actor掌握新技能
+        /// </summary>
+        /// <param name="meta"></param>
+        public CAbility MasterAbility(string name)
 		{
 			if (string.IsNullOrEmpty(name))return null;
 
@@ -147,8 +176,36 @@ namespace DarkRoom.GamePlayAbility {
 		public void CancelSelectedAbility() {
 			m_selectedAbility = null;
 		}
+        #endregion
 
-		void OnDestroy()
+        #region Effect
+        /// <summary>
+        /// 给目标添加效果
+        /// </summary>
+	    public void ApplyGameplayEffectToTarget(CEffectMeta effectMeta, CAbilitySystem target)
+	    {
+	        if (target == null)return;
+	        target.ApplyGameplayEffectToSelf(effectMeta, this);
+	    }
+
+        /// <summary>
+        /// 给自己添加效果, 要指定效果来源
+        /// </summary>
+	    public void ApplyGameplayEffectToSelf(CEffectMeta effectMeta, CAbilitySystem instigator)
+	    {
+	    }
+
+        /// <summary>
+        /// 获取自己身上的可用的CEffect
+        /// </summary>
+	    private CEffect GetEffectOnSelf(CEffectMeta effectMeta)
+	    {
+	        return null;
+	    }
+
+        #endregion
+
+        void OnDestroy()
 		{
 			m_abilityDict.Clear();
 			m_abilityDict = null;

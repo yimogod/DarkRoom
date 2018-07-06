@@ -14,12 +14,23 @@ namespace DarkRoom.GamePlayAbility {
         Count,
     }
 
+    public enum AbilityTargetTeam
+    {
+        None, //不需要目标, 可以选择地面
+        Me,
+        Friend,
+        Enemy,
+        All
+    }
+
     /// <summary>
     /// 作为武器攻击或者指向性技能的过滤器
+    /// TODO 可以通过tag来实现
     /// </summary>
-    public class CAbilityTargetFilter {
+    /*public class CAbilityTargetFilter {
 		/// <summary>
 		/// 过滤器枚举
+		/// TODO 可以通过tag来实现
 		/// </summary>
 		public enum Filter
 		{
@@ -66,7 +77,6 @@ namespace DarkRoom.GamePlayAbility {
 		/// </summary>
 		public TargetTeam TargetValue;
 
-
 		public CAbilityTargetFilter()
 		{
 			int count = (int) Filter.Count;
@@ -78,7 +88,7 @@ namespace DarkRoom.GamePlayAbility {
 
 			TargetValue = TargetTeam.All;
 		}
-	}
+	}*/
 
 	public class CAbilityEnum
 	{
@@ -221,5 +231,34 @@ namespace DarkRoom.GamePlayAbility {
 		}
 	}
 
-   
+    public enum CGameplayAbilityTriggerSource
+    {
+        // Triggered from a gameplay event, will come with payload
+        GameplayEvent,
+
+        // Triggered if the ability's owner gets a tag added, triggered once whenever it's added
+        OwnedTagAdded,
+
+        // Triggered if the ability's owner gets a tag removed, triggered once whenever it's removed
+        OwnedTagRemoved,
+    }
+
+    /// <summary>
+    /// 技能被动激活的触发器数据结构
+    /// </summary>
+    public struct CAbilityTriggerData
+    {
+        /// <summary>
+        /// 相关tag
+        /// </summary>
+        public CGameplayTag TriggerTag;
+
+        /// <summary>
+        /// 事件名称
+        /// </summary>
+        public string EventName;
+
+        /** The type of trigger to respond to */
+        CGameplayAbilityTriggerSource TriggerSource;
+    };
 }

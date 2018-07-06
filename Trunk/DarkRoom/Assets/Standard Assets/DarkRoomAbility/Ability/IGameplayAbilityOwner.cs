@@ -31,8 +31,12 @@ namespace DarkRoom.GamePlayAbility
         bool InValid { get; }
 
         //------------------- for aiblity ---------------------------------
+        CAbilitySystem AbilitySystem { get; }
         bool CostEnoughForAbility(AbilityCostType type, int count);
         void AbilityUseCost(AbilityCostType type, int count);
         //------------------- for aiblity end ---------------------------------
+
+        float GetSquaredXZDistanceTo_NoRadius(Vector3 target);
+        float GetSquaredXZDistanceTo_NoRadius(IGameplayAbilityOwner target);
     }
 }
