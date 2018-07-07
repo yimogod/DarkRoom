@@ -80,7 +80,7 @@ namespace DarkRoom.GamePlayAbility {
 				target[m_cid] = new Dictionary<CPawnVO.Property, float>();
 			}
 
-			var m = MBuffMeta.ModifyProperty;
+			/*var m = MBuffMeta.ModifyProperty;
 
 			//速度增量
 			if (m.MoveSpeedBonus > 0) {
@@ -93,7 +93,7 @@ namespace DarkRoom.GamePlayAbility {
 				//Debug.Log("add speed multiplier to me " + m.MoveSpeedMultiplier);
 				target[m_cid].Add(CPawnVO.Property.SpeedMultiplier, m.MoveSpeedMultiplier);
 				m_owner.BaseData.NotiSpeedChange();
-			}
+			}*/
 		}
 
 		//移除属性修改

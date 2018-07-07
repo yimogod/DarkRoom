@@ -3,17 +3,7 @@ using System.Collections.Generic;
 using DarkRoom.Game;
 
 namespace DarkRoom.GamePlayAbility {
-    /// <summary>
-    /// 技能消耗的资源种类
-    /// </summary>
-    public enum AbilityCostType
-    {
-        MP, //蓝
-        HP, //红
-        Vital, //活力
-        Count,
-    }
-
+    //----------------------- not sure delete in future -------------------------
     /// <summary>
     /// 作为武器攻击或者指向性技能的过滤器
     /// TODO 可以通过tag来实现
@@ -223,6 +213,27 @@ namespace DarkRoom.GamePlayAbility {
 			get { return !string.IsNullOrEmpty(Prefab); }
 		}
 	}
+
+    //----------------------- used for now -------------------------
+    /// <summary>
+    /// 技能消耗的资源种类
+    /// </summary>
+    public enum AbilityCostType
+    {
+        MP, //蓝
+        HP, //红
+        Vital, //活力
+        Count,
+    }
+
+    /// <summary>
+    /// 用何种方法进行属性修改
+    /// </summary>
+    public enum CAttributeModifyMethod
+    {
+        ConstValue, //固定值
+        CustomCalculation, //通过传入的计算机进行的修改
+    }
 
     public enum CGameplayAbilityTriggerSource
     {

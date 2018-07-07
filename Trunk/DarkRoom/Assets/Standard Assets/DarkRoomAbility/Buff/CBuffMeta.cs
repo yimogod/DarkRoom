@@ -89,8 +89,8 @@ namespace DarkRoom.GamePlayAbility {
         /// <summary>
         /// buff修改的单位属性
         /// </summary>
-        public CAbilityEnum.BuffModification ModifyProperty =
-	        new CAbilityEnum.BuffModification();
+        //public CAbilityEnum.BuffModification ModifyProperty =
+	    //    new CAbilityEnum.BuffModification();
 
         public CBuffMeta(string idKey) : base(idKey) { }
 	}

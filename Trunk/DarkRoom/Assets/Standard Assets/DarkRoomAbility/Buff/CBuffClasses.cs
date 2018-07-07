@@ -4,8 +4,6 @@ using DarkRoom.Game;
 
 namespace DarkRoom.GamePlayAbility
 {
-
-
     public enum CGameplayModOp
     {
         Additive, //加法
@@ -29,6 +27,21 @@ namespace DarkRoom.GamePlayAbility
         /// 对属性的操作
         /// </summary>
         public CGameplayModOp ModifierOp;
+
+        /// <summary>
+        /// 修改的方法
+        /// </summary>
+        public CAttributeModifyMethod Method;
+
+        /// <summary>
+        /// 修改值
+        /// </summary>
+        public float ModifyValue = 0;
+
+        /// <summary>
+        /// 自定义修改值的属性
+        /// </summary>
+        public string ModifyCalculation;
 
         /// <summary>
         /// buff来源的身上必须满足的tag条件
