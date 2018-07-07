@@ -69,12 +69,12 @@ namespace DarkRoom.GamePlayAbility {
         public string AbilityName;
 
 		//技能的owner, 做个简单的约定, 只能是人
-		protected IGameplayAbilityOwner m_owner;
+		protected IGameplayAbilityActor m_owner;
         //谁发射了技能, 比如枪
-        protected IGameplayAbilityOwner m_avatar;
+        protected IGameplayAbilityActor m_avatar;
 
         //技能的目标, 会是人物
-        protected IGameplayAbilityOwner m_target;
+        protected IGameplayAbilityActor m_target;
 		//或者坐标(在unit layer上的坐标)
 		protected Vector3 m_targetLocalPosition;
 
@@ -145,9 +145,9 @@ namespace DarkRoom.GamePlayAbility {
         /// <summary>
         /// 传入本技能的owner和avatar
         /// </summary>
-        public void InitAbilityActorInfo(IGameplayAbilityOwner owner, IGameplayAbilityOwner avatar)
+        public void InitAbilityActorInfo(IGameplayAbilityActor actor, IGameplayAbilityActor avatar)
         {
-            m_owner = owner;
+            m_owner = actor;
             m_avatar = avatar;
         }
 
@@ -185,7 +185,7 @@ namespace DarkRoom.GamePlayAbility {
         /// <summary>
         /// 对传入的目标施法
         /// </summary>
-		public virtual AffectDectectResult TryActivateAbility(IGameplayAbilityOwner target){
+		public virtual AffectDectectResult TryActivateAbility(IGameplayAbilityActor target){
 			AffectDectectResult result = CanAffectOnTarget(target);
 			if (result != AffectDectectResult.Success) {
 				ReportNotReady();
@@ -228,7 +228,7 @@ namespace DarkRoom.GamePlayAbility {
 		/// <summary>
 		/// 技能是否能够对目标施展
 		/// </summary>
-		public virtual AffectDectectResult CanAffectOnTarget(IGameplayAbilityOwner target){
+		public virtual AffectDectectResult CanAffectOnTarget(IGameplayAbilityActor target){
 			if(!CD_Ready) return AffectDectectResult.CDNotReady;
 		    if (m_running) return AffectDectectResult.StillRunning;
 
@@ -249,6 +249,7 @@ namespace DarkRoom.GamePlayAbility {
 
 		/// <summary>
 		/// 技能是否能够对目的地
+		/// TODO 开未来是否需要移到子类里面
 		/// </summary>
 		public virtual AffectDectectResult CanAffectOnTarget(Vector3 localPosition) {
 			if (!CD_Ready) return AffectDectectResult.CDNotReady;
@@ -263,7 +264,7 @@ namespace DarkRoom.GamePlayAbility {
         /// <summary>
         /// target的分组是否匹配
         /// </summary>
-        protected bool IsTargetGroupMatch(IGameplayAbilityOwner target)
+        protected bool IsTargetGroupMatch(IGameplayAbilityActor target)
         {
             bool b = false;
             switch (MetaBase.TargetTeamRequire)
@@ -293,7 +294,7 @@ namespace DarkRoom.GamePlayAbility {
             return false;
         }
 
-        protected bool IsActivationTagMatchForTarget(IGameplayAbilityOwner target)
+        protected bool IsActivationTagMatchForTarget(IGameplayAbilityActor target)
         {
             return false;
         }

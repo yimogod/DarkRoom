@@ -33,13 +33,13 @@ namespace DarkRoom.GamePlayAbility {
 				break;
 			case CAbilityEnum.Order.NotifyEffect:
 				m_orderReady = false;
-				m_owner.ObserveMessage ("NotiyEffect", OnNotify);
+				//m_owner.ObserveMessage ("NotiyEffect", OnNotify);
 				break;
 			}
 		}
 
 		//目前只测试了, which unit = caster
-		public override void Apply(CAIController from, CAIController to){
+		/*public override void Apply(CAIController from, CAIController to){
 			PreProcessOrder();
 			base.Apply(from, to);
 			if (m_orderReady)PostApplyCtrl();
@@ -164,6 +164,6 @@ namespace DarkRoom.GamePlayAbility {
 		/// </summary>
 		public override void JobDown(){
 			if (m_orderReady) base.JobDown();
-		}
+		}*/
 	}
 }

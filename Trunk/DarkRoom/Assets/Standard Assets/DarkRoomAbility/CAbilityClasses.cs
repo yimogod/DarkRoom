@@ -115,6 +115,8 @@ namespace DarkRoom.GamePlayAbility {
 		/// 效果的目标谁身上
 		/// 用于配置接收该指令的单位
 		/// 根据需求进行调整
+		/// 
+		/// TODO 看是否能干掉这个location
 		/// </summary>
 		public enum Location {
 			TargetUnit, //目标的中心

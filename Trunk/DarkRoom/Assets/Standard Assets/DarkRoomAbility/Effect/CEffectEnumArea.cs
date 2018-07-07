@@ -17,7 +17,20 @@ namespace DarkRoom.GamePlayAbility {
 			get { return MetaBase as CEffectEnumAreaMeta; }
 		}
 
-		public override void Apply(CAIController from, CAIController to)
+	    public override void AppliedFrom(IGameplayAbilityActor instigator)
+	    {
+	        base.AppliedFrom(instigator);
+	        //buff自己销毁自己
+	        //CBuff beh = CBuff.Create(m_meta.Behavior, m_owner.gameObject);
+	        //beh.Apply(from, to);
+	    }
+
+	    public override void ApplyToPosition(Vector3 localPosition)
+	    {
+	        Debug.LogError("CEffectApplyBuff Can not Apply To a Position. Check Config");
+	    }
+
+        /*public override void Apply(CAIController from, CAIController to)
 		{
 			base.Apply(from, to);
 
@@ -56,7 +69,7 @@ namespace DarkRoom.GamePlayAbility {
 				case CAbilityEnum.Location.TargetDirection:
 					break;
 			}
-		}
+		}*/
 
 		private void SearchAndApply(CAIController owner, CAIController target, Vector3 center)
 		{
@@ -82,13 +95,13 @@ namespace DarkRoom.GamePlayAbility {
 			if (list != null) {
 				foreach (var item in list) {
 					if (item.Pawn.DeadOrDyingOrInvalid) continue;
-					CEffect.DefaultCreateAndApply(m_meta.Area.Effect, owner, item as CAIController);
+					//CEffect.DefaultCreateAndApply(m_meta.Area.Effect, owner, item as CAIController);
 				}
 			}
 
 			if (m_interested != null) {
-				CAIMessage m = new CAIMessage (0, "NotiyEffectCallBack", m_owner, m_interested);
-				CAIMessage.Send(m_owner, m);
+				//CAIMessage m = new CAIMessage (0, "NotiyEffectCallBack", m_owner, m_interested);
+				//CAIMessage.Send(m_owner, m);
 			}
 
 		}

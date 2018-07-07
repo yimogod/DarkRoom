@@ -53,13 +53,13 @@ namespace DarkRoom.GamePlayAbility {
 		/// <summary>
 		/// 根据配置, 效果到底作用于目标还是自身
 		/// </summary>
-		public GameObject DectectGameObjectOwner(GameObject from, GameObject to)
+		/*public GameObject DectectGameObjectOwner(GameObject from, GameObject to)
 		{
 			if (WhichUnit == CAbilityEnum.Location.CasterUnit) {
 				return from;
 			}
 			return to;
-		}
+		}*/
 
 		public CEffectMeta(string idKey) : base(idKey) { }
 	}

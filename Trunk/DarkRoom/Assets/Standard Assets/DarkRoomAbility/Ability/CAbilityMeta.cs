@@ -24,6 +24,7 @@ namespace DarkRoom.GamePlayAbility {
 		{
 			Attack, //攻击
 			EffectTarget, //需要选定目标的effect
+            EffectPosition, //对于目标点或者方向实施的技能
 		}
 
 		/// <summary>
@@ -165,8 +166,9 @@ namespace DarkRoom.GamePlayAbility {
 	{
 		public const string CAbilType_Attack = "CAbilAttack";
 		public const string CAbilType_Target = "CAbilEffectTarget";
+	    public const string CAbilType_Position = "CAbilEffectPosition";
 
-		public CAbilityParser() : base() {
+        public CAbilityParser() : base() {
 		}
 
 		public CAbilityParser(bool useXml) : base(useXml) {
@@ -185,7 +187,10 @@ namespace DarkRoom.GamePlayAbility {
 					case CAbilType_Target:
 						Parse_Target(node);
 						break;
-				}
+                    case CAbilType_Position:
+                        Parse_Position(node);
+                        break;
+                }
 			}
 		}
 
@@ -217,9 +222,12 @@ namespace DarkRoom.GamePlayAbility {
 			m_xreader.TryReadChildNodeAttr(root, "MinAttackSpeedMultiplier", "value", ref meta.MinAttackSpeedMultiplier);
 		}
 
+	    private void Parse_Position(XmlElement root)
+	    {
 
+	    }
 
-		private void Parse_Base(XmlElement root, CAbilityMeta meta) {
+	    private void Parse_Base(XmlElement root, CAbilityMeta meta) {
 			meta.Id = root.GetAttribute("id");
 			m_xreader.TryReadChildNodeAttr(root, "Clip", "value", ref meta.Clip);
 

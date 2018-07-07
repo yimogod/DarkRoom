@@ -167,9 +167,9 @@ namespace DarkRoom.GamePlayAbility {
 			//正常结束时施加的效果
 			if (string.IsNullOrEmpty(MBuffMeta.PeriodicEffect))return;
 
-			var eff = CEffect.Create(MBuffMeta.PeriodicEffect, m_owner.gameObject, m_to.gameObject);
-			eff.Apply(m_owner, m_to);
-			eff.JobDown();
+			//var eff = CEffect.Create(MBuffMeta.PeriodicEffect, m_owner.gameObject, m_to.gameObject);
+			//eff.Apply(m_owner, m_to);
+			//eff.JobDown();
 		}
 
 		//buff生命周期正常结束

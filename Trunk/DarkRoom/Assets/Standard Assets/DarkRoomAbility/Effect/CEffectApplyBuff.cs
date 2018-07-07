@@ -5,7 +5,7 @@ using DarkRoom.Game;
 
 namespace DarkRoom.GamePlayAbility {
 	/// <summary>
-	/// 应用行为的效果. 一个很重要的作用就是添加buff
+	/// 给目标添加Buff
 	/// </summary>
 	public class CEffectApplyBuff : CEffect
 	{
@@ -13,27 +13,18 @@ namespace DarkRoom.GamePlayAbility {
 			get { return MetaBase as CEffectApplyBuffMeta; }
 		}
 
-		public override void Apply(CAIController from, CAIController to)
-		{
-			base.Apply(from, to);
-			//buff自己销毁自己
-			CBuff beh = CBuff.Create(m_meta.Behavior, m_owner.gameObject);
-			beh.Apply(from, to);
+	    public override void AppliedFrom(IGameplayAbilityActor instigator)
+	    {
+	        base.AppliedFrom(instigator);
+	        //buff自己销毁自己
+	        //CBuff beh = CBuff.Create(m_meta.Behavior, m_owner.gameObject);
+	        //beh.Apply(from, to);
         }
 
-		/// <summary>
-		/// 如果我们添加buff的对象的是坐标, 那么我们认为buff是添加到了自己身上
-		/// 
-		/// 根据冲锋得到的, 未来可能会修改
-		/// </summary>
-		public override void Apply(CAIController from, Vector3 to) {
-			if (m_meta.AttachTarget) {
-				Debug.Log(m_meta.Id + " can not apply buff to pos with WhichUnit = Target");
-				return;
-			}
-
-			Apply(from, from);
-		}
+	    public override void ApplyToPosition(Vector3 localPosition)
+	    {
+            Debug.LogError("CEffectApplyBuff Can not Apply To a Position. Check Config");
+	    }
 	}
 }
 

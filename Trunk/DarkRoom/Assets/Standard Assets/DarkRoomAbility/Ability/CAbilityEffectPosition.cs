@@ -21,16 +21,16 @@ namespace DarkRoom.GamePlayAbility {
             //作用于目标
 		    if (m_target != null)
 		    {
-		        m_owner.AbilitySystem.ApplyGameplayEffectToTarget(null, m_target.AbilitySystem);
+		        m_owner.AbilitySystem.ApplyGameplayEffectToTarget(null, m_target);
             }
 		    else //作用于地址
 		    {
-		        
-		    }
+		        m_owner.AbilitySystem.ApplyGameplayEffectToPosition(null, m_targetLocalPosition);
+            }
 			
 		}
 
-		public override AffectDectectResult CanAffectOnTarget(IGameplayAbilityOwner target){
+		public override AffectDectectResult CanAffectOnTarget(IGameplayAbilityActor target){
 			AffectDectectResult result = base.CanAffectOnTarget(target);
 			if (result != AffectDectectResult.Success)return result;
 

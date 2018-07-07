@@ -4,10 +4,23 @@ using DarkRoom.Game;
 
 namespace DarkRoom.GamePlayAbility {
 	public class CEffectDamage : CEffect{
-		//private CDamageInfo _damage = null;
+        //private CDamageInfo _damage = null;
 
-		public override void Apply(CAIController owner, CAIController target){
-			CEffectDamageMeta meta = MetaBase as CEffectDamageMeta;
+	    public override void AppliedFrom(IGameplayAbilityActor instigator)
+	    {
+	        base.AppliedFrom(instigator);
+	        //buff自己销毁自己
+	        //CBuff beh = CBuff.Create(m_meta.Behavior, m_owner.gameObject);
+	        //beh.Apply(from, to);
+	    }
+
+	    public override void ApplyToPosition(Vector3 localPosition)
+	    {
+	        Debug.LogError("CEffectApplyBuff Can not Apply To a Position. Check Config");
+	    }
+
+        //public override void Apply(CAIController owner, CAIController target){
+			//CEffectDamageMeta meta = MetaBase as CEffectDamageMeta;
 
 			//if (_damage == null)
 				//_damage = new CDamageInfo(owner, target, meta);
@@ -15,7 +28,7 @@ namespace DarkRoom.GamePlayAbility {
 				//_damage.target = target;
 
 			//OnImpact(owner, target, _damage);
-		}
+		//}
 
 
 		//命中目标后的回调

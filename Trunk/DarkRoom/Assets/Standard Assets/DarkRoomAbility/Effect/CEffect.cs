@@ -23,91 +23,81 @@ namespace DarkRoom.GamePlayAbility {
 		/// </summary>
 		public int Index;
 
-		/// <summary>
-		/// 效果配置信息
-		/// </summary>
-		public CEffectMeta MetaBase {
-			get{
-				if (string.IsNullOrEmpty(EffectName)) {
-					Debug.LogError("Notice EffectName is null");
-					return null;
-				}
-				return CEffectMetaManager.GetMeta(EffectName);
-			}
-		}
+        /// <summary>
+        /// 本效果是否在执行中
+        /// </summary>
+	    private bool m_running = false;
 
-		//该效果是挂在谁身上的, 也可以称之为目标
-		//TODO 放在地上的效果再说
-		protected CAIController m_owner;
 
-		//效果来源于谁
-		protected CAIController m_from;
-		//效果目标是谁
-		protected CAIController m_to;
-		protected Vector3 m_toPos;
 
-		protected virtual void Awake(){
-			m_owner = gameObject.GetComponent<CAIController>();
-		}
+		//该效果是挂在谁身上的, 就是主人
+		protected IGameplayAbilityActor m_owner;
+        //效果由谁引发的
+	    protected IGameplayAbilityActor m_instigator;
+        //效果作用的坐标
+	    protected Vector3 m_targetLocalPos = Vector3.negativeInfinity;
+
+        /// <summary>
+        /// 效果配置信息
+        /// </summary>
+        public CEffectMeta MetaBase
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(EffectName))
+                {
+                    Debug.LogError("Notice EffectName is null");
+                    return null;
+                }
+                return CEffectMetaManager.GetMeta(EffectName);
+            }
+        }
+
+        protected virtual void Awake(){}
 		protected virtual void Start(){}
 		protected virtual void Update(){}
 		protected virtual void OnDestroy(){}
 
-		/// <summary>
-		/// 效果作用于某个坐标
-		/// </summary>
-		public virtual void Apply(CAIController from, Vector3 to) {
-			m_from = from;
-			m_toPos = to;
+	    public void InitAbilityActorInfo(IGameplayAbilityActor actor)
+	    {
+	        m_owner = actor;
+	    }
 
-			if (MetaBase.WhichUnit == CAbilityEnum.Location.CasterUnit) {
-				m_owner = from;
-			} else {
-				m_owner = null;
-			}
+        /// <summary>
+        /// 效果作用于某个坐标
+        /// </summary>
+        public virtual void ApplyToPosition(Vector3 localPosition)
+        {
+            m_instigator = m_owner;
+            m_targetLocalPos = localPosition;
+        }
 
-			//不是己方给与的效果, 那么我们就人物是伤害了
-			//TODO 可能有坑
-			if (m_owner != null && !m_owner.SameTeam(m_from)) {
-				m_owner.Pawn.Instigator = m_from;
-			}
-		}
-
-		public virtual void Apply(CAIController from, CAIController to)
+		public virtual void AppliedFrom(IGameplayAbilityActor instigator)
 		{
-			m_from = from;
-			m_to = to;
-
-			//效果自己放给自己
-			if (MetaBase.WhichUnit == CAbilityEnum.Location.CasterUnit) {
-				m_owner = from;
-			} else {
-				m_owner = to;
-			}
-
-			//不是己方给与的效果, 那么我们就人物是伤害了
-			//TODO 可能有坑
-			if (m_owner != null && !m_owner.SameTeam(m_from)) {
-				m_owner.Pawn.Instigator = m_from;
-			}
+		    m_instigator = instigator;
 		}
 
 		/// <summary>
-		/// 效果结束, 销毁自己
+		/// 效果结束
 		/// </summary>
-		public virtual void JobDown(){
-			Destroy(this);
+		public virtual void JobDown()
+		{
+		    m_running = false;
 		}
 
-		public static CEffect Create(string meta, GameObject from, GameObject to)
+        /// <summary>
+        /// 给owner创建一个Effect组件, 并挂在Effect Child Layer身上
+        /// </summary>
+		public static CEffect Create(string meta, IGameplayAbilityActor owner)
 		{
 			CEffect eff = null;
 			CEffectMeta emeta = CEffectMetaManager.GetMeta(meta);
-			GameObject go = emeta.DectectGameObjectOwner(from, to);
-			if (go == null) {
+			if (owner == null) {
 				Debug.LogError("We can not get GameObject which effect attach on " + meta);
 				return null;
 			}
+
+		    GameObject go = owner.EffectLayer;
 
 			switch (emeta.Type) {
 				case CEffectMeta.EffectType.LaunchMissle:
@@ -136,21 +126,6 @@ namespace DarkRoom.GamePlayAbility {
 					break;
 			}
 
-			return eff;
-		}
-
-		public static CEffect DefaultCreateAndApply(string meta, CAIController from, CAIController to)
-		{
-			CEffect eff = CEffect.Create(meta, from.gameObject, to.gameObject);
-			eff.Apply(from, to);
-			eff.JobDown();
-			return eff;
-		}
-
-		public static CEffect DefaultCreateAndApply(string meta, CAIController from, Vector3 to) {
-			CEffect eff = CEffect.Create(meta, from.gameObject, null);
-			eff.Apply(from, to);
-			eff.JobDown();
 			return eff;
 		}
 	}

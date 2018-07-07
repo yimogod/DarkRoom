@@ -15,7 +15,7 @@ namespace DarkRoom.GamePlayAbility {
 			get { return MetaBase as CEffectLaunchMissileMeta; }
 		}
 
-		public override void Apply(CAIController from, CAIController to)
+		/*public override void Apply(CAIController from, CAIController to)
 		{
 			Apply(from, to.LocalPosition);
 			m_entity.FlyTarget = to;
@@ -55,7 +55,7 @@ namespace DarkRoom.GamePlayAbility {
 			//添加自毁程序. 3s后自动销毁
 			CAutoDestoryComp des = missle.AddComponent<CAutoDestoryComp>();
 			des.Run(3f);
-		}
+		}*/
 
 		//private void OnImpactCallBack (object sender, XEventArgs e){
 		//	OnImpact(e.dataObj as CActorEntity, e.dataObj_2 as CActorEntity);

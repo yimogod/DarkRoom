@@ -44,9 +44,10 @@ namespace DarkRoom.GamePlayAbility {
     /// </summary>
     public class CAbilitySystem : MonoBehaviour
 	{
-	    private CPawnEntity m_owner;
-		//角色目前选中的技能
-		private CAbility m_selectedAbility;
+	    protected IGameplayAbilityActor m_owner;
+
+        //角色目前选中的技能
+        private CAbility m_selectedAbility;
 
         //在ability go的下面有两个child, 分别用来挂在effect和buff
 	    private GameObject m_effectGo;
@@ -65,8 +66,6 @@ namespace DarkRoom.GamePlayAbility {
 
 		void Start()
 		{
-			m_owner = gameObject.GetComponent<CPawnEntity>();
-
             //添加挂在effect和buff的go. 
 		    var effect = transform.Find("Effect");
 		    if (effect == null)
@@ -91,7 +90,12 @@ namespace DarkRoom.GamePlayAbility {
 		    }
         }
 
-	    #region Ability
+        #region Ability
+	    public void InitAbilityActorInfo(IGameplayAbilityActor actor)
+	    {
+	        m_owner = actor;
+	    }
+
         /// <summary>
         /// actor掌握新技能
         /// </summary>
@@ -101,9 +105,10 @@ namespace DarkRoom.GamePlayAbility {
 			if (string.IsNullOrEmpty(name))return null;
 
 			CAbility abi = CAbility.Create(name, gameObject);
-			if (abi == null)return null;
+            if (abi == null)return null;
 
-			abi.Index = m_abilityList.Count;
+		    abi.InitAbilityActorInfo(m_owner, m_owner);
+            abi.Index = m_abilityList.Count;
 
 			m_abilityList.Add(abi);
 			m_abilityDict[name] = abi;
@@ -146,7 +151,7 @@ namespace DarkRoom.GamePlayAbility {
 			m_selectedAbility = m_abilityDict[name];
 		}
 
-		public void Launch(int index, IGameplayAbilityOwner target){
+		public void Launch(int index, IGameplayAbilityActor target){
 			SelectAbility(0);
 			Launch(target);
 		}
@@ -159,7 +164,7 @@ namespace DarkRoom.GamePlayAbility {
 		/// <summary>
 		/// 使用已经选中的技能
 		/// </summary>
-		public void Launch(IGameplayAbilityOwner target){
+		public void Launch(IGameplayAbilityActor target){
 			m_selectedAbility.TryActivateAbility(target);
         }
 
@@ -179,26 +184,49 @@ namespace DarkRoom.GamePlayAbility {
         #endregion
 
         #region Effect
+	    /// <summary>
+	    /// 朝某个位置应用效果
+	    /// </summary>
+	    public void ApplyGameplayEffectToPosition(CEffectMeta effectMeta, Vector3 localPostion)
+	    {
+	        var effect = GetSleepingEffectOnSelf(effectMeta);
+	        if (effect == null)
+	        {
+	            Debug.Log("Effect MUST NOT Null here. Check the code or config");
+	            return;
+	        }
+
+	        effect.ApplyToPosition(localPostion);
+        }
+
         /// <summary>
         /// 给目标添加效果
         /// </summary>
-	    public void ApplyGameplayEffectToTarget(CEffectMeta effectMeta, CAbilitySystem target)
+	    public void ApplyGameplayEffectToTarget(CEffectMeta effectMeta, IGameplayAbilityActor target)
 	    {
 	        if (target == null)return;
-	        target.ApplyGameplayEffectToSelf(effectMeta, this);
+	        target.AbilitySystem.ApplyGameplayEffectToSelf(effectMeta, m_owner);
 	    }
 
         /// <summary>
         /// 给自己添加效果, 要指定效果来源
         /// </summary>
-	    public void ApplyGameplayEffectToSelf(CEffectMeta effectMeta, CAbilitySystem instigator)
-	    {
-	    }
+	    private void ApplyGameplayEffectToSelf(CEffectMeta effectMeta, IGameplayAbilityActor instigator)
+        {
+            var effect = GetSleepingEffectOnSelf(effectMeta);
+            if (effect == null)
+            {
+                Debug.Log("Effect MUST NOT Null here. Check the code or config");
+                return;
+            }
+
+            effect.AppliedFrom(instigator);
+        }
 
         /// <summary>
         /// 获取自己身上的可用的CEffect
         /// </summary>
-	    private CEffect GetEffectOnSelf(CEffectMeta effectMeta)
+	    private CEffect GetSleepingEffectOnSelf(CEffectMeta effectMeta)
 	    {
 	        return null;
 	    }
