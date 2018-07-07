@@ -13,7 +13,7 @@ namespace DarkRoom.GamePlayAbility {
 			get { return MetaBase as CEffectApplyBuffMeta; }
 		}
 
-	    public override void AppliedFrom(IGameplayAbilityActor instigator)
+	    public override void AppliedFrom(IGameplayAbilityUnit instigator)
 	    {
 	        base.AppliedFrom(instigator);
 	        //buff自己销毁自己

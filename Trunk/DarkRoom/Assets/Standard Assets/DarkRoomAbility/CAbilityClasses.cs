@@ -14,15 +14,6 @@ namespace DarkRoom.GamePlayAbility {
         Count,
     }
 
-    public enum AbilityTargetTeam
-    {
-        None, //不需要目标, 可以选择地面
-        Me,
-        Friend,
-        Enemy,
-        All
-    }
-
     /// <summary>
     /// 作为武器攻击或者指向性技能的过滤器
     /// TODO 可以通过tag来实现
@@ -90,7 +81,7 @@ namespace DarkRoom.GamePlayAbility {
 		}
 	}*/
 
-	public class CAbilityEnum
+    public class CAbilityEnum
 	{
 		/// <summary>
 		/// 目标类型

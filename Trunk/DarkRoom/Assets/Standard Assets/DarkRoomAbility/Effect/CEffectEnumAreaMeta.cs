@@ -2,19 +2,9 @@
 	public class CEffectEnumAreaMeta : CEffectMeta
 	{
 		/// <summary>
-		/// 查询目标的方法
-		/// </summary>
-		public enum Method
-		{
-			TeamAll, //如果有团队的概念的话, 那么就整个团队
-			ImpactRange, //在圆/矩形里面的所有单位
-			RandomInRange, //在圆/矩形里面的单个随机单位
-		}
-
-		/// <summary>
 		/// 搜索的方法
 		/// </summary>
-		public Method SearchMethod = Method.ImpactRange;
+		//public Method SearchMethod = Method.ImpactRange;
 
 		/// <summary>
 		/// 搜索的中心位置
@@ -24,7 +14,7 @@
 		/// <summary>
 		/// 查找目标时的过滤器
 		/// </summary>
-		public AbilityTargetTeam SearchTeamFilter;
+		public CAbilityUnitTeamType SearchTeamFilter;
 
 		/// <summary>
 		/// 查找范围

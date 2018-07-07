@@ -5,7 +5,7 @@ using UnityEngine;
 namespace DarkRoom.GamePlayAbility {
 	public class CEffectCreateUnit : CEffect
 	{
-	    public override void AppliedFrom(IGameplayAbilityActor instigator)
+	    public override void AppliedFrom(IGameplayAbilityUnit instigator)
 	    {
 	        base.AppliedFrom(instigator);
 	        //buff自己销毁自己

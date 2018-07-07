@@ -24,7 +24,7 @@ namespace DarkRoom.GamePlayAbility {
 		    m_owner.AbilitySystem.ApplyGameplayEffectToTarget(null, m_target);
 		}
 
-		public override AffectDectectResult CanAffectOnTarget(IGameplayAbilityActor target){
+		public override AffectDectectResult CanAffectOnTarget(IGameplayAbilityUnit target){
 			AffectDectectResult result = base.CanAffectOnTarget(target);
 			if (result != AffectDectectResult.Success)return result;
 

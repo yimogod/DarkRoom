@@ -7,78 +7,41 @@ using DarkRoom.Game;
 namespace DarkRoom.GamePlayAbility {
 	public class CEffectEnumArea : CEffect
 	{
-		/// <summary>
-		/// 本效果感兴趣的目标
-		/// </summary>
-		protected CController m_interested;
+	    private List<IGameplayAbilityUnit> m_searchResult = new List<IGameplayAbilityUnit>();
 
 		protected CEffectEnumAreaMeta m_meta
 		{
 			get { return MetaBase as CEffectEnumAreaMeta; }
 		}
 
-	    public override void AppliedFrom(IGameplayAbilityActor instigator)
+	    public override void AppliedFrom(IGameplayAbilityUnit instigator)
 	    {
 	        base.AppliedFrom(instigator);
-	        //buff自己销毁自己
-	        //CBuff beh = CBuff.Create(m_meta.Behavior, m_owner.gameObject);
-	        //beh.Apply(from, to);
+	        ApplyToPosition(m_owner.LocalPosition);
 	    }
 
 	    public override void ApplyToPosition(Vector3 localPosition)
 	    {
-	        Debug.LogError("CEffectApplyBuff Can not Apply To a Position. Check Config");
-	    }
+            base.ApplyToPosition(localPosition);
 
-        /*public override void Apply(CAIController from, CAIController to)
+	        m_searchResult.Clear();
+            m_owner.SearchUnitsWithQuery(m_searchResult);
+
+	        foreach (var item in m_searchResult)
+	        {
+	            if (item.InValid) continue;
+	            //CEffect.DefaultCreateAndApply(m_meta.Area.Effect, owner, item as CAIController);
+	        }
+        }
+
+		private void SearchAndApply()
 		{
-			base.Apply(from, to);
-
-			//Debug.Log("apply ceffect enum area");
-			switch (m_meta.ImpactLocation) {
-				case CAbilityEnum.Location.CasterUnit:
-					SearchAndApply(m_owner, m_from, m_from.LocalPosition);
-					break;
-				case CAbilityEnum.Location.CasterPoint:
-					SearchAndApply(m_owner, m_from, m_from.LocalPosition);
-					break;
-				case CAbilityEnum.Location.TargetUnit:
-					SearchAndApply(m_owner, m_to, m_to.LocalPosition);
-					break;
-				case CAbilityEnum.Location.TargetPoint:
-					SearchAndApply(m_owner, m_to, m_to.LocalPosition);
-					break;
-				case CAbilityEnum.Location.TargetDirection:
-					break;
-			}
-		}
-
-		//说实话, 这里不知道怎么样, 先放着
-		public override void Apply(CAIController from, Vector3 to) {
-			Debug.LogError("EffectEnumArea must have a unit to param");
-
-			switch (m_meta.ImpactLocation) {
-				case CAbilityEnum.Location.CasterUnit:
-					break;
-				case CAbilityEnum.Location.CasterPoint:
-					break;
-				case CAbilityEnum.Location.TargetUnit:
-					break;
-				case CAbilityEnum.Location.TargetPoint:
-					break;
-				case CAbilityEnum.Location.TargetDirection:
-					break;
-			}
-		}*/
-
-		private void SearchAndApply(CAIController owner, CAIController target, Vector3 center)
-		{
-			List<CController> list = null;
-			switch (m_meta.SearchMethod) {
-					case CEffectEnumAreaMeta.Method.TeamAll:
+//			List<CController> list = new List<CController>();
+			/*switch (m_meta.SearchMethod) {
+					case AbilitySearchTargetMethod.TeamAll:
 					list = target.SearchUnits();
                     break;
-			case CEffectEnumAreaMeta.Method.RandomInRange:
+			case AbilitySearchTargetMethod.RandomInRange:
 				list = target.SearchUnits ();
 				if (list.Count > 1) {
 					int i = CDarkRandom.Next (0, list.Count - 1);
@@ -87,23 +50,10 @@ namespace DarkRoom.GamePlayAbility {
 				}
 					
 					break;
-					case CEffectEnumAreaMeta.Method.ImpactRange:
+					case AbilitySearchTargetMethod.ImpactRange:
 					list = owner.SearchUnits(center, m_meta.Area.Radius);
 					break;
-			}
-
-			if (list != null) {
-				foreach (var item in list) {
-					if (item.Pawn.DeadOrDyingOrInvalid) continue;
-					//CEffect.DefaultCreateAndApply(m_meta.Area.Effect, owner, item as CAIController);
-				}
-			}
-
-			if (m_interested != null) {
-				//CAIMessage m = new CAIMessage (0, "NotiyEffectCallBack", m_owner, m_interested);
-				//CAIMessage.Send(m_owner, m);
-			}
-
+			}*/
 		}
 	}
 }

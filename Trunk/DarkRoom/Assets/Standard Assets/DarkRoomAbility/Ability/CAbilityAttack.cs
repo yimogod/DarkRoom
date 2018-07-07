@@ -29,7 +29,7 @@ namespace DarkRoom.GamePlayAbility {
 		}*/
 
 		//普攻, 那只能对敌人使用
-		public override  AffectDectectResult CanAffectOnTarget(IGameplayAbilityActor target){
+		public override  AffectDectectResult CanAffectOnTarget(IGameplayAbilityUnit target){
 			m_target = target;
 
 			AffectDectectResult result = base.CanAffectOnTarget(m_target);

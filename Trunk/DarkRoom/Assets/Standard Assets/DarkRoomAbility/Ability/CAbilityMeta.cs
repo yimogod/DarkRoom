@@ -60,7 +60,7 @@ namespace DarkRoom.GamePlayAbility {
 	    /// <summary>
 	    /// 技能作用目标的团队关系
 	    /// </summary>
-	    public AbilityTargetTeam TargetTeamRequire = AbilityTargetTeam.All;
+	    public CAbilityUnitTeamType TargetTeamRequire = CAbilityUnitTeamType.All;
 
 		/// <summary>
 		/// 技能配合的动作clip

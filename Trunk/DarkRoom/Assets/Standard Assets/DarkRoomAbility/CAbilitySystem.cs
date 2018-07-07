@@ -44,7 +44,7 @@ namespace DarkRoom.GamePlayAbility {
     /// </summary>
     public class CAbilitySystem : MonoBehaviour
 	{
-	    protected IGameplayAbilityActor m_owner;
+	    protected IGameplayAbilityUnit m_owner;
 
         //角色目前选中的技能
         private CAbility m_selectedAbility;
@@ -91,7 +91,7 @@ namespace DarkRoom.GamePlayAbility {
         }
 
         #region Ability
-	    public void InitAbilityActorInfo(IGameplayAbilityActor actor)
+	    public void InitAbilityActorInfo(IGameplayAbilityUnit actor)
 	    {
 	        m_owner = actor;
 	    }
@@ -151,7 +151,7 @@ namespace DarkRoom.GamePlayAbility {
 			m_selectedAbility = m_abilityDict[name];
 		}
 
-		public void Launch(int index, IGameplayAbilityActor target){
+		public void Launch(int index, IGameplayAbilityUnit target){
 			SelectAbility(0);
 			Launch(target);
 		}
@@ -164,7 +164,7 @@ namespace DarkRoom.GamePlayAbility {
 		/// <summary>
 		/// 使用已经选中的技能
 		/// </summary>
-		public void Launch(IGameplayAbilityActor target){
+		public void Launch(IGameplayAbilityUnit target){
 			m_selectedAbility.TryActivateAbility(target);
         }
 
@@ -202,7 +202,7 @@ namespace DarkRoom.GamePlayAbility {
         /// <summary>
         /// 给目标添加效果
         /// </summary>
-	    public void ApplyGameplayEffectToTarget(CEffectMeta effectMeta, IGameplayAbilityActor target)
+	    public void ApplyGameplayEffectToTarget(CEffectMeta effectMeta, IGameplayAbilityUnit target)
 	    {
 	        if (target == null)return;
 	        target.AbilitySystem.ApplyGameplayEffectToSelf(effectMeta, m_owner);
@@ -211,7 +211,7 @@ namespace DarkRoom.GamePlayAbility {
         /// <summary>
         /// 给自己添加效果, 要指定效果来源
         /// </summary>
-	    private void ApplyGameplayEffectToSelf(CEffectMeta effectMeta, IGameplayAbilityActor instigator)
+	    private void ApplyGameplayEffectToSelf(CEffectMeta effectMeta, IGameplayAbilityUnit instigator)
         {
             var effect = GetSleepingEffectOnSelf(effectMeta);
             if (effect == null)

@@ -30,7 +30,7 @@ namespace DarkRoom.GamePlayAbility {
 			
 		}
 
-		public override AffectDectectResult CanAffectOnTarget(IGameplayAbilityActor target){
+		public override AffectDectectResult CanAffectOnTarget(IGameplayAbilityUnit target){
 			AffectDectectResult result = base.CanAffectOnTarget(target);
 			if (result != AffectDectectResult.Success)return result;
 

@@ -6,7 +6,7 @@ namespace DarkRoom.GamePlayAbility {
 	public class CEffectDamage : CEffect{
         //private CDamageInfo _damage = null;
 
-	    public override void AppliedFrom(IGameplayAbilityActor instigator)
+	    public override void AppliedFrom(IGameplayAbilityUnit instigator)
 	    {
 	        base.AppliedFrom(instigator);
 	        //buff自己销毁自己

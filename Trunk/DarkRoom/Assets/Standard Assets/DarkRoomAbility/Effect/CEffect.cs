@@ -31,9 +31,9 @@ namespace DarkRoom.GamePlayAbility {
 
 
 		//该效果是挂在谁身上的, 就是主人
-		protected IGameplayAbilityActor m_owner;
+		protected IGameplayAbilityUnit m_owner;
         //效果由谁引发的
-	    protected IGameplayAbilityActor m_instigator;
+	    protected IGameplayAbilityUnit m_instigator;
         //效果作用的坐标
 	    protected Vector3 m_targetLocalPos = Vector3.negativeInfinity;
 
@@ -58,7 +58,7 @@ namespace DarkRoom.GamePlayAbility {
 		protected virtual void Update(){}
 		protected virtual void OnDestroy(){}
 
-	    public void InitAbilityActorInfo(IGameplayAbilityActor actor)
+	    public void InitAbilityActorInfo(IGameplayAbilityUnit actor)
 	    {
 	        m_owner = actor;
 	    }
@@ -72,7 +72,7 @@ namespace DarkRoom.GamePlayAbility {
             m_targetLocalPos = localPosition;
         }
 
-		public virtual void AppliedFrom(IGameplayAbilityActor instigator)
+		public virtual void AppliedFrom(IGameplayAbilityUnit instigator)
 		{
 		    m_instigator = instigator;
 		}
@@ -88,7 +88,7 @@ namespace DarkRoom.GamePlayAbility {
         /// <summary>
         /// 给owner创建一个Effect组件, 并挂在Effect Child Layer身上
         /// </summary>
-		public static CEffect Create(string meta, IGameplayAbilityActor owner)
+		public static CEffect Create(string meta, IGameplayAbilityUnit owner)
 		{
 			CEffect eff = null;
 			CEffectMeta emeta = CEffectMetaManager.GetMeta(meta);

@@ -69,12 +69,12 @@ namespace DarkRoom.GamePlayAbility {
         public string AbilityName;
 
 		//技能的owner, 做个简单的约定, 只能是人
-		protected IGameplayAbilityActor m_owner;
+		protected IGameplayAbilityUnit m_owner;
         //谁发射了技能, 比如枪
-        protected IGameplayAbilityActor m_avatar;
+        protected IGameplayAbilityUnit m_avatar;
 
         //技能的目标, 会是人物
-        protected IGameplayAbilityActor m_target;
+        protected IGameplayAbilityUnit m_target;
 		//或者坐标(在unit layer上的坐标)
 		protected Vector3 m_targetLocalPosition;
 
@@ -145,7 +145,7 @@ namespace DarkRoom.GamePlayAbility {
         /// <summary>
         /// 传入本技能的owner和avatar
         /// </summary>
-        public void InitAbilityActorInfo(IGameplayAbilityActor actor, IGameplayAbilityActor avatar)
+        public void InitAbilityActorInfo(IGameplayAbilityUnit actor, IGameplayAbilityUnit avatar)
         {
             m_owner = actor;
             m_avatar = avatar;
@@ -185,7 +185,7 @@ namespace DarkRoom.GamePlayAbility {
         /// <summary>
         /// 对传入的目标施法
         /// </summary>
-		public virtual AffectDectectResult TryActivateAbility(IGameplayAbilityActor target){
+		public virtual AffectDectectResult TryActivateAbility(IGameplayAbilityUnit target){
 			AffectDectectResult result = CanAffectOnTarget(target);
 			if (result != AffectDectectResult.Success) {
 				ReportNotReady();
@@ -228,7 +228,7 @@ namespace DarkRoom.GamePlayAbility {
 		/// <summary>
 		/// 技能是否能够对目标施展
 		/// </summary>
-		public virtual AffectDectectResult CanAffectOnTarget(IGameplayAbilityActor target){
+		public virtual AffectDectectResult CanAffectOnTarget(IGameplayAbilityUnit target){
 			if(!CD_Ready) return AffectDectectResult.CDNotReady;
 		    if (m_running) return AffectDectectResult.StillRunning;
 
@@ -264,21 +264,21 @@ namespace DarkRoom.GamePlayAbility {
         /// <summary>
         /// target的分组是否匹配
         /// </summary>
-        protected bool IsTargetGroupMatch(IGameplayAbilityActor target)
+        protected bool IsTargetGroupMatch(IGameplayAbilityUnit target)
         {
             bool b = false;
             switch (MetaBase.TargetTeamRequire)
             {
-                case AbilityTargetTeam.All:
+                case CAbilityUnitTeamType.All:
                     b = true;
                     break;
-                case AbilityTargetTeam.Me:
+                case CAbilityUnitTeamType.Me:
                     b = (target == m_owner);
                     break;
-                case AbilityTargetTeam.Friend:
+                case CAbilityUnitTeamType.Friend:
                     b = m_owner.IsFriendTeam(target);
                     break;
-                case AbilityTargetTeam.Enemy:
+                case CAbilityUnitTeamType.Enemy:
                     b = m_owner.IsEnemyTeam(target);
                     break;
             }
@@ -294,7 +294,7 @@ namespace DarkRoom.GamePlayAbility {
             return false;
         }
 
-        protected bool IsActivationTagMatchForTarget(IGameplayAbilityActor target)
+        protected bool IsActivationTagMatchForTarget(IGameplayAbilityUnit target)
         {
             return false;
         }
