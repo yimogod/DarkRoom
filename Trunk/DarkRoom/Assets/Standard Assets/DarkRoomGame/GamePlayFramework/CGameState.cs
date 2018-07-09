@@ -9,6 +9,11 @@ namespace DarkRoom.Game {
 	/// </summary>
 	public class CGameState
 	{
+        /// <summary>
+        /// 游戏开始的时间
+        /// </summary>
+	    private int m_gameStartTime = 0;
+
 		/// <summary>
 		/// 存储着场景中的所有数据
 		/// 比如玩家数据.任务数据.地图数据
@@ -87,7 +92,7 @@ namespace DarkRoom.Game {
 			m_cleaner.RemoveDeadUnit();
         }
 
-		public virtual void Clear()
+		public virtual void OnDestroy()
 		{
 			m_redGroup.Clear();
 			m_blueGroup.Clear();

@@ -22,7 +22,7 @@ namespace DarkRoom.Utility
 		/// 播放鼠标点击特效
 		/// </summary>
 		public static GameObject LaunchSingletonEffect_Static(GameObject effectBase, Vector3 worldPosition){
-			Transform parent = CWorldContainer.Instance.EffLayer;
+			Transform parent = CWorld.Instance.Layer.UnitLayer;
 			Vector3 localPosition =  parent.worldToLocalMatrix.MultiplyPoint3x4(worldPosition);
 
 			return LaunchSingletonEffect(effectBase, localPosition, Quaternion.identity, 1f, null, false, false);
@@ -41,9 +41,9 @@ namespace DarkRoom.Utility
 				return null;
 			}
 
-			GameObject go = CWorldContainer.Instance.FindEffectInPool(effectBase.name);
+			/*GameObject go = CWorld.Instance.FindEffectInPool(effectBase.name);
 			if (go == null){
-				go = CWorldContainer.Instance.FindEffectInLayer(effectBase.name);
+				go = CWorld.Instance.FindEffectInLayer(effectBase.name);
 			}
 
 			if (go == null){
@@ -60,7 +60,7 @@ namespace DarkRoom.Utility
 				pool = go.AddComponent<CAutoBackToPoolVFX>();
 			}
 			pool.CancelBackToPool();
-			pool.poolLayer = CWorldContainer.Instance.PoolLayer;
+			pool.poolLayer = CWorld.Instance.PoolLayer;
 			pool.attachTran = attachObj;
 			if (dieWithAttach)
 				pool.DieWithAttachDie();
@@ -68,9 +68,10 @@ namespace DarkRoom.Utility
 				pool.FollowAttach();
 
 			float minValue = GetMinTimeWithGoEffectNeed(go, localPosition, orientation, scale);
-			pool.DelayBackToPool(minValue);
+			pool.DelayBackToPool(minValue);*/
 
-			return go;
+			//return go;
+		    return null;
 		}
 
 		public static GameObject LaunchTweenEffect(GameObject effectBase, float tweenDuation){
@@ -79,14 +80,16 @@ namespace DarkRoom.Utility
 				return null;
 			}
 
-			GameObject go = CWorldContainer.Instance.FindEffectInPool(effectBase.name);
+			/*GameObject go = CWorld.Instance.FindEffectInPool(effectBase.name);
 			if (go == null){
 				go = GameObject.Instantiate<GameObject>(effectBase);
 				go.name = effectBase.name;
 			}
 			go.SetActive(true);
-			CWorldContainer.Instance.PutBackToEffectPool(go, tweenDuation);
-			return go;
+			CWorld.Instance.PutBackToEffectPool(go, tweenDuation);*/
+
+			//return go;
+		    return null;
 		}
 
 		public static GameObject LaunchEffect(GameObject effectBase, Vector3 localPosition,
@@ -96,7 +99,7 @@ namespace DarkRoom.Utility
 				return null;
 			}
 
-			GameObject go = CWorldContainer.Instance.FindEffectInPool(effectBase.name);
+			/*GameObject go = CWorld.Instance.FindEffectInPool(effectBase.name);
 			if (go == null){
 				go = GameObject.Instantiate<GameObject>(effectBase);
 				go.name = effectBase.name;
@@ -108,15 +111,17 @@ namespace DarkRoom.Utility
 				if (destroy){
 					GameObject.Destroy(go, minValue);
 				} else{
-					CWorldContainer.Instance.PutBackToEffectPool(go, minValue);
+					CWorld.Instance.PutBackToEffectPool(go, minValue);
 				}
 			}
-			return go;
-		}
+			return go;*/
+
+		    return null;
+        }
 
 		private static float GetMinTimeWithGoEffectNeed(GameObject go, Vector3 localPosition, Quaternion orientation, float scale){
 			Transform transform = go.transform;
-			transform.SetParent(CWorldContainer.Instance.EffLayer);
+			transform.SetParent(CWorld.Instance.Layer.UnitLayer);
 			transform.localPosition = localPosition;
 			transform.localScale = Vector3.one * scale;
 			transform.rotation = orientation;

@@ -73,7 +73,7 @@ namespace DarkRoom.GamePlayAbility {
 			if (m_meta.ImpactVFX.Valid) {
 				GameObject explode = new GameObject(m_meta.ImpactVFX.Prefab);
 				//UIUtil.SetAbilityEffect(explode.transform, m_meta.ImpactVFX);
-				CDarkUtil.AddChild(CWorldContainer.Instance.EffLayer, explode.transform, hitPos);
+				CDarkUtil.AddChild(CWorld.Instance.Layer.UnitLayer, explode.transform, hitPos);
 
 
 				CAutoDestoryComp des = explode.AddComponent<CAutoDestoryComp>();

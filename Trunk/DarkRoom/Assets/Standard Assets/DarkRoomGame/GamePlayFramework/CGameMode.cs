@@ -13,9 +13,6 @@ namespace DarkRoom.Game {
 		/// </summary>
 		public static bool TestFlag = false;
 
-		//游戏数据
-		protected CGameState m_gameState;
-
 		//目前玩家操纵的角色
 		//当选中我的时候，使用技能是选中的其他人或位置存在这里
 		//回头看是否放在ai里面更合适一些
@@ -44,15 +41,6 @@ namespace DarkRoom.Game {
 		}
 
 		/// <summary>
-		/// 初始化游戏
-		/// </summary>
-		public virtual void InitGame(int mapId, CGameState data)
-		{
-			m_enabled = true;
-			m_gameState = data;
-		}
-
-		/// <summary>
 		/// 选择一个角色为当前操作的角色
 		/// </summary>
 		/// <param name="ctrl"></param>
@@ -62,7 +50,6 @@ namespace DarkRoom.Game {
 			ctrl.IgnoreInput = false;
 			ctrl.InterestingTarget = null;
 
-			
 			m_selectedPawnCtrl = ctrl;
 		}
 
@@ -77,13 +64,8 @@ namespace DarkRoom.Game {
 		/// <summary>
 		/// 清理游戏
 		/// </summary>
-		public virtual void Clear()
+		public virtual void OnDestroy()
 		{
-			if (m_gameState != null) {
-				m_gameState.Clear();
-				m_gameState = null;
-			}
-
 			m_enabled = false;
 			m_selectedPawnCtrl = null;
 		}
@@ -99,7 +81,6 @@ namespace DarkRoom.Game {
 		public virtual void LateUpdate()
 		{
 			bool v = m_removeDeadReg.Update();
-			if (v && m_gameState != null) m_gameState.RemoveDeadUnit();
 		}
 	}
 }

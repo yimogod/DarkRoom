@@ -78,13 +78,13 @@ namespace DarkRoom.Utility
 			Vector3 mousePos = Input.mousePosition;
 			Ray ray = Camera.main.ScreenPointToRay(mousePos);
 			RaycastHit hit;
-			int layerMask = 1 << LayerMask.NameToLayer(CWorldContainer.LAYER_NAME_TERRAIN);
+			int layerMask = 1 << LayerMask.NameToLayer(CWorldLayer.LAYER_NAME_TERRAIN);
 			if (Physics.Raycast(ray, out hit, 1000f, layerMask)){
 				m_overWorldPos = hit.point;
 			}
 
 			//探测我们是否经过了某个单位
-			layerMask = 1 << LayerMask.NameToLayer(CWorldContainer.LAYER_NAME_UNIT);
+			layerMask = 1 << LayerMask.NameToLayer(CWorldLayer.LAYER_NAME_UNIT);
 			if (Physics.Raycast(ray, out hit, 1000f, layerMask)){
 				m_overUnit = hit.transform;
 			}
