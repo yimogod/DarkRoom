@@ -91,10 +91,13 @@ namespace DarkRoom.GamePlayAbility {
 			get{ return CAbilityMetaManager.GetMeta(AbilityName); }
 		}
 
+        /// <summary>
+        /// TODO 还不知道有用没用
+        /// </summary>
 		public bool NeedTarget
 		{
-			get { return MetaBase.Type == CAbilityMeta.AbilityType.EffectTarget ||
-							MetaBase.Type == CAbilityMeta.AbilityType.Attack; }
+			get { return MetaBase.Type == CAbilityType.EffectTarget ||
+							MetaBase.Type == CAbilityType.Attack; }
 		}
 
 		/// <summary>
@@ -178,14 +181,14 @@ namespace DarkRoom.GamePlayAbility {
         /// <summary>
         /// 没有参数意味着对自己施法
         /// </summary>
-        public virtual AffectDectectResult TryActivateAbility(){
+        public AffectDectectResult TryActivateAbility(){
 			return TryActivateAbility(m_owner);
 		}
 
         /// <summary>
         /// 对传入的目标施法
         /// </summary>
-		public virtual AffectDectectResult TryActivateAbility(IGameplayAbilityUnit target){
+		public AffectDectectResult TryActivateAbility(IGameplayAbilityUnit target){
 			AffectDectectResult result = CanAffectOnTarget(target);
 			if (result != AffectDectectResult.Success) {
 				ReportNotReady();
@@ -202,14 +205,14 @@ namespace DarkRoom.GamePlayAbility {
         /// 对指定的地点施法
         /// 注意是, localPos的位置
         /// </summary>
-		public virtual AffectDectectResult TryActivateAbility(Vector3 target){
-			AffectDectectResult result = CanAffectOnTarget(target);
+		public AffectDectectResult TryActivateAbility(Vector3 localPosition){
+			AffectDectectResult result = CanAffectOnTarget(localPosition);
 			if (result != AffectDectectResult.Success) {
 				ReportNotReady();
 				return result;
 			}
 
-			m_targetLocalPosition = target;
+			m_targetLocalPosition = localPosition;
             Activate();
             return result;
 		}
@@ -244,12 +247,15 @@ namespace DarkRoom.GamePlayAbility {
 		    b = IsActivationTagMatchForTarget(target);
 		    if (!b) return AffectDectectResult.TargetTagInvalid;
 
+		    float range2 = m_owner.GetSquaredXZDistanceTo_NoRadius(target);
+		    b = range2 <= (MetaBase.DectectRange * MetaBase.DectectRange);
+		    if (!b) return AffectDectectResult.OutOfRange;
+
             return AffectDectectResult.Success;
 		}
 
 		/// <summary>
-		/// 技能是否能够对目的地
-		/// TODO 开未来是否需要移到子类里面
+		/// 技能是否能够对目的地, 子类如果不能响应此方法, 要覆盖本方法
 		/// </summary>
 		public virtual AffectDectectResult CanAffectOnTarget(Vector3 localPosition) {
 			if (!CD_Ready) return AffectDectectResult.CDNotReady;
@@ -332,7 +338,7 @@ namespace DarkRoom.GamePlayAbility {
         {
             foreach (var item in MetaBase.CostList)
             {
-                m_owner.AbilityUseCost((AbilityCostType)item.x, item.y);
+                m_owner.AbilityUseCost((CAbilityCostType)item.x, item.y);
             }
         }
 
@@ -345,11 +351,11 @@ namespace DarkRoom.GamePlayAbility {
 
 			CAbilityMeta emeta = CAbilityMetaManager.GetMeta(meta);
 			switch (emeta.Type) {
-				case CAbilityMeta.AbilityType.Attack:
+				case CAbilityType.Attack:
 					ability = owner.AddComponent<CAbilityAttack>();
 					ability.AbilityName = meta;
 					break;
-				case CAbilityMeta.AbilityType.EffectTarget:
+				case CAbilityType.EffectTarget:
 					ability = owner.AddComponent<CAbilitylEffectTarget>();
 					ability.AbilityName = meta;
 					break;

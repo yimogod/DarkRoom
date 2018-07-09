@@ -18,16 +18,6 @@ namespace DarkRoom.GamePlayAbility {
 	public class CAbilityMeta : CBaseMeta
 	{
 		/// <summary>
-		/// 技能类型的枚举定义
-		/// </summary>
-		public enum AbilityType
-		{
-			Attack, //攻击
-			EffectTarget, //需要选定目标的effect
-            EffectPosition, //对于目标点或者方向实施的技能
-		}
-
-		/// <summary>
 		/// 技能施放7阶段
 		/// 
 		/// TODO 这每个阶段的含义我需要明确知道
@@ -45,12 +35,20 @@ namespace DarkRoom.GamePlayAbility {
 		/// <summary>
 		/// 技能类型
 		/// </summary>
-		public AbilityType Type = AbilityType.Attack;
+		public CAbilityType Type = CAbilityType.Attack;
 
 		/// <summary>
 		/// 技能使用的间隔, cd时间, 基于秒
 		/// </summary>
 		public float Period = 0.5f;
+
+        /// <summary>
+        /// 单位是米或者格子
+        /// 技能用于是否能够到目标的距离
+        /// 比如剑直接攻击
+        /// 比如法师天降陨石
+        /// </summary>
+	    public float DectectRange = 1.0f;
 
 		/// <summary>
 		/// 技能消耗的资源. index是CostType, 值是数量
@@ -162,16 +160,16 @@ namespace DarkRoom.GamePlayAbility {
 	}
 
 
-	public class CAbilityParser : CMetaParser
+	public class CAbilityMetaParser : CMetaParser
 	{
 		public const string CAbilType_Attack = "CAbilAttack";
 		public const string CAbilType_Target = "CAbilEffectTarget";
 	    public const string CAbilType_Position = "CAbilEffectPosition";
 
-        public CAbilityParser() : base() {
+        public CAbilityMetaParser() : base() {
 		}
 
-		public CAbilityParser(bool useXml) : base(useXml) {
+		public CAbilityMetaParser(bool useXml) : base(useXml) {
 		}
 
 		public override void Execute(string content)
@@ -204,10 +202,9 @@ namespace DarkRoom.GamePlayAbility {
 			m_xreader.TryReadChildNodeAttr(root, "Effect", "value", ref meta.Effect);
 			m_xreader.TryReadChildNodeAttr(root, "Range", "value", ref meta.Range);
 			m_xreader.TryReadChildNodeAttr(root, "ShowTime", "value", ref meta.ShowTime);
-			m_xreader.TryReadChildNodeAttr(root, "Period", "value", ref meta.Period);
+			
 			string str = String.Empty;
 			m_xreader.TryReadChildNodeAttr(root, "TargetLocation", "value", ref str);
-			//meta.TargetLocation = CAbilityUtil.GetLocation(str);
 		}
 
 		/// <summary>
@@ -217,21 +214,37 @@ namespace DarkRoom.GamePlayAbility {
 		private void Parse_Attack(XmlElement root) {
 			var meta = new CAbilityAttackMeta("null");
 			Parse_Base(root, meta);
-
-			m_xreader.TryReadChildNodeAttr(root, "MinAttackSpeedMultiplier", "value", ref meta.MinAttackSpeedMultiplier);
-			m_xreader.TryReadChildNodeAttr(root, "MinAttackSpeedMultiplier", "value", ref meta.MinAttackSpeedMultiplier);
 		}
 
 	    private void Parse_Position(XmlElement root)
 	    {
+	        //meta.TargetLocation = CAbilityUtil.GetLocation(str);
+        }
+
+        private void Parse_Base(XmlElement root, CAbilityMeta meta) {
+			meta.Id = root.GetAttribute("id");
+
+            ParseSimpleBaseProperty(root, meta);
+            ParseCost();
+
+            CAbilityMetaManager.AddMeta(meta);
+		}
+
+        /// <summary>
+        /// 解析技能的简单的属性
+        /// </summary>
+	    private void ParseSimpleBaseProperty(XmlElement root, CAbilityMeta meta)
+	    {
+	        m_xreader.TryReadChildNodeAttr(root, "Clip", "value", ref meta.Clip);
+	        m_xreader.TryReadChildNodeAttr(root, "Period", "value", ref meta.Period);
+        }
+
+        /// <summary>
+        /// 解析技能的消耗
+        /// </summary>
+	    private void ParseCost()
+	    {
 
 	    }
-
-	    private void Parse_Base(XmlElement root, CAbilityMeta meta) {
-			meta.Id = root.GetAttribute("id");
-			m_xreader.TryReadChildNodeAttr(root, "Clip", "value", ref meta.Clip);
-
-			CAbilityMetaManager.AddMeta(meta);
-		}
 	}
 }

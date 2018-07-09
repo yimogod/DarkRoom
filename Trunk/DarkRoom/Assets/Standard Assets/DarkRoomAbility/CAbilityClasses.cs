@@ -215,10 +215,21 @@ namespace DarkRoom.GamePlayAbility {
 	}
 
     //----------------------- used for now -------------------------
+
+    /// <summary>
+    /// 技能类型的枚举定义
+    /// </summary>
+    public enum CAbilityType
+    {
+        Attack, //攻击
+        EffectTarget, //需要选定目标的effect
+        EffectPosition, //对于目标点或者方向实施的技能
+    }
+
     /// <summary>
     /// 技能消耗的资源种类
     /// </summary>
-    public enum AbilityCostType
+    public enum CAbilityCostType
     {
         MP, //蓝
         HP, //红

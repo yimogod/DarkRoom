@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 
 namespace DarkRoom.GamePlayAbility {
-	//Atk会寻找武器, 使用武器的effect来进行真正的攻击判断
+	/// <summary>
+    /// 普通的近战或开枪等瞬伤单次单人攻击
+    /// </summary>
 	public class CAbilityAttackMeta : CAbilityMeta {
-		//调整攻击速度的最大最小范围
-		public float MinAttackSpeedMultiplier = 0.25f;
-		public float MaxAttackSpeedMultiplier = 128f;
-
-		public CAbilityAttackMeta(string idKey) : base(idKey) {
+		public CAbilityAttackMeta(string idKey) : base(idKey)
+		{
+		    Type = CAbilityType.Attack;
 		}
 	}
 }

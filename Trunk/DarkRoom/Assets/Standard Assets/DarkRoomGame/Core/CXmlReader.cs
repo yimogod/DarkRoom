@@ -44,6 +44,9 @@ namespace DarkRoom.Game
 			return Int32.TryParse(v, out t);
 		}
 
+	    /// <summary>
+	    /// 读取属性. 类似于  <Clip value='false'/>
+	    /// </summary>
 		public bool TryReadChildNodeAttr(XmlElement parent, string childNodeName, string attrName, ref bool t) {
 			int i = 0;
 			bool b = TryReadChildNodeAttr(parent, childNodeName, attrName, ref i);
@@ -51,6 +54,9 @@ namespace DarkRoom.Game
 			return b;
 		}
 
+	    /// <summary>
+	    /// 读取属性. 类似于  <Clip value='1.0'/>
+	    /// </summary>
 		public bool TryReadChildNodeAttr(XmlElement parent, string childNodeName, string attrName, ref float t)
 		{
 			XmlElement node =  parent.SelectSingleNode(childNodeName) as XmlElement;
@@ -60,6 +66,9 @@ namespace DarkRoom.Game
 			return float.TryParse(v, out t);
 		}
 
+        /// <summary>
+        /// 读取属性. 类似于  <Clip value='atk'/>
+        /// </summary>
 		public bool TryReadChildNodeAttr(XmlElement parent, string childNodeName, string attrName, ref string t)
 		{
 			XmlElement node =  parent.SelectSingleNode(childNodeName) as XmlElement;
@@ -69,11 +78,18 @@ namespace DarkRoom.Game
 			return true;
 		}
 
-		/// <summary>
-		/// 获取名字一样的数组
-		/// </summary>
-		/// <returns></returns>
-		public bool TryReadChildNodesAttr(XmlElement parent, string childNodeName, string attrName, List<string> list) {
+        /// <summary>
+        /// 获取名字一样的数组
+        /// TryReadChildNodesAttr(parent, a, b, list)
+        /// <a>
+        ///     <b value = '1'>
+        ///     <b value = '2'>
+        ///     <b value = '3'>
+        ///     <b value = '4'>
+        /// </a>
+        /// 这样list获取的数组值有1,2,3,4
+        /// </summary>
+        public bool TryReadChildNodesAttr(XmlElement parent, string childNodeName, string attrName, List<string> list) {
 			XmlNodeList nodes = parent.SelectNodes(childNodeName);
 			if (nodes == null) return false;
 

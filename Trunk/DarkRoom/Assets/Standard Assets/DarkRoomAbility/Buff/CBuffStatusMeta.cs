@@ -19,12 +19,6 @@ namespace DarkRoom.GamePlayAbility {
 		public Dictionary<CPawnVO.State, int> StateFlags = new Dictionary<CPawnVO.State, int>();
 
 		/// <summary>
-		/// 禁用技能类别, 比如目标技能, 普通攻击, 采集, 合体, 变形, 建造
-		/// </summary>
-		public List<CAbilityMeta.AbilityType> AbilClassDisableList = 
-			new List<CAbilityMeta.AbilityType>();
-
-		/// <summary>
 		/// buff修改的单位属性
 		/// </summary>
 		public CAbilityEnum.BuffModification ModifyProperty = 

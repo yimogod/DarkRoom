@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+   <CAbilAttack id="attack">
+        <Clip value="atk"/>
+		<Period value = "1000"/>
+		<DetectRange = "1">
+    </CAbilAttack>
+</Catalog>

@@ -34,8 +34,8 @@ namespace DarkRoom.GamePlayAbility
 
         //------------------- for aiblity ---------------------------------
         CAbilitySystem AbilitySystem { get; }
-        bool CostEnoughForAbility(AbilityCostType type, int count);
-        void AbilityUseCost(AbilityCostType type, int count);
+        bool CostEnoughForAbility(CAbilityCostType type, int count);
+        void AbilityUseCost(CAbilityCostType type, int count);
         //------------------- for aiblity end ---------------------------------
 
         //------------------- for effect ---------------------------------
@@ -51,7 +51,14 @@ namespace DarkRoom.GamePlayAbility
         GameObject BuffLayer { get; }
         //------------------- for effect end ---------------------------------
 
+        /// <summary>
+        /// 获取到点的距离的平方
+        /// </summary>
         float GetSquaredXZDistanceTo_NoRadius(Vector3 target);
+
+        /// <summary>
+        /// 获取到单位的距离的平方
+        /// </summary>
         float GetSquaredXZDistanceTo_NoRadius(IGameplayAbilityUnit target);
     }
 }

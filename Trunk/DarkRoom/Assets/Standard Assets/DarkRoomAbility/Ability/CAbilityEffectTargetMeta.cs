@@ -93,7 +93,7 @@ namespace DarkRoom.GamePlayAbility {
 
 
 		public CAbilityEffectTargetMeta(string idKey) : base(idKey) {
-			Type = AbilityType.EffectTarget;
+			Type = CAbilityType.EffectTarget;
 		}
 	}
 }
