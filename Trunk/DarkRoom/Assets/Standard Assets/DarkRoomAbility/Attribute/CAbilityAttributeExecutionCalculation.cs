@@ -9,9 +9,9 @@ namespace DarkRoom.GamePlayAbility
     /// </summary>
     public class CAbilityAttributeExecutionCalculation
     {
-        public string HashName
+        public virtual string HashName
         {
-            get { return "BaseCalculation"; }
+            get { return GetType().FullName; }
         }
 
         public virtual void Execute(IGameplayAbilityUnit instigator, IGameplayAbilityUnit victim)

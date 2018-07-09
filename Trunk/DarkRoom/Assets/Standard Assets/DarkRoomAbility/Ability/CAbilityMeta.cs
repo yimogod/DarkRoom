@@ -214,7 +214,9 @@ namespace DarkRoom.GamePlayAbility {
 		private void Parse_Attack(XmlElement root) {
 			var meta = new CAbilityAttackMeta("null");
 			Parse_Base(root, meta);
-		}
+
+		    m_xreader.TryReadChildNodeAttr(root, "AffectCalculation", "value", ref meta.AffectCalculation);
+        }
 
 	    private void Parse_Position(XmlElement root)
 	    {

@@ -3,6 +3,7 @@
    <CAbilAttack id="attack">
         <Clip value="atk"/>
 		<Period value = "1000"/>
-		<DetectRange = "1">
+		<DetectRange value = "1">
+		<AffectCalculation value = "DefaultPhysicalCalculation">
     </CAbilAttack>
 </Catalog>
