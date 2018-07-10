@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DarkRoom.Anim
 {
-    public class UAnimMontage
+    public class CUnitMontage
     {
     }
 }

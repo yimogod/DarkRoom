@@ -8,8 +8,8 @@ namespace DarkRoom.Game
 	/// 会在折点调用移动组件更改方向-->不要轻易改动这个设计
 	/// </summary>
 	[RequireComponent(typeof(CUnitSpacialComp))]
-	[RequireComponent(typeof(CUnitMovementComp))]
-	public class CPathFollowingComp : MonoBehaviour
+	[RequireComponent(typeof(CPawnMovementComp))]
+	public class CPawnPathFollowingComp : MonoBehaviour
 	{
 		/// <summary>
 		/// 跟随路径行走完毕的结果
@@ -79,7 +79,7 @@ namespace DarkRoom.Game
 		//缓存空间组件
 		private CUnitSpacialComp m_spacial;
 
-		private CUnitMovementComp m_mover;
+		private CPawnMovementComp m_mover;
 
 		//路径折点列表
 		private CPathResult m_wayPoints;
@@ -97,7 +97,7 @@ namespace DarkRoom.Game
 		void Start()
 		{
 			m_spacial = GetComponent<CUnitSpacialComp>();
-			m_mover = GetComponent<CUnitMovementComp>();
+			m_mover = GetComponent<CPawnMovementComp>();
 		}
 
 		/// <summary>
@@ -151,7 +151,7 @@ namespace DarkRoom.Game
 		/// <summary>
 		/// 请求移动
 		/// </summary>
-		public void RequestMove(CPathResult wayPoints, CUnitMovementComp.MoveType moveType = CUnitMovementComp.MoveType.Direct)
+		public void RequestMove(CPathResult wayPoints, CPawnMovementComp.MoveType moveType = CPawnMovementComp.MoveType.Direct)
 		{
 			m_mover.SetMoveType(moveType);
 			m_wayPoints = wayPoints;

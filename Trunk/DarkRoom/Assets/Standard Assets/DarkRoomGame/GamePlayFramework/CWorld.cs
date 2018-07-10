@@ -94,6 +94,33 @@ namespace DarkRoom.Game {
 	        return go;
 	    }
 
+	    /// <summary>
+	    /// 在指定坐标创建效果
+	    /// </summary>
+	    public ParticleSystem SpawnEmitterAtLocation(string prefab, Vector3 localPosition)
+	    {
+	        GameObject go = new GameObject(prefab);
+	        go.transform.parent = m_layer.UnitLayer;
+	        go.transform.localPosition = localPosition;
+	        return null;
+	    }
+
+        /// <summary>
+        /// 在parent身上的slot child身上创建prefab效果
+        /// 有位置偏移offset
+        /// </summary>
+	    public ParticleSystem SpawnEmitterAttachedTransform(string prefab, Transform root, string slot, Vector3 offset)
+        {
+            Transform parent = null;
+	        if (!string.IsNullOrEmpty(slot))parent = root.Find("slot");
+            if (parent == null) parent = root;
+
+            GameObject go = new GameObject(prefab);
+	        go.transform.parent = parent;
+	        go.transform.localPosition = offset;
+	        return null;
+	    }
+
         private void OnDestroy(){
 			m_ins = null;
 		    m_layer.OnDestroy();

@@ -22,7 +22,7 @@ namespace DarkRoom.Game
 	/// 如果以逻辑来划分游戏，得到的就是一个个World的概念；如果以表示来划分，得到就是一个个Level
 	/// </summary>
 
-	[RequireComponent(typeof(CPathFollowingComp))]
+	[RequireComponent(typeof(CPawnPathFollowingComp))]
 	public class CController : MonoBehaviour, IHaveLocalPosition, ICanSearchUnits
 	{
 		/// <summary>

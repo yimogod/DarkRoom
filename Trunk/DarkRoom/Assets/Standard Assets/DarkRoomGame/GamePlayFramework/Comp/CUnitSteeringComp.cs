@@ -8,8 +8,8 @@ namespace DarkRoom.Game
 	/// CUnitSteeringComp 只提供行为方法, 我们不自身去update产生具体行为
 	/// </summary>
 	[RequireComponent(typeof(CUnitSpacialComp))]
-	[RequireComponent(typeof(CUnitMovementComp))]
-	[RequireComponent(typeof(CPathFollowingComp))]
+	[RequireComponent(typeof(CPawnMovementComp))]
+	[RequireComponent(typeof(CPawnPathFollowingComp))]
 	public class CUnitSteeringComp : MonoBehaviour
 	{
 		enum SteeringType
@@ -52,9 +52,9 @@ namespace DarkRoom.Game
 		//缓存空间组件
 		private CUnitSpacialComp m_spacial;
 		//缓存移动组件
-		private CUnitMovementComp m_mover;
+		private CPawnMovementComp m_mover;
 		//跟随路径行走
-		private CPathFollowingComp m_pathFollower;
+		private CPawnPathFollowingComp m_pathFollower;
 
 		private bool m_idleInRVO = false;
 
@@ -84,7 +84,7 @@ namespace DarkRoom.Game
 		/// <summary>
 		/// 如果使用了跟随路径,每帧都会有跟随状态的变化
 		/// </summary>
-		public CPathFollowingComp.FinishResultType PathFinishResult {
+		public CPawnPathFollowingComp.FinishResultType PathFinishResult {
 			get { return m_pathFollower.FinishResult; }
 		}
 
@@ -100,14 +100,14 @@ namespace DarkRoom.Game
 				m_spacial = gameObject.AddComponent< CUnitSpacialComp>();
 			}
 
-			m_mover = gameObject.GetComponent<CUnitMovementComp>();
+			m_mover = gameObject.GetComponent<CPawnMovementComp>();
 			if (m_mover == null) {
-				m_mover = gameObject.AddComponent<CUnitMovementComp>();
+				m_mover = gameObject.AddComponent<CPawnMovementComp>();
 			}
 
-			m_pathFollower = gameObject.GetComponent<CPathFollowingComp>();
+			m_pathFollower = gameObject.GetComponent<CPawnPathFollowingComp>();
 			if (m_pathFollower == null) {
-				m_pathFollower = gameObject.AddComponent<CPathFollowingComp>();
+				m_pathFollower = gameObject.AddComponent<CPawnPathFollowingComp>();
 			}
 		}
 

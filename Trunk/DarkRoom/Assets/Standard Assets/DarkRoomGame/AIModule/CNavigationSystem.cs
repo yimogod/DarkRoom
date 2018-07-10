@@ -159,11 +159,11 @@ namespace DarkRoom.AI {
 				me.Pawn.StopMovement();
 			}
 
-			CPathFollowingComp follower = me.Pawn.Follower;
+			CPawnPathFollowingComp follower = me.Pawn.Follower;
 			//如果我已经到了目的地, 那么就直接达到
 			bool alreadyAtGoal = follower.HasReached(goal, 0.5f);
 			if (alreadyAtGoal) {
-				follower.RequestMoveWithImmediateFinish(CPathFollowingComp.FinishResultType.Success);
+				follower.RequestMoveWithImmediateFinish(CPawnPathFollowingComp.FinishResultType.Success);
                 return;
 			}
 			

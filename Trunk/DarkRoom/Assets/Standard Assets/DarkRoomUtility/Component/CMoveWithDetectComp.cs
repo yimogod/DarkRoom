@@ -8,15 +8,15 @@ namespace DarkRoom.Utility
 	/// 在用键盘手柄控制移动的时候, 我们需要像坦克大战那样,前进的时候可以摩擦着过去障碍物
 	/// </summary>
 	[RequireComponent(typeof(CUnitSpacialComp))]
-	[RequireComponent(typeof(CUnitMovementComp))]
+	[RequireComponent(typeof(CPawnMovementComp))]
 	public class CMoveWithDetectComp : MonoBehaviour
 	{
-		private CUnitMovementComp m_mover;
+		private CPawnMovementComp m_mover;
 		private CUnitSpacialComp m_spacial;
 
 		void Awake()
 		{
-			m_mover = GetComponent<CUnitMovementComp>();
+			m_mover = GetComponent<CPawnMovementComp>();
 			m_spacial = GetComponent<CUnitSpacialComp>();
 		}
 

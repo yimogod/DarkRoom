@@ -10,7 +10,7 @@ namespace DarkRoom.Game
 	/// 自身是个组合模式. 会通过调用具体的行为来切换行为方式
 	/// </summary>
 	[RequireComponent(typeof(CUnitSpacialComp))]
-	public class CUnitMovementComp : MonoBehaviour {
+	public class CPawnMovementComp : MonoBehaviour {
 
 		/// <summary>
 		/// 移动方式, 是mover的直接移动， 还是由rvo驱动的移动
@@ -19,7 +19,6 @@ namespace DarkRoom.Game
 		public enum MoveType {
 			Unknow, //外部操控
 			Direct, //直接给速度, 然后移动
-			RVO,
 		}
 
 		//本组件挂在谁身上
@@ -89,8 +88,8 @@ namespace DarkRoom.Game
 		/// <summary>
 		/// 当前的运动状态
 		/// </summary>
-		protected CUnitMovementBaseState m_currState{
-			get { return m_sm.CurrState as CUnitMovementBaseState; }
+		protected CPawnMovementBaseState m_currState{
+			get { return m_sm.CurrState as CPawnMovementBaseState; }
 		}
 
 		void Awake()
@@ -102,9 +101,9 @@ namespace DarkRoom.Game
 
 			//默认我们用外部的移动器
 			m_sm = new CStateMachine();
-			m_sm.RegisterState(new CUnitMovementUnknow(gameObject));
-			m_sm.RegisterState(new CUnitMovementDirectly(gameObject));
-			m_sm.ChangeState(CUnitMovementUnknow.STATE);
+			m_sm.RegisterState(new CPawnMovementUnknow(gameObject));
+			m_sm.RegisterState(new CPawnMovementDirectly(gameObject));
+			m_sm.ChangeState(CPawnMovementUnknow.STATE);
         }
 
 		void Start()
@@ -120,11 +119,10 @@ namespace DarkRoom.Game
 		{
 			switch (type) {
 				case MoveType.Direct:
-				m_sm.ForceChangeState(CUnitMovementDirectly.STATE);
+				m_sm.ForceChangeState(CPawnMovementDirectly.STATE);
                 break;
-				case MoveType.RVO:
 				case MoveType.Unknow:
-				m_sm.ForceChangeState(CUnitMovementUnknow.STATE);
+				m_sm.ForceChangeState(CPawnMovementUnknow.STATE);
 				break;
 			}
 

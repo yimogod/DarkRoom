@@ -3,7 +3,7 @@ using DarkRoom.Core;
 using UnityEngine;
 
 namespace DarkRoom.Game {
-	public class CUnitMovementBaseState : CBaseState
+	public class CPawnMovementBaseState : CBaseState
 	{
 		protected CUnitSpacialComp m_spacial;
 		protected Vector3 m_velocity = Vector3.zero;
@@ -12,7 +12,7 @@ namespace DarkRoom.Game {
 			get { return m_data as GameObject; }
 		}
 
-		public CUnitMovementBaseState(string name, GameObject go) : base(name, go)
+		public CPawnMovementBaseState(string name, GameObject go) : base(name, go)
 		{
 			m_spacial = go.GetComponent<CUnitSpacialComp>();
 		}
@@ -68,19 +68,19 @@ namespace DarkRoom.Game {
 	/// 移动器不知道用什么方式来移动. 
 	/// 典型的原因是外部在直接操控transform来移动
 	/// </summary>
-	public class CUnitMovementUnknow : CUnitMovementBaseState {
-		public const string STATE = "CUnitMovementUnknow";
+	public class CPawnMovementUnknow : CPawnMovementBaseState {
+		public const string STATE = "CPawnMovementUnknow";
 
-		public CUnitMovementUnknow(GameObject go) : base(STATE, go) { }
+		public CPawnMovementUnknow(GameObject go) : base(STATE, go) { }
 	}
 
 	/// <summary>
 	/// 直接移动的状态, 就是传入速度方向. 然后进行移动
 	/// </summary>
-	public class CUnitMovementDirectly : CUnitMovementBaseState {
-		public const string STATE = "CUnitMovementDirectly";
+	public class CPawnMovementDirectly : CPawnMovementBaseState {
+		public const string STATE = "CPawnMovementDirectly";
 
-		public CUnitMovementDirectly(GameObject go) : base(STATE, go) { }
+		public CPawnMovementDirectly(GameObject go) : base(STATE, go) { }
 
 		public override void Enter(CStateMachine sm) {
 		}

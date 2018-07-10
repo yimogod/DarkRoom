@@ -14,8 +14,8 @@ namespace DarkRoom.Game {
 	/// 那么放进Controller就可以组合应用了
 	/// </summary>
 	
-	[RequireComponent(typeof(CPathFollowingComp))]
-	[RequireComponent(typeof(CUnitMovementComp))]
+	[RequireComponent(typeof(CPawnPathFollowingComp))]
+	[RequireComponent(typeof(CPawnMovementComp))]
 	public class CPawnEntity : CUnitEntity
 	{
 		/// <summary>
@@ -25,10 +25,10 @@ namespace DarkRoom.Game {
 		public CController Instigator;
 
 		//控制pawn移动的基础组件
-		protected CUnitMovementComp m_movement;
+		protected CPawnMovementComp m_movement;
 
 		//跟随路径行走的组件
-		protected CPathFollowingComp m_follower;
+		protected CPawnPathFollowingComp m_follower;
 
 		/// <summary>
 		/// 我的视力扇形区域
@@ -42,12 +42,12 @@ namespace DarkRoom.Game {
 		/// 控制pawn行走的组件
 		/// </summary>
 		/// <value>The mover.</value>
-		public CUnitMovementComp Mover
+		public CPawnMovementComp Mover
 		{
 			get { return m_movement; }
 		}
 
-		public CPathFollowingComp Follower
+		public CPawnPathFollowingComp Follower
 		{
 			get { return m_follower; }
 		}
@@ -65,21 +65,21 @@ namespace DarkRoom.Game {
 		/// 是否正在跟随路径行走, 实现 nav agent的接口
 		/// </summary>
 		public bool IsFollowingPath {
-			get { return m_follower.Status == CPathFollowingComp.PathFollowingStatus.Moving; }
+			get { return m_follower.Status == CPawnPathFollowingComp.PathFollowingStatus.Moving; }
 		}
 
 		/// <summary>
 		/// 是否完成路径行走
 		/// </summary>
 		public bool FinishedFollowingPath {
-			get { return m_follower.FinishResult == CPathFollowingComp.FinishResultType.Success; }
+			get { return m_follower.FinishResult == CPawnPathFollowingComp.FinishResultType.Success; }
 		}
 
 		protected override void RegisterAllComponents(){
 			base.RegisterAllComponents();
 			//初始化CPawnMovementComp
-			m_movement = GetComponent<CUnitMovementComp>();
-			m_follower = GetComponent<CPathFollowingComp>();
+			m_movement = GetComponent<CPawnMovementComp>();
+			m_follower = GetComponent<CPawnPathFollowingComp>();
 		}
 
 		/// <summary>
