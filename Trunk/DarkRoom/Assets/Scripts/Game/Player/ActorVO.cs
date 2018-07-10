@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace DarkRoom.Game{
+namespace Sword{
 
 	/// <summary>
 	/// mvc中的数据来源
 	/// 由controller根据各种情况改变各种数据
 	/// </summary>
-	public class CPawnVO
+	public class ActorVO
 	{
 		/// <summary>
 		/// 速度修改通知其他依赖的对象. 比如移动组件
@@ -83,7 +83,7 @@ namespace DarkRoom.Game{
 			new Dictionary<State, KeyValuePair<int, long>>();
 
 		//角色元数据
-		protected CPawnMeta m_metaBase;
+		protected ActorMeta m_metaBase;
 		protected int m_hp = 1000000;
 		protected int m_maxHp = 1000000; //设置个默认最大值
 		protected int m_mp;
@@ -98,11 +98,11 @@ namespace DarkRoom.Game{
 
 		protected float m_speedBase;
 
-		public CPawnVO()
+		public ActorVO()
 		{
 		}
 
-		public CPawnVO(CPawnMeta meta)
+		public ActorVO(ActorMeta meta)
 		{
 			m_metaBase = meta;
 			PrimaryWeaponId = meta.InitWeapon;
@@ -111,7 +111,7 @@ namespace DarkRoom.Game{
 		/// <summary>
 		/// 角色元数据基类
 		/// </summary>
-		public CPawnMeta MetaBase{
+		public ActorMeta MetaBase{
 			get{ return m_metaBase; }
 		}
 

@@ -16,7 +16,7 @@ namespace DarkRoom.GamePlayAbility {
 		/// 不让攻击, 不让隐形, 不让碰撞, 不让战斗, 不让侦测, 不让提供/使用人口
 		/// 不让乘客, 不让有视野. 
 		/// </summary>
-		public Dictionary<CPawnVO.State, int> StateFlags = new Dictionary<CPawnVO.State, int>();
+		//public Dictionary<CPawnVO.State, int> StateFlags = new Dictionary<CPawnVO.State, int>();
 
 		/// <summary>
 		/// buff修改的单位属性

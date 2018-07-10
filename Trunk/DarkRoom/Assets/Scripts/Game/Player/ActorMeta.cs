@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using DarkRoom.Game;
 
-namespace DarkRoom.Game{
+namespace Sword{
 	/// <summary>
 	/// 角色的元数据, 存储了出生时的数据
 	/// 注意, 里面的一些数据, 比如Radius, 长宽高等数据也会存储到各个组件中
@@ -11,7 +12,7 @@ namespace DarkRoom.Game{
 	/// TODO 未来会考虑讲这个冗余数据放置到各个comp中进行配置, 这需要配套的编辑器
 	/// 或者直接用collider来读取数据
 	/// </summary>
-	public class CPawnMeta : CBaseMeta{
+	public class ActorMeta : CBaseMeta{
 
 		/// <summary>
 		/// 基于秒的单位为米(m)--一般人类的速度是10km/1h, 意味着1s是2.7m
@@ -75,7 +76,7 @@ namespace DarkRoom.Game{
 		//talent, 出生自带的buff
 		public List<Vector2Int> TalentList = new List<Vector2Int>();
 
-		public CPawnMeta (int id) : base(id){}
+		public ActorMeta(int id) : base(id){}
 
 
 		public int GetATK(int level){

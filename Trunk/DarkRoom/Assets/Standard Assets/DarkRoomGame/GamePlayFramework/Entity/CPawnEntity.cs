@@ -38,10 +38,6 @@ namespace DarkRoom.Game {
 		/// </summary>
 		protected CCircularSector m_viewSight;
 
-		//数据, 基于mvc, 我们需要根据vo的数据来更新视图
-		//除非内恰的行为, 否则我们不能调用vo的更新数据接口
-		protected CPawnVO m_data;
-
 		/// <summary>
 		/// 控制pawn行走的组件
 		/// </summary>
@@ -54,10 +50,6 @@ namespace DarkRoom.Game {
 		public CPathFollowingComp Follower
 		{
 			get { return m_follower; }
-		}
-
-		public CPawnVO BaseData {
-			get { return m_data; }
 		}
 
 		/// <summary>
@@ -81,18 +73,6 @@ namespace DarkRoom.Game {
 		/// </summary>
 		public bool FinishedFollowingPath {
 			get { return m_follower.FinishResult == CPathFollowingComp.FinishResultType.Success; }
-		}
-
-		/// <summary>
-		/// 赋值vo数据
-		/// </summary>
-		/// <param name="vo"></param>
-		public virtual void AttachData(CPawnVO vo){
-			m_data = vo;
-
-			m_spacial.SetBody(1f, 1f, m_data.MetaBase.Radius, m_data.MetaBase.Weight);
-			m_viewSight = new CCircularSector(m_data.ViewAngle, m_data.ViewRange);
-			m_data.OnNotiSpeedChange = OnSpeedChange;
 		}
 
 		protected override void RegisterAllComponents(){
@@ -201,17 +181,10 @@ namespace DarkRoom.Game {
 			}
 		}
 
-		private void OnSpeedChange(){
-			float sp = m_data.Speed;
-			//Debug.Log("so sync the speed is " + sp);
-			m_movement.SyncSpeed(sp);
-		}
-
 		protected override void OnDestroy() {
 			base.OnDestroy();
 
 			m_movement = null;
-			m_data = null;
 		}
 	}
 }

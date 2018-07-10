@@ -75,12 +75,12 @@ namespace DarkRoom.GamePlayAbility {
 		//添加属性修改
 
 		private void ApplyModification(){
-			var target = m_owner.BaseData.PropertyModifier;
+			/*var target = m_owner.BaseData.PropertyModifier;
 			if (!target.ContainsKey(m_cid)) {
 				target[m_cid] = new Dictionary<CPawnVO.Property, float>();
 			}
 
-			/*var m = MBuffMeta.ModifyProperty;
+			var m = MBuffMeta.ModifyProperty;
 
 			//速度增量
 			if (m.MoveSpeedBonus > 0) {
@@ -99,12 +99,12 @@ namespace DarkRoom.GamePlayAbility {
 		//移除属性修改
 		private void RemoveModification()
 		{
-			var target = m_owner.BaseData.PropertyModifier;
+			/*var target = m_owner.BaseData.PropertyModifier;
 			if (target.ContainsKey(m_cid)) {
 				target.Remove(m_cid);
 
 				m_owner.BaseData.NotiSpeedChange();
-			}
+			}*/
 		}
 
 		//添加状态修改
@@ -113,56 +113,56 @@ namespace DarkRoom.GamePlayAbility {
 		//这是恰巧应用于同一个目标单位, 那么属性和状态就会被累加
 		//所以 TODO 如果buff的来源是同一个技能的话, 那我们就不接着apply了
 		private void ApplyState(){
-			//if (MBuffMeta.StateFlags.Count == 0)return;
-			
-			var target = m_owner.BaseData.StateModifier;
-			/*foreach (var kv in MBuffMeta.StateFlags) {
-				//只要是指令移除, 那么就相当于驱散, 不管来源
-				if (kv.Value == 0 &&
-					target.ContainsKey(kv.Key)) {
-					target.Remove(kv.Key);
+            //if (MBuffMeta.StateFlags.Count == 0)return;
+
+		    /*var target = m_owner.BaseData.StateModifier;
+            foreach (var kv in MBuffMeta.StateFlags) {
+                //只要是指令移除, 那么就相当于驱散, 不管来源
+                if (kv.Value == 0 &&
+                    target.ContainsKey(kv.Key)) {
+                    target.Remove(kv.Key);
                     continue;
-				}
+                }
 
-				if (kv.Value != 0) {
-					//计算时间, 给与更长的时间
-					long newTime = CTimeUtil.GetCurrentMillSecondStamp() +
-						(long)(MBuffMeta.Duration * 1000f);
+                if (kv.Value != 0) {
+                    //计算时间, 给与更长的时间
+                    long newTime = CTimeUtil.GetCurrentMillSecondStamp() +
+                        (long)(MBuffMeta.Duration * 1000f);
 
-					//如果有其他人给的状态, 那么更新他的值
-					if (target.ContainsKey(kv.Key)) {
-						if (newTime > target[kv.Key].Value) {
-							target[kv.Key] = new KeyValuePair<int, long>(m_cid, newTime);
-						}
-					} else {
-						//否则赋予自己
-						target[kv.Key] = new KeyValuePair<int, long>(m_cid, newTime);
-						//Debug.Log("ApplyState");
-					}
-				}
-			}*/
+                    //如果有其他人给的状态, 那么更新他的值
+                    if (target.ContainsKey(kv.Key)) {
+                        if (newTime > target[kv.Key].Value) {
+                            target[kv.Key] = new KeyValuePair<int, long>(m_cid, newTime);
+                        }
+                    } else {
+                        //否则赋予自己
+                        target[kv.Key] = new KeyValuePair<int, long>(m_cid, newTime);
+                        //Debug.Log("ApplyState");
+                    }
+                }
+            }*/
 
-		}
+        }
 
-		//移除状态修改
-		//单指时间到的正常移除
-		private void RemoveState() {
-			//if (MBuffMeta.StateFlags.Count == 0) return;
-			//Debug.Log("remove state");
+        //移除状态修改
+        //单指时间到的正常移除
+        private void RemoveState() {
+            //if (MBuffMeta.StateFlags.Count == 0) return;
+            //Debug.Log("remove state");
 
-			//移除之前添加的, 是我赋予的buff
-			var target = m_owner.BaseData.StateModifier;
-			/*foreach (var kv in MBuffMeta.StateFlags) {
+            //移除之前添加的, 是我赋予的buff
+            /*var target = m_owner.BaseData.StateModifier;
+			foreach (var kv in MBuffMeta.StateFlags) {
 				if (kv.Value == 1 &&
 					target.ContainsKey(kv.Key) &&
 					target[kv.Key].Key == m_cid) {
 					target.Remove(kv.Key);
 				}
 			}*/
-		}
+        }
 
-		//dot的执行
-		private void OnPeriod()
+        //dot的执行
+        private void OnPeriod()
 		{
 			//正常结束时施加的效果
 			if (string.IsNullOrEmpty(MBuffMeta.PeriodicEffect))return;

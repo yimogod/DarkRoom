@@ -172,7 +172,7 @@ namespace DarkRoom.GamePlayAbility {
 			if (stateNode != null) {
 				int state = 0;
 				bool b = m_xreader.TryReadChildNodeAttr(stateNode, "HitFly", "value", ref state);
-				if (b) meta.StateFlags[CPawnVO.State.HitFly] = state;
+				//if (b) meta.StateFlags[CPawnVO.State.HitFly] = state;
 			}
 			//end state
 

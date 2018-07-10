@@ -75,7 +75,7 @@ namespace DarkRoom.GamePlayAbility {
 		//添加属性修改
 
 		private void ApplyModification(){
-			var target = m_owner.BaseData.PropertyModifier;
+			/*var target = m_owner.BaseData.PropertyModifier;
 			if (!target.ContainsKey(m_cid)) {
 				target[m_cid] = new Dictionary<CPawnVO.Property, float>();
 			}
@@ -93,18 +93,18 @@ namespace DarkRoom.GamePlayAbility {
 				//Debug.Log("add speed multiplier to me " + m.MoveSpeedMultiplier);
 				target[m_cid].Add(CPawnVO.Property.SpeedMultiplier, m.MoveSpeedMultiplier);
 				m_owner.BaseData.NotiSpeedChange();
-			}
+			}*/
 		}
 
 		//移除属性修改
 		private void RemoveModification()
 		{
-			var target = m_owner.BaseData.PropertyModifier;
+			/*var target = m_owner.BaseData.PropertyModifier;
 			if (target.ContainsKey(m_cid)) {
 				target.Remove(m_cid);
 
 				m_owner.BaseData.NotiSpeedChange();
-			}
+			}*/
 		}
 
 		//添加状态修改
@@ -113,7 +113,7 @@ namespace DarkRoom.GamePlayAbility {
 		//这是恰巧应用于同一个目标单位, 那么属性和状态就会被累加
 		//所以 TODO 如果buff的来源是同一个技能的话, 那我们就不接着apply了
 		private void ApplyState(){
-			if (MBuffMeta.StateFlags.Count == 0)return;
+			/*if (MBuffMeta.StateFlags.Count == 0)return;
 			
 			var target = m_owner.BaseData.StateModifier;
 			foreach (var kv in MBuffMeta.StateFlags) {
@@ -140,25 +140,25 @@ namespace DarkRoom.GamePlayAbility {
 						//Debug.Log("ApplyState");
 					}
 				}
-			}
+			}*/
 
 		}
 
 		//移除状态修改
 		//单指时间到的正常移除
 		private void RemoveState() {
-			if (MBuffMeta.StateFlags.Count == 0) return;
+			//if (MBuffMeta.StateFlags.Count == 0) return;
 			//Debug.Log("remove state");
 
 			//移除之前添加的, 是我赋予的buff
-			var target = m_owner.BaseData.StateModifier;
+			/*var target = m_owner.BaseData.StateModifier;
 			foreach (var kv in MBuffMeta.StateFlags) {
 				if (kv.Value == 1 &&
 					target.ContainsKey(kv.Key) &&
 					target[kv.Key].Key == m_cid) {
 					target.Remove(kv.Key);
 				}
-			}
+			}*/
 		}
 
 		//dot的执行

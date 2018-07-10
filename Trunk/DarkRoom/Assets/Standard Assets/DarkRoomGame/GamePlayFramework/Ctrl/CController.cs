@@ -36,31 +36,11 @@ namespace DarkRoom.Game
 		/// </summary>
 		//public event EventHandler<XEventArgs> OnPawnDieCallBack;
 
-		//mvc的数据
-		protected CPawnVO m_data;
-
 		//控制着的pawn视图
 		protected CPawnEntity m_pawn;
 
 		//是否是player controller
 		protected bool m_isPlayerController = false;
-
-		/// <summary>
-		/// 数据来源, mvc中的model
-		/// </summary>
-		public CPawnVO BaseData{
-			get { return m_data; }
-		}
-
-		/// <summary>
-		/// 赋值mvc的数据
-		/// </summary>
-		/// <param name="data"></param>
-		public virtual void AttachData(CPawnVO data)
-		{
-			m_data = data;
-			m_pawn.AttachData(data);
-		}
 
 		/// <summary>
 		/// controller持有的view对象
@@ -94,7 +74,6 @@ namespace DarkRoom.Game
 			//OnPawnDieCallBack = null;
 
 			m_pawn = null;
-			m_data = null;
 		}
 
 		/// <summary>

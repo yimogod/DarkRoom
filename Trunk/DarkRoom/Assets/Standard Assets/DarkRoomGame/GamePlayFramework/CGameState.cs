@@ -18,7 +18,7 @@ namespace DarkRoom.Game {
 		/// 存储着场景中的所有数据
 		/// 比如玩家数据.任务数据.地图数据
 		/// </summary>
-		public List<CPawnVO> PawnDataList = new List<CPawnVO>();
+		//public List<CPawnVO> PawnDataList = new List<CPawnVO>();
 
 
 		protected Dictionary<int, CAIController> m_pawnEntityList = new Dictionary<int, CAIController>();
@@ -96,7 +96,7 @@ namespace DarkRoom.Game {
 		{
 			m_redGroup.Clear();
 			m_blueGroup.Clear();
-            PawnDataList.Clear();
+            //PawnDataList.Clear();
 			m_pawnEntityList.Clear();
 			m_cleaner = null;
 		}
