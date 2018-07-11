@@ -8,19 +8,19 @@ namespace DarkRoom.PCG {
 	public class CFloodFill
 	{
 		//洪水要冲击的地图
-		private CCave.CellularMap m_map;
+		private CCellularMap m_map;
 
 		//所有的连续区域的列表. 区域的格子的值要等于 tileType
 		//List<Cave.Coord>代表一个封闭区域
-		public List<List<CCave.Coord>> GetRegions(CCave.CellularMap map, int tileType)
+		public List<List<CCave.Coord>> GetRegions(CCellularMap map, int tileType)
 		{
 			m_map = map;
 
 			List<List<CCave.Coord>> regions = new List<List<CCave.Coord>>();
-			int[,] mapFlags = new int[m_map.Width, m_map.Height];
+			int[,] mapFlags = new int[m_map.NumCols, m_map.NumRows];
 
-			for (int x = 0; x < m_map.Width; x++) {
-				for (int y = 0; y < m_map.Height; y++) {
+			for (int x = 0; x < m_map.NumCols; x++) {
+				for (int y = 0; y < m_map.NumRows; y++) {
 					//本格子已经处理过了
 					if (mapFlags[x, y] != 0)continue;
 					//本格子不等于要处理的类型
@@ -44,7 +44,7 @@ namespace DarkRoom.PCG {
 		//floodfill算法
 		private List<CCave.Coord> GetRegionTiles(int startX, int startY) {
 			List<CCave.Coord> tiles = new List<CCave.Coord>();
-			int[,] mapFlags = new int[m_map.Width, m_map.Height];
+			int[,] mapFlags = new int[m_map.NumCols, m_map.NumRows];
 			int tileType = m_map[startX, startY];
 
 			Queue<CCave.Coord> queue = new Queue<CCave.Coord>();

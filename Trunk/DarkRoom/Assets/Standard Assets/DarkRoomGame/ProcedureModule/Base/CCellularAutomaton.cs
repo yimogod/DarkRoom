@@ -24,7 +24,7 @@ namespace DarkRoom.PCG {
 		/// 整个地图的边缘需要是活着的
 		/// 这个是算法的本身造成的, youtube的例子也是这样
 		/// </summary>
-		public bool NeedAliveEdage = true;
+		private bool m_needAliveEdage = true;
 
 		private int m_iterations = 5;
 
@@ -109,7 +109,7 @@ namespace DarkRoom.PCG {
 				}
 			}
 
-			if (NeedAliveEdage)
+			if (m_needAliveEdage)
 			{
 				//如果是整地图, 则我们需要在四周筑上围墙
 				//随机填充满所有的地图

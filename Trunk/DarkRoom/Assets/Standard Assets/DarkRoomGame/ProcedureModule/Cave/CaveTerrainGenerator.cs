@@ -30,7 +30,7 @@ namespace DarkRoom.PCG{
 		public int CloseReginThreshold = 50;
 
 		//存储着自动机生成的数据 [x, y]
-		private CCave.CellularMap m_map;
+		private CCellularMap m_map;
 
 		//细胞自动机
 		private CCellularAutomaton m_cellular;
@@ -44,7 +44,7 @@ namespace DarkRoom.PCG{
 		/// 获取细胞自动机处理过的地图
 		/// 死亡为不可通行
 		/// </summary>
-		public CCave.CellularMap Map{ get { return m_map; } }
+		public CCellularMap Map { get { return m_map; } }
 
 		/// <summary>
 		/// 获取本地图中的屋子
@@ -62,7 +62,7 @@ namespace DarkRoom.PCG{
 			Height = numRows;
 
 			int[,] map = m_cellular.GenerateTerrianWithCellular(numCols, numRows);
-			m_map = new CCave.CellularMap(map);
+			m_map = new CCellularMap(map);
 			ProcessRegion();
 			ConnectClosestRooms(m_survivingRooms);
 		}

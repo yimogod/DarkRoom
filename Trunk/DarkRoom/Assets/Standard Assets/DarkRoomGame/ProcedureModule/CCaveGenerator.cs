@@ -5,7 +5,13 @@ using UnityEngine;
 namespace DarkRoom.PCG {
 	[RequireComponent(typeof(CaveTerrainGenerator))]
 	public class CaveGenerator : CTileMapGeneratorBase {
-		public List<string> AssetList;
+
+	    /// <summary>
+	    /// 存储的asset列表
+	    /// 0代表可通行区域代表的资源
+	    /// 1, 2代表不可通行区域的两个资源
+	    /// </summary>
+        public List<string> AssetList;
 
 		private CaveTerrainGenerator m_terrain;
 
@@ -17,27 +23,30 @@ namespace DarkRoom.PCG {
 		public override void Generate()
 		{
 			base.Generate();
-			m_terrain.Generate(NumCols, NumRows);
+			m_terrain.Generate(m_numCols, m_numRows);
 
 
-			CCave.CellularMap cellular = m_terrain.Map;
-			for (int x = 0; x < NumCols; x++) {
-				for (int z = 0; z < NumRows; z++) {
-					//m_grid.SetType(x, z, CAssetNode.TileType.TERRIAN);
+		    CCellularMap cellular = m_terrain.Map;
+			for (int x = 0; x < m_numCols; x++) {
+				for (int z = 0; z < m_numRows; z++) {
 
-					bool walk = cellular[x, z] == 0;
-					m_grid.SetWalkable(x, z, walk); //注意, 我们这里认为, 死亡的才是可同行的, 原因是这样图形好看
-					m_grid.SetNodeAsset(x, z, GetSpriteAtHeight(walk));
+				    bool walk = cellular[x, z] == 0;
+					m_grid.SetWalkable(x, z, walk);
+				    int type = GetTypeByAlive(walk);
+                    string asset = AssetList[type];
+                    m_grid.SetTypeAndAsset(x, z, type, asset);
                 }
 			}
 		}
 
-		private string GetSpriteAtHeight(bool walk) {
-			if (walk)return AssetList[0];
+        /// <summary>
+        /// walk = true mean alive
+        /// </summary>
+		private int GetTypeByAlive(bool alive) {
+			if (alive)return 0;
 
-			if(CDarkRandom.SmallerThan(0.5f))
-				return AssetList[1];
-			return AssetList[2];
+			if(CDarkRandom.SmallerThan(0.5f))return 1;
+			return 2;
 		}
 	}
 }

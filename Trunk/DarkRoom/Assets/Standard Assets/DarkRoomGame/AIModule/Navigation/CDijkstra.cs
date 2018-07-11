@@ -65,7 +65,7 @@ namespace DarkRoom.AI {
 			CGraphNode node = m_startNode;
 
 			while (node != m_endNode) {
-				for (int i = 0; i < node.neighbourCount; i++) {
+				for (int i = 0; i < node.NeighbourCount; i++) {
 					CGraphNode.Neighbour neighbour = node.Neighbours[i];
 					CGraphNode test = neighbour.node;
                     if (test == node) continue;

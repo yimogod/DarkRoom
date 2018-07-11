@@ -37,13 +37,13 @@ namespace DarkRoom.AI {
 		/// <summary>
 		/// 本node的链接node个数
 		/// </summary>
-		public int neighbourCount {
+		public int NeighbourCount {
 			get { return Neighbours.Count; }
 		}
 
 		public void FillValue(float g, CGraphNode parent) {
-			this.G = g;
-			this.Parent = parent;
+			G = g;
+			Parent = parent;
 		}
 
 		/// <summary>

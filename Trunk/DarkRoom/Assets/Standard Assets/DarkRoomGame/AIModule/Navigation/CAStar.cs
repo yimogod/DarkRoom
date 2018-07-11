@@ -181,6 +181,11 @@ namespace DarkRoom.AI {
         /// </summary>
         public bool Walkable { get; set; }
 
+        public bool Invalid
+        {
+            get { return Col < 0 || Row < 0; }
+        }
+
         /// <summary>
         /// 经过此点寻路的总代价. f代价
         /// </summary>
