@@ -69,7 +69,7 @@ namespace DarkRoom.PCG {
 			for (int x = 0; x < Width; x++) {
 				for (int z = 0; z < Height; z++) {
 					string asset = GetSpriteAtHeight(perlin[x, z]);
-					m_grid.SetType(x, z, Tile.TileType.TERRIAN);
+					//m_grid.SetType(x, z, CAssetNode.TileType.TERRIAN);
 					m_grid.SetAsset(x, z, asset);
                 }
 			}

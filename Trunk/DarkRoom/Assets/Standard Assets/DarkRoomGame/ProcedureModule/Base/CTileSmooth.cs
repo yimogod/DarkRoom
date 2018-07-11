@@ -1,4 +1,5 @@
 ﻿using System;
+using DarkRoom.Game;
 
 namespace DarkRoom.PCG {
 	/// <summary>
@@ -7,10 +8,10 @@ namespace DarkRoom.PCG {
 	/// </summary>
 	public class CTileSmooth
 	{
-		public void SmoothTileMapSprite(CProcedureMap tileMap){
-			for (int x = 0; x < tileMap.numCols; x++)
+		public void SmoothTileMapSprite(CAssetGrid tileMap){
+			for (int x = 0; x < tileMap.NumCols; x++)
 			{
-				for (int z = 0; x < tileMap.numRows; z++)
+				for (int z = 0; x < tileMap.NumRows; z++)
 				{
 					SmoothSingleTileSprite(tileMap, x, z);
 				}
@@ -18,15 +19,15 @@ namespace DarkRoom.PCG {
 		}
 
 		//根据四周情况, 平滑单个的tile
-		private void SmoothSingleTileSprite(CProcedureMap map, int x, int z){
-			SetTileCornerValue(map, x, z, Tile.Corner.BottomRight, 4);
-			SetTileCornerValue(map, x, z - 1, Tile.Corner.TopRight, 1);
-			SetTileCornerValue(map, x + 1, z, Tile.Corner.BottomLeft, 8);
-			SetTileCornerValue(map, x + 1, z - 1, Tile.Corner.TopLeft, 2);
+		private void SmoothSingleTileSprite(CAssetGrid map, int x, int z){
+			SetTileCornerValue(map, x, z, CAssetNode.Corner.BottomRight, 4);
+			SetTileCornerValue(map, x, z - 1, CAssetNode.Corner.TopRight, 1);
+			SetTileCornerValue(map, x + 1, z, CAssetNode.Corner.BottomLeft, 8);
+			SetTileCornerValue(map, x + 1, z - 1, CAssetNode.Corner.TopLeft, 2);
 		}
 
-		private void SetTileCornerValue(CProcedureMap map, int x, int z, Tile.Corner corner, int value){
-			Tile tile = map.GetTile(x, z);
+		private void SetTileCornerValue(CAssetGrid map, int x, int z, CAssetNode.Corner corner, int value){
+			CAssetNode tile = map.GetNode(x, z);
 			if (tile == null)return;
 
 			int fv = tile.GetFrogCornerValue(corner);

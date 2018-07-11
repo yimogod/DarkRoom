@@ -1,40 +1,39 @@
-﻿using DarkRoom.Core;
+﻿using System;
+using DarkRoom.Core;
 using UnityEngine;
 
-namespace DarkRoom.AI {
+namespace DarkRoom.Game {
 	/// <summary>
 	/// 二维表格数据. 用于AStar和直线探测寻路
-	///2017/03/30/v1
-	/// Author. liuzhibin
 	/// </summary>
-	public class CAStarGrid : IWalkable
+	public class CMapGrid<T> : IWalkableGrid where T : IWalkableNode
 	{
 		//地图所有的node数据.
 		//[col][row]
-		private AStarNode[,] m_nodes;
-		private int m_numRows;
-		private int m_numCols;
+		protected T[,] m_nodes;
+        protected int m_numRows;
+        protected int m_numCols;
 
-		//本次需要寻路的开始和终点
-		private AStarNode m_startNode;
-		private AStarNode m_endNode;
+        //本次需要寻路的开始和终点
+        protected T m_startNode;
+        protected T m_endNode;
 
 		/// <summary>
 		/// 默认构造函数. 啥都没干
 		/// </summary>
-		public CAStarGrid(){}
+		public CMapGrid(){}
 
 		/// <summary>
 		/// 返回寻路起点
 		/// </summary>
 		/// <value>The start node.</value>
-		public AStarNode StartNode{ get { return m_startNode; } }
+		public T StartNode{ get { return m_startNode; } }
 
 		/// <summary>
 		/// 返回寻路终点
 		/// </summary>
 		/// <value>The end node.</value>
-		public AStarNode EndNode{ get { return m_endNode; } }
+		public T EndNode{ get { return m_endNode; } }
 
 		/// <summary>
 		/// 返回网格列数
@@ -67,15 +66,16 @@ namespace DarkRoom.AI {
 			m_numRows = numRows;
 			m_numCols = numCols;
 
-			m_nodes = new AStarNode[m_numCols, m_numRows];
+			m_nodes = new T[m_numCols, m_numRows];
 			for(int row = 0; row < m_numRows; row++){
 				for(int col = 0; col < m_numCols; col++){
-					m_nodes[col, row] = new AStarNode(col, row, walkable);
-				}
+                    T t  = default(T);
+                    t.Col = col;
+                    t.Row = row;
+                    m_nodes[col, row] = t;
+                }
 			}
 		}
-
-		
 
 		/// <summary>
 		/// 设置地图所有的格子的walkable 为 value
@@ -95,10 +95,10 @@ namespace DarkRoom.AI {
 		/// <returns>The node.</returns>
 		/// <param name="row">Row.</param>
 		/// <param name="col">Col.</param>
-		public AStarNode GetNode(int col, int row){
-			if (row < 0 || col < 0)return null;
-			if (row >= m_numRows)return null;
-			if (col >= m_numCols)return null;
+		public T GetNode(int col, int row){
+			if (row < 0 || col < 0)return default(T);
+			if (row >= m_numRows)return default(T);
+			if (col >= m_numCols)return default(T);
 			return m_nodes[col, row];
 		}
 
@@ -110,7 +110,7 @@ namespace DarkRoom.AI {
 		/// <param name="row">Row. Base On 0</param>
 		/// <param name="col">Col. Base On 0</param>
 		public bool IsWalkable(int col, int row){
-			AStarNode node = GetNode(col, row);
+			T node = GetNode(col, row);
 			if(node == null)return false;
 			return node.Walkable;
 		}
@@ -122,7 +122,7 @@ namespace DarkRoom.AI {
 		/// <param name="col">Col.</param>
 		/// <param name="value">格子的可通行性</param>
 		public void SetWalkable(int col, int row, bool value){
-			AStarNode node = GetNode(col, row);
+			T node = GetNode(col, row);
 			if (node == null){
 				Debug.LogError("SetWalkable Error");
 				return;
@@ -137,7 +137,7 @@ namespace DarkRoom.AI {
 		/// <param name="row">Row.</param>
 		/// <param name="col">Col.</param>
 		public void SetStartNode(int col, int row){
-			AStarNode node = GetNode(col, row);
+			T node = GetNode(col, row);
 			if (node == null){
 				Debug.LogError("SetStartNode Error");
 				return;
@@ -151,7 +151,7 @@ namespace DarkRoom.AI {
 		/// <param name="row">Row.</param>
 		/// <param name="col">Col.</param>
 		public void SetEndNode(int col, int row){
-			AStarNode node = GetNode(col, row);
+			T node = GetNode(col, row);
 			if (node == null){
 				Debug.LogError("SetEndNode Error");
 				return;
@@ -159,90 +159,79 @@ namespace DarkRoom.AI {
 			m_endNode = m_nodes[col, row];
 		}
 
-		/// <summary>
-		/// 清理本实例持有的一些对象引用
-		/// </summary>
-		public void Dispose(){
+	    public void CopyUnWalkableFrom(IWalkableGrid grid, int startCol, int startRow, int endCol, int endRow)
+	    {
+	        for (int r = startRow; r < endRow; r++)
+	        {
+	            for (int c = startCol; c < endCol; c++)
+	            {
+	                if (grid.IsWalkable(c, r)) continue;
+	                SetWalkable(c, r, false);
+                }
+	        }
+	    }
+
+	    public void CopyWalkableFrom(IWalkableGrid grid, int startCol, int startRow, int endCol, int endRow)
+	    {
+	        for (int r = startRow; r < endRow; r++)
+	        {
+	            for (int c = startCol; c < endCol; c++)
+	            {
+	                bool inWalkable = grid.IsWalkable(c, r);
+	                if (inWalkable)SetWalkable(c, r, true);
+	            }
+	        }
+	    }
+
+	    /*获取所在位置最近的可通行图*/
+	    public Vector3 FindNearestWalkablePos(Vector3 pos)
+	    {
+	        int row = (int)pos.z;
+	        int col = (int)pos.x;
+	        T node = GetNode(row, col);
+	        if (node != null && node.Walkable) return pos;
+
+
+	        int gap = 1;
+	        int maxGap = Math.Max(m_numCols, m_numRows);
+	        while (gap < maxGap)
+	        {
+	            int minCol = col - gap;
+	            int maxCol = col + gap;
+	            int minRow = row - gap;
+	            int maxRow = row + gap;
+
+	            //1. two rows line
+	            for (int i = minCol; i <= maxCol; i++)
+	            {
+	                node = GetNode(maxRow, i);
+	                //if (node != null && node.Walkable) return node.vector;
+
+	                node = GetNode(minRow, i);
+	                //if (node != null && node.Walkable) return node.vector;
+	            }
+
+	            //2. two cols line
+	            for (int i = minRow + 1; i < maxRow; i++)
+	            {
+	                node = GetNode(i, minCol);
+	                //if (node != null && node.Walkable) return node.vector;
+
+	                node = GetNode(i, maxCol);
+	               // if (node != null && node.Walkable) return node.vector;
+	            }
+
+	            gap++;
+	        }
+
+	        return CDarkConst.INVALID_VEC3;
+	    }
+
+        /// <summary>
+        /// 清理本实例持有的一些对象引用
+        /// </summary>
+        public void Dispose(){
 			m_nodes = null;
-			m_startNode = null;
-			m_endNode = null;
 		}
 	}
-
-	/// <summary>
-	/// AStarGrid的单位数据.记录了AStar寻路需要的一些数据
-	/// 2017/03/30/v1
-	/// Author. liuzhibin
-	/// </summary>
-	public class AStarNode : IPriority
-	{
-		/// <summary>
-		/// The row.
-		/// </summary>
-		public int Row;
-
-		/// <summary>
-		/// The col.
-		/// </summary>
-		public int Col;
-
-		/// <summary>
-		/// The walkable.
-		/// </summary>
-		public bool Walkable = true;
-
-		/// <summary>
-		/// 经过此点寻路的总代价. f代价
-		/// </summary>
-		public float f;
-
-		/// <summary>
-		/// 原点到此点的移动代价. g代价
-		/// </summary>
-		public float g;
-
-		/// <summary>
-		/// 此点到目的点的代价, h代价
-		/// </summary>
-		public float h;
-
-		/// <summary>
-		/// 形成寻路结果链表的数据
-		/// </summary>
-		public AStarNode Parent;
-
-		/// <summary>
-		/// 本地代价修正,比如雪地的代价就是2之类的
-		/// </summary>
-		public float CostMultiplier = 1.0f;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AStarNode"/> class.
-		/// </summary>
-		/// <param name="row">Row.</param>
-		/// <param name="col">Col.</param>
-		/// <param name="walkable">本单位格子是否可以通行</param>
-		public AStarNode(int col, int row, bool walkable) {
-			Col = col;
-			Row = row;
-			Walkable = walkable;
-		}
-
-		//实现优先级队列的接口
-		public float GetPriority() { return f; }
-
-		/// <summary>
-		/// 填充本node的值
-		/// </summary>
-		/// <param name="f">F.</param>
-		/// <param name="g">G.</param>
-		/// <param name="h">H.</param>
-		/// <param name="parent">Parent.</param>
-		public void FillValue(float f, float g, float h, AStarNode parent) {
-			this.f = f;
-			this.g = g;
-			this.h = h;
-			this.Parent = parent;
-		}
-    }
 }

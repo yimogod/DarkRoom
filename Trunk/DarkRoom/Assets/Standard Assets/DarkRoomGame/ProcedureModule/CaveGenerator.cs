@@ -23,7 +23,7 @@ namespace DarkRoom.PCG {
 			CCave.CellularMap cellular = m_terrain.Map;
 			for (int x = 0; x < Width; x++) {
 				for (int z = 0; z < Height; z++) {
-					m_grid.SetType(x, z, Tile.TileType.TERRIAN);
+					//m_grid.SetType(x, z, CAssetNode.TileType.TERRIAN);
 
 					bool walk = cellular[x, z] == 0;
 					m_grid.SetWalkable(x, z, walk); //注意, 我们这里认为, 死亡的才是可同行的, 原因是这样图形好看

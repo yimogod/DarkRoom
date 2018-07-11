@@ -36,7 +36,7 @@ namespace DarkRoom.Game{
 			return vec;
 		}
 
-		public static void DrawGrid(CWalkableData gird)
+		public static void DrawGrid(CMapGrid<CStarNode> gird)
 		{
 			var parent = new GameObject("map cube");
 			var t = parent.transform;
@@ -54,7 +54,7 @@ namespace DarkRoom.Game{
 			}
 		}
 
-		public static void PrintGird(CWalkableData gird)
+		public static void PrintGird(CMapGrid<CStarNode> gird)
 		{
 			string str = "";
 			for (int row = gird.NumRows - 1; row >= 0 ; row--) {

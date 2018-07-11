@@ -1,4 +1,5 @@
 ﻿using System;
+using DarkRoom.Game;
 using UnityEngine;
 
 namespace DarkRoom.AI
@@ -172,7 +173,7 @@ namespace DarkRoom.AI
 		/// <param name="endRow"></param>
 		/// <param name="endCol"></param>
 		/// <returns></returns>
-		public bool FindPath(CWalkableData grid, int startCol, int startRow,  int endCol, int endRow)
+		public bool FindPath(IWalkableGrid grid, int startCol, int startRow,  int endCol, int endRow)
 		{
 			SetData(startCol, startRow, endCol, endRow);
 			return Find(grid);
@@ -183,9 +184,9 @@ namespace DarkRoom.AI
 		/// </summary>
 		/// <returns><c>true</c>, if path was found, <c>false</c> otherwise.</returns>
 		/// <param name="grid">Grid.</param>
-		public bool FindPath(CAStarGrid grid){
-			AStarNode startNode = grid.StartNode;
-			AStarNode endNode = grid.EndNode;
+		public bool FindPath(CMapGrid<CStarNode> grid){
+		    CStarNode startNode = grid.StartNode;
+		    CStarNode endNode = grid.EndNode;
 			SetData(startNode.Col, startNode.Row, endNode.Col, endNode.Row);
 			return Find(grid);
 		}
@@ -196,7 +197,7 @@ namespace DarkRoom.AI
 		/// </summary>
 		/// <param name="grid"></param>
 		/// <returns></returns>
-		private bool Find(IWalkable grid)
+		private bool Find(IWalkableGrid grid)
 		{
 			//竖线探测
 			if (isVertical) {

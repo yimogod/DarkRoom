@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DarkRoom.Core;
+using DarkRoom.Game;
 
 namespace DarkRoom.AI {
 	/// <summary>
@@ -23,10 +24,10 @@ namespace DarkRoom.AI {
 		private readonly Connection m_conn;
 
 		//AStar要寻路的数据
-		private CAStarGrid m_grid;
+		private CMapGrid<CStarNode> m_grid;
 		//开始和结束点
-		private AStarNode m_startNode;
-		private AStarNode m_endNode;
+		private CStarNode m_startNode;
+		private CStarNode m_endNode;
 
 		//直线通过的成本
 		private float m_straightCost = 1.0f;
@@ -34,9 +35,9 @@ namespace DarkRoom.AI {
 		private float m_diagCost = 1.4f;
 
 		//AStar计算需要的三个列表
-		private CPriorityQueue<AStarNode> m_open = new CPriorityQueue<AStarNode>();
-		private List<AStarNode> m_closed = new List<AStarNode>();
-		private Stack<AStarNode> m_path = new Stack<AStarNode>();
+		private CPriorityQueue<CStarNode> m_open = new CPriorityQueue<CStarNode>();
+		private List<CStarNode> m_closed = new List<CStarNode>();
+		private Stack<CStarNode> m_path = new Stack<CStarNode>();
 
 		//是否寻找到最近的点. 还是end node上面
 		private bool m_findClosestNode = false;
@@ -50,7 +51,7 @@ namespace DarkRoom.AI {
 		/// 获取寻路结果. 在调用FindPath方法后再使用此结果
 		/// </summary>
 		/// <value>The path.</value>
-		public Stack<AStarNode> path{
+		public Stack<CStarNode> path{
 			get { return m_path; }
 		}
 
@@ -61,7 +62,7 @@ namespace DarkRoom.AI {
 		/// <returns><c>true</c>, if path was found, <c>false</c> otherwise.</returns>
 		/// <param name="grid">传入需要进行寻路的地图</param>
 		/// <param name="closeToDestination">If set to <c>false</c>, 寻路结果不包含终点</param>
-		public bool FindPath(CAStarGrid grid, bool closeToDestination = false){
+		public bool FindPath(CMapGrid<CStarNode> grid, bool closeToDestination = false){
 			m_grid = grid;
 			m_findClosestNode = closeToDestination;
 			m_open.Clear();
@@ -72,16 +73,16 @@ namespace DarkRoom.AI {
 			//终点不可通行, 我就不寻路了
 			if (!m_endNode.Walkable)return false;
 
-			m_startNode.g = 0;
-			m_startNode.h = Heuristic(m_startNode);
-			m_startNode.f = m_startNode.g + m_startNode.h;
+			m_startNode.G = 0;
+			m_startNode.H = Heuristic(m_startNode);
+			m_startNode.F = m_startNode.G + m_startNode.H;
 			bool result = Search();
 			return result;
 		}
 
 		//寻路的具体算法
 		private bool Search(){
-			AStarNode node = m_startNode;
+			CStarNode node = m_startNode;
 
 			while(node != m_endNode){
 				int startCol = Math.Max(0, node.Col - 1);
@@ -93,7 +94,7 @@ namespace DarkRoom.AI {
 				//但对于2d游戏, 我们想仅仅寻找左右上下
 				for(int i = startRow; i <= endRow; i++){
 					for(int j = startCol; j <= endCol; j++){
-						AStarNode test = m_grid.GetNode(j, i);
+						CStarNode test = m_grid.GetNode(j, i);
 						if(test == node)continue;
 						if(!test.Walkable)continue;
 						//这里之前是在后面也做f更新了. 但考虑提前到这里会提高效率
@@ -110,11 +111,11 @@ namespace DarkRoom.AI {
 							cost = m_straightCost;
 						}
 
-						float g = node.g + cost * test.CostMultiplier;
+						float g = node.G + cost * test.CostMultiplier;
 						float h = Heuristic(test);
 						float f = g + h;
 						if(IsOpen(test)){
-							if(test.f > f)test.FillValue(f, g, h, node);
+							if(test.F > f)test.FillValue(f, g, h, node);
 						} else {
 							test.FillValue(f, g, h, node);
 							m_open.Push(test);
@@ -132,7 +133,7 @@ namespace DarkRoom.AI {
 
 		private void BuildPath(){
 			m_path.Clear();
-			AStarNode node = m_endNode;
+			CStarNode node = m_endNode;
 			if (!m_findClosestNode)m_path.Push(node);
 
 			while(node != m_startNode){
@@ -145,18 +146,102 @@ namespace DarkRoom.AI {
 		}
 
 		//寻路评估函数
-		private float Heuristic(AStarNode node){
+		private float Heuristic(CStarNode node){
 			int dcol = m_endNode.Col - node.Col;
 			int drow = m_endNode.Row - node.Row;
 			return Math.Abs (dcol) * m_straightCost + Math.Abs(drow) * m_straightCost;
 		}
 
-		private bool IsOpen(AStarNode node){
+		private bool IsOpen(CStarNode node){
 			return m_open.Contains(node);
 		}
 
-		private bool IsClosed(AStarNode node){
+		private bool IsClosed(CStarNode node){
 			return m_closed.Contains(node);
 		}
 	}
+
+    /// <summary>
+    /// AStarGrid的单位数据.记录了AStar寻路需要的一些数据
+    /// </summary>
+    public class CStarNode : IPriority, IWalkableNode
+    {
+        /// <summary>
+        /// The row.
+        /// </summary>
+        public int Row { get; set; }
+
+        /// <summary>
+        /// The col.
+        /// </summary>
+        public int Col { get; set; }
+
+        /// <summary>
+        /// The walkable.
+        /// </summary>
+        public bool Walkable { get; set; }
+
+        /// <summary>
+        /// 经过此点寻路的总代价. f代价
+        /// </summary>
+        public float F;
+
+        /// <summary>
+        /// 原点到此点的移动代价. g代价
+        /// </summary>
+        public float G;
+
+        /// <summary>
+        /// 此点到目的点的代价, h代价
+        /// </summary>
+        public float H;
+
+        /// <summary>
+        /// 形成寻路结果链表的数据
+        /// </summary>
+        public CStarNode Parent;
+
+        /// <summary>
+        /// 本地代价修正,比如雪地的代价就是2之类的
+        /// </summary>
+        public float CostMultiplier = 1.0f;
+
+        public CStarNode()
+        {
+            Col = -1;
+            Row = -1;
+            Walkable = false;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CStarNode"/> class.
+        /// </summary>
+        /// <param name="row">Row.</param>
+        /// <param name="col">Col.</param>
+        /// <param name="walkable">本单位格子是否可以通行</param>
+        public CStarNode(int col, int row, bool walkable)
+        {
+            Col = col;
+            Row = row;
+            Walkable = walkable;
+        }
+
+        //实现优先级队列的接口
+        public float GetPriority() { return F; }
+
+        /// <summary>
+        /// 填充本node的值
+        /// </summary>
+        /// <param name="f">F.</param>
+        /// <param name="g">G.</param>
+        /// <param name="h">H.</param>
+        /// <param name="parent">Parent.</param>
+        public void FillValue(float f, float g, float h, CStarNode parent)
+        {
+            F = f;
+            G = g;
+            H = h;
+            Parent = parent;
+        }
+    }
 }

@@ -86,5 +86,10 @@ namespace DarkRoom.Core
 				list.Add(t);
 			}
 		}
-	}
+
+        public static bool IsInvalidVec3(Vector3 vec)
+        {
+            return false;
+        }
+    }
 }

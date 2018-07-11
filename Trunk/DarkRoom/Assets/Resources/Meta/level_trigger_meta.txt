@@ -1,0 +1,6 @@
+id	chest_0	chest_num	chest_1	chest_1_num	chest_2	trigger_1	trigger_1_num	trigger_2	trigger_2_num	trigger_3	trigger_3_num
+1	-1	0	-1	0	10001	-1	0	-1	0	-1	0
+2	-1	1	1	1	10001	10001	1	-1	0	-1	0
+3	-1	1	1	1	10001	10001	1	-1	0	-1	0
+4	-1	0	-1	0	10001	10001	0	-1	0	-1	0
+5	-1	0	-1	0	10001	-1	0	-1	0	-1	0
