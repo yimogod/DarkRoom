@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace DarkRoom.PCG {
-	public class CCellularAutomaton : MonoBehaviour
+	public class CCellularAutomaton
 	{
 		/// <summary>
 		/// 随机数种子
@@ -30,17 +30,17 @@ namespace DarkRoom.PCG {
 
 		//x, y
 		private int[,] m_values;
-        private int m_width;
-		private int m_height;
+        private int m_numCols;
+		private int m_numRows;
 
 		/// <summary>
 		/// 返回二维数组[y,x], 0代表死亡
 		/// </summary>
-		public int[,] GenerateTerrianWithCellular(int width, int height)
+		public int[,] GenerateTerrianWithCellular(int cols, int rows)
 		{
-			m_width = width;
-			m_height = height;
-			m_values = new int[m_width, m_height];
+			m_numCols = cols;
+			m_numRows = rows;
+			m_values = new int[m_numCols, m_numRows];
 
 			if (RandomSeed)Seed = Random.Range(-10000, 1000);
 			CDarkRandom.SetSeed(Seed);
@@ -56,8 +56,8 @@ namespace DarkRoom.PCG {
 
 		/*少数服从多数*/
 		private void MoreIsBetterThanLess() {
-			for(int y = 0; y < m_height; y++){
-				for(int x = 0; x < m_width; x++){
+			for(int y = 0; y < m_numRows; y++){
+				for(int x = 0; x < m_numCols; x++){
 					int num = FindSurroundAliveNum(x, y);
 					if(num < 4) {
 						m_values[x, y] = 0;
@@ -69,11 +69,11 @@ namespace DarkRoom.PCG {
 		}
 
 		/*寻找9宫格或者的个数*/
-		private int FindSurroundAliveNum(int tileX, int tileY){
-			int leftX = tileX - 1;
-			int rightX = tileX + 1;
-			int downY = tileY - 1;
-			int upY = tileY + 1;
+		private int FindSurroundAliveNum(int col, int row){
+			int leftX = col - 1;
+			int rightX = col + 1;
+			int downY = row - 1;
+			int upY = row + 1;
 
 			int num = 0;
 			for (int x = leftX; x <= rightX; x ++){
@@ -97,13 +97,13 @@ namespace DarkRoom.PCG {
 
 		//坐标是否合法
 		private bool IsCoordValid(int x, int y) {
-			return x >= 0 && x < m_width && y >= 0 && y < m_height;
+			return x >= 0 && x < m_numCols && y >= 0 && y < m_numRows;
 		}
 
 		//随机填充地图
 		void RandomFillMap() {
-			for (int x = 0; x < m_width; x++) {
-				for (int y = 0; y < m_height; y++) {
+			for (int x = 0; x < m_numCols; x++) {
+				for (int y = 0; y < m_numRows; y++) {
 					bool b = CDarkRandom.SmallerThan(Threshold);
 					m_values[x, y] = b ? 1 : 0;
 				}
@@ -113,16 +113,16 @@ namespace DarkRoom.PCG {
 			{
 				//如果是整地图, 则我们需要在四周筑上围墙
 				//随机填充满所有的地图
-				int maxIndex_Y = m_height - 1;
-				int maxIndex_X = m_width - 1;
+				int maxIndex_Y = m_numRows - 1;
+				int maxIndex_X = m_numCols - 1;
 
-				for (int x = 0; x < m_width; x++)
+				for (int x = 0; x < m_numCols; x++)
 				{
 					m_values[x, 0] = 1;
 					m_values[x, maxIndex_Y] = 1;
 				}
 
-				for (int y = 0; y < m_height; y++)
+				for (int y = 0; y < m_numRows; y++)
 				{
 					m_values[0, y] = 1;
 					m_values[maxIndex_X, y] = 1;

@@ -25,7 +25,6 @@ namespace DarkRoom.PCG {
 			base.Generate();
 			m_terrain.Generate(m_numCols, m_numRows);
 
-
 		    CCellularMap cellular = m_terrain.Map;
 			for (int x = 0; x < m_numCols; x++) {
 				for (int z = 0; z < m_numRows; z++) {

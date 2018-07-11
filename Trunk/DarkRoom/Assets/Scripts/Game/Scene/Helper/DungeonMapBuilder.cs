@@ -23,18 +23,18 @@ namespace Sword
             m_world = world;
         }
 
-        private MapMeta _mapMeta
+        private MapMeta m_mapMeta
         {
-            get { return m_world.meta; }
+            get { return m_world.Meta; }
         }
 
-        public CAssetGrid assetGrid
+        public CAssetGrid AssetGrid
         {
             get{return null;//return _mapGen.assetGrid;
             }
         }
 
-        public CAssetGrid typeGrid
+        public CAssetGrid TypeGrid
         {
             //get { return _mapGen.typeGrid; }
             get { return null; }
@@ -58,10 +58,9 @@ namespace Sword
         public void CopyData()
         {
             //然后获取地图的各种数据
-            var grid = m_world.walkGrid;
-            grid.Init(_mapMeta.rows, _mapMeta.cols, true);
-            //grid.CopyUnWalkableFrom(_mapGen.walkGrid);
-           // _world.typeGrid = typeGrid;
+            var grid = m_world.WalkableGrid;
+            grid.Init(m_mapMeta.Rows, m_mapMeta.Cols, true);
+            grid.CopyUnWalkableFrom(_mapGen.Grid);
         }
 
         public void CreateOther()
@@ -80,15 +79,15 @@ namespace Sword
            // CreateHero(_mapGen.startTile);
 
             //2. 创建怪物
-            CreateMonster(_mapMeta.monster_0, _mapMeta.monster_0_lv, _mapMeta.monster_0_ai, _mapMeta.monster_0_num);
-            CreateMonster(_mapMeta.monster_1, _mapMeta.monster_1_lv, _mapMeta.monster_1_ai, _mapMeta.monster_1_num);
-            CreateMonster(_mapMeta.monster_2, _mapMeta.monster_2_lv, _mapMeta.monster_2_ai, _mapMeta.monster_2_num);
-            CreateMonster(_mapMeta.monster_3, _mapMeta.monster_3_lv, _mapMeta.monster_3_ai, _mapMeta.monster_3_num);
-            CreateMonster(_mapMeta.boss_1, _mapMeta.boss_1_lv, _mapMeta.boss_1_ai, 1);
+            CreateMonster(m_mapMeta.monster_0, m_mapMeta.monster_0_lv, m_mapMeta.monster_0_ai, m_mapMeta.monster_0_num);
+            CreateMonster(m_mapMeta.monster_1, m_mapMeta.monster_1_lv, m_mapMeta.monster_1_ai, m_mapMeta.monster_1_num);
+            CreateMonster(m_mapMeta.monster_2, m_mapMeta.monster_2_lv, m_mapMeta.monster_2_ai, m_mapMeta.monster_2_num);
+            CreateMonster(m_mapMeta.monster_3, m_mapMeta.monster_3_lv, m_mapMeta.monster_3_ai, m_mapMeta.monster_3_num);
+            CreateMonster(m_mapMeta.boss_1, m_mapMeta.boss_1_lv, m_mapMeta.boss_1_ai, 1);
 
 
             //3. 创建boss, 在宝箱附近
-            if (_mapMeta.boss_0 != -1)
+            if (m_mapMeta.boss_0 != -1)
             {
                 //Vector3 pos = _helper.FindFreeTileNear(_mapGen.importTile_1);
                 //UnitBornData bornData =

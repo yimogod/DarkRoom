@@ -36,7 +36,7 @@ namespace Sword
             GameObject terrainGO = AssetManager.LoadMapPrefab("Forest", "Forest_01");
             m_terrain3D = gameObject.AddComponent<TileTerrainComp>();
 
-            TMap.Instance.terrain = m_terrain3D;
+            TMap.Instance.Terrain = m_terrain3D;
             m_unit3DCreator = gameObject.AddComponent<DungeonUnit3DPlant>();
         }
 
@@ -46,7 +46,7 @@ namespace Sword
             m_builder.CopyData();
 
             m_unit3DCreator.Init(m_terrain3D);
-            m_unit3DCreator.InstantiateUnit(m_mapMeta, m_builder.typeGrid, m_builder.assetGrid);
+            m_unit3DCreator.InstantiateUnit(m_mapMeta, m_builder.TypeGrid, m_builder.AssetGrid);
         }
 
         void Update()

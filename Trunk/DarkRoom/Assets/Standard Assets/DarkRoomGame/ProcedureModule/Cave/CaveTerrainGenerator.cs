@@ -15,25 +15,12 @@ namespace DarkRoom.PCG{
 	public class CaveTerrainGenerator : MonoBehaviour
 	{
 		/// <summary>
-		/// 地图宽度
-		/// </summary>
-		public int Width;
-
-		/// <summary>
-		/// 地图高度
-		/// </summary>
-		public int Height;
-
-		/// <summary>
 		/// 封闭区域的格子数小于这个我们就删除这个封闭区域
 		/// </summary>
 		public int CloseReginThreshold = 50;
 
 		//存储着自动机生成的数据 [x, y]
 		private CCellularMap m_map;
-
-		//细胞自动机
-		private CCellularAutomaton m_cellular;
 
 		private CFloodFill m_floodFill = new CFloodFill();
 
@@ -53,17 +40,14 @@ namespace DarkRoom.PCG{
 
 		void Start()
 		{
-			m_cellular = gameObject.GetComponent<CCellularAutomaton>();
 		}
 
 		public void Generate(int numCols, int numRows)
 		{
-			Width = numCols;
-			Height = numRows;
+			m_map = new CCellularMap(numCols, numRows);
+		    m_map.Generate();
 
-			int[,] map = m_cellular.GenerateTerrianWithCellular(numCols, numRows);
-			m_map = new CCellularMap(map);
-			ProcessRegion();
+            ProcessRegion();
 			ConnectClosestRooms(m_survivingRooms);
 		}
 

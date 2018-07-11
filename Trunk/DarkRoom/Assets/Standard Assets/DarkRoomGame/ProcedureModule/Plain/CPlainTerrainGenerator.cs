@@ -20,54 +20,28 @@ namespace DarkRoom.PCG{
 	 * 为什么要强调64x64, 因为如果地图小于64的话, 细胞自动机随机的不够, 不能够产生合理数据
 	 * 如果地图小于64, 需要在64上随机, 然后采样成小地图
 	*/
-	[RequireComponent(typeof(CPerlinNoise))]
 	public class CPlainTerrainGenerator : MonoBehaviour {
-		/// <summary>
-		/// 地图宽度
-		/// </summary>
-		public int Width;
-
-		/// <summary>
-		/// 地图高度
-		/// </summary>
-		public int Height;
-
-		private CPlain.PerlinMap m_map;
-
-		//柏林模糊
-		private CPerlinNoise m_perlin;
+		private CPerlinMap m_map;
 
 		private CPlainRoadGenerator m_road;
 
 		/// <summary>
 		/// 获取柏林模糊产生的地图
 		/// </summary>
-		public CPlain.PerlinMap Map { get { return m_map; } }
+		public CPerlinMap Map { get { return m_map; } }
 
 		void Start()
 		{
-			m_perlin = gameObject.GetComponent<CPerlinNoise>();
 			m_road = new CPlainRoadGenerator();
         }
 
 		/// <summary>
 		/// 柏林噪声产生地形数据
 		/// </summary>
-		public void Generate()
+		public void Generate(int cols, int rows)
 		{
-			Generate(Width, Height);
-		}
-
-		/// <summary>
-		/// 柏林噪声产生地形数据
-		/// </summary>
-		public void Generate(int width, int height)
-		{
-			Width = width;
-			Height = height;
-
-			float[,] map = m_perlin.GetNoiseValues(Width, Height);
-			m_map = new CPlain.PerlinMap(map);
-		}
+			m_map = new CPerlinMap(cols, rows);
+		    m_map.Generate();
+        }
 	}
 }

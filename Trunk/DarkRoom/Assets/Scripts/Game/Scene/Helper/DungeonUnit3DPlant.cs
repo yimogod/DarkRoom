@@ -15,9 +15,9 @@ namespace Sword
 
         private IEnumerator CreateUnitOfTileMap()
         {
-            for (int row = 0; row < _mapMeta.rows; row++)
+            for (int row = 0; row < _mapMeta.Rows; row++)
             {
-                for (int col = 0; col < _mapMeta.cols; col++)
+                for (int col = 0; col < _mapMeta.Cols; col++)
                 {
                     //string pname = _assetGrid.GetNode(row, col).name;
                     string pname = "";

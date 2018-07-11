@@ -39,7 +39,7 @@ namespace Sword
 
         protected GameObject PlaceUnitByCenter(string unitName, int col, int row)
         {
-            GameObject go = AssetManager.LoadMapPrefab(_mapMeta.mapRoot, unitName);
+            GameObject go = AssetManager.LoadMapPrefab(_mapMeta.MapRoot, unitName);
             if (go == null) return null;
 
             //树以中心为原点, 且占用一格
@@ -52,7 +52,7 @@ namespace Sword
 
         protected GameObject PlaceUnitByLeftBottom(string unitName, int col, int row)
         {
-            GameObject go = AssetManager.LoadMapPrefab(_mapMeta.mapRoot, unitName);
+            GameObject go = AssetManager.LoadMapPrefab(_mapMeta.MapRoot, unitName);
             if (go == null) return null;
 
             //房子左下角对齐, 获取的应该是方块的左下角坐标

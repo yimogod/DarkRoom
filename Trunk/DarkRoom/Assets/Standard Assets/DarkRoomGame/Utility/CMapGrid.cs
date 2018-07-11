@@ -159,7 +159,12 @@ namespace DarkRoom.Game {
 			m_endNode = m_nodes[col, row];
 		}
 
-	    public void CopyUnWalkableFrom(IWalkableGrid grid, int startCol, int startRow, int endCol, int endRow)
+	    public void CopyUnWalkableFrom(IWalkableGrid grid)
+	    {
+	        CopyUnWalkableFrom(grid, 0, 0, m_numCols, m_numRows);
+	    }
+
+        public void CopyUnWalkableFrom(IWalkableGrid grid, int startCol, int startRow, int endCol, int endRow)
 	    {
 	        for (int r = startRow; r < endRow; r++)
 	        {
@@ -171,7 +176,12 @@ namespace DarkRoom.Game {
 	        }
 	    }
 
-	    public void CopyWalkableFrom(IWalkableGrid grid, int startCol, int startRow, int endCol, int endRow)
+	    public void CopyWalkableFrom(IWalkableGrid grid)
+	    {
+	        CopyWalkableFrom(grid, 0, 0, m_numCols, m_numRows);
+	    }
+
+        public void CopyWalkableFrom(IWalkableGrid grid, int startCol, int startRow, int endCol, int endRow)
 	    {
 	        for (int r = startRow; r < endRow; r++)
 	        {

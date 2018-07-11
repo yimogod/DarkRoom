@@ -2,7 +2,7 @@
 
 namespace DarkRoom.PCG
 {
-	public class CPerlinNoise : MonoBehaviour
+	public class CPerlinNoise
 	{
 		/// <summary>
 		/// 种子
@@ -47,20 +47,20 @@ namespace DarkRoom.PCG
 		/// <summary>
 		/// 获取柏林模糊的二维地图, 格子数据归一化
 		/// </summary>
-		public float[,] GetNoiseValues(int width, int height)
+		public float[,] GetNoiseValues(int cols, int rows)
 		{
 			if (RandomSeed)
 				Seed = Random.Range(-10000, 10000);
 
-			float w = (float) width;
-			float h = (float) height;
+			float w = (float) cols;
+			float h = (float) rows;
 
-			float[,] values = new float[width, height];
+			float[,] values = new float[cols, rows];
 
 			float min = float.MaxValue;
 			float max = float.MinValue;
-			for (int i = 0; i < width; i++) {
-				for (int j = 0; j < height; j++) {
+			for (int i = 0; i < cols; i++) {
+				for (int j = 0; j < rows; j++) {
 					float r = 0f;
 					float ta = Amptitude;
 					float tf = Frequency;
@@ -81,8 +81,8 @@ namespace DarkRoom.PCG
 			}
 
 			//归一化
-			for (int i = 0; i < width; i++) {
-				for (int j = 0; j < height; j++) {
+			for (int i = 0; i < cols; i++) {
+				for (int j = 0; j < rows; j++) {
 					values[i, j] = Mathf.InverseLerp(min, max, values[i, j]);
 				}
 			}

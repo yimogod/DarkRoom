@@ -30,7 +30,12 @@ namespace DarkRoom.PCG {
         /// </summary>
 	    public int TerrainType = 1;
 
-		private CPlainTerrainGenerator m_terrain;
+	    /// <summary>
+	    /// 从外面指定的, 水域类型的值
+	    /// </summary>
+	    public int SeaType = 2;
+
+        private CPlainTerrainGenerator m_terrain;
 
 		void Awake()
 		{
@@ -40,59 +45,78 @@ namespace DarkRoom.PCG {
         /// <summary>
         /// 根据高度, 从配置中读取相关的asset
         /// </summary>
-		private string GetAssetAtHeight(float height) {
+		private int GetTypeAtHeight(float height) {
             //两种海洋
 			if (height < SeaLevel){
-				if(CDarkRandom.SmallerThan(0.5f))
-					return AssetList[0];
-				return AssetList[1];
+				if(CDarkRandom.SmallerThan(0.5f))return 0;
+				return 1;
 			}
 
             //两种海岸线
             if (height <= BeachHeight){
-				if(CDarkRandom.SmallerThan(0.5f))
-					return AssetList[2];
-				return AssetList[3];
+				if(CDarkRandom.SmallerThan(0.5f))return 2;
+				return 3;
 			}
 
             //两种草
 			if (height <= GrassHeight){
-				if(CDarkRandom.SmallerThan(0.5f))
-					return AssetList[4];
-				return AssetList[5];
+				if(CDarkRandom.SmallerThan(0.5f))return 4;
+				return 5;
 			}
 
             //另外一种草
-			if (height <= GrassHeight2)
-				return AssetList[6];
+			if (height <= GrassHeight2)return 6;
 
             //两种地面
-			if (height <= LandHeight)
-				return AssetList[7];
-			if (height <= LandHeight2)
-				return AssetList[8];
+			if (height <= LandHeight)return 7;
+			if (height <= LandHeight2)return 8;
 
             //两种石头
 			if (height <= StoneHeight){
-				if(CDarkRandom.SmallerThan(0.5f))
-					return AssetList[9];
-				return AssetList[10];
+				if(CDarkRandom.SmallerThan(0.5f))return 9;
+				return 10;
 			}
 
             //默认的绿草地
-			return AssetList[4];
+			return 4;
 		}
+
+	    private int GetTypeByIndex(int index)
+	    {
+	        int v = -1;
+	        switch (index)
+	        {
+                case 0:
+	            case 1:
+	            case 2:
+	            case 3:
+                    v = SeaType;
+	                break;
+	            case 4:
+	            case 5:
+	            case 6:
+	            case 7:
+	            case 8:
+	            case 9:
+	            case 10:
+	                v = TerrainType;
+	                break;
+            }
+
+	        return v;
+	    }
 
 		public override void Generate()
 		{
 			base.Generate();
 			m_terrain.Generate(m_numCols, m_numRows);
 
-			CPlain.PerlinMap perlin = m_terrain.Map;
+			CPerlinMap perlin = m_terrain.Map;
 			for (int x = 0; x < m_numCols; x++) {
 				for (int z = 0; z < m_numRows; z++) {
-					string asset = GetAssetAtHeight(perlin[x, z]);
-					m_grid.SetTypeAndAsset(x, z, TerrainType, asset);
+					int index = GetTypeAtHeight(perlin[x, z]);
+				    int type = GetTypeByIndex(index);
+                    m_grid.SetTypeAndAsset(x, z, type, AssetList[index]);
                 }
 			}
 		}

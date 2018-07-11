@@ -5,11 +5,10 @@ using DarkRoom.Game;
 namespace Sword{
 	#region class
 	public class MapMeta : CBaseMeta{
-		public string nameKey;
-		public int cols;
-		public int rows;
+		public int Cols;
+		public int Rows;
 		public int type; // rush or comman
-		public string mapRoot;// 地图的路径父目录 "Forest"
+		public string MapRoot;// 地图的路径父目录 "Forest"
 
 		//师傅随机地形高度
 		public bool randomTerrainHeight = true;
@@ -96,11 +95,10 @@ namespace Sword{
 				m_reader.MarkRow(i);
 
 				MapMeta meta = new MapMeta(m_reader.ReadString());
-				meta.nameKey = m_reader.ReadString();
-				meta.mapRoot = m_reader.ReadString();
+				meta.MapRoot = m_reader.ReadString();
 
-				meta.cols = m_reader.ReadInt();
-				meta.rows = m_reader.ReadInt();
+				meta.Cols = m_reader.ReadInt();
+				meta.Rows = m_reader.ReadInt();
 
 				meta.type = m_reader.ReadInt();
 				meta.randomTerrainHeight = m_reader.ReadBool();
@@ -108,7 +106,7 @@ namespace Sword{
 				meta.decoBlockNum = m_reader.ReadInt();
 				meta.decoDestroyNum = m_reader.ReadInt();
 
-				int maxBlockNum = (int)(meta.cols * meta.rows * 0.7f);
+				int maxBlockNum = (int)(meta.Cols * meta.Rows * 0.7f);
 				if((meta.decoBlockNum + meta.decoDestroyNum) > maxBlockNum) {
 					UnityEngine.Debug.LogError("Deco block num > map col x row in " + meta.Id);
 					continue;
