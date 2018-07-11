@@ -12,10 +12,10 @@ namespace DarkRoom.Game {
 		/// </summary>
 		public CAssetGrid(){}
 
-		public void SetValue(int col, int row, int value)
+		public void SetNodeType(int col, int row, int value)
 		{
 			CAssetNode node = GetNode(col, row);
-			if (node == null) {
+			if (node.Invalid) {
 				Debug.LogError("SetType Error");
 				return;
 			}
@@ -23,10 +23,10 @@ namespace DarkRoom.Game {
 			node.Type = value;
 		}
 
-	    public int GetValue(int col, int row)
+	    public int GetNodeType(int col, int row)
 	    {
 	        CAssetNode node = GetNode(col, row);
-	        if (node == null)
+	        if (node.Invalid)
 	        {
 	            Debug.LogError("SetType Error");
 	            return -1;
@@ -35,7 +35,7 @@ namespace DarkRoom.Game {
 	        return node.Type;
 	    }
 
-        public void SetAsset(int col, int row, string value) {
+        public void SetNodeAsset(int col, int row, string value) {
 			CAssetNode node = GetNode(col, row);
 			if (node == null) {
 				Debug.LogError("SetAsset Error");
@@ -45,10 +45,10 @@ namespace DarkRoom.Game {
 			node.Asset = value;
 		}
 
-	    public string GetAsset(int col, int row)
+	    public string GetNodeAsset(int col, int row)
 	    {
 	        CAssetNode node = GetNode(col, row);
-	        if (node == null)
+	        if (node.Invalid)
 	        {
 	            Debug.LogError("SetAsset Error");
 	            return string.Empty;
@@ -56,6 +56,19 @@ namespace DarkRoom.Game {
 
 	        return node.Asset;
 	    }
+
+	    public void SetTypeAndAsset(int col, int row, int value, string assets)
+	    {
+	        CAssetNode node = GetNode(col, row);
+	        if (node.Invalid)
+	        {
+	            Debug.LogError("Set Value and Asset Error");
+	            return;
+	        }
+
+	        node.Type = value;
+            node.Asset = assets;
+        }
     }
 
 	/// <summary>
@@ -78,7 +91,12 @@ namespace DarkRoom.Game {
         /// </summary>
         public bool Walkable { get; set; }
 
-        /// <summary>
+	    public bool Invalid
+	    {
+	        get { return Col < 0 || Row < 0; }
+	    }
+
+	    /// <summary>
         /// 本格子的类型
         /// </summary>
         public int Type;

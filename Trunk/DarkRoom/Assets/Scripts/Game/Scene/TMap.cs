@@ -14,9 +14,9 @@ namespace Sword {
 		//从地图生成类中获取/或者在预制地图中获取, 目前用于高亮英雄
 		public CAssetNode typeGrid = null;
 
-		public TerrainComp terrain = null;
+		public TileTerrainComp terrain = null;
 
-		private MapMeta _mapMeta;
+		private MapMeta m_mapMeta;
 
 		private TMap() { }
 
@@ -28,11 +28,11 @@ namespace Sword {
 		}
 
 		public MapMeta meta {
-			get { return _mapMeta; }
+			get { return m_mapMeta; }
 		}
 
 		public void Init(MapMeta meta) {
-			_mapMeta = meta;
+			m_mapMeta = meta;
 			walkGrid.Init(meta.cols, meta.rows);
 		}
 
@@ -70,7 +70,7 @@ namespace Sword {
 
 		/*地图中随机一个位置*/
 		public Vector3 FindRandomNodeLocation() {
-			return CMapUtil.FindRandomNodeLocation(_mapMeta.rows, _mapMeta.cols);
+			return CMapUtil.FindRandomNodeLocation(m_mapMeta.rows, m_mapMeta.cols);
 		}
 
 		//切换场景调用这个函数

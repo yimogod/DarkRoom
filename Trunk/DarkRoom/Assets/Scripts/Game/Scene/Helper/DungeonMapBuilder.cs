@@ -7,42 +7,58 @@ using UnityEngine;
 
 namespace Sword
 {
-    //需要记住, 我的地图terrain是已厘米为单位的. 也就是说unity的1 = 1cm. 1000 = 1m
-    //这个跟2dtoolkit的2d机制有关系. 他认为最小单位1像素, 也就意味这1 = 1px = 1cm
-    //这以为着3dmax做模型以米为单位的话, 导入的时候需要做缩放
-    //在单位做运动的时候也需要记住以mi为单位
+    /// <summary>
+    /// 调用对应的地形/单位生成器, 生成地图
+    /// </summary>
     public class DungeonMapBuilder
     {
-        private DungeonMapHelper _helper;
-        private TMap _world;
+        private DungeonMapHelper m_helper;
+        private TMap m_world;
 
-        private ActorGenerator _actorGen;
-        //private TileMapBaseGenerator _mapGen;
+        private ActorGenerator m_actorGen;
+        private CTileMapGeneratorBase _mapGen;
 
         public DungeonMapBuilder(TMap world)
         {
-            _world = world;
+            m_world = world;
+        }
+
+        private MapMeta _mapMeta
+        {
+            get { return m_world.meta; }
+        }
+
+        public CAssetGrid assetGrid
+        {
+            get{return null;//return _mapGen.assetGrid;
+            }
+        }
+
+        public CAssetGrid typeGrid
+        {
+            //get { return _mapGen.typeGrid; }
+            get { return null; }
         }
 
         //随机生成地图及tile数据
-        public void CreateMap(Terrain3DComp map)
+        public void CreateMap(TileTerrainComp map)
         {
             //地图生成器生成地图
-            /*TileMapPlainRandom3DGenerator gen = new TileMapPlainRandom3DGenerator();
-            gen.treeCellularPercent = _mapMeta.treeCellularPercent;
-            gen.decoBlockNum = _mapMeta.decoBlockNum;
-            gen.decoDestroyNum = _mapMeta.decoDestroyNum;
-            gen.Generate(map);
-
+            CPlainGenerator gen = new CPlainGenerator();
+            //gen.treeCellularPercent = _mapMeta.treeCellularPercent;
+          //  gen.decoBlockNum = _mapMeta.decoBlockNum;
+          //  gen.decoDestroyNum = _mapMeta.decoDestroyNum;
+            gen.Generate();
             _mapGen = gen;
-            map.ForceBuild();*/
+
+            map.ForceBuild();
         }
 
         //讲生成器的通行数据拷贝到我们的tmap中
         public void CopyData()
         {
             //然后获取地图的各种数据
-            var grid = _world.walkGrid;
+            var grid = m_world.walkGrid;
             grid.Init(_mapMeta.rows, _mapMeta.cols, true);
             //grid.CopyUnWalkableFrom(_mapGen.walkGrid);
            // _world.typeGrid = typeGrid;
@@ -53,8 +69,8 @@ namespace Sword
             //_helper = new DungeonMapHelper(_mapGen.walkGrid);
            // _actorGen = new ActorGenerator(_world.terrain);
 
-            CreateTrigger();
-            CreateUnit();
+            //CreateTrigger();
+            //CreateUnit();
         }
 
         //创建单位, 英雄和怪物
@@ -112,7 +128,7 @@ namespace Sword
 
             for (int i = 0; i < num; ++i)
             {
-                UnitBornData bornData = _helper.CreateRandomUnitBorn(metaId, CUnitEntity.TeamSide.Blue);
+                UnitBornData bornData = m_helper.CreateRandomUnitBorn(metaId, CUnitEntity.TeamSide.Blue);
                 if (bornData.invalid) continue;
                 CreateMonsterAtPos(bornData, lv, ai);
             }
@@ -162,28 +178,8 @@ namespace Sword
 
         public void Clear()
         {
-            _helper.Clear();
-            _actorGen.Clear();
-        }
-
-        private MapMeta _mapMeta
-        {
-            get { return _world.meta; }
-        }
-
-        public CAssetGrid assetGrid
-        {
-            get
-            {
-                return null;
-                //return _mapGen.assetGrid;
-            }
-        }
-
-        public CAssetGrid typeGrid
-        {
-            //get { return _mapGen.typeGrid; }
-            get { return null; }
+            m_helper.Clear();
+            m_actorGen.Clear();
         }
     }
 }

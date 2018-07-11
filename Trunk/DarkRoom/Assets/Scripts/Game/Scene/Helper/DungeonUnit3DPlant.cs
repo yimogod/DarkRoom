@@ -23,7 +23,7 @@ namespace Sword
                     string pname = "";
                     if (string.IsNullOrEmpty(pname)) continue;
 
-                    int type = _typeGrid.GetValue(row, col);
+                    int type = _typeGrid.GetNodeType(row, col);
                     switch (type)
                     {
                         case (int) GameConst.TileType.TREE:

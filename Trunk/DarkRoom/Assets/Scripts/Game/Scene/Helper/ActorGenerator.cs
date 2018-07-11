@@ -13,9 +13,9 @@ namespace Sword
     public class ActorGenerator
     {
         private Transform _unitLayer;
-        private TerrainComp _terrain;
+        private TileTerrainComp _terrain;
 
-        public ActorGenerator(TerrainComp terrain)
+        public ActorGenerator(TileTerrainComp terrain)
         {
             _unitLayer = CWorld.Instance.Layer.UnitLayer;
             _terrain = terrain;

@@ -4,29 +4,36 @@ using DarkRoom.Game;
 
 namespace DarkRoom.PCG{
 	public class CTileMapGeneratorBase : MonoBehaviour {
-		/// <summary>
-		/// 地图宽度
-		/// </summary>
-		public int Width;
+		protected int m_numCols;
 
-		/// <summary>
-		/// 地图高度
-		/// </summary>
-		public int Height;
+        /// <summary>
+        /// 地图高度
+        /// </summary>
+        protected int m_numRows;
 
 		//存储地形类型, 辅助地形自动生成
 		protected CAssetGrid m_grid = new CAssetGrid();
 
-		public virtual void Generate(){
-			m_grid.Init(Width, Height, true);
+	    /// <summary>
+	    /// 地图宽度
+	    /// </summary>
+	    //public int NumCols {get { return m_numCols; }}
 
-			int minX = CDarkRandom.Next(4, Width - 4);
-			int minZ = CDarkRandom.Next(4, Height - 4);
-			m_grid.SetValue(minZ, minX, -1);
+	    /// <summary>
+	    /// 地图高度
+	    /// </summary>
+	    //public int NumRows{get { return m_numRows; }}
 
-			minX = CDarkRandom.Next(4, Width - 4);
-			minZ = CDarkRandom.Next(4, Height - 4);
-			m_grid.SetValue(minZ, minX, -1);
+        public virtual void Generate(){
+			m_grid.Init(m_numCols, m_numRows, true);
+
+			int minX = CDarkRandom.Next(4, m_numCols - 4);
+			int minZ = CDarkRandom.Next(4, m_numRows - 4);
+			m_grid.SetNodeType(minZ, minX, -1);
+
+			minX = CDarkRandom.Next(4, m_numCols - 4);
+			minZ = CDarkRandom.Next(4, m_numRows - 4);
+			m_grid.SetNodeType(minZ, minX, -1);
 		}
 
 		public CAssetGrid Grid {

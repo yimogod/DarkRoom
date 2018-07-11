@@ -10,7 +10,7 @@ namespace Sword
 
         void Awake()
         {
-            Application.targetFrameRate = 60;
+            Application.targetFrameRate = 30;
             MetaParserManager mm = new MetaParserManager();
             mm.Init();
             mm.Execute();

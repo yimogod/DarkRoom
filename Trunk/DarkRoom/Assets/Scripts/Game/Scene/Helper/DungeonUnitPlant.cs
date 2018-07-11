@@ -12,11 +12,11 @@ namespace Sword
         protected DungeonMapBuilder _builder;
         protected MapMeta _mapMeta;
 
-        protected TerrainComp _terrain = null;
+        protected TileTerrainComp _terrain = null;
         protected CAssetGrid _assetGrid;
         protected CAssetGrid _typeGrid;
 
-        public void Init(TerrainComp terrain)
+        public void Init(TileTerrainComp terrain)
         {
             _terrain = terrain;
         }

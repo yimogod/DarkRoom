@@ -111,7 +111,7 @@ namespace DarkRoom.Game {
 		/// <param name="col">Col. Base On 0</param>
 		public bool IsWalkable(int col, int row){
 			T node = GetNode(col, row);
-			if(node == null)return false;
+			if(node.Invalid)return false;
 			return node.Walkable;
 		}
 
@@ -123,7 +123,7 @@ namespace DarkRoom.Game {
 		/// <param name="value">格子的可通行性</param>
 		public void SetWalkable(int col, int row, bool value){
 			T node = GetNode(col, row);
-			if (node == null){
+			if (node.Invalid){
 				Debug.LogError("SetWalkable Error");
 				return;
 			}
@@ -138,7 +138,7 @@ namespace DarkRoom.Game {
 		/// <param name="col">Col.</param>
 		public void SetStartNode(int col, int row){
 			T node = GetNode(col, row);
-			if (node == null){
+			if (node.Invalid){
 				Debug.LogError("SetStartNode Error");
 				return;
 			}
@@ -152,7 +152,7 @@ namespace DarkRoom.Game {
 		/// <param name="col">Col.</param>
 		public void SetEndNode(int col, int row){
 			T node = GetNode(col, row);
-			if (node == null){
+			if (node.Invalid){
 				Debug.LogError("SetEndNode Error");
 				return;
 			}
