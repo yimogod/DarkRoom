@@ -8,11 +8,11 @@ namespace DarkRoom.PCG {
 	public class CFloodFill
 	{
 		//洪水要冲击的地图
-		private CCellularMap m_map;
+		private CCellularGrid m_map;
 
 		//所有的连续区域的列表. 区域的格子的值要等于 tileType
 		//List<Cave.Coord>代表一个封闭区域
-		public List<List<CCave.Coord>> GetRegions(CCellularMap map, int tileType)
+		public List<List<CCave.Coord>> GetRegions(CCellularGrid map, int tileType)
 		{
 			m_map = map;
 

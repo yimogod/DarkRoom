@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using DarkRoom.AI;
 using DarkRoom.Game;
 using DarkRoom.PCG;
 using UnityEngine;
@@ -45,6 +44,8 @@ namespace Sword
         {
             //地图生成器生成地图
             CPlainGenerator gen = new CPlainGenerator();
+            gen.TerrainType = (int)GameConst.TileType.TERRIAN;
+            gen.SeaType = (int) GameConst.TileType.LAKE;
             //gen.treeCellularPercent = _mapMeta.treeCellularPercent;
           //  gen.decoBlockNum = _mapMeta.decoBlockNum;
           //  gen.decoDestroyNum = _mapMeta.decoDestroyNum;

@@ -24,7 +24,7 @@ namespace DarkRoom.PCG {
 
 			public Room() {}
 
-			public Room(List<CCave.Coord> roomTiles, CCellularMap map) {
+			public Room(List<CCave.Coord> roomTiles, CCellularGrid map) {
 				tiles = roomTiles;
 				roomSize = tiles.Count;
 				connectedRooms = new List<Room>();

@@ -70,7 +70,7 @@ namespace DarkRoom.Game{
 			Debug.Log(str);
 		}
 
-		public static void PrintGird(int[,] gird)
+		public static void PrintGird<T>(T[,] gird)
 		{
 			int numCols = gird.GetLength(0);
 			int numRows = gird.GetLength(1);
@@ -78,7 +78,7 @@ namespace DarkRoom.Game{
 			string str = "";
 			for (int row = numRows - 1; row >= 0 ; row--) {
 				for (int col = 0; col < numCols; col++) {
-					int v = gird[col, row];
+					T v = gird[col, row];
 					str = string.Format("{0},{1}", str, v);
 				}
 

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DarkRoom.Utility
 {
-	[AddComponentMenu("xsj/Tween/Tween Scale")]
+	[AddComponentMenu("/DarkRoom/Tween/Tween Scale")]
 	public class CTweenScale : CUITweener {
 		public Vector3 from = Vector3.one;
 		public Vector3 to = Vector3.one;
