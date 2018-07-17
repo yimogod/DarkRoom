@@ -20,7 +20,7 @@ namespace Sword
         public DungeonMapBuilder(TMap world)
         {
             m_world = world;
-        }
+		}
 
         private MapMeta m_mapMeta
         {
@@ -42,27 +42,27 @@ namespace Sword
         //随机生成地图及tile数据
         public void CreateMap(TileTerrainComp map)
         {
-            //地图生成器生成地图
-            CPlainGenerator gen = new CPlainGenerator();
-            gen.TerrainType = (int)GameConst.TileType.TERRIAN;
+			if(map == null){
+				Debug.LogError("CreateMap need a map which not null");
+				return;
+			}
+
+			//地图生成器生成地图
+			CPlainGenerator gen = map.GetComponent<CPlainGenerator>();
+			if (gen == null) gen = map.gameObject.AddComponent<CPlainGenerator>();
+
+			gen.TerrainType = (int)GameConst.TileType.TERRIAN;
             gen.SeaType = (int) GameConst.TileType.LAKE;
             //gen.treeCellularPercent = _mapMeta.treeCellularPercent;
           //  gen.decoBlockNum = _mapMeta.decoBlockNum;
           //  gen.decoDestroyNum = _mapMeta.decoDestroyNum;
             gen.Generate();
-            _mapGen = gen;
 
+			_mapGen = gen;
             map.ForceBuild();
-        }
+			m_helper = new DungeonMapHelper(null);
 
-        //讲生成器的通行数据拷贝到我们的tmap中
-        public void CopyData()
-        {
-            //然后获取地图的各种数据
-            var grid = m_world.WalkableGrid;
-            grid.Init(m_mapMeta.Rows, m_mapMeta.Cols, true);
-            grid.CopyUnWalkableFrom(_mapGen.Grid);
-        }
+		}
 
         public void CreateOther()
         {
@@ -73,8 +73,17 @@ namespace Sword
             //CreateUnit();
         }
 
-        //创建单位, 英雄和怪物
-        private void CreateUnit()
+		//讲生成器的通行数据拷贝到我们的tmap中
+		public void CopyData()
+		{
+			//然后获取地图的各种数据
+			var grid = m_world.WalkableGrid;
+			grid.Init(m_mapMeta.Rows, m_mapMeta.Cols, true);
+			grid.CopyUnWalkableFrom(_mapGen.Grid);
+		}
+
+		//创建单位, 英雄和怪物
+		private void CreateUnit()
         {
             //1. BornHero
            // CreateHero(_mapGen.startTile);

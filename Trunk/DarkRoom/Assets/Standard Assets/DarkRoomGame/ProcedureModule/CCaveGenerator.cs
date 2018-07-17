@@ -5,14 +5,6 @@ using UnityEngine;
 namespace DarkRoom.PCG {
 	[RequireComponent(typeof(CaveTerrainGenerator))]
 	public class CaveGenerator : CTileMapGeneratorBase {
-
-	    /// <summary>
-	    /// 存储的asset列表
-	    /// 0代表可通行区域代表的资源
-	    /// 1, 2代表不可通行区域的两个资源
-	    /// </summary>
-        public List<string> AssetList;
-
 		private CaveTerrainGenerator m_terrain;
 
 		void Awake()
@@ -30,10 +22,9 @@ namespace DarkRoom.PCG {
 				for (int z = 0; z < m_numRows; z++) {
 
 				    bool walk = cellular[x, z] == 0;
-					m_grid.SetWalkable(x, z, walk);
 				    int type = GetTypeByAlive(walk);
                     string asset = AssetList[type];
-                    m_grid.SetTypeAndAsset(x, z, type, asset);
+                    m_grid.FillData(x, z, type, asset, walk);
                 }
 			}
 		}

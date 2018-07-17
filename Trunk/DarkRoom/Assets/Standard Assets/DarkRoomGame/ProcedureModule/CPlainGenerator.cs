@@ -15,17 +15,6 @@ namespace DarkRoom.PCG {
 		public float StoneHeight = 1f;
 
         /// <summary>
-        /// 存储的asset列表
-        /// 默认情况下
-        /// 0, 1代表两种海的颜色
-        /// 2, 3代表海岸线
-        /// 4, 5, 6代表草地, 其中4代表默认的绿地
-        /// 7, 8 两种地面
-        /// 9, 10两种石头地面
-        /// </summary>
-		public List<string> AssetList;
-
-        /// <summary>
         /// 从外面指定的, terrain类型的值
         /// </summary>
 	    public int TerrainType = 1;
@@ -116,7 +105,7 @@ namespace DarkRoom.PCG {
 				for (int z = 0; z < m_numRows; z++) {
 					int index = GetTypeAtHeight(perlin[x, z]);
 				    int type = GetTypeByIndex(index);
-                    m_grid.SetTypeAndAsset(x, z, type, AssetList[index]);
+                    m_grid.FillData(x, z, type, AssetList[index], BlockList[index]);
                 }
 			}
 		}

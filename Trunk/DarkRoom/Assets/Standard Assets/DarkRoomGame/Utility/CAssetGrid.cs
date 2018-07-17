@@ -57,7 +57,7 @@ namespace DarkRoom.Game {
 	        return node.Asset;
 	    }
 
-	    public void SetTypeAndAsset(int col, int row, int value, string assets)
+	    public void FillData(int col, int row, int value, string assets, bool walkable)
 	    {
 	        CAssetNode node = GetNode(col, row);
 	        if (node.Invalid)
@@ -68,6 +68,7 @@ namespace DarkRoom.Game {
 
 	        node.Type = value;
             node.Asset = assets;
+			node.Walkable = walkable;
         }
     }
 
@@ -121,6 +122,13 @@ namespace DarkRoom.Game {
 			BottomLeft = 1,
 			TopRight = 2,
 			BottomRight = 3
+		}
+
+		public CAssetNode()
+		{
+			Col = -1;
+			Row = -1;
+			Walkable = false;
 		}
 
 		public CAssetNode(int col, int row, bool walkable) {

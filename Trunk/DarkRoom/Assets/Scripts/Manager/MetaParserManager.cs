@@ -18,15 +18,15 @@ namespace Sword
 
         public void Init()
         {
-            AddPaser("Meta/ability_meta", new CAbilityMetaParser());
-            AddPaser("Meta/effect_meta", new CEffectMetaParser());
-            AddPaser("Meta/buff_meta", new CBuffMetaParser());
+            //AddPaser("Meta/ability_meta", new CAbilityMetaParser());
+            //AddPaser("Meta/effect_meta", new CEffectMetaParser());
+            //AddPaser("Meta/buff_meta", new CBuffMetaParser());
 
-            AddPaser("Meta/actor_meta", new CActorMetaParser());
+            //AddPaser("Meta/actor_meta", new CActorMetaParser());
 
             AddPaser("Meta/level_meta", new MapMetaParser());
-            AddPaser("Meta/level_monster_meta", new MapMonsterMetaParser());
-            AddPaser("Meta/level_trigger_meta", new MapTriggerMetaParser());
+            //AddPaser("Meta/level_monster_meta", new MapMonsterMetaParser());
+            //AddPaser("Meta/level_trigger_meta", new MapTriggerMetaParser());
 
             m_num = m_urlList.Count;
         }

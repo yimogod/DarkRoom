@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DarkRoom.Game;
+using UnityEngine;
 
 namespace Sword{
 	#region class
@@ -72,16 +73,16 @@ namespace Sword{
 	#region manager
 	public class MapMetaManager{
 		//关卡信息
-		public static Dictionary<string, MapMeta> _dict = new Dictionary<string, MapMeta>();
+		public static Dictionary<string, MapMeta> m_dict = new Dictionary<string, MapMeta>();
 
 		public MapMetaManager (){}
 
 		public static void AddMeta(MapMeta meta){
-			_dict.Add(meta.Id, meta);
+			m_dict.Add(meta.Id, meta);
 		}
 
 		public static MapMeta GetMeta(string id){
-			return _dict[id];
+			return m_dict[id];
 		}
 	}
 	#endregion
@@ -95,6 +96,7 @@ namespace Sword{
 				m_reader.MarkRow(i);
 
 				MapMeta meta = new MapMeta(m_reader.ReadString());
+				meta.NameKey = m_reader.ReadString(); 
 				meta.MapRoot = m_reader.ReadString();
 
 				meta.Cols = m_reader.ReadInt();

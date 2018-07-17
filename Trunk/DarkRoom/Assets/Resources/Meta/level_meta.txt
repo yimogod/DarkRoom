@@ -1,4 +1,5 @@
 id	name	path	cols	rows	type	randHeight	treeCellularPercent	deco_block	deco_destroy
+									
 1	Level_1_1_01	Forest	64	64	1	1	55	60	0
 2	Level_1_1_01	Forest	64	64	1	1	55	60	0
 3	Level_1_1_01	Forest	64	64	1	1	55	60	0

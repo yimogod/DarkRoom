@@ -12,10 +12,10 @@ namespace Sword
         private TileTerrainComp m_terrain3D = null;
         private DungeonUnit3DPlant m_unit3DCreator = null;
 
-        void Start()
+        public void Launch()
         {
             InitMapThing();
-            LoadAndCreateMapThing();
+            //LoadAndCreateMapThing();
 
             //GameUtil.CameraFocusHero();
             //AssetManager.LoadUIPrefab("UI_Battle_HUD_Preb");
@@ -33,11 +33,12 @@ namespace Sword
             m_builder = new DungeonMapBuilder(TMap.Instance);
 
             //读取加载地形数据, 并组装terrain3d comp
-            GameObject terrainGO = AssetManager.LoadMapPrefab("Forest", "Forest_01");
             m_terrain3D = gameObject.AddComponent<TileTerrainComp>();
+			m_builder.CreateMap(m_terrain3D);
+			m_builder.CreateOther();
 
-            TMap.Instance.Terrain = m_terrain3D;
-            m_unit3DCreator = gameObject.AddComponent<DungeonUnit3DPlant>();
+			//TMap.Instance.Terrain = m_terrain3D;
+            //m_unit3DCreator = gameObject.AddComponent<DungeonUnit3DPlant>();
         }
 
         private void LoadAndCreateMapThing()

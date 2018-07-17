@@ -63,13 +63,13 @@ namespace DarkRoom.Game {
 		/// <param name="numRows">Number rows.</param>
 		/// <param name="walkable">If set to <c>true</c> walkable.此地图所有的格子可通行则为true</param>
 		public void Init(int numCols, int numRows, bool walkable){
-			m_numRows = numRows;
 			m_numCols = numCols;
+			m_numRows = numRows;
 
 			m_nodes = new T[m_numCols, m_numRows];
 			for(int row = 0; row < m_numRows; row++){
 				for(int col = 0; col < m_numCols; col++){
-                    T t  = default(T);
+					T t = Activator.CreateInstance<T>();
                     t.Col = col;
                     t.Row = row;
                     m_nodes[col, row] = t;
@@ -96,9 +96,9 @@ namespace DarkRoom.Game {
 		/// <param name="row">Row.</param>
 		/// <param name="col">Col.</param>
 		public T GetNode(int col, int row){
-			if (row < 0 || col < 0)return default(T);
-			if (row >= m_numRows)return default(T);
-			if (col >= m_numCols)return default(T);
+			if (row < 0 || col < 0)return Activator.CreateInstance<T>();
+			if (row >= m_numRows)return Activator.CreateInstance<T>();
+			if (col >= m_numCols)return Activator.CreateInstance<T>();
 			return m_nodes[col, row];
 		}
 

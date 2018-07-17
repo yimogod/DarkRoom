@@ -14,15 +14,13 @@ namespace Sword
             MetaParserManager mm = new MetaParserManager();
             mm.Init();
             mm.Execute();
-
-            if (scene != null) scene.enabled = false;
         }
 
         void Start()
         {
             ApplicationFacade.instance.Startup();
 
-            if (scene != null) scene.enabled = true;
+			if (scene != null) scene.Launch();
         }
     }
 }
