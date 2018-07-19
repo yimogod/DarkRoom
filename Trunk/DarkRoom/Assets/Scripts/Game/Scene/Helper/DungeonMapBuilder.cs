@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using DarkRoom.AI;
+using DarkRoom.Core;
 using DarkRoom.Game;
 using DarkRoom.PCG;
 using UnityEngine;
@@ -11,35 +13,26 @@ namespace Sword
     /// </summary>
     public class DungeonMapBuilder
     {
-        private DungeonMapHelper m_helper;
-        private TMap m_world;
+        private DungeonMapTileData m_tilesData;
+        private MapMeta m_mapMeta;
 
         private ActorGenerator m_actorGen;
-        private CTileMapGeneratorBase _mapGen;
+        private CTileMapGeneratorBase m_mapGen;
 
-        public DungeonMapBuilder(TMap world)
+        public DungeonMapBuilder(MapMeta meta)
         {
-            m_world = world;
+            m_mapMeta = meta;
 		}
-
-        private MapMeta m_mapMeta
-        {
-            get { return m_world.Meta; }
-        }
 
         public CAssetGrid AssetGrid
         {
-            get{return null;//return _mapGen.assetGrid;
-            }
+            get { return m_mapGen.Grid; }
         }
 
-        public CAssetGrid TypeGrid
-        {
-            //get { return _mapGen.typeGrid; }
-            get { return null; }
-        }
-
-        //随机生成地图及tile数据
+        /// <summary>
+        /// 随机生成地图及tile数据
+        /// 并且把数据填充入TileTerrainComp
+        /// </summary>
         public void CreateMap(TileTerrainComp map)
         {
 			if(map == null){
@@ -47,39 +40,48 @@ namespace Sword
 				return;
 			}
 
-			//地图生成器生成地图
-			CPlainGenerator gen = map.GetComponent<CPlainGenerator>();
-			if (gen == null) gen = map.gameObject.AddComponent<CPlainGenerator>();
+            /// 0, 1代表两种海的颜色
+            /// 2, 3代表海岸线
+            /// 4, 5, 6代表草地, 其中4代表默认的绿地
+            /// 7, 8 两种地面
+            /// 9, 10两种石头地面
 
+            //地图生成器生成地图
+            CPlainGenerator gen = map.GetOrCreateComponentOnGameObject<CPlainGenerator>();
 			gen.TerrainType = (int)GameConst.TileType.TERRIAN;
             gen.SeaType = (int) GameConst.TileType.LAKE;
-            //gen.treeCellularPercent = _mapMeta.treeCellularPercent;
-          //  gen.decoBlockNum = _mapMeta.decoBlockNum;
-          //  gen.decoDestroyNum = _mapMeta.decoDestroyNum;
+            gen.SetAsset(0, "sea_01", false);
+            gen.SetAsset(1, "sea_02", false);
+            gen.SetAsset(2, "coast_01", false);
+            gen.SetAsset(3, "coast_02", false);
+            gen.SetAsset(4, "grass_01", true);
+            gen.SetAsset(5, "grass_02", true);
+            gen.SetAsset(6, "grass_03", true);
+            gen.SetAsset(7, "land_01", true);
+            gen.SetAsset(8, "land_02", true);
+            gen.SetAsset(9, "stone_01", true);
+            gen.SetAsset(10, "stone_02", true);
+            gen.SetDefaultAsset("grass_01", true);
             gen.Generate();
-
-			_mapGen = gen;
-            map.ForceBuild();
-			m_helper = new DungeonMapHelper(null);
-
+			m_mapGen = gen;
 		}
 
         public void CreateOther()
         {
-            //_helper = new DungeonMapHelper(_mapGen.walkGrid);
-           // _actorGen = new ActorGenerator(_world.terrain);
+            //m_tilesData = new DungeonMapTileData(_mapGen.walkGrid);
+            // _actorGen = new ActorGenerator(_world.terrain);
 
             //CreateTrigger();
             //CreateUnit();
         }
 
-		//讲生成器的通行数据拷贝到我们的tmap中
-		public void CopyData()
+        /// <summary>
+        /// 讲生成器的通行数据拷贝到我们的tmap中
+        /// </summary>
+        public void CopyData(CMapGrid<CStarNode> targetGrid)
 		{
-			//然后获取地图的各种数据
-			var grid = m_world.WalkableGrid;
-			grid.Init(m_mapMeta.Rows, m_mapMeta.Cols, true);
-			grid.CopyUnWalkableFrom(_mapGen.Grid);
+		    targetGrid.Init(m_mapMeta.Cols, m_mapMeta.Rows, true);
+		    targetGrid.CopyUnWalkableFrom(m_mapGen.Grid);
 		}
 
 		//创建单位, 英雄和怪物
@@ -137,7 +139,7 @@ namespace Sword
 
             for (int i = 0; i < num; ++i)
             {
-                UnitBornData bornData = m_helper.CreateRandomUnitBorn(metaId, CUnitEntity.TeamSide.Blue);
+                UnitBornData bornData = m_tilesData.CreateRandomUnitBorn(metaId, CUnitEntity.TeamSide.Blue);
                 if (bornData.invalid) continue;
                 CreateMonsterAtPos(bornData, lv, ai);
             }
@@ -187,7 +189,7 @@ namespace Sword
 
         public void Clear()
         {
-            m_helper.Clear();
+            m_tilesData.Clear();
             m_actorGen.Clear();
         }
     }

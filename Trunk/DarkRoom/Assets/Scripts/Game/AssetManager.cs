@@ -21,81 +21,79 @@ namespace Sword{
 		public static string FOLDER_ROOT_EQUIP = "Prefabs/Equip/";
 		public static string FOLDER_ROOT_SKILL = "Prefabs/Skill/";
 
-		public static Sprite LoadItemIcon(string name){
-			string path = string.Format("{0}{1}", FOLDER_ROOT_ITEM_ICON, name);
-			Texture2D texture = ResourceManager.LoadTexture2D(path);
-			Rect rect = new Rect(0, 0, texture.width, texture.height);
-			Sprite sprite = Sprite.Create(texture, rect, Vector2.zero);
-
-			return sprite;
+		public static void LoadItemIcon(string name){
+			//string path = string.Format("{0}{1}", FOLDER_ROOT_ITEM_ICON, name);
+			//Texture2D texture = CResourceManager.LoadTexture2D(path);
+			//Rect rect = new Rect(0, 0, texture.width, texture.height);
+			//Sprite sprite = Sprite.Create(texture, rect, Vector2.zero);
 		}
 
-		public static Sprite LoadHeadIcon(string name){
-			string path = string.Format("{0}{1}", FOLDER_ROOT_HEAD_ICON, name);
-			Texture2D texture = ResourceManager.LoadTexture2D(path);
-			Rect rect = new Rect(0, 0, texture.width, texture.height);
-			Sprite sprite = Sprite.Create(texture, rect, Vector2.zero);
+		public static void LoadHeadIcon(string name){
+			//string path = string.Format("{0}{1}", FOLDER_ROOT_HEAD_ICON, name);
+			//Texture2D texture = CResourceManager.LoadTexture2D(path);
+			//Rect rect = new Rect(0, 0, texture.width, texture.height);
+			//Sprite sprite = Sprite.Create(texture, rect, Vector2.zero);
 
-			return sprite;
+			//return sprite;
 		}
 
-		public static Sprite LoadBodyIcon(string name){
-			string path = string.Format("{0}{1}", FOLDER_ROOT_BODY_ICON, name);
-			Texture2D texture = ResourceManager.LoadTexture2D(path);
-			Rect rect = new Rect(0, 0, texture.width, texture.height);
-			Sprite sprite = Sprite.Create(texture, rect, Vector2.zero);
+		public static void LoadBodyIcon(string name){
+			//string path = string.Format("{0}{1}", FOLDER_ROOT_BODY_ICON, name);
+			//Texture2D texture = CResourceManager.LoadTexture2D(path);
+			//Rect rect = new Rect(0, 0, texture.width, texture.height);
+			//Sprite sprite = Sprite.Create(texture, rect, Vector2.zero);
 
-			return sprite;
+			//return sprite;
 		}
 
-		public static Sprite LoadEquipIcon(string name){
-			string path = string.Format("{0}{1}", FOLDER_ROOT_EQUIP_ICON, name);
-			Texture2D texture = ResourceManager.LoadTexture2D(path);
-			Rect rect = new Rect(0, 0, texture.width, texture.height);
-			Sprite sprite = Sprite.Create(texture, rect, Vector2.zero);
+		public static void LoadEquipIcon(string name){
+			//string path = string.Format("{0}{1}", FOLDER_ROOT_EQUIP_ICON, name);
+			//Texture2D texture = CResourceManager.LoadTexture2D(path);
+			//Rect rect = new Rect(0, 0, texture.width, texture.height);
+			//Sprite sprite = Sprite.Create(texture, rect, Vector2.zero);
 
-			return sprite;
+			//return sprite;
 		}
 
-		public static GameObject LoadUIPrefab(string name){
-			string path = string.Format("{0}{1}", FOLDER_ROOT_UI, name);
-			GameObject go = ResourceManager.LoadAndCreatePrefab(path);
-			return go;
+		public static void LoadUIPrefab(string name){
+			//string path = string.Format("{0}{1}", FOLDER_ROOT_UI, name);
+			//GameObject go = CResourceManager.LoadAndCreatePrefab(path);
+			//return go;
 		}
 
-		public static GameObject LoadMapPrefab(string mapFolder, string name){
-			string path = string.Format(FOLDER_ROOT_MAP, mapFolder, name);
-			GameObject go = ResourceManager.LoadAndCreatePrefab(path);
-			return go;
+		public static void LoadMapPrefab(string mapFolder, string name){
+			//string path = string.Format(FOLDER_ROOT_MAP, mapFolder, name);
+			//GameObject go = CResourceManager.LoadAndCreatePrefab(path);
+			//return go;
 		}
 
-		public static GameObject LoadActorPrefab(string name){
-			string path = string.Format("{0}{1}", FOLDER_ROOT_ACTOR, name);
-			GameObject go = ResourceManager.LoadAndCreatePrefab(path);
-			return go;
+		public static void LoadActorPrefab(string name){
+			//string path = string.Format("{0}{1}", FOLDER_ROOT_ACTOR, name);
+			//GameObject go = CResourceManager.LoadAndCreatePrefab(path);
+			//return go;
 		}
 
-		public static GameObject LoadSkillPrefab(string name){
-			string path = string.Format("{0}{1}", FOLDER_ROOT_SKILL, name);
-			GameObject go = ResourceManager.LoadAndCreatePrefab(path);
-			return go;
+		public static void LoadSkillPrefab(string name){
+			//string path = string.Format("{0}{1}", FOLDER_ROOT_SKILL, name);
+			//GameObject go = CResourceManager.LoadAndCreatePrefab(path);
+			//return go;
 		}
 
-		public static GameObject LoadEquipPrefab(string name){
-			string path = string.Format("{0}{1}", FOLDER_ROOT_EQUIP, name);
-			GameObject go = ResourceManager.LoadAndCreatePrefab(path);
-			return go;
+		public static void LoadEquipPrefab(string name){
+			//string path = string.Format("{0}{1}", FOLDER_ROOT_EQUIP, name);
+			//GameObject go = CResourceManager.LoadAndCreatePrefab(path);
+			//return go;
 		}
 
-		public static GameObject LoadTriggerPrefab(string name){
-			string path = string.Format("{0}{1}", FOLDER_ROOT_TRIGGER, name);
-			GameObject go = ResourceManager.LoadAndCreatePrefab(path);
-			return go;
+		public static void LoadTriggerPrefab(string name){
+			//string path = string.Format("{0}{1}", FOLDER_ROOT_TRIGGER, name);
+			//GameObject go = CResourceManager.LoadAndCreatePrefab(path);
+			//return go;
 		}
 
-		public static GameObject LoadAndCreatePrefab(string path){
-			GameObject go = ResourceManager.LoadAndCreatePrefab(path);
-			return go;
+		public static void LoadAndCreatePrefab(string path){
+			//GameObject go = CResourceManager.LoadAndCreatePrefab(path);
+			//return go;
 		}
 	}
 }

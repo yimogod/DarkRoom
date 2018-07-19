@@ -90,15 +90,15 @@ namespace Sword
             Transform rootTran = attachRoot.transform;
             CDarkUtil.AddChild(entity.transform, rootTran);
 
-            GameObject healthGO = AssetManager.LoadAndCreatePrefab("Prefabs/Hud/Health_Display_Preb");
-            Transform trans = healthGO.transform;
-            CDarkUtil.AddChild(rootTran, trans);
+            //GameObject healthGO = AssetManager.LoadAndCreatePrefab("Prefabs/Hud/Health_Display_Preb");
+            //Transform trans = healthGO.transform;
+            //CDarkUtil.AddChild(rootTran, trans);
             //trans.localPosition = new Vector3(0, entity.height * 1.4f, 0);
 
             //头顶冒血
-            GameObject hpGO = AssetManager.LoadAndCreatePrefab("Prefabs/Hud/HP_Change_Preb");
-            trans = hpGO.transform;
-            CDarkUtil.AddChild(rootTran, trans);
+            //GameObject hpGO = AssetManager.LoadAndCreatePrefab("Prefabs/Hud/HP_Change_Preb");
+            //trans = hpGO.transform;
+            //CDarkUtil.AddChild(rootTran, trans);
         }
 
         public void Clear()

@@ -13,7 +13,6 @@ namespace Sword {
     {
         public CAssetGrid AssetGrid;
 
-
 		public int NumRows {
 			get { return 0; }
 		}

@@ -9,6 +9,7 @@ namespace DarkRoom.PCG {
 
 		void Awake()
 		{
+		    m_maxAssetsNum = 2;
 			m_terrain = gameObject.GetComponent<CaveTerrainGenerator>();
 		}
 
@@ -23,7 +24,7 @@ namespace DarkRoom.PCG {
 
 				    bool walk = cellular[x, z] == 0;
 				    int type = GetTypeByAlive(walk);
-                    string asset = AssetList[type];
+                    string asset = m_assetList[type];
                     m_grid.FillData(x, z, type, asset, walk);
                 }
 			}

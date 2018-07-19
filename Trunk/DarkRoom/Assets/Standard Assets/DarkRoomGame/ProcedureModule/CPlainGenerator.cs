@@ -4,7 +4,7 @@ using DarkRoom.Core;
 using UnityEngine;
 
 namespace DarkRoom.PCG {
-	[RequireComponent(typeof(CPlainTerrainGenerator))]
+	[RequireComponent(typeof(CPlainGenerator_Terrain))]
 	public class CPlainGenerator : CTileMapGeneratorBase {
 		public float SeaLevel = 0.2f;
 		public float BeachHeight = 0.22f;
@@ -24,11 +24,15 @@ namespace DarkRoom.PCG {
 	    /// </summary>
 	    public int SeaType = 2;
 
-        private CPlainTerrainGenerator m_terrain;
+        private CPlainGenerator_Terrain m_terrain;
 
 		void Awake()
 		{
-			m_terrain = gameObject.GetComponent<CPlainTerrainGenerator>();
+		    m_maxAssetsNum = 11;
+		    m_walkableList = new bool[m_maxAssetsNum];
+            m_assetList = new string[m_maxAssetsNum];
+
+		    m_terrain = new CPlainGenerator_Terrain();
 		}
 
         /// <summary>
@@ -105,7 +109,7 @@ namespace DarkRoom.PCG {
 				for (int z = 0; z < m_numRows; z++) {
 					int index = GetTypeAtHeight(perlin[x, z]);
 				    int type = GetTypeByIndex(index);
-                    m_grid.FillData(x, z, type, AssetList[index], BlockList[index]);
+                    m_grid.FillData(x, z, type, GetAsset(index), GetAssetWalkable(index));
                 }
 			}
 		}

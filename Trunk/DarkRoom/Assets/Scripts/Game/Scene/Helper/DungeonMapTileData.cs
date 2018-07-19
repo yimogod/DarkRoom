@@ -6,11 +6,10 @@ using DarkRoom.Game;
 
 namespace Sword
 {
-
-//创建地图的辅助类,
-//1. 一些实用方法
-//2. 创建单位的实用方法
-    public class DungeonMapHelper
+    /// <summary>
+    /// 存储着地图中哪些格子上有单位(monster, trigger), 单位的势力范围等
+    /// </summary>
+    public class DungeonMapTileData
     {
         /*如果添加一个怪, 则周围的2层都会被占用, 用于随机创建一个怪时避免重叠, key = row * 10000 + col;*/
         private Dictionary<int, bool> _unitRangeDict = new Dictionary<int, bool>();
@@ -21,7 +20,7 @@ namespace Sword
         private int _numRows;
         private int _numCols;
 
-        public DungeonMapHelper(CMapGrid<CStarNode> walkGrid)
+        public DungeonMapTileData(CMapGrid<CStarNode> walkGrid)
         {
             _numRows = walkGrid.NumRows;
             _numCols = walkGrid.NumCols;

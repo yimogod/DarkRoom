@@ -7,9 +7,9 @@ namespace Sword
 {
     public class DungeonUnit3DPlant : DungeonUnitPlant
     {
-        public override void InstantiateUnit(MapMeta mapMeta, CAssetGrid typeGrid, CAssetGrid assetGrid)
+        public override void InstantiateUnit(MapMeta mapMeta, CAssetGrid assetGrid)
         {
-            base.InstantiateUnit(mapMeta, typeGrid, assetGrid);
+            base.InstantiateUnit(mapMeta, assetGrid);
             StartCoroutine(CreateUnitOfTileMap());
         }
 

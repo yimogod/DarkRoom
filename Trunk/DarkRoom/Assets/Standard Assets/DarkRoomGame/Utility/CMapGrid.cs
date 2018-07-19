@@ -6,7 +6,7 @@ namespace DarkRoom.Game {
 	/// <summary>
 	/// 二维表格数据. 用于AStar和直线探测寻路
 	/// </summary>
-	public class CMapGrid<T> : IWalkableGrid where T : IWalkableNode
+	public class CMapGrid<T> : IWalkableGrid where T : IWalkableNode, new()
 	{
 		//地图所有的node数据.
 		//[col][row]
@@ -69,7 +69,7 @@ namespace DarkRoom.Game {
 			m_nodes = new T[m_numCols, m_numRows];
 			for(int row = 0; row < m_numRows; row++){
 				for(int col = 0; col < m_numCols; col++){
-					T t = Activator.CreateInstance<T>();
+					T t = default(T);
                     t.Col = col;
                     t.Row = row;
                     m_nodes[col, row] = t;
@@ -96,9 +96,9 @@ namespace DarkRoom.Game {
 		/// <param name="row">Row.</param>
 		/// <param name="col">Col.</param>
 		public T GetNode(int col, int row){
-			if (row < 0 || col < 0)return Activator.CreateInstance<T>();
-			if (row >= m_numRows)return Activator.CreateInstance<T>();
-			if (col >= m_numCols)return Activator.CreateInstance<T>();
+			if (row < 0 || col < 0)return default(T);
+			if (row >= m_numRows)return default(T);
+			if (col >= m_numCols)return default(T);
 			return m_nodes[col, row];
 		}
 

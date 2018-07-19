@@ -14,17 +14,15 @@ namespace Sword
 
         protected TileTerrainComp _terrain = null;
         protected CAssetGrid _assetGrid;
-        protected CAssetGrid _typeGrid;
 
         public void Init(TileTerrainComp terrain)
         {
             _terrain = terrain;
         }
 
-        public virtual void InstantiateUnit(MapMeta mapMeta, CAssetGrid typeGrid, CAssetGrid assetGrid)
+        public virtual void InstantiateUnit(MapMeta mapMeta, CAssetGrid assetGrid)
         {
             _mapMeta = mapMeta;
-            _typeGrid = typeGrid;
             _assetGrid = assetGrid;
         }
 

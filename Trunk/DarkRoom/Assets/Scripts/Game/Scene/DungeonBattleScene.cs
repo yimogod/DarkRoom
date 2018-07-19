@@ -30,7 +30,7 @@ namespace Sword
         {
             m_mapMeta = MapMetaManager.GetMeta("1");
             TMap.Instance.Init(m_mapMeta);
-            m_builder = new DungeonMapBuilder(TMap.Instance);
+            m_builder = new DungeonMapBuilder(m_mapMeta);
 
             //读取加载地形数据, 并组装terrain3d comp
             m_terrain3D = gameObject.AddComponent<TileTerrainComp>();
@@ -44,10 +44,10 @@ namespace Sword
         private void LoadAndCreateMapThing()
         {
             m_builder.CreateOther();
-            m_builder.CopyData();
+            m_builder.CopyData(TMap.Instance.WalkableGrid);
 
             m_unit3DCreator.Init(m_terrain3D);
-            m_unit3DCreator.InstantiateUnit(m_mapMeta, m_builder.TypeGrid, m_builder.AssetGrid);
+            m_unit3DCreator.InstantiateUnit(m_mapMeta, m_builder.AssetGrid);
         }
 
         void Update()

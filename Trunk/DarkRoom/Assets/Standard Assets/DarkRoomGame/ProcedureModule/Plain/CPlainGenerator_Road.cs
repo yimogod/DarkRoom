@@ -7,7 +7,7 @@ namespace DarkRoom.PCG
 	/// <summary>
 	/// 平原产生河流和道路的类
 	/// </summary>
-	public class CPlainRoadGenerator {
+	public class CPlainGenerator_Road {
 		/// <summary>
 		/// 最简单的产生路径的方法. 不考虑地图的实际情况
 		/// 请保证xy1 和 xy2 的距离足够远. 至少得有6 * 5个格子以上吧
