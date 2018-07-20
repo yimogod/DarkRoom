@@ -12,7 +12,7 @@ namespace DarkRoom.PCG
         protected int _numCols;
         protected int _numRows;
 
-        protected AStar astar = new AStar();
+        protected CAStar astar = new CAStar();
 
         //路开始的点
         protected Vector3 _startPoint;
@@ -20,9 +20,9 @@ namespace DarkRoom.PCG
         protected Vector3 _endPoint;
 
         //存储主路点的node坐标, node来自于walkgrid
-        protected List<MapNode> _wayPointList = new List<MapNode>();
+        protected List<CStarNode> _wayPointList = new List<CStarNode>();
 
-        public RoadGenerator(int cols, int rows)
+        public CForestGenerator_Road(int cols, int rows)
         {
             _numCols = cols;
             _numRows = rows;
@@ -83,10 +83,8 @@ namespace DarkRoom.PCG
 
         }
 
-        protected virtual void ExpandAttachRoad(Stack<MapNode> path, MapGrid walkGrid, MapGrid typeGrid) { }
-
         //创建道路
-        public void CreateMainRoad(MapGrid walkGrid, MapGrid typeGrid)
+        public void CreateMainRoad(CStarNode walkGrid, CStarNode typeGrid)
         {
             //1. 我们先从左下角随机起点.
             //我们的路的起点在整张图里面缩3个格子
@@ -189,7 +187,7 @@ namespace DarkRoom.PCG
                 //找到路就根据a*结果画路
                 if (r)
                 {
-                    foreach (MapNode node in astar.path)
+                    foreach (var node in astar.path)
                     {
                         _wayPointList.Add(node);
                     }
@@ -208,16 +206,14 @@ namespace DarkRoom.PCG
             ExpandMainRoad(walkGrid, typeGrid);
 
             //6.这时, wayPointList已经是所有的路的连接点, 我们遍历设置地图数据, 我们会最终一起绘制路
-            foreach (MapNode node in _wayPointList)
+            foreach (var node in _wayPointList)
             {
-                MapNode tn = typeGrid.GetNode(node.row, node.col);
+                var tn = typeGrid.GetNode(node.row, node.col);
                 tn.type = (int)RayConst.TileType.ROAD;
             }
 
             //finish
         }
-
-        protected virtual void ExpandMainRoad(MapGrid walkGrid, MapGrid typeGrid) { }
 
         //curr是目前检测是否合法的点
         //last是上一个合法的点
@@ -278,105 +274,9 @@ namespace DarkRoom.PCG
 
         protected int CompareX(Vector3 node1, Vector3 node2)
         {
-            if (RMathUtil.FloatEqual(node1.z, node2.z)) return 0;
+            if (CDarkUtil.FloatEqual(node1.z, node2.z)) return 0;
             if (node1.x < node2.x) return -1;
             return 1;
         }
-
-
-
-
-
-        /// <summary>
-        /// 最简单的产生路径的方法. 不考虑地图的实际情况
-        /// 请保证xy1 和 xy2 的距离足够远. 至少得有6 * 5个格子以上吧
-        /// 返回的列表是经过排序的
-        /// </summary>
-        public List<Vector2> GetWayPoints(int width, int height, int x1, int y1, int x2, int y2)
-		{
-			CIntLine line = new CIntLine(new Vector2(x1, y1), new Vector2(x2, y2));
-
-			int step = 6;
-			int maxLimit = 10;
-			List<Vector2> list = new List<Vector2>();
-			
-            int dx = Mathf.Abs(x1 - x2);
-			int dy = Mathf.Abs(y1 - y2);
-
-			int x, y, delta, intX, intY, min, max;
-			Vector2 start, end;
-
-			if (dx > dy) {
-				if (x1 < x2) {
-					start = new Vector2(x1, y1);
-					end = new Vector2(x2, y2);
-					min = x1;
-					max = x2;
-				} else {
-					end = new Vector2(x1, y1);
-					start = new Vector2(x2, y2);
-					max = x1;
-					min = x2;
-				}
-
-				list.Add(start);
-				for (x = min; x < max; x += step) {
-					y = Mathf.RoundToInt(height * CDarkRandom.NextPerlinValueNoise(width, height, 10.0f));
-					intY = line.GetY(x);
-					delta = intY - y;
-					if (delta > maxLimit) {
-						y = intY + maxLimit;
-					} else if (delta < -maxLimit) {
-						y = intY - maxLimit;
-					}
-
-					Vector2 v = new Vector2(x, y);
-					MakeTileInMap(width, height, ref v);
-					list.Add(v);
-				}
-				list.Add(end);
-
-			} else {
-				if (y1 < y2) {
-					start = new Vector2(x1, y1);
-					end = new Vector2(x2, y2);
-					min = y1;
-					max = y2;
-				} else {
-					end = new Vector2(x1, y1);
-					start = new Vector2(x2, y2);
-					max = y1;
-					min = y2;
-				}
-				list.Add(start);
-
-				for (y = min; y < max; y += step) {
-					x = Mathf.RoundToInt(width * CDarkRandom.NextPerlinValueNoise(width, height, 10.0f));
-					intX = line.GetX(y);
-					delta = intX - x;
-					if (delta > maxLimit) {
-						x = intX + maxLimit;
-					} else if (delta < -maxLimit) {
-						x = intX - maxLimit;
-					}
-
-					Vector2 v = new Vector2(x, y);
-					MakeTileInMap(width, height, ref v);
-					list.Add(v);
-				}
-
-				list.Add(end);
-			}
-
-			return list;
-		}
-
-		private void MakeTileInMap(int width, int height, ref Vector2 v)
-		{
-			if (v.x < 0) v.x = 0;
-			if (v.y < 0) v.y = 0;
-			if (v.x > (width - 1)) v.x = width - 1;
-			if (v.y > (height - 1)) v.y = height - 1;
-		}
 	}
 }

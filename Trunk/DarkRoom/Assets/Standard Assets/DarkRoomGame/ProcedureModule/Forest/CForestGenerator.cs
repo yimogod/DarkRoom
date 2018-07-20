@@ -6,9 +6,7 @@ using UnityEngine;
 namespace DarkRoom.PCG {
 	[RequireComponent(typeof(CForestGenerator_Terrain))]
 	public class CForestGenerator : CTileMapGeneratorBase {
-		public float SeaLevel = 0.2f;
-		public float BeachHeight = 0.22f;
-		public float GrassHeight = 0.3f;
+		public float GrassHeight = 0.24f;
 		public float GrassHeight2 = 0.35f;
 		public float LandHeight = 0.52f;
 		public float LandHeight2 = 0.8f;
@@ -22,7 +20,7 @@ namespace DarkRoom.PCG {
 	    /// <summary>
 	    /// 从外面指定的, 水域类型的值
 	    /// </summary>
-	    public int SeaType = 2;
+	    public int WaterType = 2;
 
         private CForestGenerator_Terrain m_terrain;
 

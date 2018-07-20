@@ -14,3 +14,5 @@ trunk/tank/Assets/StreamingAssets/Bundles.meta
 trunk/tank/Assembly-UnityScript.unityproj
 *.suo
 trunk/tank/Assets/Bundles.meta
+.DS_Store
+Trunk/DarkRoom/.vscode/settings.json
