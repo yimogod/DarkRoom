@@ -166,6 +166,7 @@ namespace DarkRoom.Game {
         }
 
         public GameObject Root;
+        public Transform TerrainLayer;
         public Transform UnitLayer;//存放所有的可以交互的单位, 英雄,npc,掉落物品等等
         public Transform TriggerLayer;
         public Transform DecoLayer;//装饰物品
@@ -176,29 +177,19 @@ namespace DarkRoom.Game {
         {
             Root = root;
 
-            GameObject go = null;
-            UnitLayer = Root.transform.Find("unit_layer");
-            if (UnitLayer == null)
-            {
-                UnitLayer = new GameObject("unit_layer").transform;
-                UnitLayer.parent = Root.transform;
-                UnitLayer.localPosition = Vector3.zero;
-                return;
-            }
+            TerrainLayer = Root.transform.GetOrCreateChild("TerrainLayer");
+            UnitLayer.gameObject.layer = LayerMask.NameToLayer("Terrain");
 
-            go = UnitLayer.gameObject;
-            go.layer = LayerMask.NameToLayer("Unit");
+            UnitLayer = Root.transform.GetOrCreateChild("UnitLayer");
+            UnitLayer.gameObject.layer = LayerMask.NameToLayer("Unit");
 
-            go = CreateLayer("trigger_layer");
-            TriggerLayer = go.transform;
+            TriggerLayer = Root.transform.GetOrCreateChild("TriggerLayer");
             TriggerLayer.localPosition = UnitLayer.localPosition;
 
-            go = CreateLayer("deco_layer");
-            DecoLayer = go.transform;
+            DecoLayer = Root.transform.GetOrCreateChild("DecoLayer");
             DecoLayer.localPosition = UnitLayer.localPosition;
 
-            go = CreateLayer("pool_layer");
-            PoolLayer = go.transform;
+            PoolLayer = Root.transform.GetOrCreateChild("PoolLayer");
         }
 
         private GameObject CreateLayer(string name)

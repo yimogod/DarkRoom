@@ -31,11 +31,13 @@ namespace DarkRoom.Game{
 			return path;
         }
 
-		//path 应该是Assets/Prefabs/UI/xxx.prefab
-		public static void InstantiatePrefab(string address, Transform parent)
+        /// <summary>
+        /// 实例化address prefab, 且放在parent下面
+        /// </summary>
+		public static void InstantiatePrefab(string address, Transform parent, Vector3 localPosition)
 		{
             CResourceLoader loader = new CResourceLoader();
-            loader.InstantiateGameObject(address, parent);
+            loader.InstantiateGameObject(address, parent, localPosition);
 		}
 
 		public static void InstantiateSprite(string address)

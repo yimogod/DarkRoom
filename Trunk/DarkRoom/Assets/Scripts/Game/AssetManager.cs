@@ -67,7 +67,15 @@ namespace Sword{
 			//return go;
 		}
 
-		public static void LoadActorPrefab(string name){
+        /// <summary>
+        /// 加载地图tile的资源
+        /// </summary>
+	    public static void LoadTilePrefab(string mapFolder, string name, Transform parent, Vector3 localPosition)
+	    {
+            CResourceManager.InstantiatePrefab(name, parent, localPosition);
+	    }
+
+	    public static void LoadActorPrefab(string name){
 			//string path = string.Format("{0}{1}", FOLDER_ROOT_ACTOR, name);
 			//GameObject go = CResourceManager.LoadAndCreatePrefab(path);
 			//return go;

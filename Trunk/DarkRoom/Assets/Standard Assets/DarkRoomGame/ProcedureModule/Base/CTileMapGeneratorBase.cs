@@ -29,6 +29,8 @@ namespace DarkRoom.PCG{
 	    /// 4, 5, 6代表草地, 其中4代表默认的绿地
 	    /// 7, 8 两种地面
 	    /// 9, 10两种石头地面
+	    /// 
+	    /// 当然最重要的, 你可以自定义. 无视我的命名
 	    /// </summary>
 	    protected string[] m_assetList;
 

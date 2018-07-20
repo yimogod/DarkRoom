@@ -11,7 +11,7 @@ namespace Sword {
 		//不可通过的地图数据, 包含山脉, 沼泽, 树, 小桌子等导致的不可通过
 		public CMapGrid<CStarNode> WalkableGrid = new CMapGrid<CStarNode>();
 
-		public TileTerrainComp Terrain = null;
+		public TileTerrainLayerComp Terrain = null;
 
 		private MapMeta m_mapMeta;
 

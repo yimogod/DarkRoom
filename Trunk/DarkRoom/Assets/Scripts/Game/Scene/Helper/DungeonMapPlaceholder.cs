@@ -9,7 +9,7 @@ namespace Sword
     /// <summary>
     /// 存储着地图中哪些格子上有单位(monster, trigger), 单位的势力范围等
     /// </summary>
-    public class DungeonMapTileData
+    public class DungeonMapPlaceholder
     {
         /*如果添加一个怪, 则周围的2层都会被占用, 用于随机创建一个怪时避免重叠, key = row * 10000 + col;*/
         private Dictionary<int, bool> _unitRangeDict = new Dictionary<int, bool>();
@@ -17,15 +17,15 @@ namespace Sword
         /*存储怪和不可通行的位置, 用于创建trigger时避开, 但可以在怪的影响力范围, key = row * 10000 + col;*/
         private Dictionary<int, bool> _unitPosDict = new Dictionary<int, bool>();
 
-        private int _numRows;
+        private int m_numRows;
         private int _numCols;
 
-        public DungeonMapTileData(CMapGrid<CStarNode> walkGrid)
+        public DungeonMapPlaceholder(CMapGrid<CStarNode> walkGrid)
         {
-            _numRows = walkGrid.NumRows;
+            m_numRows = walkGrid.NumRows;
             _numCols = walkGrid.NumCols;
 
-            for (int row = 0; row < _numRows; ++row)
+            for (int row = 0; row < m_numRows; ++row)
             {
                 for (int col = 0; col < _numCols; ++col)
                 {
@@ -119,7 +119,7 @@ namespace Sword
         //创建, 地图中可以空置的位置
         private Vector3 FindFreeTileNotInDict(Dictionary<int, bool> dict)
         {
-            Vector3 pos = CMapUtil.FindRandomNodeLocation(_numRows, _numCols);
+            Vector3 pos = CMapUtil.FindRandomNodeLocation(m_numRows, _numCols);
             int col = (int) pos.x;
             int row = (int) pos.z;
             int key = 10000 * row + col;
@@ -129,7 +129,7 @@ namespace Sword
             int tryTimes = 0;
             while (block && tryTimes < maxTryTimes)
             {
-                pos = CMapUtil.FindRandomNodeLocation(_numRows, _numCols);
+                pos = CMapUtil.FindRandomNodeLocation(m_numRows, _numCols);
                 col = (int) pos.x;
                 row = (int) pos.z;
                 key = 10000 * row + col;

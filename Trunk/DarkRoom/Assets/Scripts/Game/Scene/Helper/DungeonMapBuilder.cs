@@ -13,41 +13,27 @@ namespace Sword
     /// </summary>
     public class DungeonMapBuilder
     {
-        private DungeonMapTileData m_tilesData;
+        private DungeonMapPlaceholder m_tilesData;
         private MapMeta m_mapMeta;
 
         private ActorGenerator m_actorGen;
         private CTileMapGeneratorBase m_mapGen;
+
+        public CAssetGrid AssetGrid => m_mapGen.Grid;
 
         public DungeonMapBuilder(MapMeta meta)
         {
             m_mapMeta = meta;
 		}
 
-        public CAssetGrid AssetGrid
-        {
-            get { return m_mapGen.Grid; }
-        }
-
         /// <summary>
         /// 随机生成地图及tile数据
         /// 并且把数据填充入TileTerrainComp
         /// </summary>
-        public void CreateMap(TileTerrainComp map)
+        public void CreateMap(TileTerrainLayerComp terrainLayer)
         {
-			if(map == null){
-				Debug.LogError("CreateMap need a map which not null");
-				return;
-			}
-
-            /// 0, 1代表两种海的颜色
-            /// 2, 3代表海岸线
-            /// 4, 5, 6代表草地, 其中4代表默认的绿地
-            /// 7, 8 两种地面
-            /// 9, 10两种石头地面
-
             //地图生成器生成地图
-            CPlainGenerator gen = map.GetOrCreateComponentOnGameObject<CPlainGenerator>();
+            CPlainGenerator gen = terrainLayer.GetOrCreateComponentOnGameObject<CPlainGenerator>();
 			gen.TerrainType = (int)GameConst.TileType.TERRIAN;
             gen.SeaType = (int) GameConst.TileType.LAKE;
             gen.SetAsset(0, "sea_01", false);
@@ -64,9 +50,11 @@ namespace Sword
             gen.SetDefaultAsset("grass_01", true);
             gen.Generate();
 			m_mapGen = gen;
-		}
 
-        public void CreateOther()
+            terrainLayer.SetAssetGrid(gen.Grid);
+        }
+
+        public void CreateActor(TileUnitLayerComp unitLayer)
         {
             //m_tilesData = new DungeonMapTileData(_mapGen.walkGrid);
             // _actorGen = new ActorGenerator(_world.terrain);

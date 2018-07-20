@@ -7,15 +7,15 @@ using DarkRoom.Core;
 
 namespace Sword
 {
-    public class DungeonUnitPlant : MonoBehaviour
+    public class TileUnitLayerComp : MonoBehaviour
     {
         protected DungeonMapBuilder _builder;
         protected MapMeta _mapMeta;
 
-        protected TileTerrainComp _terrain = null;
+        protected TileTerrainLayerComp _terrain = null;
         protected CAssetGrid _assetGrid;
 
-        public void Init(TileTerrainComp terrain)
+        public void Init(TileTerrainLayerComp terrain)
         {
             _terrain = terrain;
         }
@@ -24,6 +24,41 @@ namespace Sword
         {
             _mapMeta = mapMeta;
             _assetGrid = assetGrid;
+        }
+
+        private IEnumerator CreateUnitOfTileMap()
+        {
+            for (int row = 0; row < _mapMeta.Rows; row++)
+            {
+                for (int col = 0; col < _mapMeta.Cols; col++)
+                {
+                    //string pname = _assetGrid.GetNode(row, col).name;
+                    string pname = "";
+                    if (string.IsNullOrEmpty(pname)) continue;
+
+                    int type = _typeGrid.GetNodeType(row, col);
+                    switch (type)
+                    {
+                        case (int)GameConst.TileType.TREE:
+                            PlaceCenterAndAddTreeComp(pname, col, row, 3);
+                            break;
+                        case (int)GameConst.TileType.ROOM:
+                            PlaceUnitByLeftBottom(pname, col, row);
+                            break;
+                        case (int)GameConst.TileType.DECAL:
+                            PlaceUnitByCenter(pname, col, row);
+                            break;
+                        case (int)GameConst.TileType.DECO_BLOCK:
+                            PlaceUnitByCenter(pname, col, row);
+                            break;
+                        case (int)GameConst.TileType.DECO_DESTROY:
+                            PlaceCenterAndAddTreeComp(pname, col, row, 1);
+                            break;
+                    }
+
+                    yield return new WaitForEndOfFrame();
+                }
+            }
         }
 
         protected void PlaceCenterAndAddTreeComp(string unitName, int col, int row, int life)

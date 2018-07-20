@@ -14,11 +14,11 @@ namespace DarkRoom.Game {
         }
 
         /// <summary>
-        /// 创建go并放在parent下面
+        /// 创建go并放在parent下面, 且指定坐标
         /// </summary>
-        public void InstantiateGameObject(string address, Transform parent)
+        public void InstantiateGameObject(string address, Transform parent, Vector3 localPosition)
         {
-            Addressables.Instantiate<GameObject>(address, parent);
+            Addressables.Instantiate<GameObject>(address, localPosition, Quaternion.identity, parent);
         }
     }
 }
