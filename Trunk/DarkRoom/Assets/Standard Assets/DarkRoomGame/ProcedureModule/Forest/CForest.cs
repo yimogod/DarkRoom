@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 
 namespace DarkRoom.PCG {
-	public class CPlain {
-
+	public class CForestTerrain {
 		
 	}
 }

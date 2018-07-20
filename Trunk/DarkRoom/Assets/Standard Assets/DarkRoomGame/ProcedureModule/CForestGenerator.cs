@@ -4,8 +4,8 @@ using DarkRoom.Core;
 using UnityEngine;
 
 namespace DarkRoom.PCG {
-	[RequireComponent(typeof(CPlainGenerator_Terrain))]
-	public class CPlainGenerator : CTileMapGeneratorBase {
+	[RequireComponent(typeof(CForestGenerator_Terrain))]
+	public class CForestGenerator : CTileMapGeneratorBase {
 		public float SeaLevel = 0.2f;
 		public float BeachHeight = 0.22f;
 		public float GrassHeight = 0.3f;
@@ -24,7 +24,7 @@ namespace DarkRoom.PCG {
 	    /// </summary>
 	    public int SeaType = 2;
 
-        private CPlainGenerator_Terrain m_terrain;
+        private CForestGenerator_Terrain m_terrain;
 
 		void Awake()
 		{
@@ -32,7 +32,7 @@ namespace DarkRoom.PCG {
 		    m_walkableList = new bool[m_maxAssetsNum];
             m_assetList = new string[m_maxAssetsNum];
 
-		    m_terrain = new CPlainGenerator_Terrain();
+		    m_terrain = new CForestGenerator_Terrain();
 		}
 
         /// <summary>

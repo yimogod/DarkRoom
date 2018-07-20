@@ -20,10 +20,10 @@ namespace DarkRoom.PCG{
 	 * 为什么要强调64x64, 因为如果地图小于64的话, 细胞自动机随机的不够, 不能够产生合理数据
 	 * 如果地图小于64, 需要在64上随机, 然后采样成小地图
 	*/
-	public class CPlainGenerator_Terrain {
+	public class CForestGenerator_Terrain {
 		private CPerlinMap m_map;
 
-		private CPlainGenerator_Road m_road;
+		private CForestGenerator_Road m_road;
 
 		/// <summary>
 		/// 获取柏林模糊产生的地图
@@ -32,7 +32,7 @@ namespace DarkRoom.PCG{
 
 		void Start()
 		{
-			m_road = new CPlainGenerator_Road();
+			m_road = new CForestGenerator_Road();
         }
 
 		/// <summary>

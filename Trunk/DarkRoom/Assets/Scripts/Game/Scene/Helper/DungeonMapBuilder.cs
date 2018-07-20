@@ -32,7 +32,7 @@ namespace Sword
         public void CreateMap(TileTerrainLayerComp terrainLayer)
         {
             //地图生成器生成地图
-            CPlainGenerator gen = terrainLayer.GetOrCreateComponentOnGameObject<CPlainGenerator>();
+            CForestGenerator gen = terrainLayer.GetOrCreateComponentOnGameObject<CForestGenerator>();
 			gen.TerrainType = (int)GameConst.TileType.TERRIAN;
             gen.SeaType = (int) GameConst.TileType.LAKE;
             gen.SetAsset(0, "sea_01", false);
