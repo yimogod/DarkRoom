@@ -2,108 +2,121 @@
 using DarkRoom.Core;
 using DarkRoom.Game;
 using UnityEngine;
-using Sword;
 
 namespace Sword
 {
-
-//创建地图的辅助类,
-//1. 一些实用方法
-//2. 创建单位的实用方法
-    public class ActorGenerator
+    public class ActorGenerator : MonoBehaviour
     {
-        private Transform _unitLayer;
-        private TileTerrainLayerComp _terrain;
+        private MapMeta m_mapMeta;
+        private DungeonMapPlaceholder m_tilesData;
 
-        public ActorGenerator(TileTerrainLayerComp terrain)
+        public void Generate(MapMeta meta, CAssetGrid assetGrid)
         {
-            _unitLayer = CWorld.Instance.Layer.UnitLayer;
-            _terrain = terrain;
+            m_tilesData = new DungeonMapPlaceholder(assetGrid);
+            m_mapMeta = meta;
         }
 
-        /*创建角色*/
-        public CUnitEntity CreateActor(ActorVO vo, UnitBornData bornData, GameObject gameObject = null)
+        //创建单位, 英雄和怪物
+        private void CreateUnit()
         {
-            bool hasActorInit = true;
-            if (gameObject == null)
+            //1. BornHero
+            //CreateHero(_mapGen.startTile);
+
+            //2. 创建怪物
+            CreateMonster(m_mapMeta.monster_0, m_mapMeta.monster_0_lv, m_mapMeta.monster_0_ai, m_mapMeta.monster_0_num);
+            CreateMonster(m_mapMeta.monster_1, m_mapMeta.monster_1_lv, m_mapMeta.monster_1_ai, m_mapMeta.monster_1_num);
+            CreateMonster(m_mapMeta.monster_2, m_mapMeta.monster_2_lv, m_mapMeta.monster_2_ai, m_mapMeta.monster_2_num);
+            CreateMonster(m_mapMeta.monster_3, m_mapMeta.monster_3_lv, m_mapMeta.monster_3_ai, m_mapMeta.monster_3_num);
+            CreateMonster(m_mapMeta.boss_1, m_mapMeta.boss_1_lv, m_mapMeta.boss_1_ai, 1);
+
+
+            //3. 创建boss, 在宝箱附近
+            if (m_mapMeta.boss_0 != -1)
             {
-                gameObject = null;//AssetManager.LoadActorPrefab(vo.MetaBase.prefab);
-                hasActorInit = false;
+                //Vector3 pos = _helper.FindFreeTileNear(_mapGen.importTile_1);
+                //UnitBornData bornData =
+                //    UnitBornData.CreateUnitBornData(_mapMeta.boss_0, CUnitEntity.TeamSide.Blue, pos);
+                //CreateMonsterAtPos(bornData, _mapMeta.boss_0_lv, _mapMeta.boss_0_ai);
+            }
+        }
+
+        //创建英雄, 固定位置, 其实更好的设计应该是祭坛~~~~
+        private void CreateHero(Vector3 pos)
+        {
+            UnitBornData bornData = UnitBornData.CreateUnitBornData(10001, CUnitEntity.TeamSide.Red, pos);
+
+            /*CActorVO vo = ProxyPool.userProxy.hero;
+            if (vo == null)
+            {
+                vo = new CActorVO(bornData.metaId);
+                vo.Init(1);
+            }
+            else
+            {
+                (vo as CActorVO).Reborn();
             }
 
-            CUnitSpacialComp posComp = gameObject.AddComponent<CUnitSpacialComp>();
-            CUnitEntity entity = gameObject.AddComponent<CUnitEntity>();
-            //entity.RestoreForm(vo);
+            CUnitEntity entity = _actorGen.CreateActor(vo, bornData);
+            _actorGen.CreateHeroAddon(entity);
+            _actorGen.CreateAttachGO(entity);
 
-            CUnitViewComp view = gameObject.AddComponent<CUnitViewComp>();
-            //gameObject.AddComponent<CAbilAttack>();
-            //gameObject.AddComponent<ActorDebugComp>();
-            //gameObject.AddComponent<CMover>();
+            _world.AddUnit(entity);
+            _helper.AddUnitToDict(entity.posColRow, 5);*/
+        }
 
+        //根据meta配置数据创建单个魔物
+        private void CreateMonster(int metaId, int lv, int ai, int num)
+        {
+            if (metaId == -1 || num == 0) return;
 
-            //如果go是外面传进来的, 说明位置已经定好了
-            if (!hasActorInit)
+            for (int i = 0; i < num; ++i)
             {
-                Rigidbody rig = gameObject.GetComponent<Rigidbody>();
-                if (rig == null)
-                {
-                    rig = gameObject.AddComponent<Rigidbody>();
-                    rig.constraints = RigidbodyConstraints.FreezeRotation |
-                                      RigidbodyConstraints.FreezePositionX |
-                                      RigidbodyConstraints.FreezePositionZ;
-                }
+                UnitBornData bornData = m_tilesData.CreateRandomUnitBorn(metaId, CUnitEntity.TeamSide.Blue);
+                if (bornData.invalid) continue;
+                CreateMonsterAtPos(bornData, lv, ai);
+            }
+        }
 
-                //设置actor的坐标和位置
-                CDarkUtil.AddChild(_unitLayer, gameObject.transform);
-                Vector3 pos = CMapUtil.GetTileCenterPosByColRow(bornData.col, bornData.row);
-                //多了0.1高度是因为角色放的炸弹啊, 地面的滩涂啊. 要在角色的脚下
-                pos.y = _terrain.GetWorldY(bornData.col, bornData.row) + 0.1f;
-                //posComp.SetPos(pos, bornData.direction);
-                //posComp.Pause();
-               // posComp.speed = vo.meta.speed;
+        //在固定位置创建怪物
+        private void CreateMonsterAtPos(UnitBornData bornData, int lv, int ai)
+        {
+            /*CActorVO vo = new CActorVO(bornData.metaId);
+            vo.ai = AIMetaManager.GetMeta(ai);
+            vo.Init(lv);
+
+            CUnitEntity entity = _actorGen.CreateActor(vo, bornData);
+            _actorGen.CreateMonsterAddon(entity);
+            _actorGen.CreateAttachGO(entity);
+
+            _world.AddUnit(entity);
+            _helper.AddUnitToDict(entity.posColRow);*/
+        }
+
+
+        //创建各种触发器
+        private void CreateTrigger()
+        {
+            //生成通关传送门
+            /*Vector3 pos = _helper.FindFreeTileNear(_mapGen.endTile);
+            _triggerGen.BornSucessPortal(pos);
+            _helper.AddUnitToDict(pos, 2);
+
+            for (int i = 0; i < _mapMeta.trigger_0_num; ++i)
+            {
+                pos = _helper.FindFreeTile();
+                _triggerGen.CreateOneTrigger(_mapMeta.trigger_0, pos);
+                _helper.AddUnitToDict(pos, 0);
             }
 
-            return entity;
-        }
+            for (int i = 0; i < _mapMeta.trigger_1_num; ++i)
+            {
+                pos = _helper.FindFreeTile();
+                _triggerGen.CreateOneTrigger(_mapMeta.trigger_1, pos);
+                _helper.AddUnitToDict(pos, 0);
+            }
 
-        public void CreateHeroAddon(CUnitEntity entity)
-        {
-            entity.Team = CUnitEntity.TeamSide.Red;
-            GameObject gameObject = entity.gameObject;
-            //目前我们仅仅英雄会有不同的武器
-            //gameObject.AddComponent<HeroFSMComp>();
-            //gameObject.AddComponent<HeroControlKeyboard>();
-        }
-
-        public void CreateMonsterAddon(CUnitEntity entity)
-        {
-            entity.Team = CUnitEntity.TeamSide.Blue;
-            GameObject gameObject = entity.gameObject;
-            //gameObject.AddComponent<ActorFSMComp>();
-            //gameObject.AddComponent<ActorAIComp>();
-        }
-
-        public void CreateAttachGO(CUnitEntity entity)
-        {
-            GameObject attachRoot = new GameObject();
-            attachRoot.name = "go";//RayConst.GO_NAME_ATTACH_ROOT;
-            Transform rootTran = attachRoot.transform;
-            CDarkUtil.AddChild(entity.transform, rootTran);
-
-            //GameObject healthGO = AssetManager.LoadAndCreatePrefab("Prefabs/Hud/Health_Display_Preb");
-            //Transform trans = healthGO.transform;
-            //CDarkUtil.AddChild(rootTran, trans);
-            //trans.localPosition = new Vector3(0, entity.height * 1.4f, 0);
-
-            //头顶冒血
-            //GameObject hpGO = AssetManager.LoadAndCreatePrefab("Prefabs/Hud/HP_Change_Preb");
-            //trans = hpGO.transform;
-            //CDarkUtil.AddChild(rootTran, trans);
-        }
-
-        public void Clear()
-        {
-            _unitLayer = null;
+            TriggerMeta meta = TriggerMetaManager.GetMeta(_mapMeta.chest_2);
+            _triggerGen.CreateTrigger_Chest(meta, _mapGen.importTile_1);*/
         }
     }
 }

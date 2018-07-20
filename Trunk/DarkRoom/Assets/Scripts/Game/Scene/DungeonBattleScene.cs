@@ -24,8 +24,6 @@ namespace Sword
 
             GameEngine.Instance.Init();
             GameEngine.Instance.Start();
-
-            m_builder.Clear();
         }
 
         private void InitMapThing()
@@ -37,24 +35,20 @@ namespace Sword
             //读取加载地形数据, 并组装terrain3d comp
             var terrainTran = CWorld.Instance.Layer.TerrainLayer;
             m_terrainLayer = terrainTran.gameObject.GetOrCreateComponent<TileTerrainLayerComp>();
-			m_builder.CreateMap(m_terrainLayer);
+            m_builder.CreateMap(m_terrainLayer);
 
             //创建并读取unit数据. 并组装unit layer comp
-            var unitTran = CWorld.Instance.Layer.UnitLayer;
-            m_unitLayer = unitTran.gameObject.GetOrCreateComponent<TileUnitLayerComp>();
-            m_builder.CreateActor();
+            //var unitTran = CWorld.Instance.Layer.UnitLayer;
+            //m_unitLayer = unitTran.gameObject.GetOrCreateComponent<TileUnitLayerComp>();
+            //m_builder.CreateActor(m_unitLayer);
         }
 
         private void CreateMapThing()
         {
             m_terrainLayer.Build();
+            m_unitLayer.Build();
 
-
-            m_builder.CreateActor();
             m_builder.CopyData(TMap.Instance.WalkableGrid);
-
-            m_unit3DCreator.Init(m_terrainLayer);
-            m_unit3DCreator.InstantiateUnit(m_mapMeta, m_builder.AssetGrid);
         }
 
         void Update()

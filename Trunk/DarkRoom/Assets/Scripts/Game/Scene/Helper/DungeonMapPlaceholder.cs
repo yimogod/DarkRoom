@@ -20,7 +20,7 @@ namespace Sword
         private int m_numRows;
         private int _numCols;
 
-        public DungeonMapPlaceholder(CMapGrid<CStarNode> walkGrid)
+        public DungeonMapPlaceholder(CAssetGrid walkGrid)
         {
             m_numRows = walkGrid.NumRows;
             _numCols = walkGrid.NumCols;

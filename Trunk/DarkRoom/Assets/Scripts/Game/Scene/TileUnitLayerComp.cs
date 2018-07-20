@@ -20,6 +20,16 @@ namespace Sword
             _terrain = terrain;
         }
 
+        public void Build()
+        {
+            if (_assetGrid == null)
+            {
+                Debug.LogError("AssetGrid Must Not Null");
+                return;
+            }
+
+        }
+
         public virtual void InstantiateUnit(MapMeta mapMeta, CAssetGrid assetGrid)
         {
             _mapMeta = mapMeta;
@@ -36,7 +46,7 @@ namespace Sword
                     string pname = "";
                     if (string.IsNullOrEmpty(pname)) continue;
 
-                    int type = _typeGrid.GetNodeType(row, col);
+                    int type = _assetGrid.GetNodeType(row, col);
                     switch (type)
                     {
                         case (int)GameConst.TileType.TREE:
@@ -72,28 +82,24 @@ namespace Sword
 
         protected GameObject PlaceUnitByCenter(string unitName, int col, int row)
         {
-            GameObject go = AssetManager.LoadMapPrefab(_mapMeta.MapRoot, unitName);
-            if (go == null) return null;
+            AssetManager.LoadMapPrefab(_mapMeta.MapRoot, unitName);
+            //if (go == null) return null;
 
             //树以中心为原点, 且占用一格
             Vector3 pos = CMapUtil.GetTileCenterPosByColRow(col, row);
-            pos.y = _terrain.GetWorldY(col, row);
             //CDarkUtil.AddChildWorld(WorldContainer.Instance.unitLayer, go.transform, pos);
-
-            return go;
+            return null;
         }
 
         protected GameObject PlaceUnitByLeftBottom(string unitName, int col, int row)
         {
-            GameObject go = AssetManager.LoadMapPrefab(_mapMeta.MapRoot, unitName);
-            if (go == null) return null;
+            AssetManager.LoadMapPrefab(_mapMeta.MapRoot, unitName);
 
             //房子左下角对齐, 获取的应该是方块的左下角坐标
             Vector3 pos = CMapUtil.GetTileLeftBottomPosByColRow(col, row);
-            pos.y = _terrain.GetWorldY(col, row);
             //CDarkUtil.AddChildWorld(WorldContainer.Instance.unitLayer, go.transform, pos);
 
-            return go;
+            return null;
         }
     }
 }
