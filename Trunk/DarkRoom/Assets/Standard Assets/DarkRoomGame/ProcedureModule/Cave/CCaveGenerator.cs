@@ -10,7 +10,7 @@ namespace DarkRoom.PCG {
 		void Awake()
 		{
 		    m_maxAssetsNum = 2;
-			m_terrain = gameObject.GetComponent<CaveTerrainGenerator>();
+			//m_terrain = gameObject.GetComponent<CaveTerrainGenerator>();
 		}
 
 		public override void Generate()

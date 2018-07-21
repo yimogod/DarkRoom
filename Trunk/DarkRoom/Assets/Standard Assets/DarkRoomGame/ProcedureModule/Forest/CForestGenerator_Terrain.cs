@@ -28,28 +28,13 @@ namespace DarkRoom.PCG{
 	    /// </summary>
 	    public float WallHeight = 1f;
 
-	    /// <summary>
-	    /// 从外面指定的, terrain平坦的类型的值
-	    /// </summary>
-	    public int TerrainType_Floor = 1;
-
-	    /// <summary>
-	    /// 从外面指定的, terrain凸起类型的值
-	    /// </summary>
-	    public int TerrainType_Wall = 2;
-
-        /// <summary>
-        /// pond对应的格子的类型
-        /// </summary>
-        public int TerrainType_Pond = 3;
-
         /// <summary>
         /// 创建池塘的个数
         /// </summary>
         public int MaxPondNum = 1;
 
         /// <summary>
-        /// 柏林噪声产生地形数据
+        /// 创建基础地形和河流
         /// </summary>
         public void Generate(int cols, int rows)
 		{
@@ -64,9 +49,11 @@ namespace DarkRoom.PCG{
             GenerateRoad();
 		}
 
-        private void GenerateRoad()
+        /// <summary>
+        /// 创建道路, 需要在创建房屋之后再调用
+        /// </summary>
+        public void GenerateRoad()
         {
-
         }
 
         private void GeneratePond()
@@ -75,12 +62,39 @@ namespace DarkRoom.PCG{
             int num = CDarkRandom.Next(MaxPondNum + 1);
             if (num <= 0) return;
 
+            //池塘的相关配置
+            var index = ForestTerrainAssetIndex.Pond;
+            var type = (int)GetTypeByIndex(index);
+            var asset = GetAsset((int)index);
+            var walkable = GetAssetWalkable((int)index);
+
+            CPondGenerator p = new CPondGenerator();
+            int pondCols = 32;
+            int pondRows = 32;
+            int leftCols = m_numCols - pondCols;
+            int leftRows = m_numRows - pondRows;
+            Vector2Int size = new Vector2Int(pondCols, pondRows);
+
             for (int i = 0; i < num; i++)
             {
-                PondGenerator p = new PondGenerator(m_numCols, m_numRows);
+                int startX = CDarkRandom.Next(pondCols, leftCols);
+                int startZ = CDarkRandom.Next(pondRows, leftRows);
+                var ponds = p.Generate(size);
+
+                for (int x = 0; x < pondCols; x++)
+                {
+                    for (int z = 0; z < pondRows; z++)
+                    {
+                        if (ponds[x, z] < 0)continue;
+                        m_grid.FillData(startX + x, startZ + z, type, asset, walkable);
+                    }
+                }
             }
         }
 
+        /// <summary>
+        /// 柏林噪声产生地形数据, 
+        /// </summary>
         private void GenerateTerrain()
         {
             var perlin = new CPerlinMap(m_numCols, m_numRows);
@@ -90,10 +104,11 @@ namespace DarkRoom.PCG{
             {
                 for (int z = 0; z < m_numRows; z++)
                 {
-                    int index = GetTypeAtHeight(perlin[x, z]);
-                    int type = GetTypeByIndex(index);
+                    var index = GetAssetIndexAtHeight(perlin[x, z]);
+                    var type = GetTypeByIndex(index);
+                    int i = (int) index;
 
-                    m_grid.FillData(x, z, type, GetAsset(index), GetAssetWalkable(index));
+                    m_grid.FillData(x, z, (int)type, GetAsset(i), GetAssetWalkable(i));
                 }
             }
         }
@@ -101,44 +116,50 @@ namespace DarkRoom.PCG{
 	    /// <summary>
 	    /// 根据高度, 从配置中读取相关的asset
 	    /// </summary>
-	    private int GetTypeAtHeight(float height)
+	    private ForestTerrainAssetIndex GetAssetIndexAtHeight(float height)
 	    {
 	        //两种草
 	        if (height <= GrassHeight)
 	        {
-	            if (CDarkRandom.SmallerThan(0.5f)) return 0;
-	            return 0;
+	            if (CDarkRandom.SmallerThan(0.5f)) return ForestTerrainAssetIndex.Grass1;
+	            return ForestTerrainAssetIndex.Grass1;
 	        }
 
 	        //另外一种草
-	        if (height <= GrassHeight2) return 1;
+	        if (height <= GrassHeight2) return ForestTerrainAssetIndex.Grass2;
 
 	        //两种地面
-	        if (height <= LandHeight) return 2;
-	        if (height <= LandHeight2) return 3;
+	        if (height <= LandHeight) return ForestTerrainAssetIndex.Land1;
+	        if (height <= LandHeight2) return ForestTerrainAssetIndex.Land2;
 
 	        //墙壁
-	        if (height <= WallHeight) return 4;
+	        if (height <= WallHeight) return ForestTerrainAssetIndex.Wall;
 
 	        //默认的绿草地
-	        return 0;
+	        return ForestTerrainAssetIndex.Grass1;
 	    }
 
-	    private int GetTypeByIndex(int index)
+	    private ForestTerrainType GetTypeByIndex(ForestTerrainAssetIndex index)
 	    {
-	        int v = -1;
+	        ForestTerrainType v = ForestTerrainType.None;
 	        switch (index)
 	        {
-	            case 0:
-	            case 1:
-	            case 2:
-	            case 3:
-	                v = TerrainType_Floor;
+	            case ForestTerrainAssetIndex.Grass1:
+	            case ForestTerrainAssetIndex.Grass2:
+	            case ForestTerrainAssetIndex.Land1:
+	            case ForestTerrainAssetIndex.Land2:
+	                v = ForestTerrainType.Floor;
 	                break;
-	            case 4:
-	                v = TerrainType_Wall;
+	            case ForestTerrainAssetIndex.Wall:
+	                v = ForestTerrainType.Wall;
 	                break;
-	        }
+	            case ForestTerrainAssetIndex.Pond:
+	                v = ForestTerrainType.Pond;
+	                break;
+	            case ForestTerrainAssetIndex.Road:
+	                v = ForestTerrainType.Road;
+	                break;
+            }
 
 	        return v;
 	    }

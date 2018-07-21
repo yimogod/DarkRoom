@@ -10,7 +10,7 @@ namespace DarkRoom.PCG
 	/// <summary>
 	/// 平原产生河流和道路的类
 	/// </summary>
-	public class CCommonGenerator_Road {
+	public class CForestGenerator_Road {
         protected int _numCols;
         protected int _numRows;
 
@@ -24,7 +24,7 @@ namespace DarkRoom.PCG
         //存储主路点的node坐标, node来自于walkgrid
         protected List<CStarNode> _wayPointList = new List<CStarNode>();
 
-        public CCommonGenerator_Road(int cols, int rows)
+        public CForestGenerator_Road(int cols, int rows)
         {
             _numCols = cols;
             _numRows = rows;
@@ -41,11 +41,11 @@ namespace DarkRoom.PCG
         }
 
         //支线的路, 要连接到院子和两个神秘点
-        public void CreateRoadAttached(Dictionary<int, RoomInfo> roomDict, CAssetGrid walkGrid, CAssetGrid typeGrid)
+        public void CreateRoadAttached(Dictionary<int, CForestRoom> roomDict, CAssetGrid walkGrid, CAssetGrid typeGrid)
         {
-            foreach (KeyValuePair<int, RoomInfo> item in roomDict)
+            foreach (KeyValuePair<int, CForestRoom> item in roomDict)
             {
-                RoomInfo room = item.Value;
+                CForestRoom room = item.Value;
                 int doorCol = room.doorCol;
                 int doorRow = room.doorRow;
                 int targetCol = -1;

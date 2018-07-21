@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DarkRoom.Core;
+using DarkRoom.Game;
 using UnityEngine;
 
 namespace DarkRoom.PCG {
@@ -21,11 +22,11 @@ namespace DarkRoom.PCG {
 	 * 如果地图小于64, 需要在64上随机, 然后采样成小地图
 	*/
     [RequireComponent(typeof(CForestGenerator_Terrain))]
-	public class CForestGenerator {
+	public class CForestGenerator : MonoBehaviour {
         /// <summary>
-        /// 从外面指定的, 水域类型的值
+        /// 基础地形的数据
         /// </summary>
-        public int WaterType = 2;
+        public CAssetGrid TerrainGrid => m_terrain.Grid;
 
         private CForestGenerator_Terrain m_terrain;
 
@@ -34,7 +35,17 @@ namespace DarkRoom.PCG {
 		    m_terrain = new CForestGenerator_Terrain();
 		}
 
-		public void Generate()
+        public void SetTerrainAsset(ForestTerrainAssetIndex index, string asset, bool walkable)
+        {
+            m_terrain.SetAsset((int)index, asset, walkable);
+        }
+
+        public void SetTerrainDefaultAsset(string asset, bool walkable)
+        {
+            m_terrain.SetDefaultAsset(asset, walkable);
+        }
+
+        public void Generate()
 		{
 			m_terrain.Generate(64, 64);
 		}

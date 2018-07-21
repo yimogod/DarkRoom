@@ -16,9 +16,9 @@ namespace Sword
         private MapMeta m_mapMeta;
 
         private ActorGenerator m_actorGen;
-        private CTileMapGeneratorBase m_mapGen;
+        private CForestGenerator m_mapGen;
 
-        public CAssetGrid AssetGrid => m_mapGen.Grid;
+        public CAssetGrid AssetGrid => m_mapGen.TerrainGrid;
 
         public DungeonMapBuilder(MapMeta meta)
         {
@@ -33,24 +33,18 @@ namespace Sword
         {
             //地图生成器生成地图
             CForestGenerator gen = terrainLayer.GetOrCreateComponentOnGameObject<CForestGenerator>();
-			gen.TerrainType_Floor = (int)GameConst.TileType.TERRIAN;
-            gen.WaterType = (int) GameConst.TileType.LAKE;
-            gen.SetAsset(0, "sea_01", false);
-            gen.SetAsset(1, "sea_02", false);
-            gen.SetAsset(2, "coast_01", false);
-            gen.SetAsset(3, "coast_02", false);
-            gen.SetAsset(4, "grass_01", true);
-            gen.SetAsset(5, "grass_02", true);
-            gen.SetAsset(6, "grass_03", true);
-            gen.SetAsset(7, "land_01", true);
-            gen.SetAsset(8, "land_02", true);
-            gen.SetAsset(9, "stone_01", true);
-            gen.SetAsset(10, "stone_02", true);
-            gen.SetDefaultAsset("grass_01", true);
+            gen.SetTerrainAsset(ForestTerrainAssetIndex.Grass1, "grass_01", true);
+            gen.SetTerrainAsset(ForestTerrainAssetIndex.Grass2, "grass_02", true);
+            gen.SetTerrainAsset(ForestTerrainAssetIndex.Land1, "land_01", true);
+            gen.SetTerrainAsset(ForestTerrainAssetIndex.Land2, "land_02", true);
+            gen.SetTerrainAsset(ForestTerrainAssetIndex.Wall, "stone_01", false);
+            gen.SetTerrainAsset(ForestTerrainAssetIndex.Pond, "pond_01", false);
+            gen.SetTerrainAsset(ForestTerrainAssetIndex.Road, "road_01", true);
+            gen.SetTerrainDefaultAsset("grass_01", true);
             gen.Generate();
 			m_mapGen = gen;
 
-            terrainLayer.SetAssetGrid(gen.Grid);
+            terrainLayer.SetAssetGrid(gen.TerrainGrid);
         }
 
         public void CreateActor(TileUnitLayerComp unitLayer)
@@ -65,7 +59,12 @@ namespace Sword
         public void CopyData(CMapGrid<CStarNode> targetGrid)
 		{
 		    targetGrid.Init(m_mapMeta.Cols, m_mapMeta.Rows, true);
-		    targetGrid.CopyUnWalkableFrom(m_mapGen.Grid);
+
+            //不可通行的来源有很多地方
+            //1 terrain的湖水
+		    targetGrid.CopyUnWalkableFrom(m_mapGen.TerrainGrid);
+            //2 单位层的房子
+
 		}
     }
 }

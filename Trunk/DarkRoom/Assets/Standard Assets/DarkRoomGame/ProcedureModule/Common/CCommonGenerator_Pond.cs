@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using DarkRoom.Core;
+﻿using DarkRoom.Core;
 using UnityEngine;
 
 namespace DarkRoom.PCG
 {
-	public class PondGenerator
+	public class CPondGenerator
 	{
         //[x, y]
 	    private float[,] m_perlinMap;
@@ -14,7 +12,7 @@ namespace DarkRoom.PCG
         private float[,] m_pondMap;
 
         //池塘的尺寸
-	    private Vector2Int m_size;
+	    private Vector2Int m_size = Vector2Int.zero;
 
 	    //最低点数据
 	    private Vector2Int m_lowestSpot;
@@ -24,11 +22,13 @@ namespace DarkRoom.PCG
 	    //2. 值最小的地方就是池塘的最低点
 	    //3. 循环池塘矩形的四条边, 寻找合理的池塘点
 	    //4. 生命游戏圆滑一个池塘边缘
-        public void Generate(Vector2Int size){
-	        m_perlinMap = new float[size.x, size.y];
-	        m_pondMap = new float[size.x, size.y];
-
-            m_size = size;
+        public float[,] Generate(Vector2Int size){
+            if (m_size != size)
+            {
+                m_perlinMap = new float[size.x, size.y];
+                m_pondMap = new float[size.x, size.y];
+                m_size = size;
+            }
 
             m_lowestSpot = Vector2Int.zero;
 	        m_lowestValue = float.MaxValue;
@@ -80,15 +80,17 @@ namespace DarkRoom.PCG
 	                if (cell < 4)m_pondMap[x, y] = -1;
 	            }
 	        }
+
+            return m_pondMap;
         }
 
         //四周是不是有邻居
-	    private int HasPondTileConnected(int col, int row)
+	    private int HasPondTileConnected(int x, int y)
 	    {
-	        if (col < 0 || col >= m_size.x) return 0;
-	        if (row < 0 || row >= m_size.y) return 0;
+	        if (x < 0 || x >= m_size.x) return 0;
+	        if (y < 0 || y >= m_size.y) return 0;
 
-	        float v = m_pondMap[row, col];
+	        float v = m_pondMap[x, y];
 	        return v > 0 ? 1 : 0;
 	    }
 
@@ -100,6 +102,8 @@ namespace DarkRoom.PCG
 	        float highestValue = float.MinValue;
 
 	        CPondLine line = new CPondLine(m_lowestSpot, new Vector2Int(x,y));
+
+            //获取直线上的最高点
 	        var v = line.NextStep();
 	        while (CDarkUtil.IsValidVec2Int(v))
 	        {
@@ -119,7 +123,7 @@ namespace DarkRoom.PCG
 	            v = line.NextStep();
 	        }
 
-	        float split = highestValue + m_lowestValue;
+	        //float split = highestValue + m_lowestValue;
 	        line = new CPondLine(m_lowestSpot, highestSpot);
 	        v = line.NextStep();
 	        while (CDarkUtil.IsValidVec2Int(v))
@@ -132,83 +136,71 @@ namespace DarkRoom.PCG
 	            }
 
 	            m_pondMap[v.x, v.y] = m_perlinMap[v.x, v.y];
-
 	            v = line.NextStep();
 	        }
 
 	    }
-
-	    private void PrintUseful()
-	    {
-	        string str = "@@@@@ \n";
-	        for (int row = 0; row < m_size.y; row++)
-	        {
-	            string line = "";
-	            for (int col = 0; col < m_size.x; col++)
-	            {
-	                line += m_pondMap[row, col].ToString() + ", ";
-	            }
-	            line += "\n";
-	            str += line;
-	        }
-
-	        Debug.Log(str);
-	    }
 	}
 
 
-	public class CPondLine
+    /// <summary>
+    /// 用于池塘的线段结构
+    /// </summary>
+	public struct CPondLine
 	{
-	    public Vector2Int Start;
-	    public Vector2Int End;
+	    private Vector2Int m_start;
+	    private Vector2Int m_end;
 
-		private bool _isVertical = false;
+		private bool m_isVertical;
         //直线的走向是朝右
-		private bool _right = true;
+		private bool m_right;
         //直线的走向是朝上
-		private bool _up = true;
-		private float _k;
+		private bool m_up;
+		private float m_k;
 
-		private int _stepTile;
+		private int m_stepTile;
 
 		public CPondLine(Vector2Int start, Vector2Int end)
 		{
-		    Start = start;
-		    End = end;
+		    m_isVertical = false;
+
+            m_start = start;
+		    m_end = end;
 
 			int dx = end.x - start.x;
 			int dy = end.y - start.y;
 			if (dx == 0){
-				_isVertical = true;
-				_stepTile = start.y;
-			} else{
-				_k = Mathf.Tan((float)dy / (float)dx);
-				_stepTile = start.x;
+				m_isVertical = true;
+				m_stepTile = start.y;
+			    m_k = 1f;
+            } else{
+				m_k = Mathf.Tan((float)dy / (float)dx);
+				m_stepTile = start.x;
 			}
 
-			_right = dx > 0;
-			_up = dy > 0;
+			m_right = dx > 0;
+			m_up = dy > 0;
 		}
 
 		public Vector2Int NextStep(){
-			int step = _stepTile;
-			if (_isVertical && _up)
-				_stepTile++;
-			else if (!_isVertical && _right)
-				_stepTile++;
+			int step = m_stepTile;
+			if (m_isVertical && m_up)
+				m_stepTile++;
+			else if (!m_isVertical && m_right)
+				m_stepTile++;
 			else
-				_stepTile--;
+				m_stepTile--;
 
-			if (_isVertical){
-				if(_up && step >= End.x)return CDarkConst.INVALID_VEC2INT;
-				if(!_up && step <= End.x) return CDarkConst.INVALID_VEC2INT;
-				return new Vector2Int(Start.x, step);
+			if (m_isVertical){
+				if(m_up && step >= m_end.x)return CDarkConst.INVALID_VEC2INT;
+				if(!m_up && step <= m_end.x) return CDarkConst.INVALID_VEC2INT;
+				return new Vector2Int(m_start.x, step);
 			}
 
-			if(_right && step >= End.y) return CDarkConst.INVALID_VEC2INT;
-			if(!_right && step <= End.y) return CDarkConst.INVALID_VEC2INT;
+			if(m_right && step >= m_end.y) return CDarkConst.INVALID_VEC2INT;
+			if(!m_right && step <= m_end.y) return CDarkConst.INVALID_VEC2INT;
 
-			int dr = (int)(_k * (step - Start.x) + Start.y);
+			int dr = (int)(m_k * (step - m_start.x) + m_start.y);
 			return new Vector2Int(step, dr);
 		}
 	}

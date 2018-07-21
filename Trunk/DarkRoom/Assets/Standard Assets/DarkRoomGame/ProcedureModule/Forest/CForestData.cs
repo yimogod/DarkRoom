@@ -1,18 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using DarkRoom.AI;
-using DarkRoom.Core;
+﻿using DarkRoom.Core;
 using DarkRoom.Game;
 using UnityEngine;
 
 namespace DarkRoom.PCG {
-	public class CForestTerrain {
+    /// <summary>
+    /// terrain用到的asset的索引
+    /// </summary>
+    public enum ForestTerrainAssetIndex
+    {
+        Grass1 = 0,
+        Grass2,
+        Land1,
+        Land2,
+        Wall,
+        Pond,
+        Road
+    }
+
+    /// <summary>
+    /// terrain用到的tile的类型
+    /// 需要注意的是目前这些类型和可通行性并没有关系. 看未来我们是否要用规则写死
+    /// </summary>
+    public enum ForestTerrainType
+    {
+        None,
+        Floor,
+        Wall,
+        Pond,
+        Road
+    }
+
+    public class CForestTerrain {
 		
 	}
 
 
-    //我们默认的房子都是坐北朝南, 即门口都朝下
-    public class RoomInfo
+    /// <summary>
+    /// 用于森林地形的房子
+    /// 我们默认的房子都是坐北朝南, 即门口都朝下
+    /// </summary>
+    public class CForestRoom
     {
         public const int MIN_COL = 10;
         public const int MIN_ROW = 10;
@@ -118,7 +145,7 @@ namespace DarkRoom.PCG {
             return true;
         }
 
-        public static RoomInfo Create(int minLength, int maxLength, int minWidth, int maxWidth)
+        public static CForestRoom Create(int minLength, int maxLength, int minWidth, int maxWidth)
         {
             //3, 4, 5
             int width = CDarkRandom.Next(minWidth, maxWidth);
@@ -127,7 +154,7 @@ namespace DarkRoom.PCG {
 
             //int rotation = Rand.Next(-1, 3);
 
-            RoomInfo room = new RoomInfo();
+            CForestRoom room = new CForestRoom();
             room.width = width;
             room.length = length;
 

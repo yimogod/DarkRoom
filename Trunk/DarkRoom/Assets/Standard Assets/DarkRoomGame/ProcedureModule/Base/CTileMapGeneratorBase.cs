@@ -4,7 +4,7 @@ using UnityEngine;
 using DarkRoom.Game;
 
 namespace DarkRoom.PCG{
-	public class CTileMapGeneratorBase : MonoBehaviour {
+	public class CTileMapGeneratorBase {
 	    protected int m_numCols => m_grid.NumCols;
 
 	    /// <summary>
@@ -46,6 +46,8 @@ namespace DarkRoom.PCG{
 
 	    /// <summary>
         /// 设置默认的资源和可通行性
+        /// 默认的资源只在index对应的资源没有的时候才会替换.
+        /// 为了容错处理添加的
         /// </summary>
 	    public void SetDefaultAsset(string asset, bool walkable)
 	    {
@@ -73,7 +75,8 @@ namespace DarkRoom.PCG{
 		}
 
         /// <summary>
-        /// 根据索引获取asset. 如果index不合法或者assets对应位置没有资源, 返货默认资源
+        /// 根据索引获取asset. 如果index不合法或者assets对应位置没有资源, 返回默认资源
+        /// 注意asset虽然没有, 但其索引和对应的type还是之前的数据
         /// </summary>
 	    protected string GetAsset(int index)
 	    {
@@ -85,6 +88,7 @@ namespace DarkRoom.PCG{
 
         /// <summary>
         /// 返回对应的asset的可通行
+        /// 注意asset虽然没有, 但其索引和对应的type还是之前的数据
         /// </summary>
 	    protected bool GetAssetWalkable(int index)
 	    {
