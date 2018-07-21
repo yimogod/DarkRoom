@@ -1,49 +1,146 @@
-﻿using UnityEngine;
+﻿using System;
+using DarkRoom.Core;
+using DarkRoom.Game;
+using Rayman;
+using UnityEngine;
 
 namespace DarkRoom.PCG{
-	/// 注意这里仅仅处理数据
+	
+    /// <summary>
+    /// 产生terrain的数据, 包含路和池塘
+    /// 
+    /// 关于terrain的资源
+    /// 0, 1两种草地
+    /// 2, 3两种土路
+    /// 4 凸起
+    /// </summary>
+	public class CForestGenerator_Terrain : CTileMapGeneratorBase
+    {
+	    /// <summary>
+	    /// 四种地面的基础材质, 看情况如果太多,会适当减少种类
+	    /// </summary>
+	    public float GrassHeight = 0.24f;
+	    public float GrassHeight2 = 0.35f;
+	    public float LandHeight = 0.52f;
+	    public float LandHeight2 = 0.8f;
+	    /// <summary>
+	    /// 指代地图凸起
+	    /// </summary>
+	    public float WallHeight = 1f;
 
-	/* 用细胞自动机来产生是否可以通行.然后不可通行的都种上树
-	 * 可以通行的试试其他地形
-	 * 森林地形,
-	 * 1.由不同深度颜色的绿地组成, 由细胞自动机或者柏林模糊生成基本地形
-	 * 2.然后有池塘或者湖泊--根据配置和随机数来确定添加以及添加的个数
-	 * 3.会有小木屋(仅作装饰)--会有道路连接到--传送点的木屋会由trigger system来生成
-	 * 4.中间穿插道路
-	 * 5.会有树丛
-	 * 6.地上种些小花--附着物--附着物需要在所有的地形产生完毕后, 在空白的区域点缀些装饰
-	 * 
-	 * 这意味着, 我们会有1种基本地形(浅绿), 1中辅助地形(深绿), 1种特殊地形(湖泊)
-	 * 多种小花--不同小花可能会对应不同的地形--有的在陆地, 有的在水里
-	 * 
-	 * 另外我们的地图现在都是3d的. 理论上都64x64起
-	 * 为什么要强调64x64, 因为如果地图小于64的话, 细胞自动机随机的不够, 不能够产生合理数据
-	 * 如果地图小于64, 需要在64上随机, 然后采样成小地图
-	*/
-	public class CForestGenerator_Terrain {
-		private CPerlinMap m_map;
+	    /// <summary>
+	    /// 从外面指定的, terrain平坦的类型的值
+	    /// </summary>
+	    public int TerrainType_Floor = 1;
 
-		private CCommonGenerator_Road m_road;
+	    /// <summary>
+	    /// 从外面指定的, terrain凸起类型的值
+	    /// </summary>
+	    public int TerrainType_Wall = 2;
 
-		/// <summary>
-		/// 获取柏林模糊产生的地图
-		/// </summary>
-		public CPerlinMap Map { get { return m_map; } }
+        /// <summary>
+        /// pond对应的格子的类型
+        /// </summary>
+        public int TerrainType_Pond = 3;
 
-		void Start()
+        /// <summary>
+        /// 创建池塘的个数
+        /// </summary>
+        public int MaxPondNum = 1;
+
+        /// <summary>
+        /// 柏林噪声产生地形数据
+        /// </summary>
+        public void Generate(int cols, int rows)
 		{
-			
+		    m_maxAssetsNum = 5;
+		    m_walkableList = new bool[m_maxAssetsNum];
+		    m_assetList = new string[m_maxAssetsNum];
+
+            m_grid.Init(cols, rows);
+
+		    GenerateTerrain();
+		    GeneratePond();
+            GenerateRoad();
+		}
+
+        private void GenerateRoad()
+        {
+
         }
 
-		/// <summary>
-		/// 柏林噪声产生地形数据
-		/// </summary>
-		public void Generate(int cols, int rows)
-		{
-		    m_road = new CCommonGenerator_Road(cols, rows);
+        private void GeneratePond()
+        {
+            if(MaxPondNum <= 0)return;
+            int num = CDarkRandom.Next(MaxPondNum + 1);
+            if (num <= 0) return;
 
-            m_map = new CPerlinMap(cols, rows);
-		    m_map.Generate();
+            for (int i = 0; i < num; i++)
+            {
+                PondGenerator p = new PondGenerator(m_numCols, m_numRows);
+            }
         }
-	}
+
+        private void GenerateTerrain()
+        {
+            var perlin = new CPerlinMap(m_numCols, m_numRows);
+            perlin.Generate();
+
+            for (int x = 0; x < m_numCols; x++)
+            {
+                for (int z = 0; z < m_numRows; z++)
+                {
+                    int index = GetTypeAtHeight(perlin[x, z]);
+                    int type = GetTypeByIndex(index);
+
+                    m_grid.FillData(x, z, type, GetAsset(index), GetAssetWalkable(index));
+                }
+            }
+        }
+
+	    /// <summary>
+	    /// 根据高度, 从配置中读取相关的asset
+	    /// </summary>
+	    private int GetTypeAtHeight(float height)
+	    {
+	        //两种草
+	        if (height <= GrassHeight)
+	        {
+	            if (CDarkRandom.SmallerThan(0.5f)) return 0;
+	            return 0;
+	        }
+
+	        //另外一种草
+	        if (height <= GrassHeight2) return 1;
+
+	        //两种地面
+	        if (height <= LandHeight) return 2;
+	        if (height <= LandHeight2) return 3;
+
+	        //墙壁
+	        if (height <= WallHeight) return 4;
+
+	        //默认的绿草地
+	        return 0;
+	    }
+
+	    private int GetTypeByIndex(int index)
+	    {
+	        int v = -1;
+	        switch (index)
+	        {
+	            case 0:
+	            case 1:
+	            case 2:
+	            case 3:
+	                v = TerrainType_Floor;
+	                break;
+	            case 4:
+	                v = TerrainType_Wall;
+	                break;
+	        }
+
+	        return v;
+	    }
+    }
 }

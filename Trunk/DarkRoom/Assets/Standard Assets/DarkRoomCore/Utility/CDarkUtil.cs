@@ -87,14 +87,52 @@ namespace DarkRoom.Core
 			}
 		}
 
+        /// <summary>
+        /// 非法的Vector3Int
+        /// </summary>
         public static bool IsInvalidVec3(Vector3 vec)
         {
             return false;
         }
 
+        /// <summary>
+        /// 合法的Vector3Int
+        /// </summary>
         public static bool IsValidVec3(Vector3 vec)
         {
             return false;
+        }
+
+        /// <summary>
+        /// 合法的Vector3Int
+        /// </summary>
+        public static bool IsValidVec3Int(Vector3Int vec)
+        {
+            return vec != CDarkConst.INVALID_VEC3INT;
+        }
+
+        /// <summary>
+        /// 非法的Vector3Int
+        /// </summary>
+        public static bool IsInvalidVec3Int(Vector3Int vec)
+        {
+            return vec == CDarkConst.INVALID_VEC3INT;
+        }
+
+        /// <summary>
+        /// 合法的Vector3Int
+        /// </summary>
+        public static bool IsValidVec2Int(Vector2Int vec)
+        {
+            return vec != CDarkConst.INVALID_VEC2INT;
+        }
+
+        /// <summary>
+        /// 非法的Vector3Int
+        /// </summary>
+        public static bool IsInvalidVec2Int(Vector2Int vec)
+        {
+            return vec == CDarkConst.INVALID_VEC2INT;
         }
     }
 }

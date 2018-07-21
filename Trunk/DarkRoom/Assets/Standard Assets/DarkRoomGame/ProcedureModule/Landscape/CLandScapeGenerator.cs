@@ -104,7 +104,7 @@ namespace DarkRoom.PCG {
 			base.Generate();
 			m_terrain.Generate(m_numCols, m_numRows);
 
-			CPerlinMap perlin = m_terrain.Map;
+			CPerlinMap perlin = m_terrain.PerlinMap;
 			for (int x = 0; x < m_numCols; x++) {
 				for (int z = 0; z < m_numRows; z++) {
 					int index = GetTypeAtHeight(perlin[x, z]);

@@ -28,7 +28,7 @@ namespace DarkRoom.PCG
 
         public override void Generate()
         {
-            m_map = m_cellular.GenerateTerrianWithCellular(m_numCols, m_numRows);
+            m_map = m_cellular.Generate(m_numCols, m_numRows);
         }
     }
 }

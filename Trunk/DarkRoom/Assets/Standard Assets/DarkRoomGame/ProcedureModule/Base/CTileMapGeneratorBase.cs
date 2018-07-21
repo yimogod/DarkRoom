@@ -5,34 +5,32 @@ using DarkRoom.Game;
 
 namespace DarkRoom.PCG{
 	public class CTileMapGeneratorBase : MonoBehaviour {
-		protected int m_numCols;
+	    protected int m_numCols => m_grid.NumCols;
 
-        /// <summary>
+	    /// <summary>
         /// 地图高度
         /// </summary>
-        protected int m_numRows;
+        protected int m_numRows => m_grid.NumRows;
 
 		//存储地形类型, 辅助地形自动生成
         //walk存储可通行数据, 同时有type和asset字段
 		protected CAssetGrid m_grid = new CAssetGrid();
 
-	    /// <summary>
-	    /// 存储的asset列表
-	    /// 比如对于细胞自动机
-	    /// 0代表可通行区域代表的资源
-	    /// 1, 2代表不可通行区域的两个资源
-	    /// 
-	    /// 比如对于柏林模糊
-	    /// 默认情况下
-	    /// 0, 1代表两种海的颜色
-	    /// 2, 3代表海岸线
-	    /// 4, 5, 6代表草地, 其中4代表默认的绿地
-	    /// 7, 8 两种地面
-	    /// 9, 10两种石头地面
-	    /// 
-	    /// 当然最重要的, 你可以自定义. 无视我的命名
-	    /// </summary>
-	    protected string[] m_assetList;
+        /// <summary>
+        /// 存储的asset列表
+        /// 比如对于细胞自动机
+        /// 0代表可通行区域代表的资源
+        /// 1, 2代表不可通行区域的两个资源
+        /// 
+        /// 比如对于森林
+        /// 默认情况下
+        /// 0, 1代表两种草的颜色
+        /// 2, 3代表两种地面
+        /// 4 代表凸起
+        /// 
+        /// 当然最重要的, 你可以自定义. 无视我的命名
+        /// </summary>
+        protected string[] m_assetList;
 
 	    /// <summary>
 	    /// 跟assets 一一对应的可通行性
@@ -72,14 +70,6 @@ namespace DarkRoom.PCG{
 		/// </summary>
 		public virtual void Generate(){
 			m_grid.Init(m_numCols, m_numRows, true);
-
-			/*int minX = CDarkRandom.Next(4, m_numCols - 4);
-			int minZ = CDarkRandom.Next(4, m_numRows - 4);
-			m_grid.SetNodeType(minZ, minX, -1);
-
-			minX = CDarkRandom.Next(4, m_numCols - 4);
-			minZ = CDarkRandom.Next(4, m_numRows - 4);
-			m_grid.SetNodeType(minZ, minX, -1);*/
 		}
 
         /// <summary>

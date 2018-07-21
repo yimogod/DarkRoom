@@ -17,7 +17,7 @@ namespace DarkRoom.PCG {
 		/// <summary>
 		/// 在初始化时, 小于这个值的格子初始位为活着, 即格子的值是1
 		/// </summary>
-		[Range(0.25f, 0.48f)]
+		[Range(0.43f, 0.48f)]
 		public float Threshold = 0.44f;
 
 		/// <summary>
@@ -33,10 +33,21 @@ namespace DarkRoom.PCG {
         private int m_numCols;
 		private int m_numRows;
 
-		/// <summary>
-		/// 返回二维数组[y,x], 0代表死亡
-		/// </summary>
-		public int[,] GenerateTerrianWithCellular(int cols, int rows)
+        /// <summary>
+        /// 对传入的数组做一次平滑处理
+        /// </summary>
+	    public void SmoothOnce(int[,]  values)
+	    {
+	        m_values = values;
+	        m_numCols = m_values.GetLength(0);
+	        m_numRows = m_values.GetLength(1);
+	        MoreIsBetterThanLess();
+        }
+
+        /// <summary>
+        /// 返回二维数组[y,x], 0代表死亡
+        /// </summary>
+        public int[,] Generate(int cols, int rows)
 		{
 			m_numCols = cols;
 			m_numRows = rows;
@@ -100,8 +111,8 @@ namespace DarkRoom.PCG {
 			return x >= 0 && x < m_numCols && y >= 0 && y < m_numRows;
 		}
 
-		//随机填充地图
-		void RandomFillMap() {
+        //随机填充地图
+	    private void RandomFillMap() {
 			for (int x = 0; x < m_numCols; x++) {
 				for (int y = 0; y < m_numRows; y++) {
 					bool b = CDarkRandom.SmallerThan(Threshold);

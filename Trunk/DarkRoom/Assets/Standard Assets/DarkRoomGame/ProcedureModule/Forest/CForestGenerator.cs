@@ -4,100 +4,39 @@ using DarkRoom.Core;
 using UnityEngine;
 
 namespace DarkRoom.PCG {
-	[RequireComponent(typeof(CForestGenerator_Terrain))]
-	public class CForestGenerator : CTileMapGeneratorBase {
-		public float GrassHeight = 0.24f;
-		public float GrassHeight2 = 0.35f;
-		public float LandHeight = 0.52f;
-		public float LandHeight2 = 0.8f;
-		public float StoneHeight = 1f;
-
+    /* 森林地形 注意这里仅仅处理数据
+	 * 1.由不同深度颜色的绿地组成, 柏林模糊生成基本地形
+	 * 2.然后有池塘或者湖泊--根据配置和随机数来确定添加以及添加的个数
+	 * 3.会有小木屋(仅作装饰)--会有道路连接到--传送点的木屋会由trigger system来生成
+	 * 4.中间穿插道路
+	 * 5.会有树丛
+	 * 6.地上种些小花--附着物--附着物需要在所有的地形产生完毕后, 在空白的区域点缀些装饰
+	 * 
+	 * 这意味着, 我们会有1种基本地形(浅绿), 1中辅助地形(深绿), 1种特殊地形(湖泊)
+	 * 多种小花--不同小花可能会对应不同的地形--有的在陆地, 有的在水里
+	 *
+     * 下面其实的没用. 因为我们用柏林模糊代替了细胞自动机
+	 * 另外我们的地图现在都是3d的. 理论上都64x64起
+	 * 为什么要强调64x64, 因为如果地图小于64的话, 细胞自动机随机的不够, 不能够产生合理数据
+	 * 如果地图小于64, 需要在64上随机, 然后采样成小地图
+	*/
+    [RequireComponent(typeof(CForestGenerator_Terrain))]
+	public class CForestGenerator {
         /// <summary>
-        /// 从外面指定的, terrain类型的值
+        /// 从外面指定的, 水域类型的值
         /// </summary>
-	    public int TerrainType = 1;
-
-	    /// <summary>
-	    /// 从外面指定的, 水域类型的值
-	    /// </summary>
-	    public int WaterType = 2;
+        public int WaterType = 2;
 
         private CForestGenerator_Terrain m_terrain;
 
 		void Awake()
 		{
-		    m_maxAssetsNum = 11;
-		    m_walkableList = new bool[m_maxAssetsNum];
-            m_assetList = new string[m_maxAssetsNum];
-
 		    m_terrain = new CForestGenerator_Terrain();
 		}
 
-        /// <summary>
-        /// 根据高度, 从配置中读取相关的asset
-        /// </summary>
-		private int GetTypeAtHeight(float height) {
-           //两种草
-			if (height <= GrassHeight){
-				if(CDarkRandom.SmallerThan(0.5f))return 4;
-				return 5;
-			}
-
-            //另外一种草
-			if (height <= GrassHeight2)return 6;
-
-            //两种地面
-			if (height <= LandHeight)return 7;
-			if (height <= LandHeight2)return 8;
-
-            //两种石头
-			if (height <= StoneHeight){
-				if(CDarkRandom.SmallerThan(0.5f))return 9;
-				return 10;
-			}
-
-            //默认的绿草地
-			return 4;
-		}
-
-	    private int GetTypeByIndex(int index)
-	    {
-	        int v = -1;
-	        switch (index)
-	        {
-                case 0:
-	            case 1:
-	            case 2:
-	            case 3:
-                    v = WaterType;
-	                break;
-	            case 4:
-	            case 5:
-	            case 6:
-	            case 7:
-	            case 8:
-	            case 9:
-	            case 10:
-	                v = TerrainType;
-	                break;
-            }
-
-	        return v;
-	    }
-
-		public override void Generate()
+		public void Generate()
 		{
-			base.Generate();
-			m_terrain.Generate(m_numCols, m_numRows);
-
-			CPerlinMap perlin = m_terrain.Map;
-			for (int x = 0; x < m_numCols; x++) {
-				for (int z = 0; z < m_numRows; z++) {
-					int index = GetTypeAtHeight(perlin[x, z]);
-				    int type = GetTypeByIndex(index);
-                    m_grid.FillData(x, z, type, GetAsset(index), GetAssetWalkable(index));
-                }
-			}
+			m_terrain.Generate(64, 64);
 		}
 	}
 }
