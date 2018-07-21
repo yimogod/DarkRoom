@@ -23,7 +23,7 @@ namespace DarkRoom.PCG{
 	public class CLandScapeGenerator_Terrain {
 		private CPerlinMap m_map;
 
-		private CForestGenerator_Road m_road;
+		private CCommonGenerator_Road m_road;
 
 		/// <summary>
 		/// 获取柏林模糊产生的地图
@@ -32,7 +32,6 @@ namespace DarkRoom.PCG{
 
 		void Start()
 		{
-			m_road = new CForestGenerator_Road();
         }
 
 		/// <summary>

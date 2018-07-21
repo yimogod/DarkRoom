@@ -1,25 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using DarkRoom.Core;
+using DarkRoom.Game;
+using DarkRoom.PCG;
 using UnityEngine;
 namespace Rayman{
-	#region generator
 	public class PondGenerator{
-		protected MapGrid _aliveGrid;
+		protected CAssetGrid _aliveGrid;
 		protected int _numCols;
 		protected int _numRows;
 		protected int _pondMinSize;
 		protected int _pondMaxSize;
 
 		protected List<PondInfo> _pondList = new List<PondInfo>();
-		protected MapCellularHelper _helper = new MapCellularHelper();
+		protected CCellularAutomaton _helper = new CCellularAutomaton();
 
 		public PondGenerator(int cols, int rows){
 			_numCols = cols;
 			_numRows = rows;
 
-			_aliveGrid = new MapGrid();
+			_aliveGrid = new CAssetGrid();
 			_aliveGrid.Init(_numCols, _numRows);
-			_helper.Init(_numCols, _numRows);
 
 			_pondMinSize = (int)(_numRows / 4);
 			_pondMaxSize = (int)(_numRows / 2);
@@ -31,15 +32,15 @@ namespace Rayman{
 		protected void GeneratePondData(int pondNum, int pondMinSize, int pondMaxSize){
 			_pondList.Clear();
 			//我们的地图默认都是活着的
-			_aliveGrid.MakeAllWalkable(true);
+			_aliveGrid.SetAllMapWalkable(true);
 
 			for(int i = 0; i < pondNum; ++i){
-				int cols = RayRandom.Next(pondMinSize, pondMaxSize);
-				int rows = RayRandom.Next(pondMinSize, pondMaxSize);
+				int cols = CDarkRandom.Next(pondMinSize, pondMaxSize);
+				int rows = CDarkRandom.Next(pondMinSize, pondMaxSize);
 				//左下角坐标随机一个
 				//池塘的外围矩形就确定了. 我们要在这个矩形中找一个不规则闭合曲线来做池塘
-				int minCol = RayRandom.Next(8, _numCols - cols);
-				int minRow = RayRandom.Next(8, _numRows - rows);
+				int minCol = CDarkRandom.Next(8, _numCols - cols);
+				int minRow = CDarkRandom.Next(8, _numRows - rows);
 
 				PondInfo pond = new PondInfo(minCol, minRow, cols, rows);
 				pond.Generate(_aliveGrid);
@@ -55,20 +56,17 @@ namespace Rayman{
 				//_aliveGrid.CopyUnWalkableFrom(grid, minX, minZ, (int)(minX + size.x), (int)(minZ + size.z));
 			}
 
-			_aliveGrid.RevertAliveDead();
+			//_aliveGrid.RevertAliveDead();
 		}
 
 		public virtual void Dispose(){
 			_pondList.Clear();
 			_pondList = null;
 
-			_helper.Dispose();
 			_helper = null;
 		}
 	}
-	#endregion
 
-	#region PondInfo
 	public class PondInfo{
 		private float[,] _perlinNodes;
 		private float[,] _usefullNodes;
@@ -120,7 +118,7 @@ namespace Rayman{
 		//2. 值最小的地方就是池塘的最低点
 		//3. 循环池塘矩形的四条边, 寻找合理的池塘点
 		//4. 生命游戏圆滑一个池塘边缘
-		public void Generate(MapGrid aliveGrid){
+		public void Generate(CAssetGrid aliveGrid){
 			_perlinNodes = new float[_rows, _cols];
 			_usefullNodes = new float[_rows, _cols];
 
@@ -132,7 +130,7 @@ namespace Rayman{
 			for (int row = 0; row < _rows; row++){
 				for (int col = 0; col < _cols; col++){
 					_usefullNodes[row, col] = -1f;
-					float perlin = RayRandom.NextPerlinValueNoise(0.4f, col, row);
+					float perlin = CDarkRandom.NextPerlinValueNoise(col, row, 0.4f);
 					_perlinNodes[row, col] = perlin;
 
 					if (perlin > _lowestValue)continue;
@@ -214,7 +212,7 @@ namespace Rayman{
 
 			PondLine line = new PondLine(_lowestCol, _lowestRow, col, row);
 			Vector3 v = line.NextStep();
-			while (RayUtil.IsValidVec3(v)){
+			while (CDarkUtil.IsValidVec3(v)){
 				int c = (int)v.x;
 				int r = (int)v.z;
 				if (r >= _rows || c >= _cols || r < 0 || c < 0){
@@ -236,7 +234,7 @@ namespace Rayman{
 			float split = _highestValue + _lowestValue;
 			line = new PondLine(_lowestCol, _lowestRow, _highestCol, _highestRow);
 			v = line.NextStep();
-			while (RayUtil.IsValidVec3(v)){
+			while (CDarkUtil.IsValidVec3(v)){
 				int c = (int)v.x;
 				int r = (int)v.z;
 				if (r >= _rows || c >= _cols || r < 0 || c < 0){
@@ -252,9 +250,7 @@ namespace Rayman{
 
 		}
 	}
-	#endregion
 
-	#region line
 	public class PondLine{
 		public int _startCol;
 		public int _startRow;
@@ -298,18 +294,16 @@ namespace Rayman{
 				_stepTile--;
 
 			if (_isVertical){
-				if(_up && step >= _endCol)return RayConst.INVALID_VEC3;
-				if(!_up && step <= _endCol)return RayConst.INVALID_VEC3;
+				if(_up && step >= _endCol)return CDarkConst.INVALID_VEC3;
+				if(!_up && step <= _endCol)return CDarkConst.INVALID_VEC3;
 				return new Vector3(_startCol, 0, step);
 			}
 
-			if(_right && step >= _endRow)return RayConst.INVALID_VEC3;
-			if(!_right && step <= _endRow)return RayConst.INVALID_VEC3;
+			if(_right && step >= _endRow)return CDarkConst.INVALID_VEC3;
+			if(!_right && step <= _endRow)return CDarkConst.INVALID_VEC3;
 
 			int dr = (int)(_k * (step - _startCol) + _startRow);
 			return new Vector3(step, 0, dr);
 		}
 	}
-
-	#endregion
 }

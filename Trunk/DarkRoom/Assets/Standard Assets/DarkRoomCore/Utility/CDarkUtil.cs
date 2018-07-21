@@ -91,5 +91,10 @@ namespace DarkRoom.Core
         {
             return false;
         }
+
+        public static bool IsValidVec3(Vector3 vec)
+        {
+            return false;
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using DarkRoom.AI;
 using DarkRoom.Core;
+using DarkRoom.Game;
 using UnityEngine;
 
 namespace DarkRoom.PCG
@@ -8,11 +10,11 @@ namespace DarkRoom.PCG
 	/// <summary>
 	/// 平原产生河流和道路的类
 	/// </summary>
-	public class CForestGenerator_Road {
+	public class CCommonGenerator_Road {
         protected int _numCols;
         protected int _numRows;
 
-        protected CAStar astar = new CAStar();
+        protected CAStar astar = new CAStar(CAStar.Connection.Four);
 
         //路开始的点
         protected Vector3 _startPoint;
@@ -22,7 +24,7 @@ namespace DarkRoom.PCG
         //存储主路点的node坐标, node来自于walkgrid
         protected List<CStarNode> _wayPointList = new List<CStarNode>();
 
-        public CForestGenerator_Road(int cols, int rows)
+        public CCommonGenerator_Road(int cols, int rows)
         {
             _numCols = cols;
             _numRows = rows;
@@ -39,7 +41,7 @@ namespace DarkRoom.PCG
         }
 
         //支线的路, 要连接到院子和两个神秘点
-        public void CreateRoadAttached(Dictionary<int, RoomInfo> roomDict, MapGrid walkGrid, MapGrid typeGrid)
+        public void CreateRoadAttached(Dictionary<int, RoomInfo> roomDict, CAssetGrid walkGrid, CAssetGrid typeGrid)
         {
             foreach (KeyValuePair<int, RoomInfo> item in roomDict)
             {
@@ -51,51 +53,50 @@ namespace DarkRoom.PCG
 
                 //遍历主路, 找到最近的路点
                 int dis = 1000000;
-                foreach (MapNode node in _wayPointList)
+                foreach (var node in _wayPointList)
                 {
-                    int d = node.DisBetween(doorRow, doorCol);
-                    if (d < dis)
-                    {
-                        dis = d;
-                        targetCol = node.col;
-                        targetRow = node.row;
-                    }
+                    //int d = node.DisBetween(doorRow, doorCol);
+                   // if (d < dis)
+                   // {
+                   //     dis = d;
+                   //     targetCol = node.col;
+                   //     targetRow = node.row;
+                  //  }
                 }
 
                 //路离房子特别近, 就不修路了
-                if (dis < 36) continue;
+               // if (dis < 36) continue;
 
                 walkGrid.SetStartNode(doorRow, doorCol);
                 walkGrid.SetEndNode(targetRow, targetCol);
-                bool r = astar.FindPath(walkGrid);
+              //  bool r = astar.FindPath(walkGrid);
                 //找到路就根据a*结果画路
-                if (!r) continue;
+                //if (!r) continue;
 
-                int roadType = (int)RayConst.TileType.ROAD;
-                foreach (MapNode node in astar.path)
-                {
+              //  int roadType = (int)RayConst.TileType.ROAD;
+             //   foreach (var node in astar.path)
+               // {
                     //新的路需要设置类型
-                    typeGrid.SetType(node.row, node.col, roadType);
-                    _wayPointList.Add(node);
-                }
-                ExpandAttachRoad(astar.path, walkGrid, typeGrid);
+                //    typeGrid.SetType(node.row, node.col, roadType);
+              //      _wayPointList.Add(node);
+              //  }
             }
 
         }
 
         //创建道路
-        public void CreateMainRoad(CStarNode walkGrid, CStarNode typeGrid)
+        public void CreateMainRoad(CAssetGrid walkGrid, CAssetGrid typeGrid)
         {
             //1. 我们先从左下角随机起点.
             //我们的路的起点在整张图里面缩3个格子
             int startRange = 3;
             int range = 9;
-            int minX = RayRandom.Next(startRange, range);
-            int minZ = RayRandom.Next(startRange, range);
+            int minX = CDarkRandom.Next(startRange, range);
+            int minZ = CDarkRandom.Next(startRange, range);
             _startPoint = new Vector3(minX, 0, minZ);
 
             //2. 随机三个数来确定重点在那个角落--左上, 右上, 右下
-            int rand = RayRandom.Next(3);
+            int rand = CDarkRandom.Next(3);
             int maxX = 0;
             int maxZ = 0;
 
@@ -106,20 +107,20 @@ namespace DarkRoom.PCG
             if (rand == TOP_LEFT)
             {
                 Debug.Log("Road direciton is Top Left");
-                maxX = RayRandom.Next(startRange, range);
-                maxZ = _numRows - RayRandom.Next(startRange, range);
+                maxX = CDarkRandom.Next(startRange, range);
+                maxZ = _numRows - CDarkRandom.Next(startRange, range);
             }
             else if (rand == BOTTOM_RIGHT)
             {//bottom right
                 Debug.Log("Road direciton is Bottom Right");
-                maxX = _numCols - RayRandom.Next(startRange, range);
-                maxZ = RayRandom.Next(startRange, range);
+                maxX = _numCols - CDarkRandom.Next(startRange, range);
+                maxZ = CDarkRandom.Next(startRange, range);
             }
             else
             {//top right
                 Debug.Log("Road direciton is Top Right");
-                maxX = _numCols - RayRandom.Next(startRange, range);
-                maxZ = _numRows - RayRandom.Next(startRange, range);
+                maxX = _numCols - CDarkRandom.Next(startRange, range);
+                maxZ = _numRows - CDarkRandom.Next(startRange, range);
             }
             _endPoint = new Vector3(maxX, 0, maxZ);
             _endPoint = walkGrid.FindNearestWalkablePos(_endPoint);
@@ -132,8 +133,8 @@ namespace DarkRoom.PCG
             List<Vector3> possibleWayPoint = new List<Vector3>();
             for (int i = 0; i < 30; ++i)
             {
-                int col = RayRandom.Next(_numCols);
-                int row = RayRandom.Next(_numRows);
+                int col = CDarkRandom.Next(_numCols);
+                int row = CDarkRandom.Next(_numRows);
                 if (!walkGrid.IsWalkable(row, col)) continue;
 
                 Vector3 vec = new Vector3(col, 0, row);
@@ -183,34 +184,32 @@ namespace DarkRoom.PCG
 
                 walkGrid.SetStartNode((int)start.z, (int)start.x);
                 walkGrid.SetEndNode((int)end.z, (int)end.x);
-                bool r = astar.FindPath(walkGrid);
+                //bool r = astar.FindPath(walkGrid);
                 //找到路就根据a*结果画路
-                if (r)
-                {
-                    foreach (var node in astar.path)
-                    {
-                        _wayPointList.Add(node);
-                    }
-                }
-                else
-                {//找不到路就直线连接
+                //if (r)
+                //{
+                //    foreach (var node in astar.path)
+              //      {
+               //         _wayPointList.Add(node);
+                //    }
+               // }
+               // else
+               // {//找不到路就直线连接
                  //TODO
-                }
+               // }
             }
 
 
             //寻路不会将起点放进去. 所以我们放入起点
-            _wayPointList.Add(walkGrid.startNode);
-            _wayPointList.Add(walkGrid.GetNode((int)_startPoint.z, (int)_startPoint.x));
-
-            ExpandMainRoad(walkGrid, typeGrid);
+           // _wayPointList.Add(walkGrid.startNode);
+           // _wayPointList.Add(walkGrid.GetNode((int)_startPoint.z, (int)_startPoint.x));
 
             //6.这时, wayPointList已经是所有的路的连接点, 我们遍历设置地图数据, 我们会最终一起绘制路
-            foreach (var node in _wayPointList)
-            {
-                var tn = typeGrid.GetNode(node.row, node.col);
-                tn.type = (int)RayConst.TileType.ROAD;
-            }
+          //  foreach (var node in _wayPointList)
+        //    {
+          //      var tn = typeGrid.GetNode(node.row, node.col);
+         //       tn.type = (int)RayConst.TileType.ROAD;
+       //     }
 
             //finish
         }
@@ -267,14 +266,14 @@ namespace DarkRoom.PCG
 
         protected int CompareZ(Vector3 node1, Vector3 node2)
         {
-            if (RMathUtil.FloatEqual(node1.z, node2.z)) return 0;
+            if (CMathUtil.FloatEqual(node1.z, node2.z)) return 0;
             if (node1.z < node2.z) return -1;
             return 1;
         }
 
         protected int CompareX(Vector3 node1, Vector3 node2)
         {
-            if (CDarkUtil.FloatEqual(node1.z, node2.z)) return 0;
+            if (CMathUtil.FloatEqual(node1.z, node2.z)) return 0;
             if (node1.x < node2.x) return -1;
             return 1;
         }

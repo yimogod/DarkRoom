@@ -37,19 +37,7 @@ namespace DarkRoom.PCG {
         /// 根据高度, 从配置中读取相关的asset
         /// </summary>
 		private int GetTypeAtHeight(float height) {
-            //两种海洋
-			if (height < SeaLevel){
-				if(CDarkRandom.SmallerThan(0.5f))return 0;
-				return 1;
-			}
-
-            //两种海岸线
-            if (height <= BeachHeight){
-				if(CDarkRandom.SmallerThan(0.5f))return 2;
-				return 3;
-			}
-
-            //两种草
+           //两种草
 			if (height <= GrassHeight){
 				if(CDarkRandom.SmallerThan(0.5f))return 4;
 				return 5;
@@ -81,7 +69,7 @@ namespace DarkRoom.PCG {
 	            case 1:
 	            case 2:
 	            case 3:
-                    v = SeaType;
+                    v = WaterType;
 	                break;
 	            case 4:
 	            case 5:

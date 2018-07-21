@@ -34,7 +34,7 @@ namespace Sword
             //地图生成器生成地图
             CForestGenerator gen = terrainLayer.GetOrCreateComponentOnGameObject<CForestGenerator>();
 			gen.TerrainType = (int)GameConst.TileType.TERRIAN;
-            gen.SeaType = (int) GameConst.TileType.LAKE;
+            gen.WaterType = (int) GameConst.TileType.LAKE;
             gen.SetAsset(0, "sea_01", false);
             gen.SetAsset(1, "sea_02", false);
             gen.SetAsset(2, "coast_01", false);
