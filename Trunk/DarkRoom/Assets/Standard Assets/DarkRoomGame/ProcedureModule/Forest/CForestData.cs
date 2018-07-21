@@ -34,12 +34,47 @@ namespace DarkRoom.PCG {
 		
 	}
 
+    public struct CForestRoom
+    {
+        public Vector2Int Size;
+        /// <summary>
+        /// 是否有推荐位置
+        /// </summary>
+        public Vector2Int PreferLocation;
+
+        public string Name;
+
+        /// <summary>
+        /// 是否唯一的
+        /// </summary>
+        public bool Unique;
+
+        /// <summary>
+        /// 是否有边界?
+        /// </summary>
+        public bool Border;
+
+        /// <summary>
+        /// 是否有隧道
+        /// </summary>
+        public bool NoTunnels;
+
+        /// <summary>
+        /// 是否特殊?
+        /// </summary>
+        public bool Special;
+
+        public int[] Spots;
+
+        public int[] Exits;
+    }
+
 
     /// <summary>
     /// 用于森林地形的房子
     /// 我们默认的房子都是坐北朝南, 即门口都朝下
     /// </summary>
-    public class CForestRoom
+    public class CForestRoom1
     {
         public const int MIN_COL = 10;
         public const int MIN_ROW = 10;
