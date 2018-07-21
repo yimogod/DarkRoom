@@ -25,7 +25,7 @@ namespace DarkRoom.PCG{
 		private CFloodFill m_floodFill = new CFloodFill();
 
 		//本地图中的房子
-		private List<CCave.Room> m_survivingRooms = new List<CCave.Room>();
+		private List<CCaveRoom> m_survivingRooms = new List<CCaveRoom>();
 
 		/// <summary>
 		/// 获取细胞自动机处理过的地图
@@ -36,7 +36,7 @@ namespace DarkRoom.PCG{
 		/// <summary>
 		/// 获取本地图中的屋子
 		/// </summary>
-		public List<CCave.Room> Rooms{ get { return m_survivingRooms; } }
+		public List<CCaveRoom> Rooms{ get { return m_survivingRooms; } }
 
 		void Start()
 		{
@@ -57,13 +57,13 @@ namespace DarkRoom.PCG{
 			ProcessLittleRegion(CloseReginThreshold, 0, 1, null);
 
 			//保存下来的大的region
-			List<List<CCave.Coord>> roomRegion = new List<List<CCave.Coord>>();
+			List<List<Vector2Int>> roomRegion = new List<List<Vector2Int>>();
 			//获取生存的细胞形成的封闭区域, 也叫room
 			ProcessLittleRegion(CloseReginThreshold, 1, 0, roomRegion);
 
 			m_survivingRooms.Clear();
 			foreach (var item in roomRegion) {
-				m_survivingRooms.Add(new CCave.Room(item, m_map));
+				m_survivingRooms.Add(new CCaveRoom(item, m_map));
             }
 		}
 
@@ -75,14 +75,14 @@ namespace DarkRoom.PCG{
 		/// <param name="large">抹去的小区域的赋值</param>
 		/// <param name="largeRegion">没有被抹去的大的区域</param>
 		private void ProcessLittleRegion(int threshold, 
-			int little, int large, List<List<CCave.Coord>> largeRegion)
+			int little, int large, List<List<Vector2Int>> largeRegion)
 		{
-			List<List<CCave.Coord>> roomRegions = m_floodFill.GetRegions(m_map, little);
-			foreach (List<CCave.Coord> roomRegion in roomRegions) {
+			List<List<Vector2Int>> roomRegions = m_floodFill.GetRegions(m_map, little);
+			foreach (List<Vector2Int> roomRegion in roomRegions) {
 				//如果区域太小, 就抹去
 				if (roomRegion.Count < threshold) {
-					foreach (CCave.Coord tile in roomRegion) {
-						m_map[tile.tileX, tile.tileZ] = large;
+					foreach (Vector2Int tile in roomRegion) {
+						m_map[tile.x, tile.y] = large;
 					}
 					continue;
 				}
@@ -94,18 +94,18 @@ namespace DarkRoom.PCG{
 		}
 
 		//连接相邻的距离最近的room, 并且在相邻的房子中间创建走路
-		private void ConnectClosestRooms(List<CCave.Room> allRooms, bool forceAccessibilityFromMainRoom = false)
+		private void ConnectClosestRooms(List<CCaveRoom> allRooms, bool forceAccessibilityFromMainRoom = false)
 		{
 			m_survivingRooms.Sort();
 			m_survivingRooms[0].isMainRoom = true;
 			m_survivingRooms[0].isAccessibleFromMainRoom = true;
 
 
-			List<CCave.Room> roomListA = new List<CCave.Room>();
-			List<CCave.Room> roomListB = new List<CCave.Room>();
+			List<CCaveRoom> roomListA = new List<CCaveRoom>();
+			List<CCaveRoom> roomListB = new List<CCaveRoom>();
 
 			if (forceAccessibilityFromMainRoom) {
-				foreach (CCave.Room room in allRooms) {
+				foreach (CCaveRoom room in allRooms) {
 					if (room.isAccessibleFromMainRoom) {
 						roomListB.Add(room);
 					} else {
@@ -118,13 +118,13 @@ namespace DarkRoom.PCG{
 			}
 
 			int bestDistance = 0;
-			CCave.Coord bestTileA = new CCave.Coord();
-			CCave.Coord bestTileB = new CCave.Coord();
-			CCave.Room bestRoomA = new CCave.Room();
-			CCave.Room bestRoomB = new CCave.Room();
+			Vector2Int bestTileA = new Vector2Int();
+			Vector2Int bestTileB = new Vector2Int();
+			CCaveRoom bestRoomA = new CCaveRoom();
+			CCaveRoom bestRoomB = new CCaveRoom();
 			bool possibleConnectionFound = false;
 
-			foreach (CCave.Room roomA in roomListA) {
+			foreach (CCaveRoom roomA in roomListA) {
 				if (!forceAccessibilityFromMainRoom) {
 					possibleConnectionFound = false;
 					if (roomA.connectedRooms.Count > 0) {
@@ -132,17 +132,17 @@ namespace DarkRoom.PCG{
 					}
 				}
 
-				foreach (CCave.Room roomB in roomListB) {
+				foreach (CCaveRoom roomB in roomListB) {
 					if (roomA == roomB || roomA.IsConnected(roomB)) {
 						continue;
 					}
 
 					for (int tileIndexA = 0; tileIndexA < roomA.edgeTiles.Count; tileIndexA++) {
 						for (int tileIndexB = 0; tileIndexB < roomB.edgeTiles.Count; tileIndexB++) {
-							CCave.Coord tileA = roomA.edgeTiles[tileIndexA];
-							CCave.Coord tileB = roomB.edgeTiles[tileIndexB];
+							Vector2Int tileA = roomA.edgeTiles[tileIndexA];
+							Vector2Int tileB = roomB.edgeTiles[tileIndexB];
 							int distanceBetweenRooms =
-								(int) (Mathf.Pow(tileA.tileX - tileB.tileX, 2) + Mathf.Pow(tileA.tileZ - tileB.tileZ, 2));
+								(int) (Mathf.Pow(tileA.x - tileB.x, 2) + Mathf.Pow(tileA.y - tileB.y, 2));
 
 							if (distanceBetweenRooms < bestDistance || !possibleConnectionFound) {
 								bestDistance = distanceBetweenRooms;
@@ -171,39 +171,39 @@ namespace DarkRoom.PCG{
 		}
 
 		//在roomA和roomB之间创建走廊
-		private void CreatePassage(CCave.Room roomA, CCave.Room roomB, 
-			CCave.Coord tileA, CCave.Coord tileB){
+		private void CreatePassage(CCaveRoom roomA, CCaveRoom roomB,
+		    Vector2Int tileA, Vector2Int tileB){
 
-			CCave.Room.ConnectRooms(roomA, roomB);
-			List<CCave.Coord> line = GetLine(tileA, tileB);
-			foreach (CCave.Coord c in line) {
+			CCaveRoom.ConnectRooms(roomA, roomB);
+			List<Vector2Int> line = GetLine(tileA, tileB);
+			foreach (Vector2Int c in line) {
 				DrawCircle(c, 5);
 			}
 		}
 
-		private void DrawCircle(CCave.Coord c, int r)
+		private void DrawCircle(Vector2Int c, int r)
 		{
 			for (int x = -r; x <= r; x++) {
 				for (int y = -r; y <= r; y++) {
 					if (x * x + y * y <= r * r) {
-						m_map.MakeAlive(c.tileX + x, c.tileZ + y);
+						m_map.MakeAlive(c.x + x, c.y + y);
 					}
 				}
 			}
 		}
 
 		//获取直线通过的格子
-		List<CCave.Coord> GetLine(CCave.Coord from, CCave.Coord to)
+		List<Vector2Int> GetLine(Vector2Int from, Vector2Int to)
 		{
-			List<CCave.Coord> line = new List<CCave.Coord>();
+			List<Vector2Int> line = new List<Vector2Int>();
 			CIntLine il = new CIntLine(
-				new Vector2(from.tileX, from.tileZ),
-				new Vector2(to.tileX, to.tileZ));
-			List<Vector2> list = il.GetLine();
+				new Vector2Int(from.x, from.y),
+				new Vector2Int(to.x, to.y));
+			List<Vector2Int> list = il.GetLine();
 			for (int i = 0; i < list.Count; i++) {
 				int x = (int)list[i].x;
 				int y = (int)list[i].y;
-				CCave.Coord co = new CCave.Coord(x, y);
+				Vector2Int co = new Vector2Int(x, y);
 				line.Add(co);
 			}
 

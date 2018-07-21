@@ -10,11 +10,11 @@ namespace DarkRoom.Core
     public class CIntLine
 	{
 		//线段的两个端点
-		private Vector2 m_from, m_to;
-		List<Vector2> m_line = new List<Vector2>();
+		private Vector2Int m_from, m_to;
+		List<Vector2Int> m_line = new List<Vector2Int>();
 
 
-		public CIntLine(Vector2 from, Vector2 to)
+		public CIntLine(Vector2Int from, Vector2Int to)
 		{
 			m_from = from;
 			m_to = to;
@@ -23,7 +23,7 @@ namespace DarkRoom.Core
 		/// <summary>
 		/// 获取在线段上的所有tile
 		/// </summary>
-		public List<Vector2> GetLine() {
+		public List<Vector2Int> GetLine() {
 			if (m_line.Count > 0) {
 				return m_line;
 			}
@@ -52,7 +52,7 @@ namespace DarkRoom.Core
 
 			int gradientAccumulation = longest / 2;
 			for (int i = 0; i < longest; i++) {
-				m_line.Add(new Vector2(x, y));
+				m_line.Add(new Vector2Int(x, y));
 
 				if (inverted) {
 					y += step;
