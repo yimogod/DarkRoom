@@ -28,6 +28,9 @@ namespace Sword
             {
                 globalExist.AddComponent<CShowFPS>();
             }
+
+            CWorld.Instance.InitializeGameMode<CGameMode>();
+            CWorld.Instance.InitializeGameState<CGameState>();
         }
     }
 }

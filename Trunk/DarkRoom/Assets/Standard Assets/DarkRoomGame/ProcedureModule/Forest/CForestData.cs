@@ -180,7 +180,7 @@ namespace DarkRoom.PCG {
             return true;
         }
 
-        public static CForestRoom Create(int minLength, int maxLength, int minWidth, int maxWidth)
+        public static CForestRoom1 Create(int minLength, int maxLength, int minWidth, int maxWidth)
         {
             //3, 4, 5
             int width = CDarkRandom.Next(minWidth, maxWidth);
@@ -189,7 +189,7 @@ namespace DarkRoom.PCG {
 
             //int rotation = Rand.Next(-1, 3);
 
-            CForestRoom room = new CForestRoom();
+            CForestRoom1 room = new CForestRoom1();
             room.width = width;
             room.length = length;
 

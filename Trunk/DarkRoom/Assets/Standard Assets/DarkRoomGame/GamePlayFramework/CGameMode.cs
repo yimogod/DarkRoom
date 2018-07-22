@@ -29,6 +29,10 @@ namespace DarkRoom.Game {
 		//每1s我们移除死亡的单位
 		private CTimeRegulator m_removeDeadReg = new CTimeRegulator(1);
 
+		public CGameMode(){
+			
+		}
+
 		//内部对选中pawn的快捷引用
 		protected CPawnEntity m_selectPawn {
 			get {

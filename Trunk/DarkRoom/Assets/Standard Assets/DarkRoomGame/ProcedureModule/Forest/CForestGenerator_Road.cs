@@ -45,11 +45,11 @@ namespace DarkRoom.PCG
         {
             foreach (KeyValuePair<int, CForestRoom> item in roomDict)
             {
-                CForestRoom room = item.Value;
-                int doorCol = room.doorCol;
-                int doorRow = room.doorRow;
-                int targetCol = -1;
-                int targetRow = -1;
+                //CForestRoom room = item.Value;
+                //int doorCol = room.doorCol;
+                //int doorRow = room.doorRow;
+                //int targetCol = -1;
+                //int targetRow = -1;
 
                 //遍历主路, 找到最近的路点
                 int dis = 1000000;
@@ -67,8 +67,8 @@ namespace DarkRoom.PCG
                 //路离房子特别近, 就不修路了
                // if (dis < 36) continue;
 
-                walkGrid.SetStartNode(doorRow, doorCol);
-                walkGrid.SetEndNode(targetRow, targetCol);
+                //walkGrid.SetStartNode(doorRow, doorCol);
+               // walkGrid.SetEndNode(targetRow, targetCol);
               //  bool r = astar.FindPath(walkGrid);
                 //找到路就根据a*结果画路
                 //if (!r) continue;

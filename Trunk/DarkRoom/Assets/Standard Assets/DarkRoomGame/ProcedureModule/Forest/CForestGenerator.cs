@@ -21,7 +21,6 @@ namespace DarkRoom.PCG {
 	 * 为什么要强调64x64, 因为如果地图小于64的话, 细胞自动机随机的不够, 不能够产生合理数据
 	 * 如果地图小于64, 需要在64上随机, 然后采样成小地图
 	*/
-    [RequireComponent(typeof(CForestGenerator_Terrain))]
 	public class CForestGenerator : MonoBehaviour {
         /// <summary>
         /// 基础地形的数据

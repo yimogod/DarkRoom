@@ -82,6 +82,10 @@ namespace Sword{
 		}
 
 		public static MapMeta GetMeta(string id){
+			if(!m_dict.ContainsKey(id)){
+				Debug.LogError(id + " map meta does not exist!");
+				return null;
+			}
 			return m_dict[id];
 		}
 	}

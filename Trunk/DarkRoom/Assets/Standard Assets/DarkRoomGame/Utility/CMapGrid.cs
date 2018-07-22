@@ -69,7 +69,7 @@ namespace DarkRoom.Game {
 			m_nodes = new T[m_numCols, m_numRows];
 			for(int row = 0; row < m_numRows; row++){
 				for(int col = 0; col < m_numCols; col++){
-					T t = default(T);
+					T t = new T();
                     t.Col = col;
                     t.Row = row;
                     m_nodes[col, row] = t;

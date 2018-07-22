@@ -38,7 +38,7 @@ namespace DarkRoom.Game
 
 			// 第一行是表头, 第二行是解释, 第三行才是开始的数据, 忽略空行和以#注释掉的行
 			string line;
-			for (int i = 4; i < lineCount; ++i) {
+			for (int i = 2; i < lineCount; ++i) {
 				line = lines[i].Trim();
 				if (line.Length == 0) continue;
 				m_tabValues.Add(ParseLine(lines[i]));

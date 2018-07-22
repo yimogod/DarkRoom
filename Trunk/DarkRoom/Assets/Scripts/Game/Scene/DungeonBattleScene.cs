@@ -46,9 +46,9 @@ namespace Sword
         private void CreateMapThing()
         {
             m_terrainLayer.Build();
-            m_unitLayer.Build();
+            //m_unitLayer.Build();
 
-            m_builder.CopyData(TMap.Instance.WalkableGrid);
+            //m_builder.CopyData(TMap.Instance.WalkableGrid);
         }
 
         void Update()

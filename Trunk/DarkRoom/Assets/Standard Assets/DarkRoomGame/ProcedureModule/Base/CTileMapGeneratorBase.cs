@@ -57,6 +57,7 @@ namespace DarkRoom.PCG{
 
 		public void SetAsset(int index, string asset, bool walkable)
 		{
+			Debug.Log(index + "  " + asset);
 		    if (m_assetList.Length > m_maxAssetsNum)
 		    {
                 Debug.LogErrorFormat("{0} bigger than max assets num. max assets num is {1}", asset, m_maxAssetsNum);

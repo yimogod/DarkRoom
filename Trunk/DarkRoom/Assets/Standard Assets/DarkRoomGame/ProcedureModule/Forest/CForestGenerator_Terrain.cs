@@ -33,15 +33,17 @@ namespace DarkRoom.PCG{
         /// </summary>
         public int MaxPondNum = 1;
 
+        public CForestGenerator_Terrain(){
+            m_maxAssetsNum = 7;
+		    m_walkableList = new bool[m_maxAssetsNum];
+		    m_assetList = new string[m_maxAssetsNum];
+        }
+
         /// <summary>
         /// 创建基础地形和河流
         /// </summary>
         public void Generate(int cols, int rows)
 		{
-		    m_maxAssetsNum = 5;
-		    m_walkableList = new bool[m_maxAssetsNum];
-		    m_assetList = new string[m_maxAssetsNum];
-
             m_grid.Init(cols, rows);
 
 		    GenerateTerrain();

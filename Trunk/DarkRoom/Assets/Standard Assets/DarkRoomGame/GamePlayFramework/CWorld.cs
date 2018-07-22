@@ -43,17 +43,17 @@ namespace DarkRoom.Game {
         /// <summary>
         /// 初始化GameMode
         /// </summary>
-        public void InitializeGameMode<T>() where T : CGameMode
+        public void InitializeGameMode<T>() where T : CGameMode, new()
 	    {
-	        m_mode = default(T);
+	        m_mode = new T();
 	    }
 
         /// <summary>
         /// 初始化GameState
         /// </summary>
-	    public void InitializeGameState<T>() where T : CGameState
+	    public void InitializeGameState<T>() where T : CGameState, new()
 	    {
-	        m_gameState = default(T);
+	        m_gameState = new T();
 	    }
 
         /// <summary>
@@ -124,8 +124,8 @@ namespace DarkRoom.Game {
         private void OnDestroy(){
 			m_ins = null;
 		    m_layer.OnDestroy();
-            m_mode.OnDestroy();
             m_gameState.OnDestroy();
+            m_mode.OnDestroy();
         }
 	}
 
@@ -178,7 +178,7 @@ namespace DarkRoom.Game {
             Root = root;
 
             TerrainLayer = Root.transform.GetOrCreateChild("TerrainLayer");
-            UnitLayer.gameObject.layer = LayerMask.NameToLayer("Terrain");
+            TerrainLayer.gameObject.layer = LayerMask.NameToLayer("Terrain");
 
             UnitLayer = Root.transform.GetOrCreateChild("UnitLayer");
             UnitLayer.gameObject.layer = LayerMask.NameToLayer("Unit");
