@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DarkRoom.GamePlayAbility;
 using  DarkRoom.Game;
+using DarkRoom.PCG;
 using UnityEngine;
 
 namespace Sword
@@ -24,6 +25,7 @@ namespace Sword
 
             //AddPaser("Meta/actor_meta", new CActorMetaParser());
 
+            AddPaser("Meta/level_meta", new CForestRoomMetaParser());
             AddPaser("Meta/level_meta", new MapMetaParser());
             //AddPaser("Meta/level_monster_meta", new MapMonsterMetaParser());
             //AddPaser("Meta/level_trigger_meta", new MapTriggerMetaParser());

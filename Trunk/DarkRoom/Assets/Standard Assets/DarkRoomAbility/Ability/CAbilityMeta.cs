@@ -166,10 +166,7 @@ namespace DarkRoom.GamePlayAbility {
 		public const string CAbilType_Target = "CAbilEffectTarget";
 	    public const string CAbilType_Position = "CAbilEffectPosition";
 
-        public CAbilityMetaParser() : base() {
-		}
-
-		public CAbilityMetaParser(bool useXml) : base(useXml) {
+        public CAbilityMetaParser() : base(true) {
 		}
 
 		public override void Execute(string content)

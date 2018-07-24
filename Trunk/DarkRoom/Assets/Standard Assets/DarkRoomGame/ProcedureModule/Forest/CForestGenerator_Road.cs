@@ -41,10 +41,10 @@ namespace DarkRoom.PCG
         }
 
         //支线的路, 要连接到院子和两个神秘点
-        public void CreateRoadAttached(Dictionary<int, CForestRoom> roomDict, CAssetGrid walkGrid, CAssetGrid typeGrid)
-        {
-            foreach (KeyValuePair<int, CForestRoom> item in roomDict)
-            {
+        //public void CreateRoadAttached(Dictionary<int, CForestRoom> roomDict, CAssetGrid walkGrid, CAssetGrid typeGrid)
+        //{
+        //    foreach (KeyValuePair<int, CForestRoom> item in roomDict)
+        //    {
                 //CForestRoom room = item.Value;
                 //int doorCol = room.doorCol;
                 //int doorRow = room.doorRow;
@@ -52,9 +52,9 @@ namespace DarkRoom.PCG
                 //int targetRow = -1;
 
                 //遍历主路, 找到最近的路点
-                int dis = 1000000;
-                foreach (var node in _wayPointList)
-                {
+           //     int dis = 1000000;
+           //     foreach (var node in _wayPointList)
+          //      {
                     //int d = node.DisBetween(doorRow, doorCol);
                    // if (d < dis)
                    // {
@@ -62,7 +62,7 @@ namespace DarkRoom.PCG
                    //     targetCol = node.col;
                    //     targetRow = node.row;
                   //  }
-                }
+           //     }
 
                 //路离房子特别近, 就不修路了
                // if (dis < 36) continue;
@@ -80,12 +80,12 @@ namespace DarkRoom.PCG
                 //    typeGrid.SetType(node.row, node.col, roadType);
               //      _wayPointList.Add(node);
               //  }
-            }
+       //     }
 
-        }
+      //  }
 
         //创建道路
-        public void CreateMainRoad(CAssetGrid walkGrid, CAssetGrid typeGrid)
+        /*public void CreateMainRoad(CAssetGrid walkGrid, CAssetGrid typeGrid)
         {
             //1. 我们先从左下角随机起点.
             //我们的路的起点在整张图里面缩3个格子
@@ -262,20 +262,20 @@ namespace DarkRoom.PCG
             if (check) return false;
 
             return true;
-        }
+        }*/
 
-        protected int CompareZ(Vector3 node1, Vector3 node2)
-        {
-            if (CMathUtil.FloatEqual(node1.z, node2.z)) return 0;
-            if (node1.z < node2.z) return -1;
-            return 1;
-        }
+        //protected int CompareZ(Vector3 node1, Vector3 node2)
+       // {
+       //     if (CMathUtil.FloatEqual(node1.z, node2.z)) return 0;
+       //     if (node1.z < node2.z) return -1;
+       //     return 1;
+      //  }
 
-        protected int CompareX(Vector3 node1, Vector3 node2)
-        {
-            if (CMathUtil.FloatEqual(node1.z, node2.z)) return 0;
-            if (node1.x < node2.x) return -1;
-            return 1;
-        }
-	}
+      //  protected int CompareX(Vector3 node1, Vector3 node2)
+      //  {
+      //      if (CMathUtil.FloatEqual(node1.z, node2.z)) return 0;
+      //      if (node1.x < node2.x) return -1;
+      //      return 1;
+     //   }
+    }
 }

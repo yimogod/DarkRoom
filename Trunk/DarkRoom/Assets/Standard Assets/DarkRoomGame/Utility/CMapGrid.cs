@@ -27,27 +27,27 @@ namespace DarkRoom.Game {
 		/// 返回寻路起点
 		/// </summary>
 		/// <value>The start node.</value>
-		public T StartNode{ get { return m_startNode; } }
+		public T StartNode => m_startNode;
 
-		/// <summary>
+	    /// <summary>
 		/// 返回寻路终点
 		/// </summary>
 		/// <value>The end node.</value>
-		public T EndNode{ get { return m_endNode; } }
+		public T EndNode => m_endNode;
 
-		/// <summary>
+	    /// <summary>
 		/// 返回网格列数
 		/// </summary>
 		/// <value>The number cols.</value>
-		public int NumCols{ get { return m_numCols; } }
+		public int NumCols => m_numCols;
 
-		/// <summary>
+	    /// <summary>
 		/// 返回网格行数
 		/// </summary>
 		/// <value>The number rows.</value>
-		public int NumRows{ get { return m_numRows; } }
+		public int NumRows => m_numRows;
 
-		/// <summary>
+	    /// <summary>
 		/// 初始化二维网格地图. 并指定所有的格子的可通行性为true
 		/// </summary>
 		/// <param name="numCols">Number cols.</param>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
+using UnityEngine;
 
 namespace DarkRoom.Game
 {
@@ -77,6 +78,29 @@ namespace DarkRoom.Game
 			t = node.GetAttribute(attrName);
 			return true;
 		}
+
+	    //从parent中寻找一个child node, 然后从node中读取一个属性
+	    //这里用ref的原因是因为, 如果在node中找不到这个属性, 就不改变t的值
+	    public bool TryReadChildNodeAttr(XmlElement parent, string childNodeName, ref Vector2Int t)
+	    {
+	        XmlElement node = parent.SelectSingleNode(childNodeName) as XmlElement;
+	        if (node == null) return false;
+
+	        string sx = node.GetAttribute("x");
+	        int x = 0;
+	        
+	        bool b = Int32.TryParse(sx, out x);
+	        if (!b) return false;
+
+	        string sy = node.GetAttribute("y");
+            int y = 0;
+            b = Int32.TryParse(sy, out y);
+	        if (!b) return false;
+
+	        t.x = x;
+	        t.y = y;
+	        return true;
+	    }
 
         /// <summary>
         /// 获取名字一样的数组
