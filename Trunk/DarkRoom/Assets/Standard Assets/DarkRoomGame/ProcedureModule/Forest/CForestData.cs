@@ -36,9 +36,19 @@ namespace DarkRoom.PCG {
     /// <summary>
     /// 开放式房屋的地块信息, 辅助terrain的数据生成
     /// </summary>
-    public struct CForestRoomTileData
+    public class CForestRoomTileData
     {
         public string Id;
-        public bool CanOpen;
+        //只有在出口的地方才可以开门
+        public CForestRoomMeta.TileType TileType;
+
+        public bool IsValid => string.IsNullOrEmpty(Id);
+        public bool CanOpen => TileType == CForestRoomMeta.TileType.Exit;
+
+        public CForestRoomTileData()
+        {
+            Id = "";
+            TileType = CForestRoomMeta.TileType.None;
+        }
     }
 }

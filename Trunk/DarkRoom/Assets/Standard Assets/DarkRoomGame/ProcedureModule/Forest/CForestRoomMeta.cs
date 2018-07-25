@@ -10,6 +10,7 @@ namespace DarkRoom.PCG
     {
         public enum TileType
         {
+            None = -1,
             Floor, //可通行的地面
             Wall, //墙壁或者柱子
             Exit //出口
@@ -26,14 +27,6 @@ namespace DarkRoom.PCG
         /// 是否唯一的
         /// </summary>
         public bool Unique;
-
-        /// <summary>
-        /// 是否有边界. 就是占用的空间要比实际的尺寸大一圈
-        /// 比如最外围是一些围墙, 然后我们扩展一圈
-        /// 
-        /// 但其实, 根本不需要. 我手动放大即可
-        /// </summary>
-        public bool Border;
 
         /// <summary>
         /// 是否有隧道
