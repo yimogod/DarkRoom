@@ -23,9 +23,9 @@ namespace Sword
         public int direction = GameConst.DIRECTION_RIGHT;
         public CUnitEntity.TeamSide group = CUnitEntity.TeamSide.Red;
 
-        private Vector3 _pos = CDarkConst.INVALID_VEC3;
+        private Vector2Int _pos = CDarkConst.INVALID_VEC2INT;
 
-        public static UnitBornData CreateUnitBornData(int id, CUnitEntity.TeamSide group, Vector3 pos)
+        public static UnitBornData CreateUnitBornData(int id, CUnitEntity.TeamSide group, Vector2Int pos)
         {
             UnitBornData data = new UnitBornData(id, pos);
             data.direction = CDarkRandom.Next(4);
@@ -34,17 +34,17 @@ namespace Sword
             return data;
         }
 
-        public UnitBornData(int id, Vector3 pos)
+        public UnitBornData(int id, Vector2Int pos)
         {
             metaId = id;
             _pos = pos;
-            col = (int) pos.x;
-            row = (int) pos.z;
+            col = pos.x;
+            row = pos.y;
         }
 
         public bool invalid
         {
-            get { return CDarkUtil.IsInvalidVec3(_pos); }
+            get { return CDarkUtil.IsValidVec2Int(_pos); }
         }
     }
 }

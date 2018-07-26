@@ -41,9 +41,9 @@ namespace Sword
         }
 
         //创建英雄, 固定位置, 其实更好的设计应该是祭坛~~~~
-        private void CreateHero(Vector3 pos)
+        private void CreateHero(Vector2Int pos)
         {
-            UnitBornData bornData = UnitBornData.CreateUnitBornData(10001, CUnitEntity.TeamSide.Red, pos);
+            //UnitBornData bornData = UnitBornData.CreateUnitBornData(10001, CUnitEntity.TeamSide.Red, pos);
 
             /*CActorVO vo = ProxyPool.userProxy.hero;
             if (vo == null)

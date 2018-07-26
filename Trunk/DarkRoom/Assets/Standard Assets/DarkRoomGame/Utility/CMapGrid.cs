@@ -11,20 +11,19 @@ namespace DarkRoom.Game {
 		//地图所有的node数据.
 		//[col][row]
 		protected T[,] m_nodes;
-        protected int m_numRows;
-        protected int m_numCols;
+	    protected Vector2Int m_size;
 
 	    /// <summary>
 		/// 返回网格列数
 		/// </summary>
 		/// <value>The number cols.</value>
-		public int NumCols => m_numCols;
+		public int NumCols => m_size.x;
 
 	    /// <summary>
 		/// 返回网格行数
 		/// </summary>
 		/// <value>The number rows.</value>
-		public int NumRows => m_numRows;
+		public int NumRows => m_size.y;
 
 	    /// <summary>
 		/// 初始化二维网格地图. 并指定所有的格子的可通行性为true
@@ -42,12 +41,11 @@ namespace DarkRoom.Game {
 		/// <param name="numRows">Number rows.</param>
 		/// <param name="walkable">If set to <c>true</c> walkable.此地图所有的格子可通行则为true</param>
 		public void Init(int numCols, int numRows, bool walkable){
-			m_numCols = numCols;
-			m_numRows = numRows;
+		    m_size = new Vector2Int(numCols, numRows);
 
-			m_nodes = new T[m_numCols, m_numRows];
-			for(int row = 0; row < m_numRows; row++){
-				for(int col = 0; col < m_numCols; col++){
+			m_nodes = new T[m_size.x, m_size.y];
+			for(int row = 0; row < m_size.y; row++){
+				for(int col = 0; col < m_size.x; col++){
 					T t = new T();
                     t.Col = col;
                     t.Row = row;
@@ -67,18 +65,20 @@ namespace DarkRoom.Game {
 			}
 		}
 
-		/// <summary>
-		/// 根据坐标获取格子
-		/// 如果格子非法, 就返回 null
-		/// </summary>
-		/// <returns>The node.</returns>
-		/// <param name="row">Row.</param>
-		/// <param name="col">Col.</param>
-		public T GetNode(int col, int row){
-			if (row < 0 || col < 0)return default(T);
-			if (row >= m_numRows)return default(T);
-			if (col >= m_numCols)return default(T);
-			return m_nodes[col, row];
+	    public T GetNode(Vector2Int pos)
+	    {
+	        return GetNode(pos.x, pos.y);
+	    }
+
+        /// <summary>
+        /// 根据坐标获取格子
+        /// 如果格子非法, 就返回 null
+        /// </summary>
+        public T GetNode(int col, int row){
+			if (row < 0 || col < 0)return new T();
+			if (row >= m_size.y) return new T();
+			if (col >= m_size.x) return new T();
+            return m_nodes[col, row];
 		}
 
 		/// <summary>
@@ -97,9 +97,6 @@ namespace DarkRoom.Game {
 		/// <summary>
 		/// 设置合法的格子的可通行性
 		/// </summary>
-		/// <param name="row">Row.</param>
-		/// <param name="col">Col.</param>
-		/// <param name="value">格子的可通行性</param>
 		public void SetWalkable(int col, int row, bool value){
 			T node = GetNode(col, row);
 			if (node.Invalid){
@@ -112,7 +109,7 @@ namespace DarkRoom.Game {
 
 	    public void CopyUnWalkableFrom(IWalkableGrid grid)
 	    {
-	        CopyUnWalkableFrom(grid, 0, 0, m_numCols, m_numRows);
+	        CopyUnWalkableFrom(grid, 0, 0, m_size.x, m_size.y);
 	    }
 
         public void CopyUnWalkableFrom(IWalkableGrid grid, int startCol, int startRow, int endCol, int endRow)
@@ -129,7 +126,7 @@ namespace DarkRoom.Game {
 
 	    public void CopyWalkableFrom(IWalkableGrid grid)
 	    {
-	        CopyWalkableFrom(grid, 0, 0, m_numCols, m_numRows);
+	        CopyWalkableFrom(grid, 0, 0, m_size.x, m_size.y);
 	    }
 
         public void CopyWalkableFrom(IWalkableGrid grid, int startCol, int startRow, int endCol, int endRow)
@@ -145,22 +142,20 @@ namespace DarkRoom.Game {
 	    }
 
 	    /*获取所在位置最近的可通行图*/
-	    public Vector3 FindNearestWalkablePos(Vector3 pos)
+	    public Vector2Int FindNearestWalkablePos(Vector2Int pos)
 	    {
-	        int row = (int)pos.z;
-	        int col = (int)pos.x;
-	        T node = GetNode(row, col);
+	        T node = GetNode(pos);
 	        if (node != null && node.Walkable) return pos;
 
 
 	        int gap = 1;
-	        int maxGap = Math.Max(m_numCols, m_numRows);
+	        int maxGap = Math.Max(m_size.x, m_size.y);
 	        while (gap < maxGap)
 	        {
-	            int minCol = col - gap;
-	            int maxCol = col + gap;
-	            int minRow = row - gap;
-	            int maxRow = row + gap;
+	            int minCol = pos.x - gap;
+	            int maxCol = pos.x + gap;
+	            int minRow = pos.y - gap;
+	            int maxRow = pos.y + gap;
 
 	            //1. two rows line
 	            for (int i = minCol; i <= maxCol; i++)
@@ -185,7 +180,7 @@ namespace DarkRoom.Game {
 	            gap++;
 	        }
 
-	        return CDarkConst.INVALID_VEC3;
+	        return CDarkConst.INVALID_VEC2INT;
 	    }
 
         /// <summary>

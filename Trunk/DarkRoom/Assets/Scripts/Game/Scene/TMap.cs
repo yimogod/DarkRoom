@@ -9,7 +9,7 @@ namespace Sword {
 	public class TMap : CSingleton<TMap> {
 
 		//不可通过的地图数据, 包含山脉, 沼泽, 树, 小桌子等导致的不可通过
-		public CMapGrid<CStarNode> WalkableGrid = new CMapGrid<CStarNode>();
+		public CStarGrid WalkableGrid = new CStarGrid();
 
 		public TileTerrainLayerComp Terrain = null;
 
@@ -52,12 +52,12 @@ namespace Sword {
 		}
 
 		/*获取所在位置最近的可通行图*/
-		public Vector3 FindNearestWalkablePos(Vector3 pos) {
+		public Vector2Int FindNearestWalkablePos(Vector2Int pos) {
 			return WalkableGrid.FindNearestWalkablePos(pos);
 		}
 
 		/*地图中随机一个位置*/
-		public Vector3 FindRandomNodeLocation() {
+		public Vector2Int FindRandomNodeLocation() {
 			return CMapUtil.FindRandomNodeLocation(m_mapMeta.Rows, m_mapMeta.Cols);
 		}
 

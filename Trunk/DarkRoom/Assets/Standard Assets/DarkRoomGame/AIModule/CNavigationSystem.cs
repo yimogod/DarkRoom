@@ -11,7 +11,7 @@ namespace DarkRoom.AI {
 		private static CNavigationSystem s_instance = null;
 
 		//地图可通行数据
-		private CMapGrid<CStarNode> m_mapWalkableData = null;
+		private CStarGrid m_mapWalkableData = null;
 
 		//同步寻路对象
 		private IPathPlanner m_pathPlanner = null;
@@ -55,7 +55,7 @@ namespace DarkRoom.AI {
 		/// </summary>
 		public void Initialize(int mapNumCols, int mapNumRows)
 		{
-			m_mapWalkableData = new CMapGrid<CStarNode>();
+			m_mapWalkableData = new CStarGrid();
 		    m_mapWalkableData.Init(mapNumCols, mapNumRows);
             m_pathPlanner = new CPathPlanner(m_mapWalkableData);
         }
@@ -64,7 +64,7 @@ namespace DarkRoom.AI {
 		/// 初始化整个系统
 		/// </summary>
 		public void Initialize(int mapNumCols, int mapNumRows, IPathPlanner asynPlanner) {
-			m_mapWalkableData = new CMapGrid<CStarNode>();
+			m_mapWalkableData = new CStarGrid();
 		    m_mapWalkableData.Init(mapNumCols, mapNumRows);
             m_pathPlanner = new CPathPlanner(m_mapWalkableData);
 			m_pathPlannerAsyn = asynPlanner;

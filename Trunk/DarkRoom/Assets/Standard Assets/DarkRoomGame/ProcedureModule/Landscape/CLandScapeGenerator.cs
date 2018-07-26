@@ -30,7 +30,7 @@ namespace DarkRoom.PCG {
 		{
 		    m_maxAssetsNum = 11;
 		    m_walkableList = new bool[m_maxAssetsNum];
-            m_assetList = new string[m_maxAssetsNum];
+            m_assetList = new int[m_maxAssetsNum];
 
 		    m_terrain = new CForestGenerator_Terrain();
 		}

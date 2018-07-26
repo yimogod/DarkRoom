@@ -5,38 +5,36 @@ namespace DarkRoom.Game{
 	public class CMapUtil
 	{
 		/*地图中随机一个位置*/
-
-		public static Vector3 FindRandomNodeLocation(int maxRow, int maxCol)
+		public static Vector2Int FindRandomNodeLocation(int maxCol, int maxRow)
 		{
 			int row = CDarkRandom.Next(0, maxRow);
 			int col = CDarkRandom.Next(0, maxCol);
 
-			return new Vector3(col, 0, row);
+			return new Vector2Int(col, row);
 		}
 
 		/* for 2d, 左下角原点 */
-		public static Vector3 GetTileCenterPosByColRow(int col, int row)
+		public static Vector2 GetTileCenterPosByColRow(int col, int row)
 		{
 			float x = (col + 0.5f);
-			float z = (row + 0.5f);
-			Vector3 vec = new Vector3(x, 0, z);
-			return vec;
+			float y = (row + 0.5f);
+			return new Vector2(x, y);
 		}
 
 		//方块的左下角坐标
-		public static Vector3 GetTileLeftBottomPosByColRow(int col, int row)
+		public static Vector2 GetTileLeftBottomPosByColRow(int col, int row)
 		{
-			Vector3 vec = new Vector3(col, 0, row);
+			Vector2 vec = new Vector2(col, row);
 			return vec;
 		}
 
-		public static Vector3 GetTileByPos(float x, float z)
+		public static Vector2Int GetTileByPos(float x, float z)
 		{
-			Vector3 vec = new Vector3((int)x, 0, (int)z);
+		    Vector2Int vec = new Vector2Int((int)x, (int)z);
 			return vec;
 		}
 
-		public static void DrawGrid(CMapGrid<CStarNode> gird)
+		public static void DrawGrid(CStarGrid gird)
 		{
 			var parent = new GameObject("map cube");
 			var t = parent.transform;
@@ -54,7 +52,7 @@ namespace DarkRoom.Game{
 			}
 		}
 
-		public static void PrintGird(CMapGrid<CStarNode> gird)
+		public static void PrintGird(CStarGrid gird)
 		{
 			string str = "";
 			for (int row = gird.NumRows - 1; row >= 0 ; row--) {

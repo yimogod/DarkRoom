@@ -60,9 +60,9 @@ namespace Sword {
                 yield return new WaitForEndOfFrame();
                 for (int j = 0; j < m_assetGrid.NumRows; j++)
                 {
-                    var tile = m_assetGrid.GetNodeAsset(i, j);
+                    var tile = m_assetGrid.GetNodeSubType(i, j);
                     var pos = CMapUtil.GetTileCenterPosByColRow(i, j);
-                    AssetManager.LoadTilePrefab("", tile, m_tran, pos);
+                    //AssetManager.LoadTilePrefab("", tile, m_tran, pos);
                 }
             }
 

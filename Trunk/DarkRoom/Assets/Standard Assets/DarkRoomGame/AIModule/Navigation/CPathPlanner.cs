@@ -11,7 +11,7 @@ namespace DarkRoom.AI {
 	/// </summary>
 	public class CPathPlanner : IPathPlanner {
 		//存储的所有的数据
-		private CMapGrid<CStarNode> m_globalMapData;
+		private CStarGrid m_globalMapData;
 
 		//用于局部寻路的类
 		private CALine m_aline = new CALine();
@@ -27,7 +27,7 @@ namespace DarkRoom.AI {
 		/// <summary>
 		/// 传入地图可通行数据构建寻路对象
 		/// </summary>
-		public CPathPlanner(CMapGrid<CStarNode> map){
+		public CPathPlanner(CStarGrid map){
 			m_globalMapData = map;
 			m_starGrid.Init(map.NumCols, map.NumRows, false);
         }

@@ -7,12 +7,7 @@ namespace DarkRoom.Game {
 	/// </summary>
 	public class CAssetGrid : CMapGrid<CAssetNode> {
 
-		/// <summary>
-		/// 默认构造函数. 啥都没干
-		/// </summary>
-		public CAssetGrid(){}
-
-		public void SetNodeType(int col, int row, int value)
+	    public void SetNodeType(int col, int row, int value)
 		{
 			CAssetNode node = GetNode(col, row);
 			if (node.Invalid) {
@@ -35,29 +30,29 @@ namespace DarkRoom.Game {
 	        return node.Type;
 	    }
 
-        public void SetNodeAsset(int col, int row, string value) {
+        public void SetNodeSubType(int col, int row, int value) {
 			CAssetNode node = GetNode(col, row);
 			if (node == null) {
 				Debug.LogError("SetAsset Error");
 				return;
 			}
 
-			node.Asset = value;
+			node.SubType = value;
 		}
 
-	    public string GetNodeAsset(int col, int row)
+	    public int GetNodeSubType(int col, int row)
 	    {
 	        CAssetNode node = GetNode(col, row);
 	        if (node.Invalid)
 	        {
 	            Debug.LogError("SetAsset Error");
-	            return string.Empty;
+	            return -1;
 	        }
 
-	        return node.Asset;
+	        return node.SubType;
 	    }
 
-	    public void FillData(int col, int row, int value, string assets, bool walkable)
+	    public void FillData(int col, int row, int type, int subType, bool walkable)
 	    {
 	        CAssetNode node = GetNode(col, row);
 	        if (node.Invalid)
@@ -66,8 +61,8 @@ namespace DarkRoom.Game {
 	            return;
 	        }
 
-	        node.Type = value;
-            node.Asset = assets;
+	        node.Type = type;
+            node.SubType = subType;
 			node.Walkable = walkable;
         }
     }
@@ -103,9 +98,9 @@ namespace DarkRoom.Game {
         public int Type;
 
 		/// <summary>
-		/// 格子上放的asset的名字
+		/// 格子的次级类型
 		/// </summary>
-		public string Asset;
+		public int SubType;
 
 		/* 战争迷雾用到的用来标记4个角落的列表, 长度为4.
 		 * 2(0) 1(2)

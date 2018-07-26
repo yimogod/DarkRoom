@@ -30,14 +30,14 @@ namespace DarkRoom.PCG{
         /// 
         /// 当然最重要的, 你可以自定义. 无视我的命名
         /// </summary>
-        protected string[] m_assetList;
+        protected int[] m_assetList;
 
 	    /// <summary>
 	    /// 跟assets 一一对应的可通行性
 	    /// </summary>
 	    protected bool[] m_walkableList;
 
-	    protected string m_defaultAsset;
+	    protected int m_defaultAsset;
 	    protected bool m_defaultAssetWalkable;
 
         protected int m_maxAssetsNum = 11;
@@ -49,13 +49,13 @@ namespace DarkRoom.PCG{
         /// 默认的资源只在index对应的资源没有的时候才会替换.
         /// 为了容错处理添加的
         /// </summary>
-	    public void SetDefaultAsset(string asset, bool walkable)
+	    public void SetDefaultAsset(int asset, bool walkable)
 	    {
 	        m_defaultAsset = asset;
 	        m_defaultAssetWalkable = walkable;
 	    }
 
-		public void SetAsset(int index, string asset, bool walkable)
+		public void SetAsset(int index, int asset, bool walkable)
 		{
 			Debug.Log(index + "  " + asset);
 		    if (m_assetList.Length > m_maxAssetsNum)
@@ -79,11 +79,11 @@ namespace DarkRoom.PCG{
         /// 根据索引获取asset. 如果index不合法或者assets对应位置没有资源, 返回默认资源
         /// 注意asset虽然没有, 但其索引和对应的type还是之前的数据
         /// </summary>
-	    protected string GetAsset(int index)
+	    protected int GetAsset(int index)
 	    {
 	        if (index < 0 || index >= m_assetList.Length) return m_defaultAsset;
-	        string asset = m_assetList[index];
-	        if (string.IsNullOrEmpty(asset)) return m_defaultAsset;
+	        int asset = m_assetList[index];
+	        if (asset < 0) return m_defaultAsset;
 	        return asset;
 	    }
 
@@ -94,8 +94,8 @@ namespace DarkRoom.PCG{
 	    protected bool GetAssetWalkable(int index)
 	    {
 	        if (index < 0 || index >= m_assetList.Length) return m_defaultAssetWalkable;
-	        string asset = m_assetList[index];
-	        if (string.IsNullOrEmpty(asset)) return m_defaultAssetWalkable;
+	        int asset = m_assetList[index];
+	        if (asset < 0) return m_defaultAssetWalkable;
 	        return m_walkableList[index];
 	    }
     }

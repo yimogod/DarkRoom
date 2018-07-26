@@ -64,52 +64,49 @@ namespace Sword
         //创建单位生成的信息,比如位置和方向
         public UnitBornData CreateRandomUnitBorn(int id, CUnitEntity.TeamSide group)
         {
-            Vector3 pos = FindFreeTileNotInDict(_unitRangeDict);
+            Vector2Int pos = FindFreeTileNotInDict(_unitRangeDict);
             return UnitBornData.CreateUnitBornData(id, group, pos);
         }
 
         //寻找地图中空白的位置
-        public Vector3 FindFreeTile()
+        public Vector2Int FindFreeTile()
         {
             return FindFreeTileNotInDict(_unitPosDict);
         }
 
         //寻找tile点附近的可以放置怪物的坐标
-        public Vector3 FindFreeTileNear(Vector3 pos)
+        public Vector2Int FindFreeTileNear(Vector2Int pos)
         {
-            int centerCol = (int) pos.x;
-            int centerRow = (int) pos.z;
-
             int col, row, key;
             bool block;
             for (int i = 1; i < 4; ++i)
             {
-                row = centerRow;
+                row = pos.y;
 
-                col = centerCol - i;
+                col = pos.x - i;
                 key = 10000 * row + col;
                 block = _unitPosDict.ContainsKey(key);
-                if (!block) return new Vector3(col, 0, row);
+                if (!block) return new Vector2Int(col, row);
 
-                col = centerCol + i;
+                col = pos.x + i;
                 key = 10000 * row + col;
                 block = _unitPosDict.ContainsKey(key);
-                if (!block) return new Vector3(col, 0, row);
+                if (!block) return new Vector2Int(col, row);
 
 
 
-                col = centerCol;
+                col = pos.x;
 
-                row = centerRow - i;
+                row = pos.y - i;
                 key = 10000 * row + col;
                 block = _unitPosDict.ContainsKey(key);
-                if (!block) return new Vector3(col, 0, row);
+                if (!block) return new Vector2Int(col, row);
 
 
-                row = centerRow + i;
+                row = pos.x + i;
                 key = 10000 * row + col;
                 block = _unitPosDict.ContainsKey(key);
-                if (!block) return new Vector3(col, 0, row);
+                if (!block) return new Vector2Int(col, row);
             }
 
 
@@ -117,12 +114,10 @@ namespace Sword
         }
 
         //创建, 地图中可以空置的位置
-        private Vector3 FindFreeTileNotInDict(Dictionary<int, bool> dict)
+        private Vector2Int FindFreeTileNotInDict(Dictionary<int, bool> dict)
         {
-            Vector3 pos = CMapUtil.FindRandomNodeLocation(m_numRows, _numCols);
-            int col = (int) pos.x;
-            int row = (int) pos.z;
-            int key = 10000 * row + col;
+            Vector2Int pos = CMapUtil.FindRandomNodeLocation(m_numRows, _numCols);
+            int key = 10000 * pos.y + pos.x;
 
             bool block = dict.ContainsKey(key);
             int maxTryTimes = 100;
@@ -130,9 +125,7 @@ namespace Sword
             while (block && tryTimes < maxTryTimes)
             {
                 pos = CMapUtil.FindRandomNodeLocation(m_numRows, _numCols);
-                col = (int) pos.x;
-                row = (int) pos.z;
-                key = 10000 * row + col;
+                key = 10000 * pos.y + pos.x;
                 block = dict.ContainsKey(key);
                 tryTimes++;
             }
@@ -140,7 +133,7 @@ namespace Sword
             if (tryTimes == maxTryTimes)
             {
                 Debug.LogError("check forest num, we can not find free tile in walkable grid!");
-                return CDarkConst.INVALID_VEC3;
+                return CDarkConst.INVALID_VEC2INT;
             }
 
             return pos;

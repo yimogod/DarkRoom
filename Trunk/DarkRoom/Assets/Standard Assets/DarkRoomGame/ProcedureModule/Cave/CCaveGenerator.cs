@@ -24,7 +24,7 @@ namespace DarkRoom.PCG {
 
 				    bool walk = cellular[x, z] == 0;
 				    int type = GetTypeByAlive(walk);
-                    string asset = m_assetList[type];
+                    var asset = m_assetList[type];
                     m_grid.FillData(x, z, type, asset, walk);
                 }
 			}

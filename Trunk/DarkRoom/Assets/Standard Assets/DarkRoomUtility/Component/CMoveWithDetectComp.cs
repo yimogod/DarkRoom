@@ -67,11 +67,11 @@ namespace DarkRoom.Utility
 				right = new Vector3(pos.x + halfWidth, 0, pos.z - halfLength);
 			}
 
-			Vector3 leftTile = CMapUtil.GetTileByPos(left.x, left.z);
-			bool canLeft = CNavigationSystem.Instance.IsWalkable(leftTile.z, leftTile.x);
+		    Vector2Int leftTile = CMapUtil.GetTileByPos(left.x, left.z);
+			bool canLeft = CNavigationSystem.Instance.IsWalkable(leftTile.x, leftTile.y);
 
-			Vector3 rightTile = CMapUtil.GetTileByPos(right.x, right.z);
-			bool canRight = CNavigationSystem.Instance.IsWalkable(rightTile.z, rightTile.x);
+		    Vector2Int rightTile = CMapUtil.GetTileByPos(right.x, right.z);
+			bool canRight = CNavigationSystem.Instance.IsWalkable(rightTile.x, rightTile.y);
 
 			//Debug.Log("canleft -----" + canLeft.ToString() + "----- left tile " + leftTile.ToString());
 			//Debug.Log("canRight -----" + canRight.ToString() + "----- right tile " + rightTile.ToString());
@@ -98,12 +98,12 @@ namespace DarkRoom.Utility
 			} else if (directionConst == CUnitSpacialComp.DIRECTION_LEFT) {
 				edge = new Vector3(0, 0, -lowspeed);
 
-				edgeLeft = (leftTile.z + 1.0f);
+				edgeLeft = (leftTile.y + 1.0f);
 				edgeLeft = edgeLeft - left.z;
 			} else {
 				edge = new Vector3(0, 0, lowspeed);
 
-				edgeLeft = leftTile.z;
+				edgeLeft = leftTile.y;
 				edgeLeft = left.z - edgeLeft;
 			}
 
