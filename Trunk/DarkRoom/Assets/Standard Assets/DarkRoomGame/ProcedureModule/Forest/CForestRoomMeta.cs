@@ -11,9 +11,10 @@ namespace DarkRoom.PCG
         public enum TileType
         {
             None = -1,
-            Floor, //可通行的地面
-            Wall, //墙壁或者柱子
-            Exit //出口
+            Floor, //可通行的地面 .
+            Wall, //墙壁或者柱子 #
+            Exit, //出口 !
+            Door //$
         }
 
         /// <summary>
@@ -29,19 +30,14 @@ namespace DarkRoom.PCG
         public bool Unique;
 
         /// <summary>
-        /// 是否有隧道
-        /// </summary>
-        public bool NoTunnels;
-
-        /// <summary>
-        /// 是否特殊?
-        /// </summary>
-        public bool Special;
-
-        /// <summary>
         /// 可通行的地方 符号 .
         /// </summary>
         public TileType[,] Spots;
+
+        /// <summary>
+        /// 房子的门的列表
+        /// </summary>
+        public List<Vector2Int> DoorPosList = new List<Vector2Int>();
 
         private Vector2Int m_size;
 
@@ -75,6 +71,10 @@ namespace DarkRoom.PCG
                     break;
                 case '#':
                     SetSpot(col, row, TileType.Wall);
+                    break;
+                case '$':
+                    SetSpot(col, row, TileType.Door);
+                    DoorPosList.Add(new Vector2Int(col, row));
                     break;
             }
         }
