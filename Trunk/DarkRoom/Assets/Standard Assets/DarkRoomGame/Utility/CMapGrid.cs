@@ -14,27 +14,6 @@ namespace DarkRoom.Game {
         protected int m_numRows;
         protected int m_numCols;
 
-        //本次需要寻路的开始和终点
-        protected T m_startNode;
-        protected T m_endNode;
-
-		/// <summary>
-		/// 默认构造函数. 啥都没干
-		/// </summary>
-		public CMapGrid(){}
-
-		/// <summary>
-		/// 返回寻路起点
-		/// </summary>
-		/// <value>The start node.</value>
-		public T StartNode => m_startNode;
-
-	    /// <summary>
-		/// 返回寻路终点
-		/// </summary>
-		/// <value>The end node.</value>
-		public T EndNode => m_endNode;
-
 	    /// <summary>
 		/// 返回网格列数
 		/// </summary>
@@ -129,34 +108,6 @@ namespace DarkRoom.Game {
 			}
 
 			node.Walkable = value;
-		}
-
-		/// <summary>
-		/// 设置寻路的起点
-		/// </summary>
-		/// <param name="row">Row.</param>
-		/// <param name="col">Col.</param>
-		public void SetStartNode(int col, int row){
-			T node = GetNode(col, row);
-			if (node.Invalid){
-				Debug.LogError("SetStartNode Error");
-				return;
-			}
-			m_startNode = m_nodes[col, row];
-		}
-
-		/// <summary>
-		/// 设置寻路的终点
-		/// </summary>
-		/// <param name="row">Row.</param>
-		/// <param name="col">Col.</param>
-		public void SetEndNode(int col, int row){
-			T node = GetNode(col, row);
-			if (node.Invalid){
-				Debug.LogError("SetEndNode Error");
-				return;
-			}
-			m_endNode = m_nodes[col, row];
 		}
 
 	    public void CopyUnWalkableFrom(IWalkableGrid grid)

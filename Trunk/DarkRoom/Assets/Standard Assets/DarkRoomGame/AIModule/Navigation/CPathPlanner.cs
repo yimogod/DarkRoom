@@ -19,7 +19,7 @@ namespace DarkRoom.AI {
 		//如果超了, 我们就navmesh到附近然后再寻路
 		private CAStar m_astar = new CAStar(CAStar.Connection.Eight);
 		//用于局部寻路的数据
-		private CMapGrid<CStarNode> m_starGrid = new CMapGrid<CStarNode>();
+		private CStarGrid m_starGrid = new CStarGrid();
 
 		//存储的路径列表. 外部只读. 不能修改
 		private List<Vector3> m_wayPoints = new List<Vector3>();

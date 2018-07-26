@@ -184,7 +184,7 @@ namespace DarkRoom.AI
 		/// </summary>
 		/// <returns><c>true</c>, if path was found, <c>false</c> otherwise.</returns>
 		/// <param name="grid">Grid.</param>
-		public bool FindPath(CMapGrid<CStarNode> grid){
+		public bool FindPath(CStarGrid grid){
 		    CStarNode startNode = grid.StartNode;
 		    CStarNode endNode = grid.EndNode;
 			SetData(startNode.Col, startNode.Row, endNode.Col, endNode.Row);
