@@ -3,10 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace DarkRoom.PCG {
+    public enum CForestRoomTileType
+    {
+        None = -1,
+        Floor, //可通行的地面 .
+        Wall, //墙壁或者柱子 #
+        Exit, //出口 !
+        Door, //$
+        InnerRoad, //房屋内部道路 ^
+        OuterRoad, //连接房间的道路, 没有符号. 我们在算法里面使用
+    }
+
     /// <summary>
     /// terrain用到的asset的索引, 通行性和规则是对应的
     /// </summary>
-    public enum ForestTerrainSubType
+    public enum CForestTerrainSubType
     {
         Grass1,
         Grass2,
@@ -21,22 +32,22 @@ namespace DarkRoom.PCG {
 
     public class CForestUtil
     {
-        public static bool GetSubTypeWalkable(ForestTerrainSubType subType)
+        public static bool GetSubTypeWalkable(CForestTerrainSubType subType)
         {
             bool v = false;
             switch (subType)
             {
-                case ForestTerrainSubType.Grass1:
-                case ForestTerrainSubType.Grass2:
-                case ForestTerrainSubType.Land1:
-                case ForestTerrainSubType.Land2:
-                case ForestTerrainSubType.Floor:
-                case ForestTerrainSubType.Road:
+                case CForestTerrainSubType.Grass1:
+                case CForestTerrainSubType.Grass2:
+                case CForestTerrainSubType.Land1:
+                case CForestTerrainSubType.Land2:
+                case CForestTerrainSubType.Floor:
+                case CForestTerrainSubType.Road:
                     v = true;
                     break;
-                case ForestTerrainSubType.Hill:
-                case ForestTerrainSubType.Wall:
-                case ForestTerrainSubType.Pond:
+                case CForestTerrainSubType.Hill:
+                case CForestTerrainSubType.Wall:
+                case CForestTerrainSubType.Pond:
                     v = false;
                     break;
             }
@@ -92,32 +103,6 @@ namespace DarkRoom.PCG {
         public Vector2Int GetTilePosition(int innerCol, int innerRow)
         {
             return new Vector2Int(innerCol, innerRow) + Pos;
-        }
-    }
-
-    /// <summary>
-    /// 开放式房屋的地块信息, 辅助terrain的数据生成
-    /// 另外 id如果没用的话, 那么可以删除本类了就
-    /// </summary>
-    public class CForestRoomTileData
-    {
-        /// <summary>
-        /// id如果是-1的话说明不是房子, 但可能是其他东西
-        /// </summary>
-        public string Id;
-        //只有在出口的地方才可以开门
-        public CForestRoomMeta.TileType TileType;
-
-        public bool IsValid => string.IsNullOrEmpty(Id);
-        //public bool CanOpen => TileType == CForestRoomMeta.TileType.Exit;
-
-        //是否是外部道路
-        public bool IsOuterRoad => TileType == CForestRoomMeta.TileType.OuterRoad;
-
-        public CForestRoomTileData()
-        {
-            Id = "-1";
-            TileType = CForestRoomMeta.TileType.None;
         }
     }
 }

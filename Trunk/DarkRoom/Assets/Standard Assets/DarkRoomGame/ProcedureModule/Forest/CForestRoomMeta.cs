@@ -8,17 +8,6 @@ namespace DarkRoom.PCG
 {
     public class CForestRoomMeta : CBaseMeta
     {
-        public enum TileType
-        {
-            None = -1,
-            Floor, //可通行的地面 .
-            Wall, //墙壁或者柱子 #
-            Exit, //出口 !
-            Door, //$
-            InnerRoad, //房屋内部道路 ^
-            OuterRoad, //连接房间的道路, 没有符号. 我们在算法里面使用
-        }
-
         /// <summary>
         /// 是否有推荐位置
         /// </summary>
@@ -34,7 +23,7 @@ namespace DarkRoom.PCG
         /// <summary>
         /// 可通行的地方 符号 .
         /// </summary>
-        public TileType[,] Spots;
+        public CForestRoomTileType[,] Spots;
 
         /// <summary>
         /// 房子的门的列表
@@ -57,7 +46,7 @@ namespace DarkRoom.PCG
 
         public void SetSize(int cols, int rows)
         {
-            Spots = new TileType[cols, rows];
+            Spots = new CForestRoomTileType[cols, rows];
             m_size = new Vector2Int(cols, rows);
         }
 
@@ -70,19 +59,19 @@ namespace DarkRoom.PCG
 
             var next = pos + Vector2Int.up;
             var type = GetSpot(next.x, next.y);
-            if (type == TileType.InnerRoad) return true;
+            if (type == CForestRoomTileType.InnerRoad) return true;
 
             next = pos + Vector2Int.down;
             type = GetSpot(next.x, next.y);
-            if (type == TileType.InnerRoad) return true;
+            if (type == CForestRoomTileType.InnerRoad) return true;
 
             next = pos + Vector2Int.left;
             type = GetSpot(next.x, next.y);
-            if (type == TileType.InnerRoad) return true;
+            if (type == CForestRoomTileType.InnerRoad) return true;
 
             next = pos + Vector2Int.right;
             type = GetSpot(next.x, next.y);
-            if (type == TileType.InnerRoad) return true;
+            if (type == CForestRoomTileType.InnerRoad) return true;
 
             return false;
         }
@@ -92,25 +81,25 @@ namespace DarkRoom.PCG
             switch (v)
             {
                 case '.':
-                    SetSpot(col, row, TileType.Floor);
+                    SetSpot(col, row, CForestRoomTileType.Floor);
                     break;
                 case '!':
-                    SetSpot(col, row, TileType.Exit);
+                    SetSpot(col, row, CForestRoomTileType.Exit);
                     break;
                 case '#':
-                    SetSpot(col, row, TileType.Wall);
+                    SetSpot(col, row, CForestRoomTileType.Wall);
                     break;
                 case '$':
-                    SetSpot(col, row, TileType.Door);
+                    SetSpot(col, row, CForestRoomTileType.Door);
                     DoorPosList.Add(new Vector2Int(col, row));
                     break;
                 case '^':
-                    SetSpot(col, row, TileType.InnerRoad);
+                    SetSpot(col, row, CForestRoomTileType.InnerRoad);
                     break;
             }
         }
 
-        public void SetSpot(int col, int row, TileType v)
+        public void SetSpot(int col, int row, CForestRoomTileType v)
         {
             bool b = ValidSpot(col, row);
             if (!b)
@@ -122,13 +111,13 @@ namespace DarkRoom.PCG
             Spots[col, row] = v;
         }
 
-        public TileType GetSpot(int col, int row)
+        public CForestRoomTileType GetSpot(int col, int row)
         {
             bool b = ValidSpot(col, row);
             if (!b)
             {
                 Debug.LogWarningFormat("Check Room mapSize and Shape. col={0} row={1}", col, row);
-                return TileType.Floor;
+                return CForestRoomTileType.Floor;
             }
 
             return Spots[col, row];

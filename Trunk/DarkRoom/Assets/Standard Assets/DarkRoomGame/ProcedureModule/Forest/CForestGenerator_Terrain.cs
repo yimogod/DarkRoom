@@ -62,7 +62,7 @@ namespace DarkRoom.PCG{
 
             //池塘的相关配置
             var type = (int)CProcedureLayer.Terrain;
-            var subType = ForestTerrainSubType.Pond;
+            var subType = CForestTerrainSubType.Pond;
             var walkable = CForestUtil.GetSubTypeWalkable(subType);
 
             CPondGenerator p = new CPondGenerator();
@@ -102,7 +102,7 @@ namespace DarkRoom.PCG{
             {
                 for (int z = 0; z < m_numRows; z++)
                 {
-                    ForestTerrainSubType subType = GetSubTypeAtHeight(perlin[x, z]);
+                    CForestTerrainSubType subType = GetSubTypeAtHeight(perlin[x, z]);
                     m_grid.FillData(x, z, type, (int)subType, CForestUtil.GetSubTypeWalkable(subType));
                 }
             }
@@ -111,27 +111,27 @@ namespace DarkRoom.PCG{
 	    /// <summary>
 	    /// 根据高度, 从配置中读取相关的asset
 	    /// </summary>
-	    private ForestTerrainSubType GetSubTypeAtHeight(float height)
+	    private CForestTerrainSubType GetSubTypeAtHeight(float height)
 	    {
 	        //两种草
 	        if (height <= GrassHeight)
 	        {
-	            if (CDarkRandom.SmallerThan(0.5f)) return ForestTerrainSubType.Grass1;
-	            return ForestTerrainSubType.Grass1;
+	            if (CDarkRandom.SmallerThan(0.5f)) return CForestTerrainSubType.Grass1;
+	            return CForestTerrainSubType.Grass1;
 	        }
 
 	        //另外一种草
-	        if (height <= GrassHeight2) return ForestTerrainSubType.Grass2;
+	        if (height <= GrassHeight2) return CForestTerrainSubType.Grass2;
 
 	        //两种地面
-	        if (height <= LandHeight) return ForestTerrainSubType.Land1;
-	        if (height <= LandHeight2) return ForestTerrainSubType.Land2;
+	        if (height <= LandHeight) return CForestTerrainSubType.Land1;
+	        if (height <= LandHeight2) return CForestTerrainSubType.Land2;
 
 	        //墙壁
-	        if (height <= WallHeight) return ForestTerrainSubType.Hill;
+	        if (height <= WallHeight) return CForestTerrainSubType.Hill;
 
 	        //默认的绿草地
-	        return ForestTerrainSubType.Grass1;
+	        return CForestTerrainSubType.Grass1;
 	    }
 
        

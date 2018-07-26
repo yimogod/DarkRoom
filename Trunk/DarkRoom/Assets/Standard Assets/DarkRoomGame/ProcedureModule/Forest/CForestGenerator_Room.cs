@@ -38,7 +38,7 @@ namespace DarkRoom.PCG
 
         private Vector2Int m_size;
 
-        private CForestRoomTileData[,] m_roomMap;
+        private CForestRoomMap m_roomMap;
         private List<CForestRoomData> m_roomList = new List<CForestRoomData>();
 
         private CStarGrid m_starGrid = new CStarGrid();
@@ -47,11 +47,11 @@ namespace DarkRoom.PCG
         /// <summary>
         /// 房屋地图数据, 其实就是个二维数组
         /// </summary>
-        public CForestRoomTileData[,] RoomMap => m_roomMap;
+        public CForestRoomMap RoomMap => m_roomMap;
 
         public void Generate(int cols, int rows)
         {
-            m_roomMap = new CForestRoomTileData[cols, rows];
+            m_roomMap = new CForestRoomMap(cols, rows);
 
             //开辟路尽头房子
             RoomAllocInEdge(EndRoadRoomId);
@@ -267,7 +267,7 @@ namespace DarkRoom.PCG
             var path = m_astar.path;
             foreach (var node in path)
             {
-                SetTileData(node.Col, node.Row, "-1", CForestRoomMeta.TileType.OuterRoad);
+                SetTileData(node.Col, node.Row, "-1", CForestRoomTileType.OuterRoad);
             }
         }
 
@@ -303,13 +303,9 @@ namespace DarkRoom.PCG
             return true;
         }
 
-        private void SetTileData(int x, int y, string id, CForestRoomMeta.TileType type)
+        private void SetTileData(int x, int y, string id, CForestRoomTileType type)
         {
-            var tile = new CForestRoomTileData();
-            tile.Id = id;
-            tile.TileType = type;
-
-            m_roomMap[x, y] = tile;
+            m_roomMap[x, y] = type;
         }
     }
 }
