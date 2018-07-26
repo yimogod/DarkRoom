@@ -33,9 +33,6 @@ namespace DarkRoom.PCG{
         public int MaxPondNum = 1;
 
         public CForestGenerator_Terrain(){
-            m_maxAssetsNum = 7;
-		    m_walkableList = new bool[m_maxAssetsNum];
-		    m_assetList = new int[m_maxAssetsNum];
         }
 
         /// <summary>
@@ -64,10 +61,9 @@ namespace DarkRoom.PCG{
             if (num <= 0) return;
 
             //池塘的相关配置
-            var index = ForestTerrainAssetIndex.Pond;
-            var type = (int)GetTypeByIndex(index);
-            var asset = GetAsset((int)index);
-            var walkable = GetAssetWalkable((int)index);
+            var subType = ForestTerrainSubType.Pond;
+            var type = (int) CProcedureLayer.Terrain;
+            var walkable = GetSubTypeWalkable(subType);
 
             CPondGenerator p = new CPondGenerator();
             int pondCols = 32;
@@ -87,7 +83,7 @@ namespace DarkRoom.PCG{
                     for (int z = 0; z < pondRows; z++)
                     {
                         if (ponds[x, z] < 0)continue;
-                        m_grid.FillData(startX + x, startZ + z, type, asset, walkable);
+                        m_grid.FillData(startX + x, startZ + z, type, (int)subType, walkable);
                     }
                 }
             }
@@ -101,15 +97,13 @@ namespace DarkRoom.PCG{
             var perlin = new CPerlinMap(m_numCols, m_numRows);
             perlin.Generate();
 
+            var type = (int)CProcedureLayer.Terrain;
             for (int x = 0; x < m_numCols; x++)
             {
                 for (int z = 0; z < m_numRows; z++)
                 {
-                    var index = GetAssetIndexAtHeight(perlin[x, z]);
-                    var type = GetTypeByIndex(index);
-                    int i = (int) index;
-
-                    m_grid.FillData(x, z, (int)type, GetAsset(i), GetAssetWalkable(i));
+                    ForestTerrainSubType subType = GetAssetIndexAtHeight(perlin[x, z]);
+                    m_grid.FillData(x, z, type, (int)subType, GetSubTypeWalkable(subType));
                 }
             }
         }
@@ -117,52 +111,49 @@ namespace DarkRoom.PCG{
 	    /// <summary>
 	    /// 根据高度, 从配置中读取相关的asset
 	    /// </summary>
-	    private ForestTerrainAssetIndex GetAssetIndexAtHeight(float height)
+	    private ForestTerrainSubType GetAssetIndexAtHeight(float height)
 	    {
 	        //两种草
 	        if (height <= GrassHeight)
 	        {
-	            if (CDarkRandom.SmallerThan(0.5f)) return ForestTerrainAssetIndex.Grass1;
-	            return ForestTerrainAssetIndex.Grass1;
+	            if (CDarkRandom.SmallerThan(0.5f)) return ForestTerrainSubType.Grass1;
+	            return ForestTerrainSubType.Grass1;
 	        }
 
 	        //另外一种草
-	        if (height <= GrassHeight2) return ForestTerrainAssetIndex.Grass2;
+	        if (height <= GrassHeight2) return ForestTerrainSubType.Grass2;
 
 	        //两种地面
-	        if (height <= LandHeight) return ForestTerrainAssetIndex.Land1;
-	        if (height <= LandHeight2) return ForestTerrainAssetIndex.Land2;
+	        if (height <= LandHeight) return ForestTerrainSubType.Land1;
+	        if (height <= LandHeight2) return ForestTerrainSubType.Land2;
 
 	        //墙壁
-	        if (height <= WallHeight) return ForestTerrainAssetIndex.Wall;
+	        if (height <= WallHeight) return ForestTerrainSubType.Hill;
 
 	        //默认的绿草地
-	        return ForestTerrainAssetIndex.Grass1;
+	        return ForestTerrainSubType.Grass1;
 	    }
 
-	    private ForestTerrainType GetTypeByIndex(ForestTerrainAssetIndex index)
-	    {
-	        ForestTerrainType v = ForestTerrainType.None;
-	        switch (index)
-	        {
-	            case ForestTerrainAssetIndex.Grass1:
-	            case ForestTerrainAssetIndex.Grass2:
-	            case ForestTerrainAssetIndex.Land1:
-	            case ForestTerrainAssetIndex.Land2:
-	                v = ForestTerrainType.Floor;
-	                break;
-	            case ForestTerrainAssetIndex.Wall:
-	                v = ForestTerrainType.Wall;
-	                break;
-	            case ForestTerrainAssetIndex.Pond:
-	                v = ForestTerrainType.Pond;
-	                break;
-	            case ForestTerrainAssetIndex.Road:
-	                v = ForestTerrainType.Road;
-	                break;
+        private bool GetSubTypeWalkable(ForestTerrainSubType subType)
+        {
+            bool v = false;
+            switch (subType)
+            {
+                case ForestTerrainSubType.Grass1:
+                case ForestTerrainSubType.Grass2:
+                case ForestTerrainSubType.Land1:
+                case ForestTerrainSubType.Land2:
+                case ForestTerrainSubType.Floor:
+                case ForestTerrainSubType.Road:
+                    v = true;
+                    break;
+                case ForestTerrainSubType.Hill:
+                case ForestTerrainSubType.Wall:
+                case ForestTerrainSubType.Pond:
+                    v = false;
+                    break;
             }
-
-	        return v;
-	    }
+            return v;
+        }
     }
 }

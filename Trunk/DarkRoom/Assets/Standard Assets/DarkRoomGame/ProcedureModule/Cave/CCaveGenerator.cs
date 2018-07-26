@@ -3,13 +3,11 @@ using DarkRoom.Core;
 using UnityEngine;
 
 namespace DarkRoom.PCG {
-	[RequireComponent(typeof(CaveTerrainGenerator))]
 	public class CaveGenerator : CTileMapGeneratorBase {
 		private CaveTerrainGenerator m_terrain;
 
 		void Awake()
 		{
-		    m_maxAssetsNum = 2;
 			//m_terrain = gameObject.GetComponent<CaveTerrainGenerator>();
 		}
 
@@ -24,7 +22,8 @@ namespace DarkRoom.PCG {
 
 				    bool walk = cellular[x, z] == 0;
 				    int type = GetTypeByAlive(walk);
-                    var asset = m_assetList[type];
+                    //var asset = m_assetList[type];
+				    int asset = 0;
                     m_grid.FillData(x, z, type, asset, walk);
                 }
 			}

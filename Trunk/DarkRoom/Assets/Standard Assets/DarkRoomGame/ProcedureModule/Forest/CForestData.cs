@@ -4,35 +4,20 @@ using UnityEngine;
 
 namespace DarkRoom.PCG {
     /// <summary>
-    /// terrain用到的asset的索引
+    /// terrain用到的asset的索引, 通行性和规则是对应的
     /// </summary>
-    public enum ForestTerrainAssetIndex
+    public enum ForestTerrainSubType
     {
-        Grass1 = 0,
+        Grass1,
         Grass2,
         Land1,
         Land2,
-        Wall,
-        Pond,
-        Road
+        Hill, //凸起的地形, 不可通行
+        Floor, //屋子的地板
+        Wall, //屋子的墙, 不可通行
+        Pond, //池塘, 不可通行
+        Road,
     }
-
-    /// <summary>
-    /// terrain用到的tile的类型
-    /// 需要注意的是目前这些类型和可通行性并没有关系. 看未来我们是否要用规则写死
-    /// </summary>
-    public enum ForestTerrainType
-    {
-        None,
-        Floor,
-        Wall,
-        Pond,
-        Road
-    }
-
-    public class CForestTerrain {
-		
-	}
 
     /// <summary>
     /// 森林开放房屋信息

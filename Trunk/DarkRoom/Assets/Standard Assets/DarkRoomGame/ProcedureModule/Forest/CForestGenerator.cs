@@ -34,16 +34,6 @@ namespace DarkRoom.PCG {
 		    m_terrain = new CForestGenerator_Terrain();
 		}
 
-        public void SetTerrainAsset(ForestTerrainAssetIndex index, int asset, bool walkable)
-        {
-            m_terrain.SetAsset((int)index, asset, walkable);
-        }
-
-        public void SetTerrainDefaultAsset(int asset, bool walkable)
-        {
-            m_terrain.SetDefaultAsset(asset, walkable);
-        }
-
         public void Generate()
 		{
 			m_terrain.Generate(64, 64);
