@@ -14,7 +14,9 @@ namespace DarkRoom.PCG
             Floor, //可通行的地面 .
             Wall, //墙壁或者柱子 #
             Exit, //出口 !
-            Door //$
+            Door, //$
+            InnerRoad, //房屋内部道路 ^
+            OuterRoad, //连接房间的道路, 没有符号. 我们在算法里面使用
         }
 
         /// <summary>
@@ -59,6 +61,32 @@ namespace DarkRoom.PCG
             m_size = new Vector2Int(cols, rows);
         }
 
+        /// <summary>
+        /// 我们的门是否连着路, 如果连着我们用路来标记.否则我们用floor来标记
+        /// </summary>
+        public bool IsDoorNextToInnerRoad(int index)
+        {
+            var pos = DoorPosList[index];
+
+            var next = pos + Vector2Int.up;
+            var type = GetSpot(next.x, next.y);
+            if (type == TileType.InnerRoad) return true;
+
+            next = pos + Vector2Int.down;
+            type = GetSpot(next.x, next.y);
+            if (type == TileType.InnerRoad) return true;
+
+            next = pos + Vector2Int.left;
+            type = GetSpot(next.x, next.y);
+            if (type == TileType.InnerRoad) return true;
+
+            next = pos + Vector2Int.right;
+            type = GetSpot(next.x, next.y);
+            if (type == TileType.InnerRoad) return true;
+
+            return false;
+        }
+
         public void SetSpot(int col, int row, char v)
         {
             switch (v)
@@ -75,6 +103,9 @@ namespace DarkRoom.PCG
                 case '$':
                     SetSpot(col, row, TileType.Door);
                     DoorPosList.Add(new Vector2Int(col, row));
+                    break;
+                case '^':
+                    SetSpot(col, row, TileType.InnerRoad);
                     break;
             }
         }

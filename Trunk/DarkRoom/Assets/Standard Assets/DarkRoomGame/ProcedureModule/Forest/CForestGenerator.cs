@@ -28,15 +28,19 @@ namespace DarkRoom.PCG {
         public CAssetGrid TerrainGrid => m_terrain.Grid;
 
         private CForestGenerator_Terrain m_terrain;
+	    private CForestGenerator_Room m_room;
 
 		void Awake()
 		{
 		    m_terrain = new CForestGenerator_Terrain();
+		    m_room = new CForestGenerator_Room();
 		}
 
         public void Generate()
 		{
 			m_terrain.Generate(64, 64);
-		}
+		    m_room.Generate(64, 64);
+            m_terrain.GenerateRoad();
+        }
 	}
 }

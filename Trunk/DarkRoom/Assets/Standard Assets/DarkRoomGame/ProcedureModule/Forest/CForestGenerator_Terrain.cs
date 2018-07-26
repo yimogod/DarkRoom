@@ -61,9 +61,9 @@ namespace DarkRoom.PCG{
             if (num <= 0) return;
 
             //池塘的相关配置
+            var type = (int)CProcedureLayer.Terrain;
             var subType = ForestTerrainSubType.Pond;
-            var type = (int) CProcedureLayer.Terrain;
-            var walkable = GetSubTypeWalkable(subType);
+            var walkable = CForestUtil.GetSubTypeWalkable(subType);
 
             CPondGenerator p = new CPondGenerator();
             int pondCols = 32;
@@ -102,8 +102,8 @@ namespace DarkRoom.PCG{
             {
                 for (int z = 0; z < m_numRows; z++)
                 {
-                    ForestTerrainSubType subType = GetAssetIndexAtHeight(perlin[x, z]);
-                    m_grid.FillData(x, z, type, (int)subType, GetSubTypeWalkable(subType));
+                    ForestTerrainSubType subType = GetSubTypeAtHeight(perlin[x, z]);
+                    m_grid.FillData(x, z, type, (int)subType, CForestUtil.GetSubTypeWalkable(subType));
                 }
             }
         }
@@ -111,7 +111,7 @@ namespace DarkRoom.PCG{
 	    /// <summary>
 	    /// 根据高度, 从配置中读取相关的asset
 	    /// </summary>
-	    private ForestTerrainSubType GetAssetIndexAtHeight(float height)
+	    private ForestTerrainSubType GetSubTypeAtHeight(float height)
 	    {
 	        //两种草
 	        if (height <= GrassHeight)
@@ -134,26 +134,6 @@ namespace DarkRoom.PCG{
 	        return ForestTerrainSubType.Grass1;
 	    }
 
-        private bool GetSubTypeWalkable(ForestTerrainSubType subType)
-        {
-            bool v = false;
-            switch (subType)
-            {
-                case ForestTerrainSubType.Grass1:
-                case ForestTerrainSubType.Grass2:
-                case ForestTerrainSubType.Land1:
-                case ForestTerrainSubType.Land2:
-                case ForestTerrainSubType.Floor:
-                case ForestTerrainSubType.Road:
-                    v = true;
-                    break;
-                case ForestTerrainSubType.Hill:
-                case ForestTerrainSubType.Wall:
-                case ForestTerrainSubType.Pond:
-                    v = false;
-                    break;
-            }
-            return v;
-        }
+       
     }
 }

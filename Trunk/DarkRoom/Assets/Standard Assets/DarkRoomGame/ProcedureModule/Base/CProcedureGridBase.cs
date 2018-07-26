@@ -14,14 +14,12 @@ namespace DarkRoom.PCG
         /// <summary>
         /// 返回网格列数
         /// </summary>
-        /// <value>The number cols.</value>
-        public int NumCols { get { return m_numCols; } }
+        public int NumCols => m_numCols;
 
         /// <summary>
         /// 返回网格行数
         /// </summary>
-        /// <value>The number rows.</value>
-        public int NumRows { get { return m_numRows; } }
+        public int NumRows => m_numRows;
 
         public CProcedureGridBase(int cols, int rows)
         {

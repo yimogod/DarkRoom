@@ -94,10 +94,18 @@ namespace DarkRoom.Game {
 			return node.Walkable;
 		}
 
-		/// <summary>
-		/// 设置合法的格子的可通行性
-		/// </summary>
-		public void SetWalkable(int col, int row, bool value){
+	    /// <summary>
+	    /// 设置合法的格子的可通行性
+	    /// </summary>
+	    public void SetWalkable(Vector2Int pos, bool value)
+	    {
+	        SetWalkable(pos.x, pos.y, value);
+	    }
+
+        /// <summary>
+        /// 设置合法的格子的可通行性
+        /// </summary>
+        public void SetWalkable(int col, int row, bool value){
 			T node = GetNode(col, row);
 			if (node.Invalid){
 				Debug.LogError("SetWalkable Error");

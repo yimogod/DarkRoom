@@ -26,9 +26,15 @@ namespace DarkRoom.AI {
 	    /// <summary>
 	    /// 设置寻路的起点
 	    /// </summary>
-	    /// <param name="row">Row.</param>
-	    /// <param name="col">Col.</param>
-	    public void SetStartNode(int col, int row)
+	    public void SetStartNode(Vector2Int pos)
+	    {
+	        SetStartNode(pos.x, pos.y);
+	    }
+
+        /// <summary>
+        /// 设置寻路的起点
+        /// </summary>
+        public void SetStartNode(int col, int row)
 	    {
 	        var node = GetNode(col, row);
 	        if (node.Invalid)
@@ -42,9 +48,15 @@ namespace DarkRoom.AI {
 	    /// <summary>
 	    /// 设置寻路的终点
 	    /// </summary>
-	    /// <param name="row">Row.</param>
-	    /// <param name="col">Col.</param>
-	    public void SetEndNode(int col, int row)
+	    public void SetEndNode(Vector2Int pos)
+	    {
+	        SetEndNode(pos.x, pos.y);
+	    }
+
+        /// <summary>
+        /// 设置寻路的终点
+        /// </summary>
+        public void SetEndNode(int col, int row)
 	    {
 	        var node = GetNode(col, row);
 	        if (node.Invalid)

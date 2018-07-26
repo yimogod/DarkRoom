@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DarkRoom.Core;
 using DarkRoom.Game;
+using DarkRoom.AI;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -36,8 +37,17 @@ namespace DarkRoom.PCG
         public int RandomRoomNum = 0;
 
         private Vector2Int m_size;
+
         private CForestRoomTileData[,] m_roomMap;
         private List<CForestRoomData> m_roomList = new List<CForestRoomData>();
+
+        private CStarGrid m_starGrid = new CStarGrid();
+        private CAStar m_astar = new CAStar(CAStar.Connection.Four);
+
+        /// <summary>
+        /// 房屋地图数据, 其实就是个二维数组
+        /// </summary>
+        public CForestRoomTileData[,] RoomMap => m_roomMap;
 
         public void Generate(int cols, int rows)
         {
@@ -169,11 +179,7 @@ namespace DarkRoom.PCG
             {
                 for (int y = 0; y < meta.Size.y; y++)
                 {
-                    var tile = new CForestRoomTileData();
-                    tile.Id = meta.Id;
-                    tile.TileType = meta.GetSpot(x, y);
-
-                    m_roomMap[sx + x, sy + y] = tile;
+                    SetTileData(sx + x, sy + y, meta.Id, meta.GetSpot(x, y));
                 }
             }
             var room = new CForestRoomData(meta.Id, sx, sy);
@@ -229,6 +235,20 @@ namespace DarkRoom.PCG
         {
             if (m_roomList.Count == 0)return;
 
+            m_starGrid.Init(m_size.x, m_size.y);
+            //读取所有房子的站位数据到寻路地图中
+            foreach (var room in m_roomList)
+            {
+                for (int c = 0; c < room.NumCols; c++)
+                {
+                    for (int r = 0; r < room.NumRows; r++)
+                    {
+                        var pos = room.GetTilePosition(c, r);
+                        m_starGrid.SetWalkable(pos, false);
+                    }
+                }
+            }
+
             for (int i = 0; i < m_roomList.Count - 1; i++)
             {
                 if(Random.value > 0.5)continue;
@@ -241,7 +261,14 @@ namespace DarkRoom.PCG
             bool v = CheckTunnelDoor(a, b);
             if (!v)return;
 
-
+            m_starGrid.SetStartNode(a.DoorForTunnel);
+            m_starGrid.SetEndNode(b.DoorForTunnel);
+            m_astar.FindPath(m_starGrid);
+            var path = m_astar.path;
+            foreach (var node in path)
+            {
+                SetTileData(node.Col, node.Row, "-1", CForestRoomMeta.TileType.OuterRoad);
+            }
         }
 
         /// <summary>
@@ -274,6 +301,15 @@ namespace DarkRoom.PCG
             b.SetTempDoorForTunnel(bIndex);
 
             return true;
+        }
+
+        private void SetTileData(int x, int y, string id, CForestRoomMeta.TileType type)
+        {
+            var tile = new CForestRoomTileData();
+            tile.Id = id;
+            tile.TileType = type;
+
+            m_roomMap[x, y] = tile;
         }
     }
 }
