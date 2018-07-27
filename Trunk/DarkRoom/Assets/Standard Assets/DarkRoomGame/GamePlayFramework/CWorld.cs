@@ -17,7 +17,9 @@ namespace DarkRoom.Game {
 
         private static CWorld m_ins = null;
 
-		public static CWorld Instance{
+	    public CWorldLayer Layer => m_layer;
+
+        public static CWorld Instance{
 			get{
 				if (m_ins == null)
 				{
@@ -28,11 +30,6 @@ namespace DarkRoom.Game {
 				return m_ins; 
 			}
 		}
-
-	    public CWorldLayer Layer
-	    {
-	        get { return m_layer; }
-	    }
 
         private void Awake()
 	    {
