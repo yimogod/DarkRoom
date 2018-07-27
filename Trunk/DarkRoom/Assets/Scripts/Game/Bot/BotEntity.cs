@@ -4,7 +4,7 @@ using DarkRoom.Game;
 
 namespace Sword
 {
-    public class BotEntity : CPawnEntity
+    public class BotEntity : ActorEntity
     {
     }
 }

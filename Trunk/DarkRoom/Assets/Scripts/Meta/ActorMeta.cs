@@ -6,11 +6,10 @@ namespace Sword{
 	/// <summary>
 	/// 角色的元数据, 存储了出生时的数据
 	/// 注意, 里面的一些数据, 比如Radius, 长宽高等数据也会存储到各个组件中
-	/// 这意味着有数据冗余. 因此我们制定下列读取规则
 	/// vo需要这些数据就重meta中读取
-	/// comp或者entity读取数据优先从组件里面读取
-	/// TODO 未来会考虑讲这个冗余数据放置到各个comp中进行配置, 这需要配套的编辑器
 	/// 或者直接用collider来读取数据
+	/// 
+	/// 我们的entity会读取这些数据, 然后存在相关的comp中
 	/// </summary>
 	public class ActorMeta : CBaseMeta{
 

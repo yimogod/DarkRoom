@@ -38,42 +38,31 @@ namespace DarkRoom.Game {
 		/// </summary>
 		protected CCircularSector m_viewSight;
 
-		/// <summary>
-		/// 控制pawn行走的组件
-		/// </summary>
-		/// <value>The mover.</value>
-		public CPawnMovementComp Mover
-		{
-			get { return m_movement; }
-		}
+	    /// <summary>
+	    /// 控制pawn行走的组件
+	    /// </summary>
+	    /// <value>The mover.</value>
+	    public CPawnMovementComp Mover => m_movement;
 
-		public CPawnPathFollowingComp Follower
-		{
-			get { return m_follower; }
-		}
+	    public CPawnPathFollowingComp Follower => m_follower;
 
-		/// <summary>
-		/// 我的视野范围是一个扇形
-		/// field of view
-		/// </summary>
-		public CCircularSector FOV
-		{
-			get { return m_viewSight; }
-		}
+	    /// <summary>
+	    /// 我的视野范围是一个扇形
+	    /// field of view
+	    /// </summary>
+	    public CCircularSector FOV => m_viewSight;
 
 		/// <summary>
 		/// 是否正在跟随路径行走, 实现 nav agent的接口
 		/// </summary>
-		public bool IsFollowingPath {
-			get { return m_follower.Status == CPawnPathFollowingComp.PathFollowingStatus.Moving; }
-		}
+		public bool IsFollowingPath => 
+		    m_follower.Status == CPawnPathFollowingComp.PathFollowingStatus.Moving;
 
 		/// <summary>
 		/// 是否完成路径行走
 		/// </summary>
-		public bool FinishedFollowingPath {
-			get { return m_follower.FinishResult == CPawnPathFollowingComp.FinishResultType.Success; }
-		}
+		public bool FinishedFollowingPath=>
+		    m_follower.FinishResult == CPawnPathFollowingComp.FinishResultType.Success;
 
 		protected override void RegisterAllComponents(){
 			base.RegisterAllComponents();
