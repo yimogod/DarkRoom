@@ -162,8 +162,8 @@ namespace DarkRoom.GamePlayAbility {
 			//read modify
 			var modifyNode = root.SelectSingleNode("Modification") as XmlElement;
 			if (modifyNode != null) {
-				var modify = meta.ModifyProperty;
-				m_xreader.TryReadChildNodeAttr(modifyNode, "MoveSpeedMultiplier", "value", ref modify.MoveSpeedMultiplier);
+				//var modify = meta.ModifyProperty;
+				//m_xreader.TryReadChildNodeAttr(modifyNode, "MoveSpeedMultiplier", "value", ref modify.MoveSpeedMultiplier);
 			}
 			//end modify
 

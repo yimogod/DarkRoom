@@ -40,12 +40,12 @@
 		/// 可以理解为动作播放第一帧时产生的视觉效果
 		/// TODO 应该用 演算体来表示
 		/// </summary>
-		public CVisualEffect LaunchVFX;
+	//	public CVisualEffect LaunchVFX;
 
 		/// <summary>
 		/// 命中时的视觉效果
 		/// </summary>
-		public CVisualEffect ImpactVFX;
+		//public CVisualEffect ImpactVFX;
 
 		public CEffectLaunchMissileMeta(string id) : base(id) {
 			Type = EffectType.LaunchMissle;

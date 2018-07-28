@@ -31,7 +31,7 @@ namespace DarkRoom.GamePlayAbility {
 		/// <summary>
 		/// 命中的视觉效果
 		/// </summary>
-		public CVisualEffect m_impact;
+		//public CVisualEffect m_impact;
 
 
 		/// <summary>
@@ -49,19 +49,19 @@ namespace DarkRoom.GamePlayAbility {
 			Type = EffectType.Damage;
 			DamageType = EffectDamageType.Melee;
 
-			int max = (int)CAbilityEnum.AttributeType.Count;
-			AttributeBonusList = new AttributeBonus[max];
-			AttributeMultiplierBonusList = new AttributeBonus[max];
+			//int max = (int)CAbilityEnum.AttributeType.Count;
+			//AttributeBonusList = new AttributeBonus[max];
+		//	AttributeMultiplierBonusList = new AttributeBonus[max];
 
-			for (int i = 0; i < max; i++) {
-				AttributeBonusList[i].Index = (CAbilityEnum.AttributeType)i;
-				AttributeBonusList[i].Value = 0;
-			}
+			//for (int i = 0; i < max; i++) {
+		//		AttributeBonusList[i].Index = (CAbilityEnum.AttributeType)i;
+		//		AttributeBonusList[i].Value = 0;
+		//	}
 
-			for (int i = 0; i < max; i++) {
-				AttributeBonusList[i].Index = (CAbilityEnum.AttributeType)i;
-				AttributeBonusList[i].Value = 1f;
-			}
+		//	for (int i = 0; i < max; i++) {
+		//		AttributeBonusList[i].Index = (CAbilityEnum.AttributeType)i;
+		//		AttributeBonusList[i].Value = 1f;
+		//	}
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace DarkRoom.GamePlayAbility {
 			/// 根据sc2, 有轻甲,重甲, 重型(massive),
 			/// 生物, 机械, 灵能, 重型, 建筑, 英雄, 召唤, 地图boss, 地图对象
 			/// </summary>
-			public CAbilityEnum.AttributeType Index;
+			//public CAbilityEnum.AttributeType Index;
 			public float Value;
 		}
 	}

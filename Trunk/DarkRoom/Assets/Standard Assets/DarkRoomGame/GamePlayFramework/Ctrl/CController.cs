@@ -91,7 +91,7 @@ namespace DarkRoom.Game
 		/// 遭受到伤害, 具体的伤害计算写在这里
 		/// 不要忘记调用伤害回调
 		/// </summary>
-		public virtual void InstigatedAnyDamage(float damage, CDamageType damageType, CController instigatedBy, CController damageCauser)
+		public virtual void InstigatedAnyDamage(float damage, CDamagePacket damageType, CController instigatedBy, CController damageCauser)
 		{
 		}
 

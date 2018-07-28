@@ -1,11 +1,8 @@
 ﻿namespace DarkRoom.Game {
 	/// <summary>
 	/// CDamageType 用来定义一系列伤害方式.并提供手段用来响应不同的伤害来源
-	/// 比如, 可以产生一个CDamageType_Fire来点燃受害者
-	/// 
-	/// DamageType不能被实例化. 应该被视为伤害类型数据存储器
 	/// </summary>
-	public struct CDamageType
+	public class CDamagePacket
 	{
 		/// <summary>
 		/// 是否由时间造成的伤害. 比如从高地掉落, 或者走进岩浆
@@ -32,16 +29,16 @@
 		public float DamageFallOff;
 	}
 
-	/// <summary>
-	/// 伤害事件
-	/// </summary>
-	public struct CDamageEvent
-	{
-		public CDamageType DamageType;
+    /// <summary>
+    /// 伤害事件
+    /// </summary>
+    public struct CDamageEvent
+    {
+        public CDamagePacket DamageType;
 
-		/** ID for this class. NOTE this must be unique for all damage events. */
-		public int ClassId;
+        /** ID for this class. NOTE this must be unique for all damage events. */
+        public int ClassId;
 
-		public bool IsOfType(int inId){ return ClassId == inId; }
-	}
+        public bool IsOfType(int inId) { return ClassId == inId; }
+    }
 }

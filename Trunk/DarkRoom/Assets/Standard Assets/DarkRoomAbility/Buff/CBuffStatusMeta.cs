@@ -8,22 +8,6 @@ namespace DarkRoom.GamePlayAbility {
 		/// </summary>
 		public float TimeScale = 1f;
 
-		/// <summary>
-		/// 状态标记. 没明白为何星际2分开了不同的flag
-		/// 内置的状态state有
-		/// 暴漏进程, 被动, 不可拖动, 不可选择, 不可阻止, 不可作为目标, 沉默
-		/// 单位属性修改--轻甲, 重甲, 生物, 机械, 灵能, 建筑, 英雄
-		/// 不让攻击, 不让隐形, 不让碰撞, 不让战斗, 不让侦测, 不让提供/使用人口
-		/// 不让乘客, 不让有视野. 
-		/// </summary>
-		//public Dictionary<CPawnVO.State, int> StateFlags = new Dictionary<CPawnVO.State, int>();
-
-		/// <summary>
-		/// buff修改的单位属性
-		/// </summary>
-		public CAbilityEnum.BuffModification ModifyProperty = 
-			new CAbilityEnum.BuffModification();
-
 		public CBuffStatusMeta(string idKey) : base(idKey) {}
 
 		/// <summary>

@@ -70,20 +70,20 @@ namespace DarkRoom.GamePlayAbility {
 
 		private void OnMissileImpact(Vector3 hitPos)
 		{
-			if (m_meta.ImpactVFX.Valid) {
-				GameObject explode = new GameObject(m_meta.ImpactVFX.Prefab);
-				//UIUtil.SetAbilityEffect(explode.transform, m_meta.ImpactVFX);
-				CDarkUtil.AddChild(CWorld.Instance.Layer.UnitLayer, explode.transform, hitPos);
+			//if (m_meta.ImpactVFX.Valid) {
+		//		GameObject explode = new GameObject(m_meta.ImpactVFX.Prefab);
+		//		//UIUtil.SetAbilityEffect(explode.transform, m_meta.ImpactVFX);
+			//	CDarkUtil.AddChild(CWorld.Instance.Layer.UnitLayer, explode.transform, hitPos);
 
 
-				CAutoDestoryComp des = explode.AddComponent<CAutoDestoryComp>();
-				des.Run(3f);
-			}
+			//	CAutoDestoryComp des = explode.AddComponent<CAutoDestoryComp>();
+			//	des.Run(3f);
+		//	}
 		}
 
 		protected override void OnDestroy()
 		{
-			m_entity = null;
+			//m_entity = null;
 		}
 	}
 }

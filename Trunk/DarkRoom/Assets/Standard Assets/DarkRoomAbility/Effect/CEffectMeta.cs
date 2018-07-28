@@ -214,12 +214,12 @@ namespace DarkRoom.GamePlayAbility {
 			meta.WhichUnit = CAbilityUtil.GetLocation(str);
 
 			m_xreader.TryReadChildNodeAttr(root, "LaunchLocation", "value", ref str);
-			meta.LaunchVFX.LocationValue = CAbilityUtil.GetLocation(str);
-			m_xreader.TryReadChildNodeAttr(root, "LaunchLocation", "prefab", ref meta.LaunchVFX.Prefab);
+		//	meta.LaunchVFX.LocationValue = CAbilityUtil.GetLocation(str);
+	//		m_xreader.TryReadChildNodeAttr(root, "LaunchLocation", "prefab", ref meta.LaunchVFX.Prefab);
 
 			m_xreader.TryReadChildNodeAttr(root, "ImpactLocation", "value", ref str);
-			meta.ImpactVFX.LocationValue = CAbilityUtil.GetLocation(str);
-			m_xreader.TryReadChildNodeAttr(root, "ImpactLocation", "prefab", ref meta.ImpactVFX.Prefab);
+		//	meta.ImpactVFX.LocationValue = CAbilityUtil.GetLocation(str);
+		//	m_xreader.TryReadChildNodeAttr(root, "ImpactLocation", "prefab", ref meta.ImpactVFX.Prefab);
 
 			m_xreader.TryReadChildNodeAttr(root, "Missile", "value", ref meta.MisslePrefab);
 			m_xreader.TryReadChildNodeAttr(root, "Movers", "Link", ref meta.Mover);
