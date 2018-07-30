@@ -84,7 +84,7 @@ namespace DarkRoom.GamePlayAbility {
         /// <summary>
         /// 本buff对属性的修改列表
         /// </summary>
-	    public List<CBuffModifierInfo> Modifiers;
+	    public List<CGamePlayModifierEvaluatedData> Modifiers;
 
         /// <summary>
         /// buff修改的单位属性

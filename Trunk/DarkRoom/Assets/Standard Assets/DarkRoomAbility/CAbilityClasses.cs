@@ -145,10 +145,22 @@ namespace DarkRoom.GamePlayAbility
     /// <summary>
     /// 用何种方法进行属性修改
     /// </summary>
-    public enum CAttributeModifyMethod
+    public enum CAttributeModMethod
     {
         ConstValue, //固定值
         CustomCalculation, //通过传入的计算机进行的修改
+    }
+
+    /// <summary>
+    /// 对属性的操作的算数
+    /// </summary>
+    public enum CAttributeModOp
+    {
+        Additive, //加法
+        Multiplicitive, //乘法
+        Division, //出发
+        Override, //覆盖
+        Max,
     }
 
     public enum CGameplayAbilityTriggerSource

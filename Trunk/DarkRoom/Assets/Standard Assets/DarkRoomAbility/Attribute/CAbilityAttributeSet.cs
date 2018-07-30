@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DarkRoom.Game;
 
 namespace DarkRoom.GamePlayAbility
 {
@@ -42,4 +43,61 @@ namespace DarkRoom.GamePlayAbility
         {
         }
     }
+
+    public struct CGameplayEffectModCallbackData
+    {
+        public CEffect EffectSpec; // The spec that the mod came from
+        public CGamePlayModifierEvaluatedData EvaluatedData; // The 'flat'/computed data to be applied to the target
+        public CAbilitySystem Target; // Target we intend to apply to
+
+        public CGameplayEffectModCallbackData(CEffect inEffectSpec,
+            CGamePlayModifierEvaluatedData inEvaluatedData, CAbilitySystem inTarget)
+        {
+            EffectSpec = inEffectSpec;
+            EvaluatedData = inEvaluatedData;
+            Target = inTarget;
+        }
+    }
+
+    /// <summary>
+    /// 对属性的修改操作
+    /// </summary>
+    public class CGamePlayModifierEvaluatedData
+    {
+        /// <summary>
+        /// 属性的英文字符, 我们用反射找对应的属性
+        /// </summary>
+        public string Attribute;
+
+        /// <summary>
+        /// 对属性的操作
+        /// </summary>
+        public CAttributeModOp ModifierOp;
+
+        /// <summary>
+        /// 修改的方法
+        /// </summary>
+        public CAttributeModMethod Method;
+
+        /// <summary>
+        /// 修改值
+        /// </summary>
+        public float Magnitude = 0;
+
+        /// <summary>
+        /// 自定义修改值的属性
+        /// </summary>
+        public string ModifyCalculation;
+
+        /// <summary>
+        /// buff来源的身上必须满足的tag条件
+        /// </summary>
+        public CGameplayTagRequirement SourceTagsRequire;
+
+        /// <summary>
+        /// buff应用的目标身上必须满足的tag条件
+        /// </summary>
+        public CGameplayTagRequirement TargetTagsRequire;
+    }
+
 }
