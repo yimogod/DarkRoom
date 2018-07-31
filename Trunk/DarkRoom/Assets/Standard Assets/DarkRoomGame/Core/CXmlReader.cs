@@ -104,28 +104,55 @@ namespace DarkRoom.Game
 
         /// <summary>
         /// 获取名字一样的数组
-        /// TryReadChildNodesAttr(parent, a, b, list)
+        /// parent = a
+        /// TryReadChildNodesAttr(parent, a, list)
         /// <a>
-        ///     <b value = '1'>
-        ///     <b value = '2'>
-        ///     <b value = '3'>
-        ///     <b value = '4'>
+        ///     <b v = '1'>
+        ///     <b v = '2'>
+        ///     <b v = '3'>
+        ///     <b v = '4'>
         /// </a>
         /// 这样list获取的数组值有1,2,3,4
         /// </summary>
-        public bool TryReadChildNodesAttr(XmlElement parent, string childNodeName, string attrName, List<string> list) {
+        public bool TryReadChildNodesAttr(XmlNode parent, string childNodeName, List<string> list) {
 			XmlNodeList nodes = parent.SelectNodes(childNodeName);
 			if (nodes == null) return false;
 
 			foreach (var node in nodes) {
-				string t = (node as XmlElement).GetAttribute(attrName);
+				string t = (node as XmlElement).GetAttribute("v");
 				list.Add(t);
 			}
 			
             return true;
 		}
 
-		public void Close()
+        /// <summary>
+        /// <a>
+        ///     <b x = '1' y='1' z='1' />
+        ///     <b x = '2' y='1' z='1' />
+        /// </a>
+        /// </summary>
+        public bool TryReadChildNodesAttr(XmlNode parent, string childNodeName, List<Vector3Int> list)
+	    {
+	        XmlNodeList nodes = parent.SelectNodes(childNodeName);
+	        if (nodes == null) return false;
+
+	        foreach (var node in nodes)
+	        {
+                Vector3Int item = Vector3Int.zero;
+	            string x = (node as XmlElement).GetAttribute("x");
+	            string y = (node as XmlElement).GetAttribute("y");
+	            string z = (node as XmlElement).GetAttribute("z");
+	            item.x = int.Parse(x);
+	            item.y = int.Parse(y);
+	            item.z = int.Parse(z);
+                list.Add(item);
+	        }
+
+	        return true;
+	    }
+
+        public void Close()
 		{
 			m_xml = null;
 		}

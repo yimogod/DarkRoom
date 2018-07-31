@@ -22,7 +22,11 @@ namespace DarkRoom.Game {
 	    public CBaseMeta(string id)
 	    {
 	        sId = id;
-        }
+
+	        int nid = -1;
+	        int.TryParse(id, out nid);
+	        Id = nid;
+	    }
 
 		public virtual string Name{
 			get{ return NameKey; }

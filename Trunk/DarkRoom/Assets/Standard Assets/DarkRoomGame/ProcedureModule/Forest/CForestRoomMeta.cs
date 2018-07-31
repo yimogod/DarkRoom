@@ -177,7 +177,8 @@ namespace DarkRoom.PCG
                 meta.SetSize(cols, rows);
 
                 List<string> lines = new List<string>();
-                m_xreader.TryReadChildNodesAttr(node, "Shape", "v", lines);
+                var shapeNode = node.SelectSingleNode("Shape");
+                m_xreader.TryReadChildNodesAttr(shapeNode, "Line", lines);
                 for (int r = 0; r < lines.Count; r++)
                 {
                     var arr = lines[r].ToCharArray();

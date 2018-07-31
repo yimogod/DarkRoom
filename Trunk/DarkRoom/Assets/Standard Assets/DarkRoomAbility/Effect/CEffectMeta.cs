@@ -190,7 +190,7 @@ namespace DarkRoom.GamePlayAbility {
 
 			m_xreader.TryReadChildNodeAttr(root, "WhichUnit", "value", ref str);
 			meta.WhichUnit = CAbilityUtil.GetLocation(str);
-			m_xreader.TryReadChildNodesAttr(root, "EffectArray", "value", meta.EffectList);
+			m_xreader.TryReadChildNodesAttr(root, "EffectArray", meta.EffectList);
 
 			CEffectMetaManager.AddMeta(meta);
 		}

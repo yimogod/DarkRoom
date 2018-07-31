@@ -24,21 +24,22 @@ namespace Sword
             CreateHero(10001, Vector2Int.down);
 
             //2. 创建怪物
-            CreateMonster(m_mapMeta.monster_0, m_mapMeta.monster_0_lv, m_mapMeta.monster_0_ai, m_mapMeta.monster_0_num);
-            CreateMonster(m_mapMeta.monster_1, m_mapMeta.monster_1_lv, m_mapMeta.monster_1_ai, m_mapMeta.monster_1_num);
-            CreateMonster(m_mapMeta.monster_2, m_mapMeta.monster_2_lv, m_mapMeta.monster_2_ai, m_mapMeta.monster_2_num);
-            CreateMonster(m_mapMeta.monster_3, m_mapMeta.monster_3_lv, m_mapMeta.monster_3_ai, m_mapMeta.monster_3_num);
-            CreateMonster(m_mapMeta.boss_1, m_mapMeta.boss_1_lv, m_mapMeta.boss_1_ai, 1);
+            foreach (var m in m_mapMeta.Monsters)
+            {
+                CreateMonster(m.x, m.y, m.z);
+            }
+            
+            //CreateMonster(m_mapMeta.boss_1, m_mapMeta.boss_1_lv, m_mapMeta.boss_1_ai, 1);
 
 
             //3. 创建boss, 在宝箱附近
-            if (m_mapMeta.boss_0 != -1)
-            {
+            //if (m_mapMeta.boss_0 != -1)
+           // {
                 //Vector3 pos = _helper.FindFreeTileNear(_mapGen.importTile_1);
                 //UnitBornData bornData =
                 //    UnitBornData.CreateUnitBornData(_mapMeta.boss_0, CUnitEntity.TeamSide.Blue, pos);
                 //CreateMonsterAtPos(bornData, _mapMeta.boss_0_lv, _mapMeta.boss_0_ai);
-            }
+          //  }
         }
 
         //创建英雄, 固定位置, 其实更好的设计应该是祭坛~~~~
@@ -58,18 +59,18 @@ namespace Sword
         }
 
         //根据meta配置数据创建单个魔物
-        private void CreateMonster(int metaId, int lv, int ai, int num)
+        private void CreateMonster(int metaId, int lv, int num)
         {
             if (metaId <= 0 || num == 0) return;
 
             for (int i = 0; i < num; ++i)
             {
-                CreateMonsterAtPos(metaId, lv, ai, Vector3.zero);
+                CreateMonsterAtPos(metaId, lv, Vector3.zero);
             }
         }
 
         //在固定位置创建怪物
-        private void CreateMonsterAtPos(int metaId, int lv, int ai, Vector3 pos)
+        private void CreateMonsterAtPos(int metaId, int lv, Vector3 pos)
         {
             var meta = ActorMetaManager.GetMeta(metaId);
             ActorVO vo = new ActorVO(null);

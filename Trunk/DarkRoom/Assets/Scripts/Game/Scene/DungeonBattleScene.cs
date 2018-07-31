@@ -28,7 +28,7 @@ namespace Sword
 
         private void InitMapThing()
         {
-            m_mapMeta = MapMetaManager.GetMeta("1");
+            m_mapMeta = MapMetaManager.GetMeta(10001);
             TMap.Instance.Init(m_mapMeta);
             m_builder = new DungeonMapBuilder(m_mapMeta);
 

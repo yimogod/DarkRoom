@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml;
 using DarkRoom.Game;
+using DarkRoom.PCG;
 using UnityEngine;
 
 namespace Sword{
@@ -8,63 +10,13 @@ namespace Sword{
 	public class MapMeta : CBaseMeta{
 		public int Cols;
 		public int Rows;
-		public int type; // rush or comman
-		public string MapRoot;// 地图的路径父目录 "Forest"
 
-		//师傅随机地形高度
-		public bool randomTerrainHeight = true;
-		//用于产生树的自动机系数
-		public int treeCellularPercent = 55;
-		//障碍物的个数
-		public int decoBlockNum = 60;
-		//可被破坏的障碍物个数
-		public int decoDestroyNum = 60;
-
-		#region common_info
-		public int monster_0;
-		public int monster_0_lv;
-		public int monster_0_ai;
-		public int monster_0_num;
-
-		public int monster_1;
-		public int monster_1_lv;
-		public int monster_1_ai;
-		public int monster_1_num;
-
-		public int monster_2;
-		public int monster_2_lv;
-		public int monster_2_ai;
-		public int monster_2_num;
-
-		public int monster_3;
-		public int monster_3_lv;
-		public int monster_3_ai;
-		public int monster_3_num;
-
-		public int boss_0;
-		public int boss_0_lv;
-		public int boss_0_ai;
-		public int boss_1;
-		public int boss_1_lv;
-		public int boss_1_ai;
-
-		public int trigger_0;
-		public int trigger_0_num;
-		public int trigger_1;
-		public int trigger_1_num;
-		public int trigger_2;
-		public int trigger_2_num;
-
-		public int chest_0;
-		public int chest_0_num;
-
-		public int chest_1;
-		public int chest_1_num;
-
-		//chest2是黄金宝箱. 只有能一个.且会有boss_0在它旁边
-		public int chest_2;
-		public int chest_2_num = 1;
-		#endregion
+        //x = id, y = lv  z = num
+        public List<Vector3Int> Monsters = new List<Vector3Int>();
+	    public List<Vector3Int> Bosses = new List<Vector3Int>();
+	    public List<Vector3Int> Triggers = new List<Vector3Int>();
+        //第一个应该是黄金宝箱, 在boss旁边
+	    public List<Vector2Int> Chests = new List<Vector2Int>();
 
 		public MapMeta(string id):base(id){}
 	}
@@ -73,15 +25,13 @@ namespace Sword{
 	#region manager
 	public class MapMetaManager{
 		//关卡信息
-		public static Dictionary<string, MapMeta> m_dict = new Dictionary<string, MapMeta>();
-
-		public MapMetaManager (){}
+		public static Dictionary<int, MapMeta> m_dict = new Dictionary<int, MapMeta>();
 
 		public static void AddMeta(MapMeta meta){
-			m_dict.Add(meta.sId, meta);
+			m_dict.Add(meta.Id, meta);
 		}
 
-		public static MapMeta GetMeta(string id){
+		public static MapMeta GetMeta(int id){
 			if(!m_dict.ContainsKey(id)){
 				Debug.LogError(id + " map meta does not exist!");
 				return null;
@@ -95,32 +45,22 @@ namespace Sword{
 	public class MapMetaParser: CMetaParser{
 		public override void Execute (string content){
 			base.Execute(content);
+		    m_xreader.ReadRootNode();
 
-			for(int i = 0; i < m_reader.row; ++i){
-				m_reader.MarkRow(i);
+		    foreach (XmlElement node in m_xreader.rootChildNodes)
+		    {
+		        MapMeta meta = new MapMeta(node.GetAttribute("id"));
+		        meta.NameKey = node.GetAttribute("name");
+                meta.Cols = int.Parse(node.GetAttribute("cols"));
+		        meta.Rows = int.Parse(node.GetAttribute("rows"));
 
-				MapMeta meta = new MapMeta(m_reader.ReadString());
-				meta.NameKey = m_reader.ReadString(); 
-				meta.MapRoot = m_reader.ReadString();
+		        var monsterRoot = node.SelectSingleNode("Monsters");
+                m_xreader.TryReadChildNodesAttr(monsterRoot, "Monster", meta.Monsters);
 
-				meta.Cols = m_reader.ReadInt();
-				meta.Rows = m_reader.ReadInt();
+		        MapMetaManager.AddMeta(meta);
+		    }
 
-				meta.type = m_reader.ReadInt();
-				meta.randomTerrainHeight = m_reader.ReadBool();
-				meta.treeCellularPercent = m_reader.ReadInt();
-				meta.decoBlockNum = m_reader.ReadInt();
-				meta.decoDestroyNum = m_reader.ReadInt();
-
-				int maxBlockNum = (int)(meta.Cols * meta.Rows * 0.7f);
-				if((meta.decoBlockNum + meta.decoDestroyNum) > maxBlockNum) {
-					UnityEngine.Debug.LogError("Deco block num > map col x row in " + meta.sId);
-					continue;
-				}
-
-				MapMetaManager.AddMeta(meta);
-			}
-		}
+        }
 	}
 	#endregion
 }
