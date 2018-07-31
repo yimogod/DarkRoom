@@ -72,22 +72,22 @@ namespace DarkRoom.Game {
         /// <summary>
         /// 创建一个单位
         /// </summary>
-        public GameObject SpawnUnit<T>(string unitName, Vector3 localPosition) where T : CUnitEntity
+        public T SpawnUnit<T>(string unitName, Vector3 localPosition) where T : CUnitEntity
 	    {
             GameObject go = new GameObject(unitName);
 	        go.transform.parent = m_layer.UnitLayer;
 	        go.transform.localPosition = localPosition;
-	        go.AddComponent<T>();
-	        return go;
+	        var comp = go.AddComponent<T>();
+	        return comp;
 	    }
 
         /// <summary>
         /// 创建一个单位, n秒后自动销毁
         /// </summary>
-	    public GameObject SpawnAutoDestroyUnit<T>(string unitName, Vector3 localPosition, int timeLast) where T : CUnitEntity
+	    public T SpawnAutoDestroyUnit<T>(string unitName, Vector3 localPosition, int timeLast) where T : CUnitEntity
         {
-            GameObject go = SpawnUnit<T>(unitName, localPosition);
-            go.AddComponent<CAutoDestoryComp>();
+            T go = SpawnUnit<T>(unitName, localPosition);
+            go.gameObject.AddComponent<CAutoDestoryComp>();
 	        return go;
 	    }
 

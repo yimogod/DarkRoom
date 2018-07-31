@@ -18,7 +18,7 @@ namespace Sword
         }
 
         /*创建角色*/
-        public CUnitEntity CreateActor(ActorVO vo, UnitBornData bornData, GameObject gameObject = null)
+        public CUnitEntity CreateActor(ActorVO vo, GameObject gameObject = null)
         {
             bool hasActorInit = true;
             if (gameObject == null)
@@ -51,7 +51,7 @@ namespace Sword
 
                 //设置actor的坐标和位置
                 CDarkUtil.AddChild(_unitLayer, gameObject.transform);
-                Vector3 pos = CMapUtil.GetTileCenterPosByColRow(bornData.col, bornData.row);
+                //Vector3 pos = CMapUtil.GetTileCenterPosByColRow(bornData.col, bornData.row);
                 //多了0.1高度是因为角色放的炸弹啊, 地面的滩涂啊. 要在角色的脚下
                 //posComp.SetPos(pos, bornData.direction);
                 //posComp.Pause();

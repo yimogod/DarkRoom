@@ -9,6 +9,7 @@ namespace Sword
     {
         private MapMeta m_mapMeta;
         private DungeonMapPlaceholder m_tilesData;
+        private ActorEntityCreator m_creator;
 
         public void Generate(MapMeta meta, CAssetGrid assetGrid)
         {
@@ -20,7 +21,7 @@ namespace Sword
         private void CreateUnit()
         {
             //1. BornHero
-            //CreateHero(_mapGen.startTile);
+            CreateHero(10001, Vector2Int.down);
 
             //2. 创建怪物
             CreateMonster(m_mapMeta.monster_0, m_mapMeta.monster_0_lv, m_mapMeta.monster_0_ai, m_mapMeta.monster_0_num);
@@ -41,55 +42,45 @@ namespace Sword
         }
 
         //创建英雄, 固定位置, 其实更好的设计应该是祭坛~~~~
-        private void CreateHero(Vector2Int pos)
+        private void CreateHero(int metaId, Vector2Int tile)
         {
-            //UnitBornData bornData = UnitBornData.CreateUnitBornData(10001, CUnitEntity.TeamSide.Red, pos);
+            var meta = ActorMetaManager.GetMeta(metaId);
+            var vo = ProxyPool.UserProxy.Hero;
+            vo.SetMeta(meta);
 
-            /*CActorVO vo = ProxyPool.userProxy.hero;
-            if (vo == null)
-            {
-                vo = new CActorVO(bornData.metaId);
-                vo.Init(1);
-            }
-            else
-            {
-                (vo as CActorVO).Reborn();
-            }
+            var pos = CMapUtil.GetTileCenterPosByColRow(tile);
+            var entity = CWorld.Instance.SpawnUnit<HeroEntity>("Hero_" + metaId, pos);
+            entity.Team = CUnitEntity.TeamSide.Red;
+            m_creator.CreateHeroAddon(entity);
+            m_creator.CreateAttachGO(entity);
 
-            CUnitEntity entity = _actorGen.CreateActor(vo, bornData);
-            _actorGen.CreateHeroAddon(entity);
-            _actorGen.CreateAttachGO(entity);
-
-            _world.AddUnit(entity);
-            _helper.AddUnitToDict(entity.posColRow, 5);*/
+            m_tilesData.AddUnitToDict(entity.LocalPosition, 5);
         }
 
         //根据meta配置数据创建单个魔物
         private void CreateMonster(int metaId, int lv, int ai, int num)
         {
-            if (metaId == -1 || num == 0) return;
+            if (metaId <= 0 || num == 0) return;
 
             for (int i = 0; i < num; ++i)
             {
-                UnitBornData bornData = m_tilesData.CreateRandomUnitBorn(metaId, CUnitEntity.TeamSide.Blue);
-                if (bornData.invalid) continue;
-                CreateMonsterAtPos(bornData, lv, ai);
+                CreateMonsterAtPos(metaId, lv, ai, Vector3.zero);
             }
         }
 
         //在固定位置创建怪物
-        private void CreateMonsterAtPos(UnitBornData bornData, int lv, int ai)
+        private void CreateMonsterAtPos(int metaId, int lv, int ai, Vector3 pos)
         {
-            /*CActorVO vo = new CActorVO(bornData.metaId);
-            vo.ai = AIMetaManager.GetMeta(ai);
-            vo.Init(lv);
+            var meta = ActorMetaManager.GetMeta(metaId);
+            ActorVO vo = new ActorVO(null);
+            //vo.ai = AIMetaManager.GetMeta(ai);
+            //vo.Init(lv);
 
-            CUnitEntity entity = _actorGen.CreateActor(vo, bornData);
-            _actorGen.CreateMonsterAddon(entity);
-            _actorGen.CreateAttachGO(entity);
+            var entity = CWorld.Instance.SpawnUnit<BotEntity>("Bot_" + metaId, pos);
+            m_creator.CreateMonsterAddon(entity);
+            m_creator.CreateAttachGO(entity);
 
-            _world.AddUnit(entity);
-            _helper.AddUnitToDict(entity.posColRow);*/
+            m_tilesData.AddUnitToDict(entity.LocalPosition);
         }
 
 

@@ -14,17 +14,26 @@ namespace DarkRoom.Game{
 		}
 
 		/* for 2d, 左下角原点 */
-		public static Vector2 GetTileCenterPosByColRow(int col, int row)
+		public static Vector3 GetTileCenterPosByColRow(int col, int row)
 		{
 			float x = (col + 0.5f);
-			float y = (row + 0.5f);
-			return new Vector2(x, y);
+			float y = 0;
+		    float z = (row + 0.5f);
+            return new Vector3(x, y, z);
 		}
 
-		//方块的左下角坐标
-		public static Vector2 GetTileLeftBottomPosByColRow(int col, int row)
+	    public static Vector3 GetTileCenterPosByColRow(Vector2Int tile)
+	    {
+	        float x = tile.x + 0.5f;
+	        float y = 0;
+	        float z = tile.y + 0.5f;
+	        return new Vector3(x, y, z);
+	    }
+
+        //方块的左下角坐标
+        public static Vector3 GetTileLeftBottomPosByColRow(int col, int row)
 		{
-			Vector2 vec = new Vector2(col, row);
+		    Vector3 vec = new Vector3(col, 0, row);
 			return vec;
 		}
 
@@ -34,7 +43,12 @@ namespace DarkRoom.Game{
 			return vec;
 		}
 
-		public static void DrawGrid(CStarGrid gird)
+	    public static Vector2Int GetTileByPos(Vector3 pos)
+	    {
+	        return GetTileByPos(pos.x, pos.z);
+	    }
+
+        public static void DrawGrid(CStarGrid gird)
 		{
 			var parent = new GameObject("map cube");
 			var t = parent.transform;

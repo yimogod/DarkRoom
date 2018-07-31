@@ -61,13 +61,6 @@ namespace Sword
             }
         }
 
-        //创建单位生成的信息,比如位置和方向
-        public UnitBornData CreateRandomUnitBorn(int id, CUnitEntity.TeamSide group)
-        {
-            Vector2Int pos = FindFreeTileNotInDict(_unitRangeDict);
-            return UnitBornData.CreateUnitBornData(id, group, pos);
-        }
-
         //寻找地图中空白的位置
         public Vector2Int FindFreeTile()
         {

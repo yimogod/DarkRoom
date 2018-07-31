@@ -296,6 +296,11 @@ namespace Sword{
 			get { return m_lv; }
 		}
 
+	    public void SetMeta(ActorMeta meta)
+	    {
+	        m_metaBase = meta;
+	    }
+
 		public void NotiSpeedChange()
 		{
 			if (OnNotiSpeedChange != null) {

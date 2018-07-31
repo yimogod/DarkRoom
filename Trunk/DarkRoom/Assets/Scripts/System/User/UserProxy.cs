@@ -9,30 +9,31 @@ namespace Sword
     {
         public const string NAME = "UserProxy";
 
-        public UserVO user = new UserVO();
+        public UserVO User = new UserVO();
+        public HeroVO Hero = new HeroVO();
 
         public UserProxy() : base(NAME) { }
 
         public bool HasEnoughCoin(int coin)
         {
-            return user.coin >= coin;
+            return User.coin >= coin;
         }
 
         public bool HasEnoughGold(int gold)
         {
-            return user.gold >= gold;
+            return User.gold >= gold;
         }
 
         public void AddCoin(int value)
         {
-            user.coin += value;
+            User.coin += value;
         }
 
         //消费
         public void ConsumeCoin(int value)
         {
-            user.coin -= value;
-            if (user.coin < 0) user.coin = 0;
+            User.coin -= value;
+            if (User.coin < 0) User.coin = 0;
         }
     }
 }

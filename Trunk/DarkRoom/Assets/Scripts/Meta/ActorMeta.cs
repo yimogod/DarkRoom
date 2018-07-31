@@ -98,4 +98,42 @@ namespace Sword{
 			return CritBase;
 		}
 	}
+
+    public class ActorMetaManager
+    {
+        private static Dictionary<int, ActorMeta> m_dict =
+            new Dictionary<int, ActorMeta>();
+
+        public static Dictionary<int, ActorMeta> Data => m_dict;
+
+        public static void AddMeta(ActorMeta meta)
+        {
+            m_dict.Add(meta.nId, meta);
+        }
+
+        public static ActorMeta GetMeta(int id)
+        {
+            return m_dict[id];
+        }
+    }
+
+    public class ActorMetaParser : CMetaParser
+    {
+        public override void Execute(string content)
+        {
+            base.Execute(content);
+
+            for (int i = 0; i < m_reader.row; ++i)
+            {
+                m_reader.MarkRow(i);
+
+                ActorMeta meta = new ActorMeta(m_reader.ReadInt());
+                meta.NameKey = m_reader.ReadString();
+                meta.Prefab = m_reader.ReadString();
+
+                ActorMetaManager.AddMeta(meta);
+            }
+        }
+    }
+
 }

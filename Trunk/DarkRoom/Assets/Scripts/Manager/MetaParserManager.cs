@@ -23,7 +23,7 @@ namespace Sword
             //AddPaser("Meta/effect_meta", new CEffectMetaParser());
             //AddPaser("Meta/buff_meta", new CBuffMetaParser());
 
-            //AddPaser("Meta/actor_meta", new CActorMetaParser());
+            AddPaser("Meta/actor_meta", new ActorMetaParser());
 
             AddPaser("Meta/level_meta", new CForestRoomMetaParser());
             AddPaser("Meta/level_meta", new MapMetaParser());
