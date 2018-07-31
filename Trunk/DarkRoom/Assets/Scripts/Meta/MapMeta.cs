@@ -78,7 +78,7 @@ namespace Sword{
 		public MapMetaManager (){}
 
 		public static void AddMeta(MapMeta meta){
-			m_dict.Add(meta.Id, meta);
+			m_dict.Add(meta.sId, meta);
 		}
 
 		public static MapMeta GetMeta(string id){
@@ -114,7 +114,7 @@ namespace Sword{
 
 				int maxBlockNum = (int)(meta.Cols * meta.Rows * 0.7f);
 				if((meta.decoBlockNum + meta.decoDestroyNum) > maxBlockNum) {
-					UnityEngine.Debug.LogError("Deco block num > map col x row in " + meta.Id);
+					UnityEngine.Debug.LogError("Deco block num > map col x row in " + meta.sId);
 					continue;
 				}
 

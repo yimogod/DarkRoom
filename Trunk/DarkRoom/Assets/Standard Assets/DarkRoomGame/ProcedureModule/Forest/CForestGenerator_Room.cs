@@ -179,10 +179,10 @@ namespace DarkRoom.PCG
             {
                 for (int y = 0; y < meta.Size.y; y++)
                 {
-                    SetTileData(sx + x, sy + y, meta.Id, meta.GetSpot(x, y));
+                    SetTileData(sx + x, sy + y, meta.sId, meta.GetSpot(x, y));
                 }
             }
-            var room = new CForestRoomData(meta.Id, sx, sy);
+            var room = new CForestRoomData(meta.sId, sx, sy);
             m_roomList.Add(room);
         }
 

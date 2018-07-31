@@ -101,11 +101,11 @@ namespace DarkRoom.GamePlayAbility {
 
 		public static void AddMeta(CBuffMeta meta)
 		{
-			if(m_dict.ContainsKey(meta.Id)) {
-				Debug.LogError("CBehaviorMetaManager ALREADY CONTAIN the behavior with id -- " +  meta.Id);
+			if(m_dict.ContainsKey(meta.sId)) {
+				Debug.LogError("CBehaviorMetaManager ALREADY CONTAIN the behavior with id -- " +  meta.sId);
 			}
 
-			m_dict[meta.Id] = meta;
+			m_dict[meta.sId] = meta;
 		}
 
 		public static CBuffMeta GetMeta(string id)

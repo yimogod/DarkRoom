@@ -139,7 +139,7 @@ namespace DarkRoom.Item {
 		}
 
 		public static void AddMeta(CEquipmentMeta meta){
-			m_dict.Add(meta.nId, meta);
+			m_dict.Add(meta.Id, meta);
 		}
 
 		public static CEquipmentMeta GetMeta(int id){

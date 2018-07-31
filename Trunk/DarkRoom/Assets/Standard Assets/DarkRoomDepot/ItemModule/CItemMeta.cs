@@ -63,7 +63,7 @@ namespace DarkRoom.Item{
 		public CItemMetaManager (){}
 
 		public static void AddMeta(CItemMeta meta){
-			_itemDict.Add(meta.Id, meta);
+			_itemDict.Add(meta.sId, meta);
 		}
 
 		public static CItemMeta GetMeta(string id){

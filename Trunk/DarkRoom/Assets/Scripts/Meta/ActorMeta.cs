@@ -108,7 +108,7 @@ namespace Sword{
 
         public static void AddMeta(ActorMeta meta)
         {
-            m_dict.Add(meta.nId, meta);
+            m_dict.Add(meta.Id, meta);
         }
 
         public static ActorMeta GetMeta(int id)

@@ -137,12 +137,12 @@ namespace DarkRoom.PCG
 
         public static void AddMeta(CForestRoomMeta meta)
         {
-            if (m_dict.ContainsKey(meta.Id))
+            if (m_dict.ContainsKey(meta.sId))
             {
-                Debug.LogError(string.Format("CForestRoomMetaManager ALREADY CONTAIN the meta with id -- {0} ", meta.Id));
+                Debug.LogError(string.Format("CForestRoomMetaManager ALREADY CONTAIN the meta with id -- {0} ", meta.sId));
             }
 
-            m_dict[meta.Id] = meta;
+            m_dict[meta.sId] = meta;
         }
 
         public static CForestRoomMeta GetMeta(string id)

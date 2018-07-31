@@ -27,7 +27,7 @@ namespace DarkRoom.GamePlayAbility {
 
 	    public override AffectDectectResult CanAffectOnTarget(Vector3 localPosition)
 	    {
-            Debug.LogErrorFormat("{0} is one AbilityAttack which Just handle unit target", MetaBase.Id);
+            Debug.LogErrorFormat("{0} is one AbilityAttack which Just handle unit target", MetaBase.sId);
 	        return AffectDectectResult.TargetInvalid;
 	    }
 
