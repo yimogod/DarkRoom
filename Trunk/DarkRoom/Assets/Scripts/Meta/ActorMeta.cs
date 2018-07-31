@@ -13,11 +13,17 @@ namespace Sword{
 	/// </summary>
 	public class ActorMeta : CBaseMeta{
 
-		/// <summary>
-		/// 基于秒的单位为米(m)--一般人类的速度是10km/1h, 意味着1s是2.7m
-		/// IMPORTANT! Speed在Movement中也有. meta的数据尽量只在vo中用
-		/// </summary>
-		public float Speed = 3f;
+	    public string Prefab;
+        
+	    /// <summary>
+        /// 职业
+        /// </summary>
+	    public ActorClass MetaClass;
+
+        /// <summary>
+        /// 能走几格
+        /// </summary>
+        public int Speed = 3;
 
 		/// <summary>
 		/// 击杀获取的经验
@@ -25,78 +31,23 @@ namespace Sword{
 		public int DeadExp;
 
 		/// <summary>
-		/// 原始视野的角度
-		/// </summary>
-		public float ViewAngle = 120f;
-
-		/// <summary>
 		/// 原始视野的长度
 		/// </summary>
-		public float ViewRange = 10f;
+		public int FOV = 6;
 
-		/// <summary>
-		/// resource key, which indeed  is prefab name
-		/// </summary>
-		public string Prefab;
+	    public int InitHealth;
 
-		/// <summary>
-		/// 身体圆心半径, 注意, 
-		/// IMPORTANT! Radius在Spacial中也有. meta的数据尽量只在vo中用
-		/// </summary>
-		public float Radius;
+	    public int InitMana;
 
-		/// <summary>
-		/// 我的体重,
-		/// IMPORTANT! Weight在Spacial中也有. meta的数据尽量只在vo中用
-		/// </summary>
-		public float Weight;
+	    public float InitDamage;
 
-		public int AtkBase;
-		public int AtkStep;
-
-		public int DefBase;
-		public int DefStep;
-
-		public int HpBase;
-		public int HpStep;
-
-		public int MpBase;
-		public int MpStep;
-
-		/* base on 1000 */
-		public int CritBase;
+	    public float InitDef;
 
 		//创建角色给的武器
 		public int InitWeapon = 0;
 
-		//主动技能, x代表ability id， y代表ability lv
-		public List<Vector2Int> ActiveAbilityList = new List<Vector2Int>();
-
-		//talent, 出生自带的buff
-		public List<Vector2Int> TalentList = new List<Vector2Int>();
-
 		public ActorMeta(int id) : base(id){}
 
-
-		public int GetATK(int level){
-			return AtkBase + level * AtkStep;
-		}
-		
-		public int GetDEF(int level){
-			return DefBase + level * DefStep;
-		}
-
-		public int GetHP(int level){
-			return HpBase + level * HpStep;
-		}
-
-		public int GetMP(int level){
-			return MpBase + level * MpBase;
-		}
-
-		public int GetCrit(int level){
-			return CritBase;
-		}
 	}
 
     public class ActorMetaManager
@@ -130,10 +81,18 @@ namespace Sword{
                 ActorMeta meta = new ActorMeta(m_reader.ReadInt());
                 meta.NameKey = m_reader.ReadString();
                 meta.Prefab = m_reader.ReadString();
+                meta.MetaClass = (ActorClass) m_reader.ReadInt();
+                meta.FOV = m_reader.ReadInt();
+                meta.Speed = m_reader.ReadInt();
+                meta.DeadExp = m_reader.ReadInt();
+                meta.InitHealth = m_reader.ReadInt();
+                meta.InitMana = m_reader.ReadInt();
+                meta.InitDamage = m_reader.ReadFloat();
+                meta.InitDef = m_reader.ReadFloat();
+                meta.InitWeapon = m_reader.ReadInt();
 
                 ActorMetaManager.AddMeta(meta);
             }
         }
     }
-
 }

@@ -1,37 +1,4 @@
-<?xml version="1.0" encoding="us-ascii"?>
-<Catalog>
-    <CActor id="10002" name="hero_warrior_girl" desc="warrior hero">
-        <Style prefab="Preb_Actor_10002" bone="0"/>
-        <Hp value="10" step="2"/>
-        <Mp value="10" step="2"/>
-        <Atk value="10" step="2"/>
-        <Def value="10" step="2"/>
-        <Porperty speed="3" job="1" dead_exp="1" fov="5"/>
-        <Equip left_weapon="" right_weapon="" cap="" 
-            neck="" armor="" belt="" glove="" 
-            left_ring="" right_ring="" trouser="" shoe="" />
-        <Ability>
-            <Item id="70001" lv="1"/>
-        </Ability>
-        <Talent>
-            <Item id="0" lv="0"/>
-        </Talent>
-    </CActor>
-	<CActor id="10008" name="hero_ranger_girl" desc="ranger hero">
-        <Style prefab="Preb_Actor_10008" bone="0"/>
-        <Hp value="10" step="2"/>
-        <Mp value="10" step="2"/>
-        <Atk value="10" step="2"/>
-        <Def value="10" step="2"/>
-        <Porperty speed="3" job="4" dead_exp="1" fov="5"/>
-        <Equip left_weapon="" right_weapon="" cap="" 
-        	neck="" armor="" belt="" glove="" 
-        	left_ring="" right_ring="" trouser="" shoe="" />
-        <Ability>
-            <Item id="70001" lv="1"/>
-        </Ability>
-        <Talent>
-            <Item id="0" lv="0"/>
-        </Talent>
-    </CActor>
-</Catalog>
+id	name	prefab	class	fov	speed	exp	health	mana	damage	def	weapon
+desc			"warrier,ranger,magic"								
+int	string	string	int	int	int	int	int	int	float	float	int
+10001	Fighter	hero_fighter	1	6	3	0	100	100	10	10	0

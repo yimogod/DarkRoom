@@ -10,53 +10,6 @@ namespace Sword{
 	public class ActorVO
 	{
 		/// <summary>
-		/// 速度修改通知其他依赖的对象. 比如移动组件
-		/// </summary>
-		public Action OnNotiSpeedChange;
-
-		/// <summary>
-		/// 属性字段
-		/// </summary>
-		public enum Property
-		{
-			SpeedBonus, //速度
-			SpeedMultiplier, //速度
-			HPBonus, //血
-			MaxHPBonus,
-			MPBonus, //蓝
-			MaxMPBonus,
-			ATK, //攻击
-			DEF, //防守
-			CRIT_RATE, //暴击率
-		}
-
-		/// <summary>
-		/// buff修改单位的状态值
-		/// </summary>
-		public enum State {
-			Stun, //击退然后昏迷
-			Daze, //晕眩 TODO 看两者的区别
-			HitFly, //击飞
-			SuppressItemUsage, //禁止使用物品
-			Cloak, //隐身
-			SuppressCollision, //无视碰撞
-			SuppressDamageVisibilityAttacker, //禁止非隐身单位的攻击 ??????
-			Undetectable, //不可侦测
-			Summoned, //成为召唤单位/属性
-			Silence, //沉默
-			Uncommandable, //无法给于指令
-			SuppressAttack, //禁止攻击
-			Unstoppable, //不可停止 ???
-			Invulnerable, //无敌
-			Benign, // 仁慈的；温和的；良性
-			Stasis, //停滞
-			Untargetable, //不可成为目标
-		}
-
-		//主武器
-		public int PrimaryWeaponId = 0;
-
-		/// <summary>
 		/// 掌握的技能列表, 除了出生的数据, 也包含后天学习的
 		/// </summary>
 		public List<int> AbilityIdList = new List<int>();
@@ -66,21 +19,6 @@ namespace Sword{
 		/// key是ability id, value是级别
 		/// </summary>
 		public Dictionary<int, int> AbilityLvDict = new Dictionary<int, int>();
-
-		/// <summary>
-		/// 因为buff造成的各种属性的修改, 每帧都会重新取值
-		/// 字典的key代表buff自己的cid
-		/// KeyValuePair key代表 buff的property, value代表 buff修改的值
-		/// </summary>
-		public Dictionary<int, Dictionary<Property, float>> PropertyModifier = 
-			new Dictionary<int, Dictionary<Property, float>>();
-
-		/// <summary>
-		/// 技能对状态造成的修改
-		/// value是state结束的时间, 毫秒数和state的buff 的cid
-		/// </summary>
-		public Dictionary<State, KeyValuePair<int, long>> StateModifier =
-			new Dictionary<State, KeyValuePair<int, long>>();
 
 		//角色元数据
 		protected ActorMeta m_metaBase;
@@ -105,7 +43,6 @@ namespace Sword{
 		public ActorVO(ActorMeta meta)
 		{
 			m_metaBase = meta;
-			PrimaryWeaponId = meta.InitWeapon;
 		}
 
 		/// <summary>
@@ -113,21 +50,6 @@ namespace Sword{
 		/// </summary>
 		public ActorMeta MetaBase{
 			get{ return m_metaBase; }
-		}
-
-		/// <summary>
-		/// 我的视野角度
-		/// </summary>
-		public virtual float ViewAngle{
-			get { return m_metaBase.ViewAngle; }
-		}
-
-		/// <summary>
-		/// 视野距离范围
-		/// </summary>
-		public virtual float ViewRange
-		{
-			get { return m_metaBase.ViewRange; }
 		}
 
 		/// <summary>
@@ -181,39 +103,6 @@ namespace Sword{
 			get { return 10; }
 		}
 
-		/// <summary>
-		/// 行走速度. 其他组件依赖于这个速度值
-		/// 作为数据的存储, 移动组件会从这里读取速度
-		/// </summary>
-		public float Speed{
-			get{
-				if (PropertyModifier.Count == 0)return SpeedBase;
-
-				float b = 0;
-				float m = 0;
-				int mulNum = 0;
-				foreach (var buff in PropertyModifier) {
-					foreach (var kv in buff.Value) {
-						if (kv.Key == Property.SpeedBonus) {
-							b += kv.Value;
-						}
-
-						if (kv.Key == Property.SpeedMultiplier) {
-							m += kv.Value;
-							mulNum++;
-						}
-					}
-				}
-
-				if (mulNum == 0) {
-					m = 1f;
-				} else {
-					m /= mulNum;
-				}
-
-				return b  + SpeedBase * m;
-			}
-		}
 
 		/// <summary>
 		/// 人物的基础速度
@@ -222,7 +111,6 @@ namespace Sword{
 			get { return m_speedBase; }
 			set{
 				m_speedBase = value;
-				NotiSpeedChange();
 			}
 		}
 
@@ -300,13 +188,5 @@ namespace Sword{
 	    {
 	        m_metaBase = meta;
 	    }
-
-		public void NotiSpeedChange()
-		{
-			if (OnNotiSpeedChange != null) {
-				OnNotiSpeedChange();
-			}
-		}
 	}
-
 }

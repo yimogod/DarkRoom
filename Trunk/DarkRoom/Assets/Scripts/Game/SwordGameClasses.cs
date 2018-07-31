@@ -4,6 +4,13 @@ using DarkRoom.Game;
 
 namespace Sword
 {
+    public enum ActorClass
+    {
+        Warrier, //力量单位
+        Ranger, //敏捷单位
+        Wizard, //智力单位
+    }
+
     /// <summary>
     /// 伤害包
     /// </summary>

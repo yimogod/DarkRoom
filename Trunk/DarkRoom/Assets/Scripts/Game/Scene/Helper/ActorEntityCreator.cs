@@ -10,58 +10,37 @@ namespace Sword
     /// </summary>
     public class ActorEntityCreator
     {
-        private Transform _unitLayer;
-
         public ActorEntityCreator()
         {
-            _unitLayer = CWorld.Instance.Layer.UnitLayer;
         }
 
         /*创建角色*/
-        public CUnitEntity CreateActor(ActorVO vo, GameObject gameObject = null)
+        public void CreateActor(ActorVO vo, ActorEntity entity)
         {
-            bool hasActorInit = true;
-            if (gameObject == null)
+            var meta = vo.MetaBase;
+            var attr = entity.AttributeSet;
+
+            attr.InitLevel(vo.LV);
+            attr.InitAttribute(meta.MetaClass, meta.InitHealth, meta.InitMana, 0, 0, meta.InitDamage, meta.InitDef);
+            attr.InitHealthAndMana();
+
+            /*Rigidbody rig = entity.GetComponent<Rigidbody>();
+            if (rig == null)
             {
-                gameObject = null;//AssetManager.LoadActorPrefab(vo.MetaBase.prefab);
-                hasActorInit = false;
-            }
+                rig = entity.gameObject.AddComponent<Rigidbody>();
+                rig.constraints = RigidbodyConstraints.FreezeRotation |
+                                    RigidbodyConstraints.FreezePositionX |
+                                    RigidbodyConstraints.FreezePositionZ;
+            }*/
 
-            CUnitSpacialComp posComp = gameObject.AddComponent<CUnitSpacialComp>();
-            CUnitEntity entity = gameObject.AddComponent<CUnitEntity>();
-            //entity.RestoreForm(vo);
-
-            CUnitViewComp view = gameObject.AddComponent<CUnitViewComp>();
-            //gameObject.AddComponent<CAbilAttack>();
-            //gameObject.AddComponent<ActorDebugComp>();
-            //gameObject.AddComponent<CMover>();
-
-
-            //如果go是外面传进来的, 说明位置已经定好了
-            if (!hasActorInit)
-            {
-                Rigidbody rig = gameObject.GetComponent<Rigidbody>();
-                if (rig == null)
-                {
-                    rig = gameObject.AddComponent<Rigidbody>();
-                    rig.constraints = RigidbodyConstraints.FreezeRotation |
-                                      RigidbodyConstraints.FreezePositionX |
-                                      RigidbodyConstraints.FreezePositionZ;
-                }
-
-                //设置actor的坐标和位置
-                CDarkUtil.AddChild(_unitLayer, gameObject.transform);
-                //Vector3 pos = CMapUtil.GetTileCenterPosByColRow(bornData.col, bornData.row);
-                //多了0.1高度是因为角色放的炸弹啊, 地面的滩涂啊. 要在角色的脚下
-                //posComp.SetPos(pos, bornData.direction);
-                //posComp.Pause();
-               // posComp.speed = vo.meta.speed;
-            }
-
-            return entity;
+            //设置actor的坐标和位置
+            //多了0.1高度是因为角色放的炸弹啊, 地面的滩涂啊. 要在角色的脚下
+            //posComp.SetPos(pos, bornData.direction);
+            //posComp.Pause();
+            // posComp.speed = vo.meta.speed;
         }
 
-        public void CreateHeroAddon(CUnitEntity entity)
+        public void CreateHeroAddon(HeroEntity entity)
         {
             entity.Team = CUnitEntity.TeamSide.Red;
             GameObject gameObject = entity.gameObject;
@@ -73,7 +52,7 @@ namespace Sword
         public void CreateMonsterAddon(CUnitEntity entity)
         {
             entity.Team = CUnitEntity.TeamSide.Blue;
-            GameObject gameObject = entity.gameObject;
+            //GameObject gameObject = entity.gameObject;
             //gameObject.AddComponent<ActorFSMComp>();
             //gameObject.AddComponent<ActorAIComp>();
         }
@@ -98,7 +77,6 @@ namespace Sword
 
         public void Clear()
         {
-            _unitLayer = null;
         }
     }
 }

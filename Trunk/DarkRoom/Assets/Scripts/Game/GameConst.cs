@@ -60,12 +60,6 @@ namespace Sword {
 
 		public const string GO_NAME_ATTACH_ROOT = "attach_root";
 
-		//地图类型, 自动生成的普通地图, 和rush关卡
-		public enum MapType {
-			COMMON = 1,
-			RUSH
-		}
-
         public enum TileType {
 			RESERVED = -1,
 			TERRIAN,

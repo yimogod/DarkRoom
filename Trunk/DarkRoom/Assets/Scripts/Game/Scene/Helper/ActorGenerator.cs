@@ -50,7 +50,7 @@ namespace Sword
 
             var pos = CMapUtil.GetTileCenterPosByColRow(tile);
             var entity = CWorld.Instance.SpawnUnit<HeroEntity>("Hero_" + metaId, pos);
-            entity.Team = CUnitEntity.TeamSide.Red;
+            m_creator.CreateActor(vo, entity);
             m_creator.CreateHeroAddon(entity);
             m_creator.CreateAttachGO(entity);
 

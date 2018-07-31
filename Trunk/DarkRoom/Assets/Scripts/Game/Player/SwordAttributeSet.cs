@@ -7,13 +7,6 @@ using UnityEngine;
 
 namespace Sword
 {
-    public enum AttributeType
-    {
-        StrengthUnit, //力量单位
-        AgilityUnit, //敏捷单位
-        IntelligenceUnit, //智力单位
-    }
-
     public class SwordAttributeSet : CAbilityAttributeSet
     {
         private enum AttributeId
@@ -23,10 +16,6 @@ namespace Sword
             Mana,
         }
         //------------------------------------ 角色当前的属性 ----------------
-        /// <summary>
-        /// 角色成长类型
-        /// </summary>
-        public AttributeType AttributeType;
 
         /// <summary>
         /// 当前回合的物理伤害
@@ -127,6 +116,9 @@ namespace Sword
         // 初始化防御
         private float m_initArmorReduction;
 
+        // 角色职业
+        private ActorClass m_class;
+
         private SwordGameMode m_gm => CWorld.Instance.GetGameMode<SwordGameMode>();
 
         public SwordAttributeSet()
@@ -139,9 +131,10 @@ namespace Sword
         /// <summary>
         /// 赋值初始化的属性
         /// </summary>
-        public void InitAttribute(int maxHealth, int maxMana, int healthRecover, int manaRecover,
-            int physicDamage, int armorReduction)
+        public void InitAttribute(ActorClass metaClass, int maxHealth, int maxMana, float healthRecover, float manaRecover,
+            float physicDamage, float armorReduction)
         {
+            m_class = metaClass;
             m_initMaxHealth = maxHealth;
             m_initMaxMana = maxMana;
             m_initHealthRecover = healthRecover;
@@ -171,53 +164,53 @@ namespace Sword
 
         /** 力量 */
         public float Strength => StrengthBase + StrengthAddOn;
-        public float StrengthBase=> m_gm.GetStrengthBase(AttributeType, m_level);
+        public float StrengthBase=> m_gm.GetStrengthBase(m_class, m_level);
 
         /** 敏捷 */
         public float Agility => AgilityBase + AgilityAddOn;
-        public float AgilityBase=> m_gm.GetAgilityBase(AttributeType, m_level);
+        public float AgilityBase=> m_gm.GetAgilityBase(m_class, m_level);
 
         /** 智力 */
         public float Intelligence => IntelligenceBase + IntelligenceAddOn;
-        public float IntelligenceBase=> m_gm.GetIntelligenceBase(AttributeType, m_level);
+        public float IntelligenceBase=> m_gm.GetIntelligenceBase(m_class, m_level);
 
         /// <summary>
         /// 物理防御
         /// </summary>
         public float ArmorReduction=> ArmorReductionBase + ArmorReductionAddOn;
-        public float ArmorReductionBase => m_gm.GetArmorReductionBase(AttributeType, Strength, m_initArmorReduction);
+        public float ArmorReductionBase => m_gm.GetArmorReductionBase(m_class, Strength, m_initArmorReduction);
 
         /** 物理攻击 */
         public float PhysicalDamage=> PhysicalDamageBase + PhysicalDamageAddOn;
-        public float PhysicalDamageBase=> m_gm.GetPhysicalDamageBase(AttributeType, Strength, Agility, Intelligence, m_initPhysicDamage);
+        public float PhysicalDamageBase=> m_gm.GetPhysicalDamageBase(m_class, Strength, Agility, Intelligence, m_initPhysicDamage);
 
         /** 暴击率  0 -- 100*/
         public float CritChance=> CritChanceBase + CritChanceAddOn;
-        public float CritChanceBase=> m_gm.GetCritChanceBase(AttributeType, Agility);
+        public float CritChanceBase=> m_gm.GetCritChanceBase(m_class, Agility);
 
         /** 暴击系数 */
         public float CritMultiplier=> CritMultiplierBase + CritMultiplierAddOn;
-        public float CritMultiplierBase=> m_gm.GetCritMultiplierBase(AttributeType, Strength, Agility, Intelligence);
+        public float CritMultiplierBase=> m_gm.GetCritMultiplierBase(m_class, Strength, Agility, Intelligence);
 
         /** 闪避 0 -- 100 */
         public float DodgeChance=> DodgeChanceBase + DodgeChanceAddOn;
-        public float DodgeChanceBase=> m_gm.GetDodgeChanceBase(AttributeType, Agility);
+        public float DodgeChanceBase=> m_gm.GetDodgeChanceBase(m_class, Agility);
 
         /** 最大血量 */
         public float MaxHealth=> MaxHealthBase * (1.0f + MaxHealthFactor) + MaxHealthAddOn;
-        public float MaxHealthBase=> m_gm.GetMaxHealthBase(AttributeType, Strength, m_initMaxHealth);
+        public float MaxHealthBase=> m_gm.GetMaxHealthBase(m_class, Strength, m_initMaxHealth);
 
         /** 血量自动恢复 */
         public float HealthRecover=> HealthRecoverBase + HealthRecoverAddOn;
-        public float HealthRecoverBase=> m_gm.GetHealthRecoverBase(AttributeType, Strength, m_initHealthRecover);
+        public float HealthRecoverBase=> m_gm.GetHealthRecoverBase(m_class, Strength, m_initHealthRecover);
 
         /** 最大蓝量 */
         public float MaxMana=> MaxManaBase * (1.0f + MaxManaFactor) + MaxManaAddOn;
-        public float MaxManaBase=> m_gm.GetMaxManaBase(AttributeType, Intelligence, m_initMaxMana);
+        public float MaxManaBase=> m_gm.GetMaxManaBase(m_class, Intelligence, m_initMaxMana);
 
         /** 蓝量自动恢复 */
         public float ManaRecover=> ManaRecoverBase + ManaRecoverAddOn;
-        public float ManaRecoverBase=> m_gm.GetManaRecoverBase(AttributeType, Intelligence, m_initManaRecover);
+        public float ManaRecoverBase=> m_gm.GetManaRecoverBase(m_class, Intelligence, m_initManaRecover);
 
         public override void PreAttributeChange(CAbilityAttribute attribute, float newValue)
         {
