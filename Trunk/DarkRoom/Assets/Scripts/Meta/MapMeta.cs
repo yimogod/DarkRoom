@@ -16,6 +16,7 @@ namespace Sword{
 	    public List<Vector3Int> Bosses = new List<Vector3Int>();
 	    public List<Vector3Int> Triggers = new List<Vector3Int>();
         //第一个应该是黄金宝箱, 在boss旁边
+        //x=id y=num
 	    public List<Vector2Int> Chests = new List<Vector2Int>();
 
 		public MapMeta(string id):base(id){}
