@@ -119,6 +119,7 @@ namespace Sword
         // 角色职业
         private ActorClass m_class;
 
+
         private SwordGameMode m_gm => CWorld.Instance.GetGameMode<SwordGameMode>();
 
         public SwordAttributeSet()
