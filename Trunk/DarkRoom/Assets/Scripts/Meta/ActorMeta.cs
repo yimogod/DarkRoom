@@ -9,57 +9,6 @@ namespace Sword
     /// 我们的entity会读取这些数据, 然后存在相关的comp中
     /// 一些重要属性的说明
     /// ----------------
-    /// Strength 力量
-    /// 力量会增加你的近战武器物理攻击和物理防御和负重
-    /// Gains per point:
-    /// Physical power:   1.00
-    /// Max encumbrance:  1.80
-    /// Physical save:     .35
-    /// ----------------
-    /// Dexterity 敏捷
-    /// 敏捷会增加你的敏捷度和命中率, 闪避率. 提高匕首和远程武器的伤害
-    /// Gains per point:
-    /// Defense:                     .35
-    /// Ranged defense:              .35
-    /// Accuracy:                   1.00
-    /// Shrug off criticals chance:  .30 //无视暴击的几率
-    /// ----------------
-    /// Constitution 体质
-    /// 体质会增加max hp, 减少物理伤害, 增加治疗效果
-    /// Gains per point:
-    /// Max life:       4.00 (*)
-    /// Physical save:  .35
-    /// Healing modification: 0.7%
-    /// ----------------
-    /// Magic 魔力
-    /// 增加各种魔法物品的能力, 减少mana消耗
-    /// Gains per point:
-    /// Spell save:  .35
-    /// Spellpower:  1.00
-    /// ----------------
-    /// Willpower意志力
-    /// 减少思想和魔法的攻击力
-    /// Gains per point:
-    /// Max Mana:       5.00
-    /// Max Stamina:    2.50
-    /// Max Psi:        1.00 (*)
-    /// Mindpower:      .70
-    /// Mental save:    .35
-    /// Spell save:     .35
-    /// Accuracy:       .35 (only when using Psi combat)
-    /// ---------------
-    /// Cunning灵巧
-    /// 影响学习思考和交互. 提高暴击率, 和抛射物的伤害, 
-    /// Gains per point:
-	/// Critical hit chance:  .30
-	/// Mental save:          .35
-	/// Mindpower:            .40
-	/// Accuracy:             .35 (only when using Psi combat)
-	/// 
-	/// 
-	/// 
-	/// 
-	/// 
 	/// 
 	/// 二级属性
 	/// Defense 减少近战的物理攻击伤害 Ranged Defense 减少远程攻击的伤害
