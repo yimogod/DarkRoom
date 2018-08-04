@@ -124,9 +124,9 @@ namespace Sword
 
         public SwordAttributeSet()
         {
-            m_expAttr = new CAbilityAttribute((int)AttributeId.Exp);
-            m_healthAttr = new CAbilityAttribute((int)AttributeId.Health);
-            m_manaAttr = new CAbilityAttribute((int)AttributeId.Mana);
+            //m_expAttr = new CAbilityAttribute((int)AttributeId.Exp);
+            //m_healthAttr = new CAbilityAttribute((int)AttributeId.Health);
+            //m_manaAttr = new CAbilityAttribute((int)AttributeId.Mana);
         }
 
         /// <summary>
@@ -215,24 +215,24 @@ namespace Sword
 
         public override void PreAttributeChange(CAbilityAttribute attribute, float newValue)
         {
-            if (attribute.Propery == (int)AttributeId.Health)
+            if (attribute.Id == (int)AttributeId.Health)
             {
                 float maxHealth = MaxHealth;
                 newValue = Mathf.Clamp(newValue, 0, maxHealth);
-                attribute.SetValue(newValue);
+                //attribute.SetValue(newValue);
             }
 
-            if (attribute.Propery == (int)AttributeId.Mana)
+            if (attribute.Id == (int)AttributeId.Mana)
             {
                 float maxMana = MaxMana;
                 newValue = Mathf.Clamp(newValue, 0, maxMana);
-                attribute.SetValue(newValue);
+                //attribute.SetValue(newValue);
             }
         }
 
         public override void PostAttributeExecute(CAbilityAttribute attribute)
         {
-            if (attribute.Propery == (int)AttributeId.Health)
+            if (attribute.Id == (int)AttributeId.Health)
             {
                 if (Health < 0)
                 {

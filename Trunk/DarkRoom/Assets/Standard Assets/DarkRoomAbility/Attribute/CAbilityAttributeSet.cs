@@ -10,19 +10,36 @@ namespace DarkRoom.GamePlayAbility
     public class CAbilityAttribute
     {
         //属性定义的唯一值
-        public int Propery { get; private set; }
+        public int Id { get; private set; }
         //属性当前的值
-        public float Value { get; private set; }
+        public float Value => BaseValue + AddOnValue;
 
-        public CAbilityAttribute(int property, float defaultValue = 0)
+        public float BaseValue => InitialValue + PersistentValue;
+
+        //属性的初始值
+        public float InitialValue { get; private set; }
+
+        //属性持久化增加的值, 玩家分配的属性点
+        public float PersistentValue { get; private set; }
+
+        //属性临时添加的值, 比如武器, buff等
+        public float AddOnValue { get; private set; }
+
+        public CAbilityAttribute(int id, float initialValue, float persistentValue)
         {
-            Propery = property;
-            Value = defaultValue;
+            Id = id;
+            InitialValue = initialValue;
+            PersistentValue = persistentValue;
         }
 
-        public void SetValue(float value)
+        public void AddPersistentValue(float value)
         {
-            Value = value;
+            PersistentValue += value;
+        }
+
+        public void AddAddOnValue(float value)
+        {
+            AddOnValue += value;
         }
     }
 
