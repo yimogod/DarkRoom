@@ -30,7 +30,7 @@ namespace Sword
     public enum MetaRace
     {
         Human,
-
+        Elf,
     }
 
     /// <summary>
@@ -38,8 +38,12 @@ namespace Sword
     /// </summary>
     public enum SubRace
     {
+        //------- human ------
         Cornac,
         Higher,
+        //------- elf ------
+        Shalore,
+        Thalore,
     }
 
     /// <summary>
@@ -105,6 +109,88 @@ namespace Sword
         Luck,
     }
 
+    public enum SubAttribute
+    {
+        /// 精度, 属于防御的部分属性
+        /// 4 
+        /// + (Dexterity - 10) * 1.00 
+        /// + Luck * 0.40 
+        /// + Accuracy bonuses from Combat Accuracy
+        /// + Accuracy bonuses from equipment 
+        /// + Accuracy bonuses or penalties from effects
+        Accuracy,
+        /// <summary>
+        /// 防御和穿透防御不同, 但公式一样
+        /// Defense bonuses from equipment
+        /// + (Dexterity - 10) * 0.35 
+        /// + Defense bonuses from talents 
+        /// + Luck * 0.4
+        /// </summary>
+        Defense,
+    }
+
+    /// <summary>
+    /// 攻击力和豁免
+    /// </summary>
+    public enum PowerAndSave
+    {
+        Physical,
+        Spell,
+        Mind,
+        PhysicalSave,
+        SpellSave,
+        MentalSave,
+    }
+
+    /// <summary>
+    /// 抗性
+    /// </summary>
+    public enum Resistance
+    {
+        Physical,
+        Fire,
+        Cold,
+        Lightning,
+        Nature,
+        BLight,
+        Light,
+        Darkness,
+        Mind,
+        Temporal,
+        All,
+    }
+
+    /// <summary>
+    /// 消耗的资源
+    /// </summary>
+    public enum Resource
+    {
+        Health, //红
+        Mana, //蓝
+        /// <summary>
+        /// Stamina 活力/精力
+        /// 大部分物理天赋都会用到. 默认每回合恢复0.3, 有buff可以修改本值. 
+        /// 休息的时候可以加快恢复速度
+        /// </summary>
+        Stamina,
+    }
+
+    /// <summary>
+    /// 伤害类型
+    /// </summary>
+    public enum DamageType
+    {
+        Physical,
+        Fire,
+        Cold,
+        Lightning,
+        Nature,
+        BLight,
+        Light,
+        Darkness,
+        Mind,
+        Temporal,
+    }
 
     public enum ActorClass
     {

@@ -10,24 +10,7 @@ namespace Sword
     /// 一些重要属性的说明
     /// ----------------
 	/// 
-	/// 二级属性
-	/// Defense 减少近战的物理攻击伤害 Ranged Defense 减少远程攻击的伤害
-	/// Defense bonuses from equipment
-	/// + (Dexterity - 10) * 0.35 
-	/// + Defense bonuses from talents 
-	/// + Luck * 0.4
-	/// 
-	/// Accuracy 命中率-- TODO有点低啊
-	/// 4 
-	/// + (Dexterity - 10) * 1.00 
-	/// + Luck * 0.40 
-	/// + Accuracy bonuses from Combat Accuracy
-	/// + Accuracy bonuses from equipment 
-	/// + Accuracy bonuses or penalties from effects
-	/// 
-	/// Stamina 活力/精力
-	/// 大部分物理天赋都会用到. 默认每回合恢复0.3, 有buff可以修改本值. 
-	/// 休息的时候可以加快恢复速度
+
 	/// 
 	/// Psi (Psionic) 超自然力量
 	/// 一些超自然种族需要的资源, 会缓慢恢复, 会被一些装备和天赋重置
