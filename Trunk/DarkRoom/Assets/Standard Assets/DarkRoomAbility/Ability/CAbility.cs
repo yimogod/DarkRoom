@@ -2,7 +2,7 @@
 using DarkRoom.Core;
 using UnityEngine;
 using DarkRoom.Game;
-using UnityEditorInternal;
+using UnityEngine;
 
 namespace DarkRoom.GamePlayAbility {
     /// <summary>
