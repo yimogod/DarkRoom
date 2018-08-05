@@ -32,12 +32,34 @@ MonoBehaviour:
     m_readOnly: 1
   - m_name: Default Local Group
     m_data:
-      m_serializedData: []
+      m_serializedData:
+      - m_assemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        m_className: System.String
+        m_data: 1350e7b7642884dd89cd512dcea227ab
+        m_key: BuildPath
+      - m_assemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        m_className: System.String
+        m_data: 13bd7a4fd2e3642fc98cb040fe69da66
+        m_key: LoadPath
+      - m_assemblyName: Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+        m_className: UnityEditor.AddressableAssets.BundledAssetGroupProcessor+BundleMode
+        m_data: PackTogether
+        m_key: BundleMode
+      - m_assemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+        m_className: System.Int32
+        m_data: 0
+        m_key: Priority
     m_guid: 6851d887af3b7412294f4658c2a19fe1
     m_processorAssembly: Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     m_processorClass: UnityEditor.AddressableAssets.BundledAssetGroupProcessor
-    m_serializeEntries: []
+    m_serializeEntries:
+    - m_guid: b374ef49fa23df947984da0965e87539
+      m_address: map_forest
+      m_readOnly: 0
+      m_serializedLabels:
+      - map
     m_readOnly: 0
   m_buildSettings:
     m_compression:
@@ -89,4 +111,5 @@ MonoBehaviour:
   m_labelTable:
     m_labelNames:
     - default
-  m_activeProfileId: b881da06d67084e60a90d9fe889d4b99
+    - map
+  m_activeProfileId: e816b614097d04cc78a25b66371c5467

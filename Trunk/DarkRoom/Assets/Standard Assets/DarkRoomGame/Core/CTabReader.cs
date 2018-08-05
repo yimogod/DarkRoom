@@ -31,7 +31,7 @@ namespace DarkRoom.Game
 			string[] lines = content.Split(RowSpliter);
 
 			int lineCount = lines.Length;
-			if (lineCount <= 4) {
+			if (lineCount <= 2) {
 				Debug.LogError("you tab file has no key or desc rows " + lines[0]);
 				return false;
 			}
