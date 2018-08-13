@@ -68,4 +68,4 @@ MonoBehaviour:
     - Assembly-CSharp-firstpass
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 1
-  autoUpdateReferences: 1
+  autoUpdateReferences: 0

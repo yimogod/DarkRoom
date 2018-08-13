@@ -119,6 +119,12 @@ namespace Sword
         /// + Accuracy bonuses from equipment 
         /// + Accuracy bonuses or penalties from effects
         Accuracy,
+
+        /// <summary>
+        /// 负重
+        /// </summary>
+        Encumbrance,
+
         /// <summary>
         /// 防御和穿透防御不同, 但公式一样
         /// Defense bonuses from equipment
@@ -127,6 +133,26 @@ namespace Sword
         /// + Luck * 0.4
         /// </summary>
         Defense,
+
+        /// <summary>
+        /// 远程攻击防御
+        /// </summary>
+        RangedDefense,
+
+        /// <summary>
+        /// 暴击几率
+        /// </summary>
+        CriticalChance,
+
+        /// <summary>
+        /// 无视暴击的几率
+        /// </summary>
+        ShrugOffCriticalsChance,
+
+        /// <summary>
+        /// 治疗效果的百分比提升
+        /// </summary>
+        HealingModification
     }
 
     /// <summary>
@@ -143,10 +169,32 @@ namespace Sword
     }
 
     /// <summary>
+    /// 护甲抵抗, 减少的伤害值=min( (target.Armour - attacker.APR), (target.Hardiness * damage) )
+    /// </summary>
+    public enum ArmourAndHardness
+    {
+        Armour,
+        ArmourPenetration,
+        ArmourHardiness
+    }
+
+    /// <summary>
     /// 抗性
     /// </summary>
     public enum Resistance
     {
+        Resistance,
+        ResistancePenetration,
+        ResistanceReduction,
+        Immunities,
+    }
+
+    /// <summary>
+    /// 抗性的类型
+    /// </summary>
+    public enum ResistanceType
+    {
+        All, //all比较特殊. 和剩下的类型有加成关系
         Physical,
         Fire,
         Cold,
@@ -157,7 +205,6 @@ namespace Sword
         Darkness,
         Mind,
         Temporal,
-        All,
     }
 
     /// <summary>
