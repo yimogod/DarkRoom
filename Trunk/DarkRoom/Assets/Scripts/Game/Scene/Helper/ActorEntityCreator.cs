@@ -21,7 +21,7 @@ namespace Sword
             var attr = entity.AttributeSet;
 
             attr.InitLevel(vo.LV);
-            attr.InitAttribute(meta.MetaClass, meta.InitHealth, meta.InitMana, 0, 0, meta.InitDamage, meta.InitDef);
+            //attr.InitAttribute(meta.MetaClass, meta.InitHealth, meta.InitMana, 0, 0, meta.InitDamage, meta.InitDef);
             attr.InitHealthAndMana();
 
             /*Rigidbody rig = entity.GetComponent<Rigidbody>();

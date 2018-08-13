@@ -1,0 +1,8 @@
+id	name	Strength	Dexterity	Constitution	Magic	Willpower	Cunning	Luck	Health	HealthRating	ExpPenalty
+desc											
+10001	Berserker	5	1	3	0	0	0	0	120	3	0
+10002	Alchemist	0	0	3	5	1	0	0	90	-1	0
+20001	Cornac	0	0	0	0	0	0	0	0	10	0
+20002	Higher	1	1	0	1	1	0	0	0	11	0.15
+20003	Shalore	-2	1	0	2	3	1	0	0	9	0.25
+20004	Thalore	2	3	1	-2	1	0	0	0	11	0.35

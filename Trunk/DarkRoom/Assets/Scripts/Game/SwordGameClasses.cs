@@ -10,7 +10,7 @@ namespace Sword
     public enum MetaClass
     {
         //战士类, 活力为主要资源, 主要天赋是Technique, 主要伤害类型是物理伤害
-        Warrier,
+        Warrier = 1,
         //法师类, mana为主要资源, 主要天赋是Spell, 主要伤害类型是arcane, 法术伤害
         Mage,
     }
@@ -21,7 +21,7 @@ namespace Sword
     public enum SubClass
     {
         //狂战, 双手武器, 牺牲防御增加攻击, 最重要的属性Strength and Constitution
-        Berserker, 
+        Berserker = 1,
     }
 
     /// <summary>
@@ -29,7 +29,7 @@ namespace Sword
     /// </summary>
     public enum MetaRace
     {
-        Human,
+        Human = 1,
         Elf,
     }
 
@@ -39,7 +39,7 @@ namespace Sword
     public enum SubRace
     {
         //------- human ------
-        Cornac,
+        Cornac = 1,
         Higher,
         //------- elf ------
         Shalore,

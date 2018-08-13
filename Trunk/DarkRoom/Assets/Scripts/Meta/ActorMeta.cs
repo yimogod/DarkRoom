@@ -26,9 +26,24 @@ namespace Sword
 	    public string Prefab;
         
 	    /// <summary>
-        /// 职业
+        /// 基础职业
         /// </summary>
-	    public ActorClass MetaClass;
+	    public MetaClass MetaClass;
+
+        /// <summary>
+        /// 基础种族
+        /// </summary>
+        public MetaRace MetaRace;
+
+        /// <summary>
+        /// 具体的职业
+        /// </summary>
+        public SubClass SubClass;
+
+        /// <summary>
+        /// 具体的种族
+        /// </summary>
+        public SubRace SubRace;
 
         /// <summary>
         /// 能走几格
@@ -45,13 +60,6 @@ namespace Sword
 		/// </summary>
 		public int FOV = 6;
 
-	    public int InitHealth;
-
-	    public int InitMana;
-
-	    public float InitDamage;
-
-	    public float InitDef;
 
 		//创建角色给的武器
 		public int InitWeapon = 0;
@@ -91,14 +99,13 @@ namespace Sword
                 ActorMeta meta = new ActorMeta(m_reader.ReadInt());
                 meta.NameKey = m_reader.ReadString();
                 meta.Prefab = m_reader.ReadString();
-                meta.MetaClass = (ActorClass) m_reader.ReadInt();
+                meta.MetaClass = (MetaClass) m_reader.ReadInt();
+                meta.SubClass = (SubClass)m_reader.ReadInt();
+                meta.MetaRace = (MetaRace)m_reader.ReadInt();
+                meta.SubRace = (SubRace)m_reader.ReadInt();
                 meta.FOV = m_reader.ReadInt();
                 meta.Speed = m_reader.ReadInt();
                 meta.DeadExp = m_reader.ReadInt();
-                meta.InitHealth = m_reader.ReadInt();
-                meta.InitMana = m_reader.ReadInt();
-                meta.InitDamage = m_reader.ReadFloat();
-                meta.InitDef = m_reader.ReadFloat();
                 meta.InitWeapon = m_reader.ReadInt();
 
                 ActorMetaManager.AddMeta(meta);
