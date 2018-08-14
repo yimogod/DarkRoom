@@ -183,10 +183,22 @@ namespace Sword
     /// </summary>
     public enum Resistance
     {
+        /// <summary>
+        /// 抗性
+        /// </summary>
         Resistance,
+
+        /// <summary>
+        /// 抗性穿透
+        /// 减少对方的抗性的百分比
+        /// </summary>
         ResistancePenetration,
+
+        /// <summary>
+        /// 抗性削弱
+        /// 减少对方的免疫数据
+        /// </summary>
         ResistanceReduction,
-        Immunities,
     }
 
     /// <summary>
@@ -205,6 +217,23 @@ namespace Sword
         Darkness,
         Mind,
         Temporal,
+    }
+
+    /// <summary>
+    /// 对某伤害类型的免疫百分比
+    /// 估计这些类型会修改定义
+    /// </summary>
+    public enum ImmunityType
+    {
+        Confusion,
+        Stun,
+        Freeze,
+        Fear,
+        Knockback,
+        Instadeath,
+        Disarm,
+        Poison,
+        Disease,
     }
 
     /// <summary>

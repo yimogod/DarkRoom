@@ -22,8 +22,11 @@ namespace DarkRoom.GamePlayAbility
         //属性持久化增加的值, 玩家分配的属性点
         public float PersistentValue { get; private set; }
 
-        //属性临时添加的值, 比如武器, buff等
+        //属性临时添加的值, 比如武器, buff等, 加减法
         public float AddOnValue { get; private set; }
+
+        //属性临时添加的值, 乘除法
+        public float AddOnFactor { get; private set; }
 
         public CAbilityAttribute(int id, float initialValue, float persistentValue)
         {
@@ -40,6 +43,11 @@ namespace DarkRoom.GamePlayAbility
         public void AddAddOnValue(float value)
         {
             AddOnValue += value;
+        }
+
+        public void AddAddOnFactor(float value)
+        {
+            AddOnFactor += value;
         }
     }
 
