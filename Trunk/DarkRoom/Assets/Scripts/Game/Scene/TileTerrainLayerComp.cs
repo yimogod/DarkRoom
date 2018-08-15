@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using DarkRoom.Game;
+using DarkRoom.PCG;
 
 namespace Sword {
     /// <summary>
@@ -19,22 +20,9 @@ namespace Sword {
 		{
 		    m_tran = transform;
 
-            int desireLayer = LayerMask.NameToLayer("Terrain");
+            int desireLayer = LayerMask.NameToLayer(CWorldLayer.LAYER_NAME_TERRAIN);
 			if (desireLayer == -1) {
 				Debug.LogError("We Do Not Set Terrain Layer. Please Set One Terrain layer");
-			}
-
-			//设置terrain组件的所有孩子到terrain layer
-			if (gameObject.layer != desireLayer) {
-				gameObject.layer = desireLayer;
-
-				Transform tran = transform;
-				int count = tran.childCount;
-				for (int i = 0; i < count; i++) {
-					Transform child = tran.GetChild(i);
-					if (child == null) continue;
-					child.gameObject.layer = desireLayer;
-				}
 			}
 		}
 
@@ -61,12 +49,39 @@ namespace Sword {
                 for (int j = 0; j < m_assetGrid.NumRows; j++)
                 {
                     var tile = m_assetGrid.GetNodeSubType(i, j);
+                    var prefab = GetPrefabBySubType(tile);
+
                     var pos = CMapUtil.GetTileCenterPosByColRow(i, j);
-                    //AssetManager.LoadTilePrefab("", tile, m_tran, pos);
+                    LoadAndCreateTile(prefab, pos);
                 }
             }
 
             yield return new WaitForEndOfFrame();
+        }
+
+        private string GetPrefabBySubType(int subType){
+            CForestTerrainSubType index = (CForestTerrainSubType)subType;
+            string str = string.Empty;
+            switch (index){
+                case CForestTerrainSubType.Grass1:
+                    str = "Tile_1_A";
+                    break;
+                case CForestTerrainSubType.Grass2:
+                    str = "Tile_1_B";
+                    break;
+                case CForestTerrainSubType.Land1:
+                    str = "Tile_1_C";
+                    break;
+                case CForestTerrainSubType.Land2:
+                    str = "Tile_1_D";
+                    break;
+            }
+
+            return str;
+        }
+
+        private void LoadAndCreateTile(string prefab, Vector3 pos){
+            AssetManager.LoadTilePrefab("map_forest", prefab, m_tran, pos);
         }
 
 		//end class

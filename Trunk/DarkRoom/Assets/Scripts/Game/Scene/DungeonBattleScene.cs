@@ -38,9 +38,9 @@ namespace Sword
             m_builder.CreateMap(m_terrainLayer);
 
             //创建并读取unit数据. 并组装unit layer comp
-            var unitTran = CWorld.Instance.Layer.UnitLayer;
-            m_unitLayer = unitTran.gameObject.GetOrCreateComponent<TileUnitLayerComp>();
-            m_builder.CreateActor(m_unitLayer);
+            //var unitTran = CWorld.Instance.Layer.UnitLayer;
+            //m_unitLayer = unitTran.gameObject.GetOrCreateComponent<TileUnitLayerComp>();
+            //m_builder.CreateActor(m_unitLayer);
         }
 
         private void CreateMapThing()

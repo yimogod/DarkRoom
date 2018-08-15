@@ -30,7 +30,7 @@ namespace DarkRoom.PCG{
         /// <summary>
         /// 创建池塘的个数
         /// </summary>
-        public int MaxPondNum = 1;
+        public int MaxPondNum = 5;
 
         public CForestGenerator_Terrain(){
         }

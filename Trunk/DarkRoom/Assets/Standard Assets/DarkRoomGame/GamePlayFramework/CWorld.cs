@@ -129,77 +129,41 @@ namespace DarkRoom.Game {
     public class CWorldLayer
     {
         public const string LAYER_NAME_TERRAIN = "Terrain";
-        public const string LAYER_NAME_TERRAIN_02 = "Terrain_02";
-        public const string LAYER_NAME_LAKE = "Lake";
-
-        /// <summary>
-        /// 贴花. 这个层需要再观察是否需要
-        /// </summary>
-        public const string LAYER_NAME_DECAL = "Decal";
-
-        /// <summary>
-        /// 类似于魔兽争霸地编的 trigger 区域. 没有视图.
-        /// </summary>
-        public const string LAYER_NAME_TRIGGER = "Trigger";
 
         /// <summary>
         /// 主要单位层. 
         /// 比如3d, 包含英雄, npc, 障碍物, 掉落物
         /// </summary>
         public const string LAYER_NAME_UNIT = "Unit";
-        public const string LAYER_NAME_WALKABLE = "Walkable";
-        public const string LAYER_NAME_GLOW = "Glow";
 
-        public enum LayerIndex
-        {
-            TERRIAN = 0,
-            TERRIAN_02, //这个代表terraincomp的第二种地形, 索引为1, 不能删除
-            ROAD, //lake用这层
-            DECAL,
-            UNIT,//TRIGGER, Deco
-            LOW_SKY,
-            HIGH_SKY,
-            WALKABLE
-        }
 
         public GameObject Root;
         public Transform TerrainLayer;
         public Transform UnitLayer;//存放所有的可以交互的单位, 英雄,npc,掉落物品等等
-        public Transform TriggerLayer;
-        public Transform DecoLayer;//装饰物品
+
+        /// <summary>
+        /// 做go缓存的layer
+        /// </summary>
         public Transform PoolLayer;
-        public Transform ItemPoolLayer; //一些英雄的装备
 
         public CWorldLayer(GameObject root)
         {
             Root = root;
 
             TerrainLayer = Root.transform.GetOrCreateChild("TerrainLayer");
-            TerrainLayer.gameObject.layer = LayerMask.NameToLayer("Terrain");
+            TerrainLayer.gameObject.layer = LayerMask.NameToLayer(LAYER_NAME_TERRAIN);
 
             UnitLayer = Root.transform.GetOrCreateChild("UnitLayer");
-            UnitLayer.gameObject.layer = LayerMask.NameToLayer("Unit");
-
-            TriggerLayer = Root.transform.GetOrCreateChild("TriggerLayer");
-            TriggerLayer.localPosition = UnitLayer.localPosition;
-
-            DecoLayer = Root.transform.GetOrCreateChild("DecoLayer");
-            DecoLayer.localPosition = UnitLayer.localPosition;
+            UnitLayer.gameObject.layer = LayerMask.NameToLayer(LAYER_NAME_UNIT);
 
             PoolLayer = Root.transform.GetOrCreateChild("PoolLayer");
         }
 
-        private GameObject CreateLayer(string name)
-        {
-            GameObject go = new GameObject(name);
-            CDarkUtil.AddChild(Root.transform, go.transform);
-            return go;
-        }
 
         public void OnDestroy()
         {
             Root = null;
-            DecoLayer = null;
+            TerrainLayer = null;
             UnitLayer = null;
             PoolLayer = null;
         }

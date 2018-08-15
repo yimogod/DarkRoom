@@ -70,8 +70,9 @@ namespace Sword{
         /// <summary>
         /// 加载地图tile的资源
         /// </summary>
-	    public static void LoadTilePrefab(string mapFolder, string name, Transform parent, Vector3 localPosition)
+	    public static void LoadTilePrefab(string mapAddress, string name, Transform parent, Vector3 localPosition)
 	    {
+            name = string.Format("{0}/{1}.prefab", mapAddress, name);
             CResourceManager.InstantiatePrefab(name, parent, localPosition);
 	    }
 

@@ -33,14 +33,6 @@ namespace Sword
         {
             //地图生成器生成地图
             CForestGenerator gen = terrainLayer.GetOrCreateComponentOnGameObject<CForestGenerator>();
-            /*gen.SetTerrainAsset(ForestTerrainAssetIndex.Grass1, "grass_01", true);
-            gen.SetTerrainAsset(ForestTerrainAssetIndex.Grass2, "grass_02", true);
-            gen.SetTerrainAsset(ForestTerrainAssetIndex.Land1, "land_01", true);
-            gen.SetTerrainAsset(ForestTerrainAssetIndex.Land2, "land_02", true);
-            gen.SetTerrainAsset(ForestTerrainAssetIndex.Wall, "stone_01", false);
-            gen.SetTerrainAsset(ForestTerrainAssetIndex.Pond, "pond_01", false);
-            gen.SetTerrainAsset(ForestTerrainAssetIndex.Road, "road_01", true);
-            gen.SetTerrainDefaultAsset("grass_01", true);*/
             gen.Generate();
 			m_mapGen = gen;
 
