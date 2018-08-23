@@ -1,8 +1,7 @@
 using System;
 
-namespace DarkRoom.AI {
-    [Serializable]
-	public class CBaseState {
+namespace DarkRoom.Core {
+	public abstract class CBaseState {
 		public string Name;
 
 		/// <summary>
@@ -23,7 +22,7 @@ namespace DarkRoom.AI {
 			m_data = owner;
 		}
 
-		public virtual void SetData(object data) {
+		public virtual void Initialize(object data) {
 			m_data = data;
 		}
 

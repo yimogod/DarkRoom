@@ -7,7 +7,7 @@ namespace DarkRoom.Game {
 	/// <summary>
 	/// 参照
 	/// </summary>
-	public class CWorld : MonoBehaviour{
+	public class CWorld : CSingletonMono<CWorld> {
 	    private CWorldLayer m_layer;
 
 	    private CGameMode m_mode;
@@ -15,25 +15,10 @@ namespace DarkRoom.Game {
 	    //游戏数据
 	    protected CGameState m_gameState;
 
-        private static CWorld m_ins = null;
-
 	    public CWorldLayer Layer => m_layer;
 
-        public static CWorld Instance{
-			get{
-				if (m_ins == null)
-				{
-					GameObject go = new GameObject("World");
-					go.transform.localPosition = Vector3.zero;
-					m_ins = go.AddComponent<CWorld>();
-				}
-				return m_ins; 
-			}
-		}
-
-        private void Awake()
+        private void Start()
 	    {
-	        m_ins = this;
 	        m_layer = new CWorldLayer(gameObject);
 	    }
 
@@ -118,8 +103,8 @@ namespace DarkRoom.Game {
 	        return null;
 	    }
 
-        private void OnDestroy(){
-			m_ins = null;
+        protected override void OnDestroy(){
+            base.OnDestroy();
 		    m_layer.OnDestroy();
             m_gameState.OnDestroy();
             m_mode.OnDestroy();

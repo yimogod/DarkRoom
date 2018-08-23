@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DarkRoom.AI
+namespace DarkRoom.Core
 {
 	public class CStateMachine {
 		private Dictionary<string, CBaseState> m_stateDict;
