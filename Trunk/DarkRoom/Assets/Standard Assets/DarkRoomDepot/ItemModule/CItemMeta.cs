@@ -77,7 +77,7 @@ namespace DarkRoom.Item{
 		public override void Execute(string content){
 			base.Execute(content);
 
-			for(int i = 0; i < m_reader.row; ++i){
+			for(int i = 0; i < m_reader.Row; ++i){
 				m_reader.MarkRow(i);
 
 				CItemMeta meta = new CItemMeta(m_reader.ReadInt());

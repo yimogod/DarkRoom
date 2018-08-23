@@ -92,7 +92,7 @@ namespace Sword
         {
             base.Execute(content);
 
-            for (int i = 0; i < m_reader.row; ++i)
+            for (int i = 0; i < m_reader.Row; ++i)
             {
                 m_reader.MarkRow(i);
 

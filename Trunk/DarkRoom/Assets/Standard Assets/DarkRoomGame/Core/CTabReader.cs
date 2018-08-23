@@ -18,9 +18,7 @@ namespace DarkRoom.Game
 
 		public CTabReader() { }
 
-		public int row {
-			get { return m_row; }
-		}
+		public int Row => m_row;
 
 		/// <summary>
 		/// 解析数据存储到类内部
@@ -28,19 +26,24 @@ namespace DarkRoom.Game
 		/// <param name="content">需要解析的内容的字符串</param>
 		/// <returns></returns>
 		public bool Parse(string content) {
-			string[] lines = content.Split(RowSpliter);
+			string[] rawLines = content.Split(RowSpliter);
+            List<string> lines = new List<string>();
+            //预处理下原始的line数据
+		    foreach (var item in rawLines){
+		        string trim = item.Trim();
+		        if (trim.Length == 0) continue;
+		        lines.Add(trim);
+            }
 
-			int lineCount = lines.Length;
+			int lineCount = lines.Count;
 			if (lineCount <= 2) {
 				Debug.LogError("you tab file has no key or desc rows " + lines[0]);
 				return false;
 			}
 
-			// 第一行是表头, 第二行是解释, 第三行才是开始的数据, 忽略空行和以#注释掉的行
-			string line;
+            // 第一行是表头, 第二行是解释, 第三行才是开始的数据, 忽略空行和以#注释掉的行
+            string line;
 			for (int i = 2; i < lineCount; ++i) {
-				line = lines[i].Trim();
-				if (line.Length == 0) continue;
 				m_tabValues.Add(ParseLine(lines[i]));
 			}
 
@@ -126,7 +129,13 @@ namespace DarkRoom.Game
 
 		public int ReadInt() {
 			string value = ReadString();
-			return int.Parse(value);
+		    int r = -1;
+		    var b = int.TryParse(value, out r);
+		    if (!b)
+		    {
+                Debug.LogError(string.Format("{0} is not int", value));
+		    }
+		    return r;
 		}
 
 		public float ReadFloat() {
