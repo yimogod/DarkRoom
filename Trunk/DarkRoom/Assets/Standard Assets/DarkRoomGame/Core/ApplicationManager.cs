@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using DarkRoom.Core;
+using DarkRoom.UI;
 
 namespace DarkRoom.Game
 {
@@ -87,7 +88,7 @@ namespace DarkRoom.Game
             //Timer.Init(); //计时器启动
             //InputManager.Init(); //输入管理器启动
 
-            //UIManager.Init(); //UIManager启动
+            CUIManager.Instance.Initialize(); //UIManager启动
 
             //GlobalLogicManager.Init(); //初始化全局逻辑
 
