@@ -82,7 +82,7 @@ namespace DarkRoom.UI
                 Debug.LogError("OnInit Exception: " + e.ToString());
             }
 
-            window.Hide();
+            window.OnHide();
             CUIManagerHelper.AddUIToCache(window, HiddenDict);
             LayerManager.SetLayer(window); //设置层级
         }
@@ -110,11 +110,8 @@ namespace DarkRoom.UI
 
             CUIManagerHelper.RemoveUIFromCache(window, HiddenDict);
             CUIManagerHelper.AddUIToCache(window, ActiveDict);
-            window.Show();
 
             StackManager.OnUIOpen(window);
-            LayerManager.SetLayer(window); //设置层级
-
             try
             {
                 window.OnOpen();
@@ -134,7 +131,6 @@ namespace DarkRoom.UI
             params object[] objs)
         {
             CUIManagerHelper.RemoveUIFromCache(window, ActiveDict);
-            LayerManager.RemoveUI(window);
 
             if (callback != null) callback += InternalCloseUI;
             else callback = InternalCloseUI;
@@ -180,7 +176,6 @@ namespace DarkRoom.UI
 
             StackManager.OnUIClose(window);
             CUIManagerHelper.AddUIToCache(window, HiddenDict);
-            window.Hide();
         }
 
         /// <summary>
@@ -217,7 +212,6 @@ namespace DarkRoom.UI
         {
             try
             {
-                view.Show();
                 view.OnShow();
             }
             catch (Exception e)
@@ -238,7 +232,6 @@ namespace DarkRoom.UI
         {
             try
             {
-                window.Hide();
                 window.OnHide();
             }
             catch (Exception e)
@@ -272,15 +265,6 @@ namespace DarkRoom.UI
             CUIManagerHelper.RemoveUIFromCache(UI, HiddenDict);
             CUIManagerHelper.RemoveUIFromCache(UI, ActiveDict);
 
-            try
-            {
-                UI.DestroyUI();
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("OnDestroy :" + e.ToString());
-            }
-
             Destroy(UI.gameObject);
         }
 
@@ -288,11 +272,6 @@ namespace DarkRoom.UI
         {
             CUIManagerHelper.DestroyUIInCache(ActiveDict);
             CUIManagerHelper.DestroyUIInCache(HiddenDict);
-        }
-
-        public int GetNormalUICount()
-        {
-            return LayerManager.normalUIList.Count;
         }
     }
 }

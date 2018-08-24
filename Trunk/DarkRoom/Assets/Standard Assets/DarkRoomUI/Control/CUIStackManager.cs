@@ -4,89 +4,81 @@ using UnityEngine;
 
 namespace DarkRoom.UI
 {
-
     public class CUIStackManager : MonoBehaviour
     {
-        List<UIWindowBase> m_normalStack = new List<UIWindowBase>();
-        List<UIWindowBase> m_fixedStack = new List<UIWindowBase>();
-        List<UIWindowBase> m_popupStack = new List<UIWindowBase>();
-        List<UIWindowBase> m_topBarStack = new List<UIWindowBase>();
+        private List<UIWindowBase> m_hudStack = new List<UIWindowBase>();
+        private List<UIWindowBase> m_normalStack = new List<UIWindowBase>();
+        private List<UIWindowBase> m_dialogStack = new List<UIWindowBase>();
+        private List<UIWindowBase> m_tipsStack = new List<UIWindowBase>();
+        private List<UIWindowBase> m_maskStack = new List<UIWindowBase>();
 
-        public void OnUIOpen(UIWindowBase ui)
+        public void OnUIOpen(UIWindowBase window)
         {
-            switch (ui.m_UIType)
+            switch (window.UIType)
             {
-                case UIType.Fixed:
-                    m_fixedStack.Add(ui);
+                case UIType.HUD:
+                    m_hudStack.Add(window);
                     break;
                 case UIType.Normal:
-                    m_normalStack.Add(ui);
+                    m_normalStack.Add(window);
                     break;
-                case UIType.PopUp:
-                    m_popupStack.Add(ui);
+                case UIType.Dialog:
+                    m_dialogStack.Add(window);
                     break;
-                case UIType.TopBar:
-                    m_topBarStack.Add(ui);
+                case UIType.Tips:
+                    m_tipsStack.Add(window);
+                    break;
+                case UIType.Mask:
+                    m_maskStack.Add(window);
                     break;
             }
         }
 
         public void OnUIClose(UIWindowBase ui)
         {
-            switch (ui.m_UIType)
+            switch (ui.UIType)
             {
-                case UIType.Fixed:
-                    m_fixedStack.Remove(ui);
+                case UIType.HUD:
+                    m_hudStack.Remove(ui);
                     break;
                 case UIType.Normal:
                     m_normalStack.Remove(ui);
                     break;
-                case UIType.PopUp:
-                    m_popupStack.Remove(ui);
+                case UIType.Dialog:
+                    m_dialogStack.Remove(ui);
                     break;
-                case UIType.TopBar:
-                    m_topBarStack.Remove(ui);
+                case UIType.Tips:
+                    m_tipsStack.Remove(ui);
+                    break;
+                case UIType.Mask:
+                    m_tipsStack.Remove(ui);
                     break;
             }
         }
 
         public void CloseLastUIWindow(UIType uiType = UIType.Normal)
         {
-            UIWindowBase ui = GetLastUI(uiType);
-
-            if (ui != null)
-            {
-                CUIManager.Instance.CloseUI(ui);
-            }
+            UIWindowBase window = GetLastUI(uiType);
+            if (window != null)CUIManager.Instance.CloseUI(window);
         }
 
         public UIWindowBase GetLastUI(UIType uiType)
         {
             switch (uiType)
             {
-                case UIType.Fixed:
-                    if (m_fixedStack.Count > 0)
-                        return m_fixedStack[m_fixedStack.Count - 1];
-                    else
-                        return null;
                 case UIType.Normal:
                     if (m_normalStack.Count > 0)
                         return m_normalStack[m_normalStack.Count - 1];
                     else
                         return null;
-                case UIType.PopUp:
-                    if (m_popupStack.Count > 0)
-                        return m_popupStack[m_popupStack.Count - 1];
-                    else
-                        return null;
-                case UIType.TopBar:
-                    if (m_topBarStack.Count > 0)
-                        return m_topBarStack[m_topBarStack.Count - 1];
+                case UIType.Dialog:
+                    if (m_dialogStack.Count > 0)
+                        return m_dialogStack[m_dialogStack.Count - 1];
                     else
                         return null;
             }
 
-            throw new System.Exception("CloseLastUIWindow does not support GameUI");
+            return null;
         }
     }
 

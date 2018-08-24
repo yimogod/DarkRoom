@@ -1,97 +1,52 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace DarkRoom.UI
 {
-
     public class CUILayerManager : MonoBehaviour
     {
-        public Transform m_GameUILayerParent;
-        public Transform m_FixedLayerParent;
-        public Transform m_NormalLayerParent;
-        public Transform m_TopbarLayerParent;
-        public Transform m_PopUpLayerParent;
+        private Transform m_hudLayer;
+        private Transform m_normalLayer;
+        private Transform m_dialogLayer;
+        private Transform m_tipsLayer;
+        private Transform m_maskLayer;
 
-        public List<UIWindowBase> normalUIList = new List<UIWindowBase>();
-
-        public void Awake()
+        void Awake()
         {
-            if (m_GameUILayerParent == null)
-            {
-                Debug.LogError("UILayerManager :GameUILayerParent is null!");
-            }
-
-            if (m_FixedLayerParent == null)
-            {
-                Debug.LogError("UILayerManager :FixedLayerParent is null!");
-            }
-
-            if (m_NormalLayerParent == null)
-            {
-                Debug.LogError("UILayerManager :NormalLayerParent is null!");
-            }
-
-            if (m_TopbarLayerParent == null)
-            {
-                Debug.LogError("UILayerManager :TopbarLayerParent is null!");
-            }
-
-            if (m_PopUpLayerParent == null)
-            {
-                Debug.LogError("UILayerManager :popUpLayerParent is null!");
-            }
+           
         }
 
-        public void SetLayer(UIWindowBase ui)
+        public void SetLayer(UIWindowBase window)
         {
-            RectTransform rt = ui.GetComponent<RectTransform>();
-            switch (ui.m_UIType)
+            RectTransform rt = window.GetComponent<RectTransform>();
+            switch (window.UIType)
             {
-                case UIType.GameUI:
-                    ui.transform.SetParent(m_GameUILayerParent);
-                    break;
-                case UIType.Fixed:
-                    ui.transform.SetParent(m_FixedLayerParent);
+                case UIType.HUD:
+                    window.transform.SetParent(m_hudLayer);
                     break;
                 case UIType.Normal:
-                    ui.transform.SetParent(m_NormalLayerParent);
-                    normalUIList.Add(ui);
+                    window.transform.SetParent(m_normalLayer);
                     break;
-                case UIType.TopBar:
-                    ui.transform.SetParent(m_TopbarLayerParent);
+                case UIType.Dialog:
+                    window.transform.SetParent(m_dialogLayer);
                     break;
-                case UIType.PopUp:
-                    ui.transform.SetParent(m_PopUpLayerParent);
+                case UIType.Tips:
+                    window.transform.SetParent(m_tipsLayer);
+                    break;
+                case UIType.Mask:
+                    window.transform.SetParent(m_maskLayer);
                     break;
             }
 
             rt.localScale = Vector3.one;
             rt.sizeDelta = Vector2.zero;
 
-            if (ui.m_UIType != UIType.GameUI)
-            {
-                rt.anchorMin = Vector2.zero;
-                rt.anchorMax = Vector3.one;
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector3.one;
 
-                rt.sizeDelta = Vector2.zero;
-                rt.anchoredPosition = Vector3.zero;
-                rt.SetAsLastSibling();
-            }
+            rt.anchoredPosition = Vector3.zero;
+            rt.SetAsLastSibling();
         }
 
-        public void RemoveUI(UIWindowBase ui)
-        {
-            switch (ui.m_UIType)
-            {
-                case UIType.GameUI: break;
-                case UIType.Fixed: break;
-                case UIType.Normal:
-                    normalUIList.Remove(ui);
-                    break;
-                case UIType.TopBar: break;
-                case UIType.PopUp: break;
-            }
-        }
     }
 }

@@ -3,12 +3,38 @@ using System.Collections;
 
 namespace DarkRoom.UI
 {
+    /// <summary>
+    /// 弹出面板的基类
+    /// </summary>
+    [RequireComponent(typeof(Canvas))]
     public class UIWindowBase : UIBase
     {
-        public UIType m_UIType;
+        protected UIType m_uiType;
+        private int m_UIID = -1;
+        private string m_UIName;
 
-        public GameObject m_bgMask;
-        public GameObject m_uiRoot;
+        public int UIID => m_UIID;
+        public UIType UIType => m_uiType;
+        public string UIName => m_UIName;
+
+        /// <summary>
+        /// 在awake后面, start前面调用
+        /// </summary>
+        /// <param name="id"></param>
+        public void Init(int id)
+        {
+            m_UIID = id;
+            m_UIName = null;
+
+            OnCreated();
+        }
+
+        /// <summary>
+        /// 刷新是主动调用
+        /// </summary>
+        public void Refresh(params object[] args)
+        {
+        }
 
         public virtual void OnOpen()
         {
@@ -16,22 +42,18 @@ namespace DarkRoom.UI
 
         public virtual void OnClose()
         {
-
         }
 
         public virtual void OnHide()
         {
-
+            gameObject.SetActive(false);
         }
 
         public virtual void OnShow()
         {
-
+            gameObject.SetActive(true);
         }
 
-        public virtual void OnRefresh()
-        {
-        }
 
         public virtual IEnumerator EnterAnim(UIAnimCallBack l_animComplete, UICallBack l_callBack, params object[] objs)
         {
@@ -57,21 +79,167 @@ namespace DarkRoom.UI
         {
         }
 
-        public virtual void Show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //------------------------------------新手引导使用
+        /*
+        protected List<GameObject> m_GuideList = new List<GameObject>();
+
+        protected Dictionary<GameObject, GuideChangeData> m_CreateCanvasDict =
+            new Dictionary<GameObject, GuideChangeData>(); //保存Canvas的创建状态
+
+        public void SetGuideMode(string objName, int order = 1)
         {
-            gameObject.SetActive(true);
+            SetGuideMode(GetGameObject(objName), order);
         }
 
-        public virtual void Hide()
+        public void SetItemGuideMode(string itemName, int order = 1)
         {
-            gameObject.SetActive(false);
+            SetGuideMode(GetItem(itemName), order);
         }
 
-        //刷新是主动调用
-        public void Refresh(params object[] args)
+        public void SetItemGuideModeByIndex(string itemName, int index, int order = 1)
         {
-            OnRefresh();
+            SetGuideMode(GetItemByIndex(itemName, index).gameObject, order);
         }
+
+        public void SetSelfGuideMode(int order = 1)
+        {
+            SetGuideMode(gameObject, order);
+        }
+
+        public void SetGuideMode(GameObject go, int order = 1)
+        {
+            Canvas canvas = go.GetComponent<Canvas>();
+            GraphicRaycaster graphic = go.GetComponent<GraphicRaycaster>();
+
+            GuideChangeData status = new GuideChangeData();
+
+            if (canvas == null)
+            {
+                canvas = go.AddComponent<Canvas>();
+
+                status.isCreateCanvas = true;
+            }
+
+            if (graphic == null)
+            {
+                graphic = go.AddComponent<GraphicRaycaster>();
+
+                status.isCreateGraphic = true;
+            }
+
+            status.OldOverrideSorting = canvas.overrideSorting;
+            status.OldSortingOrder = canvas.sortingOrder;
+            status.oldSortingLayerName = canvas.sortingLayerName;
+
+            //如果检测到目标对象
+            bool oldActive = go.activeSelf;
+            if (!oldActive)
+            {
+                go.SetActive(true);
+            }
+
+            canvas.overrideSorting = true;
+            canvas.sortingOrder = order;
+            canvas.sortingLayerName = "Guide";
+
+
+            if (!oldActive)
+            {
+                go.SetActive(false);
+            }
+
+            if (!m_CreateCanvasDict.ContainsKey(go))
+            {
+                m_CreateCanvasDict.Add(go, status);
+                m_GuideList.Add(go);
+            }
+            else
+            {
+                Debug.LogError("m_CreateCanvasDict " + go);
+            }
+        }
+
+        public void CancelGuideModel(GameObject go)
+        {
+            if (go == null)
+            {
+                Debug.LogError("go is null");
+                return;
+            }
+
+            Canvas canvas = go.GetComponent<Canvas>();
+            GraphicRaycaster graphic = go.GetComponent<GraphicRaycaster>();
+
+            if (m_CreateCanvasDict.ContainsKey(go))
+            {
+                GuideChangeData status = m_CreateCanvasDict[go];
+
+                if (graphic != null && status.isCreateGraphic)
+                {
+                    DestroyImmediate(graphic);
+                }
+
+                if (canvas != null && status.isCreateCanvas)
+                {
+                    DestroyImmediate(canvas);
+                }
+                else
+                {
+                    if (canvas != null)
+                    {
+                        canvas.overrideSorting = status.OldOverrideSorting;
+                        canvas.sortingOrder = status.OldSortingOrder;
+                        canvas.sortingLayerName = status.oldSortingLayerName;
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogError("m_CreateCanvasDict.ContainsKey(go) is error");
+            }
+        }
+
+        protected struct GuideChangeData
+        {
+            public bool isCreateCanvas;
+            public bool isCreateGraphic;
+
+            public string oldSortingLayerName;
+            public int OldSortingOrder;
+            public bool OldOverrideSorting;
+        }
+
+        public void ClearGuideModel()
+        {
+            for (int i = 0; i < m_GuideList.Count; i++)
+            {
+                CancelGuideModel(m_GuideList[i]);
+            }
+
+            for (int i = 0; i < m_ChildList.Count; i++)
+            {
+                m_ChildList[i].ClearGuideModel();
+            }
+
+            m_GuideList.Clear();
+            m_CreateCanvasDict.Clear();
+        }*/
     }
 }
 

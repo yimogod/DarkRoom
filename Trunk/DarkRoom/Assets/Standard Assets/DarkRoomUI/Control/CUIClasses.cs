@@ -13,12 +13,11 @@ namespace DarkRoom.UI
 
     public enum UIType
     {
-        GameUI,
-
-        Fixed,
+        HUD,
         Normal,
-        TopBar,
-        PopUp
+        Dialog,
+        Tips,
+        Mask,
     }
 
     public enum UIEvent

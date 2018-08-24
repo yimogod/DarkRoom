@@ -80,15 +80,6 @@ namespace DarkRoom.UI
             {
                 for (int i = 0; i < uis.Count; i++)
                 {
-                    try
-                    {
-                        uis[i].DestroyUI();
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogError("OnDestroy :" + e.ToString());
-                    }
-
                     GameObject.Destroy(uis[i].gameObject);
                 }
             }
