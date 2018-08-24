@@ -18,7 +18,6 @@ namespace DarkRoom.UI
         public void DestroyUI()
         {
             ClearGuideModel();
-            //RemoveAllListener();
             CleanItem();
             OnUIDestroy();
         }
@@ -30,11 +29,7 @@ namespace DarkRoom.UI
 
         private int m_UIID = -1;
 
-        public int UIID
-        {
-            get { return m_UIID; }
-            //set { m_UIID = value; }
-        }
+        public int UIID => m_UIID;
 
         public string UIEventKey
         {

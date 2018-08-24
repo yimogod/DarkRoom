@@ -40,7 +40,13 @@ namespace DarkRoom.Game{
             loader.InstantiateGameObject(address, parent, localPosition, onComplete);
 		}
 
-		public static void InstantiateSprite(string address)
+	    public static void InstantiatePrefab(string address, Transform parent, Action<GameObject> onComplete = null)
+	    {
+	        CResourceLoader loader = new CResourceLoader();
+	        loader.InstantiateGameObject(address, parent, Vector3.zero, onComplete);
+	    }
+
+        public static void InstantiateSprite(string address)
         {
 			
 		}
