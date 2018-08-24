@@ -9,66 +9,66 @@ namespace DarkRoom.UI
 {
     public class CUIManagerHelper
     {
-        public static bool IsExitsInCache(UIWindowBase view, Dictionary<string, List<UIWindowBase>> dict)
+        public static bool IsExitsInCache(UIWindowBase window, Dictionary<string, List<UIWindowBase>> dict)
         {
-            if (view == null) return false;
+            if (window == null) return false;
 
-            if (!dict.ContainsKey(view.name)) return false;
-            return dict[view.name].Contains(view);
+            if (!dict.ContainsKey(window.name)) return false;
+            return dict[window.name].Contains(window);
         }
 
         /// <summary>
         /// 获取一个隐藏的UI,如果有多个同名UI，则返回最后创建的那一个
         /// </summary>
-        /// <param name="viewName">UI名</param>
+        /// <param name="winName">UI名</param>
         /// <returns></returns>
-        public static UIWindowBase GetUIFromCache(string viewName, Dictionary<string, List<UIWindowBase>> dict)
+        public static UIWindowBase GetUIFromCache(string winName, Dictionary<string, List<UIWindowBase>> dict)
         {
-            if (!dict.ContainsKey(viewName)) return null;
-            int count = dict[viewName].Count;
+            if (!dict.ContainsKey(winName)) return null;
+            int count = dict[winName].Count;
             if (count == 0) return null;
 
-            UIWindowBase ui = dict[viewName][count - 1];
+            UIWindowBase ui = dict[winName][count - 1];
             //默认返回最后创建的那一个
             return ui;
         }
 
-        public static void AddUIToCache(UIWindowBase UI, Dictionary<string, List<UIWindowBase>> dict)
+        public static void AddUIToCache(UIWindowBase window, Dictionary<string, List<UIWindowBase>> dict)
         {
-            if (UI == null) return;
+            if (window == null) return;
 
-            if (!dict.ContainsKey(UI.name))
+            if (!dict.ContainsKey(window.name))
             {
-                dict.Add(UI.name, new List<UIWindowBase>());
+                dict.Add(window.name, new List<UIWindowBase>());
             }
 
-            dict[UI.name].Add(UI);
+            dict[window.name].Add(window);
         }
 
         /// <summary>
         /// 从cache中删除ui, 如果不在列表里面, 就返回
         /// </summary>
-        public static void RemoveUIFromCache(UIWindowBase view, Dictionary<string, List<UIWindowBase>> dict)
+        public static void RemoveUIFromCache(UIWindowBase window, Dictionary<string, List<UIWindowBase>> dict)
         {
-            bool b = IsExitsInCache(view, dict);
+            bool b = IsExitsInCache(window, dict);
             if (!b) return;
 
-            if (view == null)
+            if (window == null)
             {
                 throw new Exception("UIManager: RemoveUI error l_UI is null: !");
             }
 
-            if (!dict.ContainsKey(view.name))
+            if (!dict.ContainsKey(window.name))
             {
-                throw new Exception("UIManager: RemoveUI error dont find: " + view.name + "  " + view);
+                throw new Exception("UIManager: RemoveUI error dont find: " + window.name + "  " + window);
             }
 
-            if (!dict[view.name].Contains(view))
+            if (!dict[window.name].Contains(window))
             {
-                throw new Exception("UIManager: RemoveUI error dont find: " + view.name + "  " + view);
+                throw new Exception("UIManager: RemoveUI error dont find: " + window.name + "  " + window);
             }
 
-            dict[view.name].Remove(view);
+            dict[window.name].Remove(window);
         }
 
         /// <summary>
@@ -99,10 +99,10 @@ namespace DarkRoom.UI
         /// <summary>
         /// 获取view所在列表的索引用来当做id
         /// </summary>
-        public static int GetUIIDFromCache(string viewName, Dictionary<string, List<UIWindowBase>> dict)
+        public static int GetUIIDFromCache(string winName, Dictionary<string, List<UIWindowBase>> dict)
         {
-            if (!dict.ContainsKey(viewName))return 0;
-            var list = dict[viewName];
+            if (!dict.ContainsKey(winName))return 0;
+            var list = dict[winName];
             int id = list.Count;
 
             for (int i = 0; i < list.Count; i++)

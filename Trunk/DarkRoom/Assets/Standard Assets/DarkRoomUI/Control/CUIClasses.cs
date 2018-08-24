@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 namespace DarkRoom.UI
 {
-    #region UI事件 代理 枚举
-
     /// <summary>
     /// UI回调
     /// </summary>
@@ -42,5 +40,4 @@ namespace DarkRoom.UI
         OnCompleteExitAnim,
     }
 
-    #endregion
 }

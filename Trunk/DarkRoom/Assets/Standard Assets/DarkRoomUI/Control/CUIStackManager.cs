@@ -56,7 +56,7 @@ namespace DarkRoom.UI
 
             if (ui != null)
             {
-                CUIManager.Instance.CloseUIWindow(ui);
+                CUIManager.Instance.CloseUI(ui);
             }
         }
 
