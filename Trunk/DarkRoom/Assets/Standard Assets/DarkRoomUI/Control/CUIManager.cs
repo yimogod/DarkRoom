@@ -51,6 +51,17 @@ namespace DarkRoom.UI
         }
 
         /// <summary>
+        /// 打开UI
+        /// </summary>
+        /// <param name="callback">动画播放完毕回调</param>
+        /// <param name="objs">回调传参</param>`
+        /// <returns>返回打开的UI</returns>
+        public T OpenUIWindow<T>(UICallBack callback = null, params object[] objs) where T : UIWindowBase
+        {
+            return (T)OpenUIWindow(typeof(T).Name, callback, objs);
+        }
+
+        /// <summary>
         /// 创建UI,如果不打开则存放在Hide列表中
         /// </summary>
         public T CreateUIWindow<T>() where T : UIWindowBase
@@ -58,7 +69,7 @@ namespace DarkRoom.UI
             return (T) CreateUIWindow(typeof(T).Name);
         }
 
-        public UIWindowBase CreateUIWindow(string UIName)
+        private UIWindowBase CreateUIWindow(string UIName)
         {
             GameObject UItmp = new GameObject(); //GameObjectManager.CreateGameObject(UIName, s_UIManagerGo);
             UIWindowBase UIbase = UItmp.GetComponent<UIWindowBase>();
@@ -78,14 +89,7 @@ namespace DarkRoom.UI
             return UIbase;
         }
 
-        /// <summary>
-        /// 打开UI
-        /// </summary>
-        /// <param name="UIName">UI名</param>
-        /// <param name="callback">动画播放完毕回调</param>
-        /// <param name="objs">回调传参</param>`
-        /// <returns>返回打开的UI</returns>
-        public UIWindowBase OpenUIWindow(string UIName, UICallBack callback = null, params object[] objs)
+        private UIWindowBase OpenUIWindow(string UIName, UICallBack callback = null, params object[] objs)
         {
             UIWindowBase UIbase = GetHideUI(UIName);
 
@@ -95,7 +99,7 @@ namespace DarkRoom.UI
             }
 
             RemoveHideUI(UIbase);
-            AddUI(UIbase);
+            AddDisplayUI(UIbase);
 
             StackManager.OnUIOpen(UIbase);
             LayerManager.SetLayer(UIbase); //设置层级
@@ -114,10 +118,7 @@ namespace DarkRoom.UI
             return UIbase;
         }
 
-        public T OpenUIWindow<T>() where T : UIWindowBase
-        {
-            return (T) OpenUIWindow(typeof(T).Name);
-        }
+  
 
         /// <summary>
         /// 关闭UI
@@ -129,7 +130,7 @@ namespace DarkRoom.UI
         public void CloseUIWindow(UIWindowBase UI, bool isPlayAnim = true, UICallBack callback = null,
             params object[] objs)
         {
-            RemoveUI(UI); //移除UI引用
+            RemoveDisplayUI(UI); //移除UI引用
             LayerManager.RemoveUI(UI);
 
             if (isPlayAnim)
@@ -152,7 +153,7 @@ namespace DarkRoom.UI
             }
         }
 
-        void CloseUIWindowCallBack(UIWindowBase UI, params object[] objs)
+        private void CloseUIWindowCallBack(UIWindowBase UI, params object[] objs)
         {
             try
             {
@@ -188,30 +189,30 @@ namespace DarkRoom.UI
             CloseUIWindow(typeof(T).Name, isPlayAnim, callback, objs);
         }
 
-        public UIWindowBase ShowUI(string UIname)
+        public UIWindowBase ShowUI(string viewName)
         {
-            UIWindowBase ui = GetUI(UIname);
+            UIWindowBase ui = GetUI(viewName);
             return ShowUI(ui);
         }
 
-        public UIWindowBase ShowUI(UIWindowBase ui)
+        public UIWindowBase ShowUI(UIWindowBase view)
         {
             try
             {
-                ui.Show();
-                ui.OnShow();
+                view.Show();
+                view.OnShow();
             }
             catch (Exception e)
             {
-                Debug.LogError(ui.UIName + " OnShow Exception: " + e.ToString());
+                Debug.LogError(view.UIName + " OnShow Exception: " + e.ToString());
             }
 
-            return ui;
+            return view;
         }
 
-        public UIWindowBase HideUI(string UIname)
+        public UIWindowBase HideUI(string viewName)
         {
-            UIWindowBase ui = GetUI(UIname);
+            UIWindowBase ui = GetUI(viewName);
             return HideUI(ui);
         }
 
@@ -230,7 +231,7 @@ namespace DarkRoom.UI
             return ui;
         }
 
-        public void HideOtherUI(string UIName)
+        public void HideOtherUI(string viewName)
         {
             List<string> keys = new List<string>(DisplayUIDict.Keys);
             for (int i = 0; i < keys.Count; i++)
@@ -238,7 +239,7 @@ namespace DarkRoom.UI
                 List<UIWindowBase> list = DisplayUIDict[keys[i]];
                 for (int j = 0; j < list.Count; j++)
                 {
-                    if (list[j].UIName != UIName)
+                    if (list[j].UIName != viewName)
                     {
                         HideUI(list[j]);
                     }
@@ -246,7 +247,7 @@ namespace DarkRoom.UI
             }
         }
 
-        public void ShowOtherUI(string UIName)
+        public void ShowOtherUI(string viewName)
         {
             List<string> keys = new List<string>(DisplayUIDict.Keys);
             for (int i = 0; i < keys.Count; i++)
@@ -254,7 +255,7 @@ namespace DarkRoom.UI
                 List<UIWindowBase> list = DisplayUIDict[keys[i]];
                 for (int j = 0; j < list.Count; j++)
                 {
-                    if (list[j].UIName != UIName)
+                    if (list[j].UIName != viewName)
                     {
                         ShowUI(list[j]);
                     }
@@ -304,13 +305,13 @@ namespace DarkRoom.UI
         {
             Debug.Log("UIManager DestroyUI " + UI.name);
 
-            if (GetIsExitsHide(UI))
+            if (IsExitsHide(UI))
             {
                 RemoveHideUI(UI);
             }
-            else if (GetIsExits(UI))
+            else if (IsExitsDisplay(UI))
             {
-                RemoveUI(UI);
+                RemoveDisplayUI(UI);
             }
 
             try
@@ -435,19 +436,8 @@ namespace DarkRoom.UI
                                 UIname);
         }
 
-        bool GetIsExits(UIWindowBase UI)
-        {
-            if (!DisplayUIDict.ContainsKey(UI.name))
-            {
-                return false;
-            }
-            else
-            {
-                return DisplayUIDict[UI.name].Contains(UI);
-            }
-        }
 
-        void AddUI(UIWindowBase UI)
+        private void AddDisplayUI(UIWindowBase UI)
         {
             if (!DisplayUIDict.ContainsKey(UI.name))
             {
@@ -459,41 +449,36 @@ namespace DarkRoom.UI
             UI.Show();
         }
 
-        void RemoveUI(UIWindowBase UI)
+        /// <summary>
+        /// 删除显示的ui
+        /// </summary>
+        private void RemoveDisplayUI(UIWindowBase view)
         {
-            if (UI == null)
-            {
+            if (view == null)
                 throw new Exception("UIManager: RemoveUI error l_UI is null: !");
-            }
 
-            if (!DisplayUIDict.ContainsKey(UI.name))
-            {
-                throw new Exception("UIManager: RemoveUI error dont find UI name: ->" + UI.name + "<-  " + UI);
-            }
+            if (!DisplayUIDict.ContainsKey(view.name))
+                throw new Exception("UIManager: RemoveUI error dont find UI name: ->" + view.name + "<-  " + view);
 
-            if (!DisplayUIDict[UI.name].Contains(UI))
-            {
-                throw new Exception("UIManager: RemoveUI error dont find UI: ->" + UI.name + "<-  " + UI);
-            }
-            else
-            {
-                DisplayUIDict[UI.name].Remove(UI);
-            }
+            if (!DisplayUIDict[view.name].Contains(view))
+                throw new Exception("UIManager: RemoveUI error dont find UI: ->" + view.name + "<-  " + view);
+
+            DisplayUIDict[view.name].Remove(view);
         }
 
-        int GetUIID(string UIname)
+        private int GetUIID(string viewName)
         {
-            if (!DisplayUIDict.ContainsKey(UIname))
+            if (!DisplayUIDict.ContainsKey(viewName))
             {
                 return 0;
             }
             else
             {
-                int id = DisplayUIDict[UIname].Count;
+                int id = DisplayUIDict[viewName].Count;
 
-                for (int i = 0; i < DisplayUIDict[UIname].Count; i++)
+                for (int i = 0; i < DisplayUIDict[viewName].Count; i++)
                 {
-                    if (DisplayUIDict[UIname][i].UIID == id)
+                    if (DisplayUIDict[viewName][i].UIID == id)
                     {
                         id++;
                         i = 0;
@@ -514,20 +499,20 @@ namespace DarkRoom.UI
         /// </summary>
         public void DestroyAllHideUI()
         {
-            foreach (List<UIWindowBase> uis in HiddenUIDict.Values)
+            foreach (List<UIWindowBase> list in HiddenUIDict.Values)
             {
-                for (int i = 0; i < uis.Count; i++)
+                for (int i = 0; i < list.Count; i++)
                 {
                     try
                     {
-                        uis[i].DestroyUI();
+                        list[i].DestroyUI();
                     }
                     catch (Exception e)
                     {
                         Debug.LogError("OnDestroy :" + e.ToString());
                     }
 
-                    Destroy(uis[i].gameObject);
+                    Destroy(list[i].gameObject);
                 }
             }
 
@@ -537,42 +522,35 @@ namespace DarkRoom.UI
         /// <summary>
         /// 获取一个隐藏的UI,如果有多个同名UI，则返回最后创建的那一个
         /// </summary>
-        /// <param name="UIname">UI名</param>
+        /// <param name="viewName">UI名</param>
         /// <returns></returns>
-        public UIWindowBase GetHideUI(string UIname)
+        public UIWindowBase GetHideUI(string viewName)
         {
-            if (!HiddenUIDict.ContainsKey(UIname))
-            {
-                return null;
-            }
-            else
-            {
-                if (HiddenUIDict[UIname].Count == 0)
-                {
-                    return null;
-                }
-                else
-                {
-                    UIWindowBase ui = HiddenUIDict[UIname][HiddenUIDict[UIname].Count - 1];
-                    //默认返回最后创建的那一个
-                    return ui;
-                }
-            }
+            if (!HiddenUIDict.ContainsKey(viewName))return null;
+            int count = HiddenUIDict[viewName].Count;
+            if (count == 0)return null;
+
+            UIWindowBase ui = HiddenUIDict[viewName][count - 1];
+            //默认返回最后创建的那一个
+            return ui;
         }
 
-        bool GetIsExitsHide(UIWindowBase UI)
+        private bool IsExitsDisplay(UIWindowBase UI)
         {
-            if (!HiddenUIDict.ContainsKey(UI.name))
-            {
-                return false;
-            }
-            else
-            {
-                return HiddenUIDict[UI.name].Contains(UI);
-            }
+            if (!DisplayUIDict.ContainsKey(UI.name)) return false;
+            return DisplayUIDict[UI.name].Contains(UI);
         }
 
-        void AddHideUI(UIWindowBase UI)
+        private bool IsExitsHide(UIWindowBase view)
+        {
+            if (!HiddenUIDict.ContainsKey(view.name))return false;
+            return HiddenUIDict[view.name].Contains(view);
+        }
+
+        /// <summary>
+        /// 添加一个隐藏的ui
+        /// </summary>
+        private void AddHideUI(UIWindowBase UI)
         {
             if (!HiddenUIDict.ContainsKey(UI.name))
             {
@@ -584,27 +562,28 @@ namespace DarkRoom.UI
             UI.Hide();
         }
 
-
-        void RemoveHideUI(UIWindowBase UI)
+        /// <summary>
+        /// 删除隐藏的窗口
+        /// </summary>
+        /// <param name="view"></param>
+        private void RemoveHideUI(UIWindowBase view)
         {
-            if (UI == null)
+            if (view == null)
             {
                 throw new Exception("UIManager: RemoveUI error l_UI is null: !");
             }
 
-            if (!HiddenUIDict.ContainsKey(UI.name))
+            if (!HiddenUIDict.ContainsKey(view.name))
             {
-                throw new Exception("UIManager: RemoveUI error dont find: " + UI.name + "  " + UI);
+                throw new Exception("UIManager: RemoveUI error dont find: " + view.name + "  " + view);
             }
 
-            if (!HiddenUIDict[UI.name].Contains(UI))
+            if (!HiddenUIDict[view.name].Contains(view))
             {
-                throw new Exception("UIManager: RemoveUI error dont find: " + UI.name + "  " + UI);
+                throw new Exception("UIManager: RemoveUI error dont find: " + view.name + "  " + view);
             }
-            else
-            {
-                HiddenUIDict[UI.name].Remove(UI);
-            }
+
+            HiddenUIDict[view.name].Remove(view);
         }
     }
 }

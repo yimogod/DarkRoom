@@ -34,10 +34,10 @@ namespace DarkRoom.Game{
         /// <summary>
         /// 实例化address prefab, 且放在parent下面
         /// </summary>
-		public static void InstantiatePrefab(string address, Transform parent, Vector3 localPosition)
+		public static void InstantiatePrefab(string address, Transform parent, Vector3 localPosition, Action<GameObject> onComplete = null)
 		{
             CResourceLoader loader = new CResourceLoader();
-            loader.InstantiateGameObject(address, parent, localPosition);
+            loader.InstantiateGameObject(address, parent, localPosition, onComplete);
 		}
 
 		public static void InstantiateSprite(string address)

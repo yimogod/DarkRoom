@@ -17,7 +17,7 @@ public class StartUp : MonoBehaviour {
     {
         ApplicationFacade.instance.Startup();
 
-        ApplicationManager.Instance.InitializeProcedure(
+        CApplicationManager.Instance.InitializeProcedure(
             new CharacterEntry_Procedure(),
             new CharacterCreate_Procedure(),
             new CharacterChoose_Procedure(),
@@ -25,7 +25,7 @@ public class StartUp : MonoBehaviour {
             new DungeonBattle_Procedure()
             );
 
-        ApplicationManager.Instance.AppLaunch();
+        CApplicationManager.Instance.AppLaunch();
     }
 
     void Update () {

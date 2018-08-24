@@ -7,14 +7,14 @@ using DarkRoom.UI;
 
 namespace DarkRoom.Game
 {
-    public enum AppMode
+    public enum CAppMode
     {
         Developing,
         QA,
         Release
     }
 
-    public class ApplicationManager : CSingletonMono<ApplicationManager>
+    public class CApplicationManager : CSingletonMono<CApplicationManager>
     {
         public delegate void ApplicationVoidCallback();
         public delegate void ApplicationBoolCallback(bool b);
@@ -28,9 +28,9 @@ namespace DarkRoom.Game
         public static ApplicationVoidCallback s_OnApplicationOnDrawGizmos = null;
         public static ApplicationVoidCallback s_OnApplicationLateUpdate = null;
 
-        public AppMode m_AppMode = AppMode.Developing;
+        public CAppMode m_AppMode = CAppMode.Developing;
 
-        public AppMode AppMode
+        public CAppMode AppMode
         {
             get
             {
