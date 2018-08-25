@@ -16,15 +16,26 @@ namespace DarkRoom.Core {
 		//是否间隔到了
 		private bool m_isReady = false;
 
+        //执行的次数. 如果<0则代表用于执行
+	    private int m_excuteTimes = -1;
+
 		public CTimeRegulator(float period) {
 			m_period = period;
 		}
 
-		/// <summary>
-		/// 默认我们一秒执行10次
-		/// </summary>
-		public CTimeRegulator() {
-			m_period = 0.1f;
+	    public CTimeRegulator(float period, int times)
+	    {
+	        m_period = period;
+	        m_excuteTimes = times;
+	    }
+
+        /// <summary>
+        /// 默认我们一秒执行10次
+        /// </summary>
+        public CTimeRegulator()
+		{
+		    m_excuteTimes = -1;
+            m_period = 0.1f;
 		}
 
 		/// <summary>
@@ -69,15 +80,20 @@ namespace DarkRoom.Core {
 			m_isReady = false;
 		}
 
-		public bool Update() {
-			m_deltaTime = Time.deltaTime;
+		public bool Update()
+		{
+            //如果执行的次数为0, 那就是不执行
+		    if (m_excuteTimes == 0) return false;
+
+            m_deltaTime = Time.deltaTime;
 			//计算时间间隔, 我们不需要每帧都计算
 			m_timePast += m_deltaTime;
 
 			//这么写的原因是给机会让百分比大于等于1有被访问的机会
 			if (m_timePast >= m_period && !m_isReady) {
 				m_isReady = true;
-				return m_isReady;
+			    m_excuteTimes--;
+                return m_isReady;
 			}
 
 			if (m_isReady) {

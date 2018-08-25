@@ -58,5 +58,14 @@ namespace DarkRoom.Game{
 		public static void LoadTexture2D(string address)
 		{
 		}
+
+        /// <summary>
+        /// 加载文本
+        /// </summary>
+        public static void LoadText(string address, Action<string> onComplete)
+	    {
+	        CResourceLoader loader = new CResourceLoader();
+            loader.LoadObject<UnityEngine.Object>(address, o => onComplete(o.ToString()));
+        }
 	}
 }

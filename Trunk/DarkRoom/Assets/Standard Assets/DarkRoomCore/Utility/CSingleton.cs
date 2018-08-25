@@ -69,7 +69,7 @@ namespace DarkRoom.Core
             T thisInstance = GetComponent<T>();
 
             //如果已经有instance, 就报错
-            if (thisInstance != m_instance)
+            if (m_instance != null && thisInstance != m_instance)
             {
                 Debug.LogError(string.Format("{0} alreay have one instance", typeof(T).Name));
                 return;
