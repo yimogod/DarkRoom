@@ -8,9 +8,6 @@ public class StartUp : MonoBehaviour {
 
 	void Awake () {
 	    Application.targetFrameRate = 30;
-	    MetaParserManager mm = new MetaParserManager();
-	    mm.Init();
-	    mm.Execute();
     }
 
     void Start()
@@ -26,9 +23,7 @@ public class StartUp : MonoBehaviour {
             );
 
         CApplicationManager.Instance.AppLaunch();
-    }
 
-    void Update () {
-		
-	}
+        CApplicationManager.Instance.ChangeProcedure(CharacterEntry_Procedure.NAME);
+    }
 }

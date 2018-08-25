@@ -4,11 +4,11 @@ using DarkRoom.Core;
 
 namespace Sword
 {
-    public class PlayerCastle_Procedure : ProcedureBase
+    public class PlayerCastle_Procedure : CProcedureBase
     {
-        public const string Name = "PlayerCastle";
+        public const string NAME = "PlayerCastle";
 
-        public PlayerCastle_Procedure() : base(Name)
+        public PlayerCastle_Procedure() : base(NAME)
         {
         }
     }

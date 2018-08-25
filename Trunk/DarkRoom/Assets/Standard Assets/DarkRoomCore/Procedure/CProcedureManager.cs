@@ -1,18 +1,19 @@
 ﻿using System;
+using UnityEngine;
 
 namespace DarkRoom.Core
 {
     /// <summary>
     /// 流程管理器。
     /// </summary>
-    public class ProcedureManager : CSingleton<ProcedureManager>
+    public class CProcedureManager
     {
         private CStateMachine m_ProcedureFsm;
 
         /// <summary>
         /// 初始化流程管理器的新实例。
         /// </summary>
-        public ProcedureManager()
+        public CProcedureManager()
         {
             m_ProcedureFsm = new CStateMachine();
         }
@@ -26,8 +27,8 @@ namespace DarkRoom.Core
         /// <summary>
         /// 获取当前流程。
         /// </summary>
-        public ProcedureBase CurrentProcedure
-                => m_ProcedureFsm.CurrState as ProcedureBase;
+        public CProcedureBase CurrentProcedure
+                => m_ProcedureFsm.CurrState as CProcedureBase;
 
         /// <summary>
         /// 获取当前流程持续时间。
@@ -50,9 +51,7 @@ namespace DarkRoom.Core
         /// <summary>
         /// 初始化流程管理器。
         /// </summary>
-        /// <param name="stateMachine">有限状态机管理器。</param>
-        /// <param name="procedures">流程管理器包含的流程。</param>
-        public void Initialize(params ProcedureBase[] procedures)
+        public void Initialize(params CProcedureBase[] procedures)
         {
             foreach (var item in procedures)
             {
@@ -63,8 +62,7 @@ namespace DarkRoom.Core
         /// <summary>
         /// 开始流程。
         /// </summary>
-        /// <param name="procedureName">要开始的流程类型。</param>
-        public void StartProcedure(string procedureName)
+        public void ChangeProcedure(string procedureName)
         {
             m_ProcedureFsm.ChangeState(procedureName);
         }
@@ -72,9 +70,7 @@ namespace DarkRoom.Core
         /// <summary>
         /// 是否存在流程。
         /// </summary>
-        /// <param name="procedureName">要检查的流程名称。</param>
-        /// <returns>是否存在流程。</returns>
-        public bool HasProcedure(string procedureName)
+        public bool ContainProcedure(string procedureName)
         {
             return m_ProcedureFsm.ContainState(procedureName);
         }

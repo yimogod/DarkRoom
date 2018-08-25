@@ -2,7 +2,7 @@ using System;
 
 namespace Sword
 {
-    public class Setting
+    public class SwordConfig
     {
         public static string URL = "http://127.0.0.1:8000/";
         public static string URL_LOGIN = URL + "account/login/";

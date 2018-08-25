@@ -53,9 +53,6 @@ namespace DarkRoom.Game
         public bool m_quickLunch = true;
 
         [HideInInspector]
-        public string m_Status = "";
-
-        [HideInInspector]
         public List<string> m_globalLogic;
         [HideInInspector]
         public string currentStatus;
@@ -65,12 +62,17 @@ namespace DarkRoom.Game
         /// </summary>
         public bool showLanguageValue = false;
 
+
+        //管理游戏流程
+        private CProcedureManager m_procedure = new CProcedureManager();
+
+
         /// <summary>
         /// 初始化游戏流程数据
         /// </summary>
-        public void InitializeProcedure(params ProcedureBase[] procedures)
+        public void InitializeProcedure(params CProcedureBase[] procedures)
         {
-            ProcedureManager.Instance.Initialize();
+            m_procedure.Initialize(procedures);
         }
 
         /// <summary>
@@ -113,7 +115,13 @@ namespace DarkRoom.Game
             }*/
         }
 
-
+        /// <summary>
+        /// 开始流程
+        /// </summary>
+        public void ChangeProcedure(string procedureName)
+        {
+            m_procedure.ChangeProcedure(procedureName);
+        }
 
         void OnApplicationQuit()
         {
@@ -166,6 +174,8 @@ namespace DarkRoom.Game
 
         void Update()
         {
+            m_procedure.Update();
+
             if (s_OnApplicationUpdate != null)
                 s_OnApplicationUpdate();
         }

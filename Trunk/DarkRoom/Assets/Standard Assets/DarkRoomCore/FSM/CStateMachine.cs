@@ -10,17 +10,11 @@ namespace DarkRoom.Core
 		private CBaseState m_currState;
 		private CBaseState m_lastState;
 
-		public CStateMachine() {
+	    public CBaseState LastState => m_lastState;
+	    public CBaseState CurrState => m_currState;
+
+        public CStateMachine() {
 			m_stateDict = new Dictionary<string, CBaseState>();
-		}
-
-		public CBaseState LastState
-		{
-			get { return m_lastState; }
-		}
-
-		public CBaseState CurrState {
-			get { return m_currState; }
 		}
 
 		/// <summary>

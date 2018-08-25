@@ -38,10 +38,14 @@ namespace DarkRoom.UI
 
         public virtual void OnOpen()
         {
+            OnBindEvent();
+            OnShow();
         }
 
         public virtual void OnClose()
         {
+            OnUnBindEvent();
+            OnHide();
         }
 
         public virtual void OnHide()
