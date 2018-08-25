@@ -33,10 +33,14 @@ namespace DarkRoom.Core
         //以防万一, 如果加载超过30s, 则视为全部加载成功
         protected CTimeRegulator m_loadingTimeReg;
 
-        public CProcedureBase(string name) : base(name) { }
+        public CProcedureBase(string name) : base(name)
+        {
+            m_loadingTimeReg = new CTimeRegulator(m_maxLoadingSecond, 1);
+        }
 
         public override void Enter(CStateMachine sm)
         {
+            m_loadingTimeReg.Restart();
             // 1是加载的目标场景
             m_enterSceneAssetMaxNum = m_preCreatePrefabAddress.Count + 1;
             StartLoading();
@@ -51,7 +55,6 @@ namespace DarkRoom.Core
         // 开始加载, 一般情绪下, 在enter中调用
         protected virtual void StartLoading()
         {
-            m_loadingTimeReg = new CTimeRegulator(m_maxLoadingSecond, 1);
             AddTargetScene();
             AddLoadingScene();
             StartLoadingPrefab();

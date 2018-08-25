@@ -1,5 +1,4 @@
-﻿using UnityEditorInternal.VR;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DarkRoom.Core
 {

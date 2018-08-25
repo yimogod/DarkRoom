@@ -17,16 +17,22 @@ namespace DarkRoom.Core {
 		private bool m_isReady = false;
 
         //执行的次数. 如果<0则代表用于执行
-	    private int m_excuteTimes = -1;
+	    private int m_excuteMaxTimes = -1;
+        private int m_excuteTimes = 0;
 
-		public CTimeRegulator(float period) {
+        public CTimeRegulator(float period) {
 			m_period = period;
 		}
 
 	    public CTimeRegulator(float period, int times)
 	    {
 	        m_period = period;
-	        m_excuteTimes = times;
+	        m_excuteMaxTimes = times;
+	        m_excuteTimes = 0;
+	        if (m_excuteMaxTimes == 0)
+	        {
+                Debug.LogError("excuteMaxTimes MUST NOT BE 00000");
+	        }
 	    }
 
         /// <summary>
@@ -34,8 +40,9 @@ namespace DarkRoom.Core {
         /// </summary>
         public CTimeRegulator()
 		{
-		    m_excuteTimes = -1;
-            m_period = 0.1f;
+		    m_period = 0.1f;
+            m_excuteMaxTimes = -1;
+		    m_excuteTimes = 0;
 		}
 
 		/// <summary>
@@ -78,12 +85,13 @@ namespace DarkRoom.Core {
 		{
 			m_timePast = 0;
 			m_isReady = false;
-		}
+		    m_excuteTimes = 0;
+        }
 
 		public bool Update()
 		{
-            //如果执行的次数为0, 那就是不执行
-		    if (m_excuteTimes == 0) return false;
+            //执行次数已经到了
+		    if (m_excuteMaxTimes >= 0 && m_excuteTimes >= m_excuteMaxTimes) return false;
 
             m_deltaTime = Time.deltaTime;
 			//计算时间间隔, 我们不需要每帧都计算
@@ -92,7 +100,7 @@ namespace DarkRoom.Core {
 			//这么写的原因是给机会让百分比大于等于1有被访问的机会
 			if (m_timePast >= m_period && !m_isReady) {
 				m_isReady = true;
-			    m_excuteTimes--;
+			    m_excuteTimes++;
                 return m_isReady;
 			}
 
