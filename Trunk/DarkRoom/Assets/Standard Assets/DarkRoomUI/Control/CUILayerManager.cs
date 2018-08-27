@@ -16,7 +16,7 @@ namespace DarkRoom.UI
            
         }
 
-        public void SetLayer(UIWindowBase window)
+        public void SetLayer(CUIWindowBase window)
         {
             RectTransform rt = window.GetComponent<RectTransform>();
             switch (window.UIType)

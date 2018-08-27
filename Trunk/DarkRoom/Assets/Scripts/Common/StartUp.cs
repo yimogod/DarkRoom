@@ -21,7 +21,7 @@ public class StartUp : MonoBehaviour {
     void Start()
     {
         CApplicationManager.Instance.AppLaunch();
-        ApplicationFacade.instance.Startup();
+        (ApplicationFacade.instance as ApplicationFacade).Startup();
 
         CApplicationManager.Instance.ChangeProcedure(CharacterEntry_Procedure.NAME);
     }

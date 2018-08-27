@@ -39,14 +39,14 @@ namespace DarkRoom.UI
         /// <summary>
         /// 当前打开的UI列表
         /// </summary>
-        public Dictionary<string, List<UIWindowBase>>
-            ActiveDict = new Dictionary<string, List<UIWindowBase>>();
+        public Dictionary<string, List<CUIWindowBase>>
+            ActiveDict = new Dictionary<string, List<CUIWindowBase>>();
 
         /// <summary>
         /// 当前隐藏的UI列表
         /// </summary>
-        public Dictionary<string, List<UIWindowBase>>
-            HiddenDict = new Dictionary<string, List<UIWindowBase>>();
+        public Dictionary<string, List<CUIWindowBase>>
+            HiddenDict = new Dictionary<string, List<CUIWindowBase>>();
 
         public void Initialize()
         {
@@ -58,7 +58,7 @@ namespace DarkRoom.UI
         /// <summary>
         /// 创建UI, 放在Hide列表中, 用于预创建ui
         /// </summary>
-        public void CreateUI<T>(Action<GameObject> complete = null) where T : UIWindowBase
+        public void CreateUI<T>(Action<GameObject> complete = null) where T : CUIWindowBase
         {
             string address = typeof(T).Name;
             CResourceManager.InstantiatePrefab(address, UIRoot, go =>
@@ -68,10 +68,10 @@ namespace DarkRoom.UI
             });
         }
 
-        private void InternalCreateUI<T>(GameObject go) where T : UIWindowBase
+        private void InternalCreateUI<T>(GameObject go) where T : CUIWindowBase
         {
             string winName = typeof(T).Name;
-            UIWindowBase window = go.GetComponent<UIWindowBase>();
+            CUIWindowBase window = go.GetComponent<CUIWindowBase>();
             try
             {
                 int id = CUIManagerHelper.GetUIIDFromCache(winName, ActiveDict);
@@ -87,10 +87,10 @@ namespace DarkRoom.UI
             LayerManager.SetLayer(window); //设置层级
         }
 
-        public void OpenUI<T>(UICallBack callback = null, params object[] objs) where T : UIWindowBase
+        public void OpenUI<T>(UICallBack callback = null, params object[] objs) where T : CUIWindowBase
         {
             string winName = typeof(T).Name;
-            UIWindowBase window = CUIManagerHelper.GetUIFromCache(winName, HiddenDict);
+            CUIWindowBase window = CUIManagerHelper.GetUIFromCache(winName, HiddenDict);
             if (window == null)
             {
                 CreateUI<T>(go =>
@@ -104,7 +104,7 @@ namespace DarkRoom.UI
             InternalOpenUI(window, callback, objs);
         }
 
-        private void InternalOpenUI(UIWindowBase window, UICallBack callback, params object[] objs)
+        private void InternalOpenUI(CUIWindowBase window, UICallBack callback, params object[] objs)
         {
             if (window == null)throw new Exception("UIManager: InternalOpenUI window is null");
 
@@ -127,7 +127,7 @@ namespace DarkRoom.UI
         /// <summary>
         /// 关闭传入的ui实例
         /// </summary>
-        public void CloseUI(UIWindowBase window, bool isPlayAnim = true, UICallBack callback = null,
+        public void CloseUI(CUIWindowBase window, bool isPlayAnim = true, UICallBack callback = null,
             params object[] objs)
         {
             CUIManagerHelper.RemoveUIFromCache(window, ActiveDict);
@@ -149,10 +149,10 @@ namespace DarkRoom.UI
         /// 根据类型关闭一个ui
         /// </summary>
         public void CloseUI<T>(bool isPlayAnim = true, UICallBack callback = null, params object[] objs)
-            where T : UIWindowBase
+            where T : CUIWindowBase
         {
             string winName = typeof(T).Name;
-            UIWindowBase window = CUIManagerHelper.GetUIFromCache(winName, ActiveDict);
+            CUIWindowBase window = CUIManagerHelper.GetUIFromCache(winName, ActiveDict);
 
             if (window == null)
             {
@@ -163,7 +163,7 @@ namespace DarkRoom.UI
             CloseUI(window, isPlayAnim, callback, objs);
         }
 
-        private void InternalCloseUI(UIWindowBase window, params object[] objs)
+        private void InternalCloseUI(CUIWindowBase window, params object[] objs)
         {
             try
             {
@@ -186,7 +186,7 @@ namespace DarkRoom.UI
             List<string> keys = new List<string>(ActiveDict.Keys);
             for (int i = 0; i < keys.Count; i++)
             {
-                List<UIWindowBase> list = ActiveDict[keys[i]];
+                List<CUIWindowBase> list = ActiveDict[keys[i]];
                 for (int j = 0; j < list.Count; j++)
                 {
                     CloseUI(list[i], false);
@@ -202,13 +202,13 @@ namespace DarkRoom.UI
             StackManager.CloseLastUIWindow(uiType);
         }
 
-        public UIWindowBase ShowUI(string viewName)
+        public CUIWindowBase ShowUI(string viewName)
         {
-            UIWindowBase ui = CUIManagerHelper.GetUIFromCache(viewName, ActiveDict);
+            CUIWindowBase ui = CUIManagerHelper.GetUIFromCache(viewName, ActiveDict);
             return ShowUI(ui);
         }
 
-        public UIWindowBase ShowUI(UIWindowBase view)
+        public CUIWindowBase ShowUI(CUIWindowBase view)
         {
             try
             {
@@ -222,13 +222,13 @@ namespace DarkRoom.UI
             return view;
         }
 
-        public UIWindowBase HideUI(string winName)
+        public CUIWindowBase HideUI(string winName)
         {
-            UIWindowBase ui = CUIManagerHelper.GetUIFromCache(winName, ActiveDict);
+            CUIWindowBase ui = CUIManagerHelper.GetUIFromCache(winName, ActiveDict);
             return HideUI(ui);
         }
 
-        public UIWindowBase HideUI(UIWindowBase window)
+        public CUIWindowBase HideUI(CUIWindowBase window)
         {
             try
             {
@@ -247,7 +247,7 @@ namespace DarkRoom.UI
             List<string> keys = new List<string>(ActiveDict.Keys);
             for (int i = 0; i < keys.Count; i++)
             {
-                List<UIWindowBase> list = ActiveDict[keys[i]];
+                List<CUIWindowBase> list = ActiveDict[keys[i]];
                 for (int j = 0; j < list.Count; j++)
                 {
                     if (list[j].UIName != viewName)
@@ -258,7 +258,7 @@ namespace DarkRoom.UI
             }
         }
 
-        public void DestroyUI(UIWindowBase UI)
+        public void DestroyUI(CUIWindowBase UI)
         {
             Debug.Log("UIManager DestroyUI " + UI.name);
 

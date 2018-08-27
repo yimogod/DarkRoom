@@ -7,7 +7,7 @@ namespace DarkRoom.UI
     /// 弹出面板的基类
     /// </summary>
     [RequireComponent(typeof(Canvas))]
-    public class UIWindowBase : UIBase
+    public class CUIWindowBase : CUIBase
     {
         protected UIType m_uiType;
         private int m_UIID = -1;

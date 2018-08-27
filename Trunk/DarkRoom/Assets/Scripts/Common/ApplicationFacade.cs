@@ -11,22 +11,6 @@ namespace Sword
         {
         }
 
-        public new static ApplicationFacade instance
-        {
-            get
-            {
-                if (m_instance == null)
-                {
-                    lock (m_staticSyncRoot)
-                    {
-                        if (m_instance == null) m_instance = new ApplicationFacade();
-                    }
-                }
-
-                return m_instance as ApplicationFacade;
-            }
-        }
-
         protected override void initializeController()
         {
             base.initializeController();

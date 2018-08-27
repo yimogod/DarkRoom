@@ -7,13 +7,13 @@ namespace DarkRoom.UI
     public class CUIAnimManager : MonoBehaviour
     {
         //开始调用进入动画
-        public void StartEnterAnim(UIWindowBase l_UIbase, UICallBack callBack, params object[] objs)
+        public void StartEnterAnim(CUIWindowBase l_UIbase, UICallBack callBack, params object[] objs)
         {
             StartCoroutine(l_UIbase.EnterAnim(EndEnterAnim, callBack, objs));
         }
 
         //进入动画播放完毕回调
-        public void EndEnterAnim(UIWindowBase l_UIbase, UICallBack callBack, params object[] objs)
+        public void EndEnterAnim(CUIWindowBase l_UIbase, UICallBack callBack, params object[] objs)
         {
             l_UIbase.OnCompleteEnterAnim();
 
@@ -31,13 +31,13 @@ namespace DarkRoom.UI
         }
 
         //开始调用退出动画
-        public void StartExitAnim(UIWindowBase l_UIbase, UICallBack callBack, params object[] objs)
+        public void StartExitAnim(CUIWindowBase l_UIbase, UICallBack callBack, params object[] objs)
         {
             StartCoroutine(l_UIbase.ExitAnim(EndExitAnim, callBack, objs));
         }
 
         //退出动画播放完毕回调
-        public void EndExitAnim(UIWindowBase l_UIbase, UICallBack callBack, params object[] objs)
+        public void EndExitAnim(CUIWindowBase l_UIbase, UICallBack callBack, params object[] objs)
         {
             l_UIbase.OnCompleteExitAnim();
 

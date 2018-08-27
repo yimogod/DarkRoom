@@ -7,6 +7,10 @@ namespace Sword
     {
         public override void Execute(INotification note)
         {
+            Facade.RegisterMediator(new CharacterEntryMediator());
+            Facade.RegisterMediator(new CharacterCreateMediator());
+            Facade.RegisterMediator(new CharacterChooseMediator());
+
             /*Facade.RegisterMediator(new LoginMediator());
             Facade.RegisterMediator(new CreateHeroMediator());
             Facade.RegisterMediator(new ItemMediator());

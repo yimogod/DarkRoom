@@ -9,7 +9,7 @@ namespace DarkRoom.UI
 {
     public class CUIManagerHelper
     {
-        public static bool IsExitsInCache(UIWindowBase window, Dictionary<string, List<UIWindowBase>> dict)
+        public static bool IsExitsInCache(CUIWindowBase window, Dictionary<string, List<CUIWindowBase>> dict)
         {
             if (window == null) return false;
 
@@ -22,24 +22,24 @@ namespace DarkRoom.UI
         /// </summary>
         /// <param name="winName">UI名</param>
         /// <returns></returns>
-        public static UIWindowBase GetUIFromCache(string winName, Dictionary<string, List<UIWindowBase>> dict)
+        public static CUIWindowBase GetUIFromCache(string winName, Dictionary<string, List<CUIWindowBase>> dict)
         {
             if (!dict.ContainsKey(winName)) return null;
             int count = dict[winName].Count;
             if (count == 0) return null;
 
-            UIWindowBase ui = dict[winName][count - 1];
+            CUIWindowBase ui = dict[winName][count - 1];
             //默认返回最后创建的那一个
             return ui;
         }
 
-        public static void AddUIToCache(UIWindowBase window, Dictionary<string, List<UIWindowBase>> dict)
+        public static void AddUIToCache(CUIWindowBase window, Dictionary<string, List<CUIWindowBase>> dict)
         {
             if (window == null) return;
 
             if (!dict.ContainsKey(window.name))
             {
-                dict.Add(window.name, new List<UIWindowBase>());
+                dict.Add(window.name, new List<CUIWindowBase>());
             }
 
             dict[window.name].Add(window);
@@ -48,7 +48,7 @@ namespace DarkRoom.UI
         /// <summary>
         /// 从cache中删除ui, 如果不在列表里面, 就返回
         /// </summary>
-        public static void RemoveUIFromCache(UIWindowBase window, Dictionary<string, List<UIWindowBase>> dict)
+        public static void RemoveUIFromCache(CUIWindowBase window, Dictionary<string, List<CUIWindowBase>> dict)
         {
             bool b = IsExitsInCache(window, dict);
             if (!b) return;
@@ -74,9 +74,9 @@ namespace DarkRoom.UI
         /// <summary>
         /// 清空列表里面所有的ui
         /// </summary>
-        public static void DestroyUIInCache(Dictionary<string, List<UIWindowBase>> dict)
+        public static void DestroyUIInCache(Dictionary<string, List<CUIWindowBase>> dict)
         {
-            foreach (List<UIWindowBase> uis in dict.Values)
+            foreach (List<CUIWindowBase> uis in dict.Values)
             {
                 for (int i = 0; i < uis.Count; i++)
                 {
@@ -90,7 +90,7 @@ namespace DarkRoom.UI
         /// <summary>
         /// 获取view所在列表的索引用来当做id
         /// </summary>
-        public static int GetUIIDFromCache(string winName, Dictionary<string, List<UIWindowBase>> dict)
+        public static int GetUIIDFromCache(string winName, Dictionary<string, List<CUIWindowBase>> dict)
         {
             if (!dict.ContainsKey(winName))return 0;
             var list = dict[winName];

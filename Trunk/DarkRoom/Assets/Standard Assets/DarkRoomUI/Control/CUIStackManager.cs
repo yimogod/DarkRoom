@@ -6,13 +6,13 @@ namespace DarkRoom.UI
 {
     public class CUIStackManager : MonoBehaviour
     {
-        private List<UIWindowBase> m_hudStack = new List<UIWindowBase>();
-        private List<UIWindowBase> m_normalStack = new List<UIWindowBase>();
-        private List<UIWindowBase> m_dialogStack = new List<UIWindowBase>();
-        private List<UIWindowBase> m_tipsStack = new List<UIWindowBase>();
-        private List<UIWindowBase> m_maskStack = new List<UIWindowBase>();
+        private List<CUIWindowBase> m_hudStack = new List<CUIWindowBase>();
+        private List<CUIWindowBase> m_normalStack = new List<CUIWindowBase>();
+        private List<CUIWindowBase> m_dialogStack = new List<CUIWindowBase>();
+        private List<CUIWindowBase> m_tipsStack = new List<CUIWindowBase>();
+        private List<CUIWindowBase> m_maskStack = new List<CUIWindowBase>();
 
-        public void OnUIOpen(UIWindowBase window)
+        public void OnUIOpen(CUIWindowBase window)
         {
             switch (window.UIType)
             {
@@ -34,7 +34,7 @@ namespace DarkRoom.UI
             }
         }
 
-        public void OnUIClose(UIWindowBase ui)
+        public void OnUIClose(CUIWindowBase ui)
         {
             switch (ui.UIType)
             {
@@ -58,11 +58,11 @@ namespace DarkRoom.UI
 
         public void CloseLastUIWindow(UIType uiType = UIType.Normal)
         {
-            UIWindowBase window = GetLastUI(uiType);
+            CUIWindowBase window = GetLastUI(uiType);
             if (window != null)CUIManager.Instance.CloseUI(window);
         }
 
-        public UIWindowBase GetLastUI(UIType uiType)
+        public CUIWindowBase GetLastUI(UIType uiType)
         {
             switch (uiType)
             {

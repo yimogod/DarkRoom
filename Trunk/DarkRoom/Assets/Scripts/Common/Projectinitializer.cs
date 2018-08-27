@@ -1,4 +1,5 @@
 using System;
+using PureMVC.Patterns;
 using UnityEngine;
 
 namespace Sword
@@ -19,8 +20,7 @@ namespace Sword
 
         void Start()
         {
-            ApplicationFacade.instance.Startup();
-
+            (Facade.instance as ApplicationFacade).Startup();
 			if (scene != null) scene.Launch();
         }
     }

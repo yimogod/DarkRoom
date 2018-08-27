@@ -1,16 +1,14 @@
 using System;
+using PureMVC.Interfaces;
+using PureMVC.Patterns;
 
 namespace Sword
 {
     public class MediatorPool
     {
-        private static ApplicationFacade m_facade = ApplicationFacade.instance;
+        private static IFacade m_facade = ApplicationFacade.instance;
 
-        public static ApplicationFacade Facade
-        {
-            get { return m_facade; }
-        }
-
+        public static ApplicationFacade Facade => m_facade as ApplicationFacade;
         /*public static LoginMediator loginMediator{
             get{
                 return _facade.RetrieveMediator(LoginMediator.NAME) as LoginMediator;

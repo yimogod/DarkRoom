@@ -49,6 +49,8 @@ namespace Sword
         protected override void OnPostEnterSceneComplete()
         {
             m_parser.Dispose();
+
+            ApplicationFacade.instance.SendNotification(NotiConst.Open_CharacterEntry);
         }
     }
 }

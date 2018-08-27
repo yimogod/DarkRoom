@@ -7,9 +7,9 @@ namespace DarkRoom.UI
     /// UI回调
     /// </summary>
     /// <param name="objs"></param>
-    public delegate void UICallBack(UIWindowBase UI, params object[] objs);
+    public delegate void UICallBack(CUIWindowBase UI, params object[] objs);
 
-    public delegate void UIAnimCallBack(UIWindowBase UIbase, UICallBack callBack, params object[] objs);
+    public delegate void UIAnimCallBack(CUIWindowBase UIbase, UICallBack callBack, params object[] objs);
 
     public enum UIType
     {

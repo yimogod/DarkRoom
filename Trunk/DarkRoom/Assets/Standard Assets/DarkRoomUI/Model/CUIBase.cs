@@ -12,7 +12,7 @@ namespace DarkRoom.UI
     /// 组件的enable和active必须都喂true的时候, 在设置其中一个值的时候,onenable才会调用
     /// disable遵循同样道理
     /// </summary>
-    public class UIBase : MonoBehaviour
+    public class CUIBase : MonoBehaviour
     {
         private void Awake()
         {
