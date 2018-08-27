@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DarkRoom.Core;
+using PureMVC.Patterns;
 using UnityEngine;
 
 namespace Sword
@@ -50,7 +51,15 @@ namespace Sword
         {
             m_parser.Dispose();
 
-            ApplicationFacade.instance.SendNotification(NotiConst.Open_CharacterEntry);
+            var user = UserVO.LoadOrCreate();
+            if (user.HasCurrentCharacter)
+            {
+                var character = CharacterVO.LoadOrCreate(user.CurrentCharacterName);
+                ProxyPool.UserProxy.Character = character;
+            }
+
+            ProxyPool.UserProxy.User = user;
+            Facade.instance.SendNotification(NotiConst.Open_CharacterEntry);
         }
     }
 }

@@ -1,5 +1,5 @@
 using System;
-
+using System.Collections.Generic;
 using PureMVC.Patterns;
 using PureMVC.Interfaces;
 
@@ -9,8 +9,17 @@ namespace Sword
     {
         public const string NAME = "UserProxy";
 
-        public UserVO User = new UserVO();
-        public HeroVO Hero = new HeroVO();
+        public UserVO User = null;
+
+        /// <summary>
+        /// 玩家当前或者说上一局玩的角色
+        /// </summary>
+        public CharacterVO Character = null;
+
+        /// <summary>
+        /// 玩家创建所有的角色
+        /// </summary>
+        public List<CharacterVO> CharacterList = null;
 
         public UserProxy() : base(NAME) { }
 
