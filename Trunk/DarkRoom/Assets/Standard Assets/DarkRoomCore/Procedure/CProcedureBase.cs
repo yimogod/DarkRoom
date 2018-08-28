@@ -38,6 +38,11 @@ namespace DarkRoom.Core
             m_loadingTimeReg = new CTimeRegulator(m_maxLoadingSecond, 1);
         }
 
+        /// <summary>
+        /// 进入场景的默认行为
+        /// 1. 启动加载时间限制
+        /// 2. 开始加载prefab
+        /// </summary>
         public override void Enter(CStateMachine sm)
         {
             m_loadingTimeReg.Restart();
@@ -49,7 +54,7 @@ namespace DarkRoom.Core
         public override void Execute(CStateMachine sm)
         {
             bool b = m_loadingTimeReg.Update();
-            if (b) EnterTargetSceneComplete();
+            if (b) CheckAllAssetsLoadComplete();
         }
 
         // 开始加载, 一般情绪下, 在enter中调用
@@ -96,24 +101,24 @@ namespace DarkRoom.Core
         protected virtual void OnSceneLoadComplete(AsyncOperation op)
         {
             m_enterSceneAssetLoadedNum++;
-            EnterTargetSceneComplete();
+            CheckAllAssetsLoadComplete();
         }
 
         /// <summary>
         /// 所有的加载都完毕了, 包含资源, 目标场景本身
         /// 这时, 我们要关闭loadingscene
         /// </summary>
-        protected virtual void EnterTargetSceneComplete()
+        protected virtual void CheckAllAssetsLoadComplete()
         {
             if(m_enterSceneAssetLoadedNum < m_enterSceneAssetMaxNum)return;
             SceneManager.UnloadSceneAsync(LoadingSceneName);
-            OnPostEnterSceneComplete();
+            OnPostEnterLevel();
         }
 
         /// <summary>
         /// 完整进入场景后调用
         /// </summary>
-        protected virtual void OnPostEnterSceneComplete()
+        protected virtual void OnPostEnterLevel()
         {
 
         }

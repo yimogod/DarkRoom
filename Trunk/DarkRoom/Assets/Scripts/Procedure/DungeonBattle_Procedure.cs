@@ -10,6 +10,12 @@ namespace Sword
 
         public DungeonBattle_Procedure() : base(NAME)
         {
+            m_targetSceneName = SwordConst.DUNGEON_BATTLE_SCENE;
+        }
+
+        protected override void OnPostEnterLevel()
+        {
+            //Facade.instance.SendNotification(NotiConst.Open_CharacterEntry);
         }
     }
 }

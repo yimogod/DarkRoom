@@ -13,6 +13,8 @@ namespace Sword
         private SwordMetaParserManager m_parser = new SwordMetaParserManager();
 
         private bool m_parseComplete = false;
+        //第一次进入
+        private bool m_firstEnter = true;
 
         public CharacterEntry_Procedure() : base(NAME)
         {
@@ -22,8 +24,9 @@ namespace Sword
         //并没有调用父类的enter方法
         public override void Enter(CStateMachine sm)
         {
+            m_firstEnter = sm.LastState == null;
             //第一次进入 entry
-            if (sm.LastState == null)
+            if (m_firstEnter)
             {
                 Debug.Log("Enter Character Entry First Time");
 
@@ -33,6 +36,7 @@ namespace Sword
             else
             {
                 Debug.Log("Enter Character Entry = Come Back");
+                base.Enter(sm);
             }
         }
 
@@ -47,18 +51,25 @@ namespace Sword
             }
         }
 
-        protected override void OnPostEnterSceneComplete()
+        protected override void OnPostEnterLevel()
         {
-            m_parser.Dispose();
-
-            var user = UserVO.LoadOrCreate();
-            if (user.HasCurrentCharacter)
+            if (m_firstEnter)
             {
-                var character = CharacterVO.LoadOrCreate(user.CurrentCharacterName);
-                ProxyPool.UserProxy.Character = character;
-            }
+                m_parser.Dispose();
 
-            ProxyPool.UserProxy.User = user;
+                var user = UserVO.LoadOrCreate();
+                if (user.HasCurrentCharacter)
+                {
+                    var character = UserProxy.Load(user.CurrentCharacterName);
+                    ProxyPool.UserProxy.Character = character;
+
+                    var hero = HeroProxy.Load(user.CurrentCharacterName);
+                    ProxyPool.HeroProxy.Hero = hero;
+                }
+
+                ProxyPool.UserProxy.User = user;
+            }
+            
             Facade.instance.SendNotification(NotiConst.Open_CharacterEntry);
         }
     }

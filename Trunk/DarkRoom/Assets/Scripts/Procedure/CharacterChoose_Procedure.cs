@@ -10,6 +10,7 @@ namespace Sword
 
         public CharacterChoose_Procedure() : base(NAME)
         {
+            m_targetSceneName = SwordConst.CHARACTER_CHOOSE_SCENE;
         }
     }
 }

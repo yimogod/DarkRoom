@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DarkRoom.Core;
+using PureMVC.Patterns;
 
 namespace Sword
 {
@@ -10,6 +11,12 @@ namespace Sword
 
         public PlayerCastle_Procedure() : base(NAME)
         {
+            m_targetSceneName = SwordConst.PLAYER_CASTLE_SCENE;
+        }
+
+        protected override void OnPostEnterLevel()
+        {
+            //Facade.instance.SendNotification(NotiConst.Open_CharacterEntry);
         }
     }
 }

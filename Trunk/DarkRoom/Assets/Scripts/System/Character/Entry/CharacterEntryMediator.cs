@@ -10,11 +10,11 @@ namespace Sword
     {
         public new const string NAME = "CharacterEntryMediator";
 
+        private UICharacterEntry m_view => ViewComponent as UICharacterEntry;
+
         public CharacterEntryMediator() : base(NAME)
         {
         }
-
-        private UICharacterEntry m_view => ViewComponent as UICharacterEntry;
 
         public override IList<string> ListNotificationInterests()
         {

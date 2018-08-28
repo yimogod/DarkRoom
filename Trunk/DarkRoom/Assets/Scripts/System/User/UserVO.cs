@@ -32,16 +32,16 @@ namespace Sword
             UserVO vo = null;
             if (ES3.KeyExists(m_saveSlot))
             {
-                vo = new UserVO();
-                vo.Save();
-            }
-            else
-            {
                 vo = ES3.Load<UserVO>(m_saveSlot);
                 if (string.IsNullOrEmpty(vo.CurrentCharacterName) && vo.HasCurrentCharacter)
                 {
                     vo.CurrentCharacterName = vo.CharacterNameList[0];
                 }
+            }
+            else
+            {
+                vo = new UserVO();
+                vo.Save();
             }
 
             return vo;
