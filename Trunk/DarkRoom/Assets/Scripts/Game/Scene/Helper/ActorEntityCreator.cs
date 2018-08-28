@@ -40,15 +40,6 @@ namespace Sword
             // posComp.speed = vo.meta.speed;
         }
 
-        public void CreateHeroAddon(HeroEntity entity)
-        {
-            entity.Team = CUnitEntity.TeamSide.Red;
-            GameObject gameObject = entity.gameObject;
-            //目前我们仅仅英雄会有不同的武器
-            //gameObject.AddComponent<HeroFSMComp>();
-            //gameObject.AddComponent<HeroControlKeyboard>();
-        }
-
         public void CreateMonsterAddon(CUnitEntity entity)
         {
             entity.Team = CUnitEntity.TeamSide.Blue;

@@ -20,7 +20,6 @@ namespace Sword
             CreateMapThing();
 
             //GameUtil.CameraFocusHero();
-            //AssetManager.LoadUIPrefab("UI_Battle_HUD_Preb");
 
             GameEngine.Instance.Init();
             GameEngine.Instance.Start();

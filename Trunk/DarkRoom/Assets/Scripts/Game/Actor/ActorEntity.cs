@@ -14,12 +14,12 @@ namespace Sword
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name;
+        //public string Name;
 
         /// <summary>
         /// 图标. 可以通过一些规则得到其他类型的图标
         /// </summary>
-        public string Icon;
+        //public string Icon;
 
         /// <summary>
         /// actor的属性,包含蓝,红,攻,防

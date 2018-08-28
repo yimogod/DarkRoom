@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Sword
 {
 
-    public class GameUtil
+    public class SwordUtil
     {
         //相机盯住英雄
         public static void CameraFocusHero()

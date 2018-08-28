@@ -6,7 +6,10 @@ namespace Sword
 {
 	public class ActorBornAttributeMeta : CBaseMeta
 	{
-	    public float Strength;
+	    public SubRace Race => (SubRace)Id;
+	    public SubClass Class => (SubClass)Id;
+
+        public float Strength;
 
 	    public float Dexterity;
 
@@ -30,9 +33,27 @@ namespace Sword
         public float ExpPenalty;
 
         public ActorBornAttributeMeta(int id) : base(id){}
+
+	    public void ReadDataFromTable(CTabReader reader)
+	    {
+	        NameKey = reader.ReadString();
+	        Strength = reader.ReadFloat();
+	        Dexterity = reader.ReadFloat();
+	        Constitution = reader.ReadFloat();
+	        Magic = reader.ReadFloat();
+	        Willpower = reader.ReadFloat();
+	        Cunning = reader.ReadFloat();
+	        Luck = reader.ReadFloat();
+	        Health = reader.ReadFloat();
+	        HealthRating = reader.ReadFloat();
+	        ExpPenalty = reader.ReadFloat();
+        }
 	}
 
-    public class ActorBornAttributeMetaManager
+    /// <summary>
+    /// ----------------------- 种族数据 ---------------------------
+    /// </summary>
+    public class RaceMetaManager
     {
         private static Dictionary<int, ActorBornAttributeMeta> m_dict =
             new Dictionary<int, ActorBornAttributeMeta>();
@@ -50,7 +71,7 @@ namespace Sword
         }
     }
 
-    public class ActorBornAttributeMetaParser : CMetaParser
+    public class RaceMetaParser : CMetaParser
     {
         public override void Execute(string content)
         {
@@ -61,19 +82,47 @@ namespace Sword
                 m_reader.MarkRow(i);
 
                 var meta = new ActorBornAttributeMeta(m_reader.ReadInt());
-                meta.NameKey = m_reader.ReadString();
-                meta.Strength = m_reader.ReadFloat();
-                meta.Dexterity = m_reader.ReadFloat();
-                meta.Constitution = m_reader.ReadFloat();
-                meta.Magic = m_reader.ReadFloat();
-                meta.Willpower = m_reader.ReadFloat();
-                meta.Cunning = m_reader.ReadFloat();
-                meta.Luck = m_reader.ReadFloat();
-                meta.Health = m_reader.ReadFloat();
-                meta.HealthRating = m_reader.ReadFloat();
-                meta.ExpPenalty = m_reader.ReadFloat();
+                meta.ReadDataFromTable(m_reader);
+                RaceMetaManager.AddMeta(meta);
+            }
+        }
+    }
 
-                ActorBornAttributeMetaManager.AddMeta(meta);
+
+    /// <summary>
+    /// ----------------------- 职业数据 ---------------------------
+    /// </summary>
+    public class ClassMetaManager
+    {
+        private static Dictionary<int, ActorBornAttributeMeta> m_dict =
+            new Dictionary<int, ActorBornAttributeMeta>();
+
+        public static Dictionary<int, ActorBornAttributeMeta> Data => m_dict;
+
+        public static void AddMeta(ActorBornAttributeMeta meta)
+        {
+            m_dict.Add(meta.Id, meta);
+        }
+
+        public static ActorBornAttributeMeta GetMeta(int id)
+        {
+            return m_dict[id];
+        }
+    }
+
+    public class ClassMetaParser : CMetaParser
+    {
+        public override void Execute(string content)
+        {
+            base.Execute(content);
+
+            for (int i = 0; i < m_reader.Row; ++i)
+            {
+                m_reader.MarkRow(i);
+
+                var meta = new ActorBornAttributeMeta(m_reader.ReadInt());
+                meta.ReadDataFromTable(m_reader);
+                ClassMetaManager.AddMeta(meta);
             }
         }
     }

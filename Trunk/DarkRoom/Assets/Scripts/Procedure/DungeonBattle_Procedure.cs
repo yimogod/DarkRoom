@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DarkRoom.Core;
+using UnityEngine;
 
 namespace Sword
 {
@@ -16,6 +17,9 @@ namespace Sword
         protected override void OnPostEnterLevel()
         {
             //Facade.instance.SendNotification(NotiConst.Open_CharacterEntry);
+
+            DungeonBattleScene scene = GameObject.FindObjectOfType<DungeonBattleScene>();
+            if(scene != null)scene.Launch();
         }
     }
 }

@@ -22,6 +22,8 @@ namespace Sword
     {
         //狂战, 双手武器, 牺牲防御增加攻击, 最重要的属性Strength and Constitution
         Berserker = 1,
+        // 术士
+        Alchemist = 2,
     }
 
     /// <summary>

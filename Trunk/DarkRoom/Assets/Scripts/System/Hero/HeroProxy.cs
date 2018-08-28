@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using DarkRoom.Core;
+using DarkRoom.Game;
 using PureMVC.Patterns;
 using PureMVC.Interfaces;
+using UnityEngine;
 
 namespace Sword
 {
@@ -51,9 +54,31 @@ namespace Sword
                 Class = metaClass,
                 Race = race,
                 Level = 1,
+                AttributePoint = 5,
+                SkillPoint = 0,
             };
             Hero = vo;
             SaveHero();
+        }
+
+        /// <summary>
+        /// 创建英雄的GO, 永不销毁
+        /// </summary>
+        public void CreateHeroEntity()
+        {
+            GameObject go = new GameObject("__" + Hero.Name);
+            go.AddComponent<CGlobalExistComp>();
+            var entity = go.AddComponent<HeroEntity>();
+            entity.Team = CUnitEntity.TeamSide.Red;
+
+            var attr = entity.AttributeSet;
+            attr.InitLevel(Hero.Level);
+            attr.InitAttribute((MetaClass)Hero.Class, meta.InitHealth, meta.InitMana, 0, 0, meta.InitDamage, meta.InitDef);
+            attr.InitHealthAndMana();
+
+            //目前我们仅仅英雄会有不同的武器
+            //gameObject.AddComponent<HeroFSMComp>();
+            //gameObject.AddComponent<HeroControlKeyboard>();
         }
     }
 }
