@@ -32,5 +32,19 @@ namespace Sword
                     break;
             }
         }
+
+        private void OnClickEnterBtn()
+        {
+        }
+
+        private void OnClickChangeBtn()
+        {
+
+        }
+
+        private void OnClickCreateBtn()
+        {
+
+        }
     }
 }

@@ -46,7 +46,8 @@ namespace Sword
         private void CreateHero(int metaId, Vector2Int tile)
         {
             var meta = ActorMetaManager.GetMeta(metaId);
-            var vo = ProxyPool.UserProxy.Hero;
+            HeroVO vo = new HeroVO();
+            //var vo = ProxyPool.UserProxy.Hero;
             vo.SetMeta(meta);
 
             var pos = CMapUtil.GetTileCenterPosByColRow(tile);
