@@ -24,16 +24,6 @@ namespace Sword
 	public class ActorMeta : CBaseMeta{
 
 	    public string Prefab;
-        
-	    /// <summary>
-        /// 基础职业
-        /// </summary>
-	    public MetaClass MetaClass;
-
-        /// <summary>
-        /// 基础种族
-        /// </summary>
-        public MetaRace MetaRace;
 
         /// <summary>
         /// 具体的职业
@@ -99,9 +89,7 @@ namespace Sword
                 ActorMeta meta = new ActorMeta(m_reader.ReadInt());
                 meta.NameKey = m_reader.ReadString();
                 meta.Prefab = m_reader.ReadString();
-                meta.MetaClass = (MetaClass) m_reader.ReadInt();
                 meta.SubClass = (ActorClass)m_reader.ReadInt();
-                meta.MetaRace = (MetaRace)m_reader.ReadInt();
                 meta.SubRace = (ActorRace)m_reader.ReadInt();
                 meta.FOV = m_reader.ReadInt();
                 meta.Speed = m_reader.ReadInt();

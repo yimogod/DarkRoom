@@ -20,7 +20,7 @@ namespace Sword
             var meta = vo.MetaBase;
             var attr = entity.AttributeSet;
 
-            attr.InitLevel(vo.LV);
+            attr.InitLevel(1);
             //attr.InitAttribute(meta.MetaClass, meta.InitHealth, meta.InitMana, 0, 0, meta.InitDamage, meta.InitDef);
             attr.InitHealthAndMana();
 

@@ -64,6 +64,9 @@ namespace Sword
                     ProxyPool.UserProxy.Character = character;
 
                     var hero = HeroProxy.Load(user.CurrentCharacterName);
+                    hero.Class = character.Class;
+                    hero.Race = character.Race;
+                    hero.Level = character.Level;
                     ProxyPool.HeroProxy.Hero = hero;
                 }
 
