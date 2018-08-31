@@ -73,7 +73,7 @@ namespace Sword
 
             var attr = entity.AttributeSet;
             attr.InitLevel(Hero.Level);
-            attr.InitAttribute((MetaClass)Hero.Class, meta.InitHealth, meta.InitMana, 0, 0, meta.InitDamage, meta.InitDef);
+            //attr.InitAttribute((MetaClass)Hero.Class, meta.InitHealth, meta.InitMana, 0, 0, meta.InitDamage, meta.InitDef);
             attr.InitHealthAndMana();
 
             //目前我们仅仅英雄会有不同的武器
