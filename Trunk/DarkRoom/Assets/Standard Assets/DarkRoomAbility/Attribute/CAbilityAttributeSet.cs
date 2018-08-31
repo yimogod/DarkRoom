@@ -28,7 +28,7 @@ namespace DarkRoom.GamePlayAbility
         //属性临时添加的值, 乘除法
         public float AddOnFactor { get; private set; }
 
-        public CAbilityAttribute(int id, float initialValue, float persistentValue)
+        public CAbilityAttribute(int id, float initialValue, float persistentValue = 0)
         {
             Id = id;
             InitialValue = initialValue;

@@ -38,12 +38,12 @@ namespace Sword
         /// <summary>
         /// 具体的职业
         /// </summary>
-        public SubClass SubClass;
+        public ActorClass SubClass;
 
         /// <summary>
         /// 具体的种族
         /// </summary>
-        public SubRace SubRace;
+        public ActorRace SubRace;
 
         /// <summary>
         /// 能走几格
@@ -100,9 +100,9 @@ namespace Sword
                 meta.NameKey = m_reader.ReadString();
                 meta.Prefab = m_reader.ReadString();
                 meta.MetaClass = (MetaClass) m_reader.ReadInt();
-                meta.SubClass = (SubClass)m_reader.ReadInt();
+                meta.SubClass = (ActorClass)m_reader.ReadInt();
                 meta.MetaRace = (MetaRace)m_reader.ReadInt();
-                meta.SubRace = (SubRace)m_reader.ReadInt();
+                meta.SubRace = (ActorRace)m_reader.ReadInt();
                 meta.FOV = m_reader.ReadInt();
                 meta.Speed = m_reader.ReadInt();
                 meta.DeadExp = m_reader.ReadInt();

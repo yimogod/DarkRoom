@@ -6,8 +6,8 @@ namespace Sword
 {
 	public class ActorBornAttributeMeta : CBaseMeta
 	{
-	    public SubRace Race => (SubRace)Id;
-	    public SubClass Class => (SubClass)Id;
+	    public ActorRace Race => (ActorRace)Id;
+	    public ActorClass Class => (ActorClass)Id;
 
         public float Strength;
 

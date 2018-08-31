@@ -4,20 +4,44 @@ using UnityEngine;
 
 namespace Sword
 {
+	public class SwordUtil
+	{
+		/// <summary>
+		/// 获取父class类
+		/// </summary>
+		public static MetaClass GetMetaClass(ActorClass actorClass)
+		{
+			MetaClass v = MetaClass.Warrier;
+			switch (actorClass)
+			{
+				case ActorClass.Berserker:
+					v = MetaClass.Warrier;
+					break;
+				case ActorClass.Alchemist:
+					v = MetaClass.Mage;
+					break;
+			}
+			return v;
+		}
 
-    public class SwordUtil
-    {
-        //相机盯住英雄
-        public static void CameraFocusHero()
-        {
-            //CUnitEntity hero = TMap.Instance.hero;
-           // Camera cam = Camera.main;
-           // if (cam == null) return;
-
-            //FollowObjectBehaviour fo = cam.GetComponent<FollowObjectBehaviour>();
-            //if (fo == null) return;
-
-            //fo.Target = hero.transform;
-        }
-    }
+		/// <summary>
+		/// 获取父类种族
+		/// </summary>
+		public static MetaRace GetMetaRace(ActorRace actorRace)
+		{
+			MetaRace v = MetaRace.Human;
+			switch (actorRace)
+			{
+				case ActorRace.Cornac:
+				case ActorRace.Higher:
+					v = MetaRace.Human;
+					break;
+				case ActorRace.Shalore:
+				case ActorRace.Thalore:
+					v = MetaRace.Elf;
+					break;
+			}
+			return v;
+		}
+	}
 }
