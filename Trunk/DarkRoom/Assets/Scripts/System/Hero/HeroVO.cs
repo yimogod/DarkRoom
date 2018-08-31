@@ -20,6 +20,17 @@ namespace Sword
         /// </summary>
         public int SkillPoint;
 
+        /// <summary>
+        /// 玩家用属性点添加到7个主属性的值
+        /// </summary>
+        public int Strength;
+        public int Dexterity;
+        public int Constitution;
+        public int Magic;
+        public int Willpower;
+        public int Cunning;
+        public int Luck;
+
         public HeroEntity Entity;
     }
 }

@@ -10,12 +10,22 @@ namespace Sword
 	{
 		//------------------------------------ 角色当前的属性 ----------------
 
-		private SwordPrimaryAttribute m_primaryAttr;
-		private SwordSubAttribute m_subAttr;
-		private SwordResourceAttribute m_resAttr;
-		private SwordPowerAttribute m_powerAttr;
-		private SwordArmorAttribute m_armorAttr;
-		private SwordResistanceAttribute m_resistAttr;
+		private SwordPrimaryAttributeSet m_primaryAttr;
+		private SwordSubAttributeSet m_subAttr;
+		private SwordResourceAttributeSet m_resAttr;
+		private SwordPowerAttributeSet m_powerAttr;
+		private SwordArmorAttributeSet m_armorAttr;
+		private SwordResistanceAttributeSet m_resistAttr;
+
+        //当前等级
+        private int m_level;
+
+        // 角色职业
+        private ActorClass m_class;
+        //角色种族
+        private ActorRace m_race;
+
+
 
 		/// <summary>
 		/// 当前回合的物理伤害
@@ -33,70 +43,83 @@ namespace Sword
 
 		public int Exp
 		{
-			get { return (int) m_expAttr.Value; }
-			set { PreAttributeChange(m_expAttr, value); }
+            get;
+            set;
 		}
 
-		public float Health
+		public float Life
 		{
-			get { return m_healthAttr.Value; }
-			set { PreAttributeChange(m_healthAttr, value); }
+            get;
+            set;
 		}
 
 		public float Mana
-		{
-			get { return m_manaAttr.Value; }
-			set { PreAttributeChange(m_manaAttr, value); }
+        {get;
+            set;
 		}
 
-		private int m_level;
-
-		private CAbilityAttribute m_expAttr;
-		private CAbilityAttribute m_healthAttr;
-		private CAbilityAttribute m_manaAttr;
-
-		//------------------------------------ 角色初始化的属性 ----------------
-		// 角色职业
-		private ActorClass m_class;
-		//角色种族
-		private ActorRace m_race;
+		
 
 
 		private SwordGameMode m_gm => CWorld.Instance.GetGameMode<SwordGameMode>();
 
 		public SwordAttributeSet()
 		{
-			//m_expAttr = new CAbilityAttribute((int)AttributeId.Exp);
-			//m_healthAttr = new CAbilityAttribute((int)AttributeId.Health);
-			//m_manaAttr = new CAbilityAttribute((int)AttributeId.Mana);
 		}
 
 		/// <summary>
 		/// 根据种族和职业赋值初始化的属性
 		/// </summary>
-		public void InitAttribute(ActorClass actorClass, ActorRace actorRace)
+        public void InitAttr(ActorClass actorClass, ActorRace actorRace)
 		{
 			m_class = actorClass;
 			m_race = actorRace;
 			var classMeta = ClassMetaManager.GetMeta((int)m_class);
 			var raceMeta = RaceMetaManager.GetMeta((int)m_race);
 
-			m_primaryAttr = new SwordPrimaryAttribute();
+			m_primaryAttr = new SwordPrimaryAttributeSet();
 			m_primaryAttr.InitFromClassAndRace(classMeta, raceMeta);
 
-			m_resAttr = new SwordResourceAttribute();
-			m_resAttr.InitFromClassAndRace(classMeta, raceMeta);
+            m_resAttr = new SwordResourceAttributeSet(m_primaryAttr);
+            m_resAttr.InitClassAndRace(classMeta, raceMeta);
+
 		}
+
+        /// <summary>
+        /// 从数据库读取的, 一级属性的持久化的点数
+        /// </summary>
+        public void SetPrimaryAttrPersistentValue(float strength, float dexterity, float constitution,
+                                                  float magic, float willpower, float cunning, float luck){
+
+            m_primaryAttr.Strength.AddPersistentValue(strength);
+            m_primaryAttr.Dexterity.AddPersistentValue(dexterity);
+            m_primaryAttr.Constitution.AddPersistentValue(constitution);
+            m_primaryAttr.Magic.AddPersistentValue(magic);
+            m_primaryAttr.Willpower.AddPersistentValue(willpower);
+            m_primaryAttr.Cunning.AddPersistentValue(cunning);
+            m_primaryAttr.Luck.AddPersistentValue(luck);
+        }
+
+        /// <summary>
+        /// 由主属性计算出的二级属性的初始值
+        /// </summary>
+        public void InitSubAttr(){
+            m_subAttr = new SwordSubAttributeSet(m_primaryAttr);
+        }
+
+        public void InitLevel(int value)
+        {
+            if (m_gm == null) Debug.LogError("SwordGameMode m_gm MUST NOT NULL!!");
+            m_level = value;
+
+            //升级重置最大血量
+            m_resAttr.SetLevel(value);
+        }
 
 		public void InitHealthAndMana()
 		{
-			Health = m_resAttr.MaxHealth.Value;
-		}
-
-		public void InitLevel(int value)
-		{
-			if (m_gm == null) Debug.LogError("SwordGameMode m_gm MUST NOT NULL!!");
-			m_level = value;
+            
+			//Health = m_resAttr.MaxHealth.Value;
 		}
 
 		public void LevelUp()

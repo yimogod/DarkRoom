@@ -72,9 +72,13 @@ namespace Sword
             entity.Team = CUnitEntity.TeamSide.Red;
 
             var attr = entity.AttributeSet;
+            attr.InitAttr((ActorClass)Hero.Class, (ActorRace)Hero.Race);
+            attr.SetPrimaryAttrPersistentValue(Hero.Strength, Hero.Dexterity, Hero.Constitution,
+                                              Hero.Magic, Hero.Willpower, Hero.Cunning, Hero.Luck);
+            attr.InitSubAttr();
             attr.InitLevel(Hero.Level);
-            //attr.InitAttribute((MetaClass)Hero.Class, meta.InitHealth, meta.InitMana, 0, 0, meta.InitDamage, meta.InitDef);
-            attr.InitHealthAndMana();
+
+            //attr.InitHealthAndMana();
 
             //目前我们仅仅英雄会有不同的武器
             //gameObject.AddComponent<HeroFSMComp>();

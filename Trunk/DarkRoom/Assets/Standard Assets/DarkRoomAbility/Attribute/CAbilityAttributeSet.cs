@@ -17,7 +17,7 @@ namespace DarkRoom.GamePlayAbility
         public float BaseValue => InitialValue + PersistentValue;
 
         //属性的初始值
-        public float InitialValue { get; private set; }
+        public virtual float InitialValue { get; private set; }
 
         //属性持久化增加的值, 玩家分配的属性点
         public float PersistentValue { get; private set; }
@@ -28,11 +28,15 @@ namespace DarkRoom.GamePlayAbility
         //属性临时添加的值, 乘除法
         public float AddOnFactor { get; private set; }
 
-        public CAbilityAttribute(int id, float initialValue, float persistentValue = 0)
+        public CAbilityAttribute(int id, float initialValue = 0, float persistentValue = 0)
         {
             Id = id;
             InitialValue = initialValue;
             PersistentValue = persistentValue;
+        }
+
+        public void ResetInitialValue(float value){
+            InitialValue = value;
         }
 
         public void AddPersistentValue(float value)
