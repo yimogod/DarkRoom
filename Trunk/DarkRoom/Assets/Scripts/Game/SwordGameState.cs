@@ -4,7 +4,14 @@ using DarkRoom.Game;
 
 namespace Sword
 {
-    public class SwordGameState : CGameState
-    {
-    }
+	public class SwordGameState : CGameState
+	{
+		/// <summary>
+		/// 当前可以行动的单位
+		/// </summary>
+		public CUnitEntity.TeamSide ActionTeam;
+
+		public bool InHeroRound => ActionTeam == CUnitEntity.TeamSide.Red;
+		public bool InEnemyRound => ActionTeam == CUnitEntity.TeamSide.Blue;
+	}
 }
