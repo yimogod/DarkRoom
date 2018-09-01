@@ -17,14 +17,14 @@ namespace Sword
 		private SwordArmorAttributeSet m_armorAttr;
 		private SwordResistanceAttributeSet m_resistAttr;
 
-        //当前等级
-        private int m_level;
+		//当前等级
+		private int m_level;
 
-        // 角色职业
-        private ActorClass m_class;
-        //角色种族
-        private ActorRace m_race;
+		// 角色职业
+		private ActorClass m_class;
 
+		//角色种族
+		private ActorRace m_race;
 
 
 		/// <summary>
@@ -41,24 +41,11 @@ namespace Sword
 		/** 吸血, 按照伤害的百分比 */
 		public float LifeStealAddOn;
 
-		public int Exp
-		{
-            get;
-            set;
-		}
+		public int Exp { get; set; }
 
-		public float Life
-		{
-            get;
-            set;
-		}
+		public float Life { get; set; }
 
-		public float Mana
-        {get;
-            set;
-		}
-
-		
+		public float Mana { get; set; }
 
 
 		private SwordGameMode m_gm => CWorld.Instance.GetGameMode<SwordGameMode>();
@@ -70,55 +57,54 @@ namespace Sword
 		/// <summary>
 		/// 根据种族和职业赋值初始化的属性
 		/// </summary>
-        public void InitAttr(ActorClass actorClass, ActorRace actorRace)
+		public void InitAttr(ActorClass actorClass, ActorRace actorRace)
 		{
 			m_class = actorClass;
 			m_race = actorRace;
-			var classMeta = ClassMetaManager.GetMeta((int)m_class);
-			var raceMeta = RaceMetaManager.GetMeta((int)m_race);
+			var classMeta = ClassMetaManager.GetMeta((int) m_class);
+			var raceMeta = RaceMetaManager.GetMeta((int) m_race);
 
 			m_primaryAttr = new SwordPrimaryAttributeSet();
 			m_primaryAttr.InitFromClassAndRace(classMeta, raceMeta);
 
-            m_resAttr = new SwordResourceAttributeSet(m_primaryAttr);
-            m_resAttr.InitClassAndRace(classMeta, raceMeta);
-
+			m_resAttr = new SwordResourceAttributeSet(m_primaryAttr);
+			m_resAttr.InitClassAndRace(classMeta, raceMeta);
 		}
 
-        /// <summary>
-        /// 从数据库读取的, 一级属性的持久化的点数
-        /// </summary>
-        public void SetPrimaryAttrPersistentValue(float strength, float dexterity, float constitution,
-                                                  float magic, float willpower, float cunning, float luck){
+		/// <summary>
+		/// 从数据库读取的, 一级属性的持久化的点数
+		/// </summary>
+		public void SetPrimaryAttrPersistentValue(float strength, float dexterity, float constitution,
+			float magic, float willpower, float cunning, float luck)
+		{
+			m_primaryAttr.Strength.AddPersistentValue(strength);
+			m_primaryAttr.Dexterity.AddPersistentValue(dexterity);
+			m_primaryAttr.Constitution.AddPersistentValue(constitution);
+			m_primaryAttr.Magic.AddPersistentValue(magic);
+			m_primaryAttr.Willpower.AddPersistentValue(willpower);
+			m_primaryAttr.Cunning.AddPersistentValue(cunning);
+			m_primaryAttr.Luck.AddPersistentValue(luck);
+		}
 
-            m_primaryAttr.Strength.AddPersistentValue(strength);
-            m_primaryAttr.Dexterity.AddPersistentValue(dexterity);
-            m_primaryAttr.Constitution.AddPersistentValue(constitution);
-            m_primaryAttr.Magic.AddPersistentValue(magic);
-            m_primaryAttr.Willpower.AddPersistentValue(willpower);
-            m_primaryAttr.Cunning.AddPersistentValue(cunning);
-            m_primaryAttr.Luck.AddPersistentValue(luck);
-        }
+		/// <summary>
+		/// 由主属性计算出的二级属性的初始值
+		/// </summary>
+		public void InitSubAttr()
+		{
+			m_subAttr = new SwordSubAttributeSet(m_primaryAttr);
+		}
 
-        /// <summary>
-        /// 由主属性计算出的二级属性的初始值
-        /// </summary>
-        public void InitSubAttr(){
-            m_subAttr = new SwordSubAttributeSet(m_primaryAttr);
-        }
+		public void InitLevel(int value)
+		{
+			if (m_gm == null) Debug.LogError("SwordGameMode m_gm MUST NOT NULL!!");
+			m_level = value;
 
-        public void InitLevel(int value)
-        {
-            if (m_gm == null) Debug.LogError("SwordGameMode m_gm MUST NOT NULL!!");
-            m_level = value;
-
-            //升级重置最大血量
-            m_resAttr.SetLevel(value);
-        }
+			//升级重置最大血量
+			m_resAttr.SetLevel(value);
+		}
 
 		public void InitHealthAndMana()
 		{
-            
 			//Health = m_resAttr.MaxHealth.Value;
 		}
 
@@ -127,6 +113,11 @@ namespace Sword
 			InitLevel(m_level + 1);
 			Exp = 0;
 			InitHealthAndMana();
+		}
+
+		public float CalculateDamage()
+		{
+			return 0f;
 		}
 
 		/** 力量 */

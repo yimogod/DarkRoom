@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
-
-namespace DarkRoom.Item {
+namespace Sword
+{
 	//挂在物品身上, 比如说掉落在地上的物品
-	public class CItemEntity : MonoBehaviour{
-		protected CItemMeta _meta;
+	public class ItemEntity : MonoBehaviour{
+		protected ItemMeta _meta;
 
 		void Start() {
 		
 		}
 
 		public void Init(string id){
-			_meta = CItemMetaManager.GetMeta(id);
+			_meta = ItemMetaManager.GetMeta(id);
 		}
 
 		void Update() {

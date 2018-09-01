@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using DarkRoom.Game;
 
-namespace DarkRoom.Item {
-	#region class
-	public class CEquipmentMeta : CBaseMeta{
+namespace Sword {
+	public class EquipmentMeta : CBaseMeta{
 		//Slot 和 type是多对多的关系, 所以不能通过slot获得type, 反之亦然
 		public enum EquipSlot{
 			Head,//头盔
@@ -53,7 +52,7 @@ namespace DarkRoom.Item {
 		public EquipType Type;
 		public EquipMethod Method;
 
-		public CEquipmentMeta(int id) : base(id){}
+		public EquipmentMeta(int id) : base(id){}
 
 		public bool CanEquipToSlot(EquipSlot slot){
 			bool value = false;
@@ -126,56 +125,40 @@ namespace DarkRoom.Item {
 		}
 
 	}
-	#endregion
 
-	#region class
-	public class CEquipmentMetaManager{
-		private static Dictionary<int, CEquipmentMeta> m_dict = 
-			new Dictionary<int, CEquipmentMeta>();
-		public CEquipmentMetaManager (){}
+	public class EquipmentMetaManager{
+		private static Dictionary<int, EquipmentMeta> m_dict = 
+			new Dictionary<int, EquipmentMeta>();
+		public EquipmentMetaManager (){}
 
-		public static Dictionary<int, CEquipmentMeta> data {
+		public static Dictionary<int, EquipmentMeta> data {
 			get { return m_dict; }
 		}
 
-		public static void AddMeta(CEquipmentMeta meta){
+		public static void AddMeta(EquipmentMeta meta){
 			m_dict.Add(meta.Id, meta);
 		}
 
-		public static CEquipmentMeta GetMeta(int id){
+		public static EquipmentMeta GetMeta(int id){
 			return m_dict[id];
 		}
-
-		public static CWeaponMeta GetWeapon(int id){
-			CEquipmentMeta meta = null;
-
-			bool b = m_dict.TryGetValue(id, out meta);
-			if (b) return meta as CWeaponMeta;
-
-			UnityEngine.Debug.Log("get weapon " + id);
-			return null;
-		}
 	}
-	#endregion
 
-	#region parser
-	public class CEquipmentMetaParser : CMetaParser {
+	public class EquipmentMetaParser : CMetaParser {
 		public override void Execute(string content) {
 			base.Execute(content);
 
 			for (int i = 0; i < m_reader.Row; ++i) {
 				m_reader.MarkRow(i);
 
-				CEquipmentMeta meta = new CEquipmentMeta(m_reader.ReadInt());
+				EquipmentMeta meta = new EquipmentMeta(m_reader.ReadInt());
 				meta.NameKey = m_reader.ReadString();
 				meta.Prefab = m_reader.ReadString();
-				meta.Type = (CEquipmentMeta.EquipType)m_reader.ReadInt();
-				meta.Method = (CEquipmentMeta.EquipMethod)m_reader.ReadInt();
+				meta.Type = (EquipmentMeta.EquipType)m_reader.ReadInt();
+				meta.Method = (EquipmentMeta.EquipMethod)m_reader.ReadInt();
 
-				CEquipmentMetaManager.AddMeta(meta);
+				EquipmentMetaManager.AddMeta(meta);
 			}
 		}
 	}
-
-	#endregion
 }

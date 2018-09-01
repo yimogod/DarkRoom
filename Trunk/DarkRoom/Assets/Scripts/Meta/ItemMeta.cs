@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using DarkRoom.Game;
 
-namespace DarkRoom.Item{
-	#region class
-	public class CItemMeta : CBaseMeta{
+namespace Sword
+{
+	public class ItemMeta : CBaseMeta{
 		public const float GOLD_COIN_RATE = 1000;
 		public enum ItemType{
 			PROPS = 1, //1道具(血瓶, 饼干)
@@ -30,7 +30,7 @@ namespace DarkRoom.Item{
 		//使用的时候产生的能力id
 		public int abilityId = 0;
 
-		public CItemMeta (int id) : base(id){}
+		public ItemMeta (int id) : base(id){}
 
 		//public string name{
 		//	get{
@@ -55,32 +55,28 @@ namespace DarkRoom.Item{
 			}
 		}
 	}
-	#endregion
 
-	#region manager
-	public class CItemMetaManager{
-		private static Dictionary<string, CItemMeta> _itemDict = new Dictionary<string, CItemMeta>();
-		public CItemMetaManager (){}
+	public class ItemMetaManager{
+		private static Dictionary<string, ItemMeta> _itemDict = new Dictionary<string, ItemMeta>();
+		public ItemMetaManager (){}
 
-		public static void AddMeta(CItemMeta meta){
+		public static void AddMeta(ItemMeta meta){
 			_itemDict.Add(meta.sId, meta);
 		}
 
-		public static CItemMeta GetMeta(string id){
+		public static ItemMeta GetMeta(string id){
 			return _itemDict[id];
 		}
 	}
-	#endregion
 
-	#region parser
-	public class CItemMetaParser : CMetaParser{
+	public class ItemMetaParser : CMetaParser{
 		public override void Execute(string content){
 			base.Execute(content);
 
 			for(int i = 0; i < m_reader.Row; ++i){
 				m_reader.MarkRow(i);
 
-				CItemMeta meta = new CItemMeta(m_reader.ReadInt());
+				ItemMeta meta = new ItemMeta(m_reader.ReadInt());
 				meta.nameKey = m_reader.ReadString();
 				meta.style = m_reader.ReadString();
 				meta.costType = m_reader.ReadInt();
@@ -89,11 +85,9 @@ namespace DarkRoom.Item{
 				meta.relatedId = m_reader.ReadInt();
 				meta.abilityId = m_reader.ReadInt();
 
-				CItemMetaManager.AddMeta(meta);
+				ItemMetaManager.AddMeta(meta);
 			}
 
 		}
 	}
-
-	#endregion
 }

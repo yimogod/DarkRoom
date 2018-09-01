@@ -1,60 +1,16 @@
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
 using DarkRoom.Game;
 
-namespace DarkRoom.Item {
-	#region class
-	/// <summary>
-	/// 武器是绑定在武器GameObject身上的.
-	///	他的位置是actor骨骼的手部骨骼.
-	///
-	///	对于近战武器，我们有个约定。
-	///	如果我的攻击动画到了trigger atk的点， 那么我就认为必然攻击了目标
-	///	不会再进行攻击距离和攻击bound碰撞测试
-	///	之后会在effect dmage中进行是否miss或者cirt等判定
-	/// 
-	///	但这次攻击时一定有效的。 即使这个瞬间target已经后撤出了攻击范围
-	///	但如果在武器前摇阶段之前进行移动取消这个攻击，这不会认为攻击了目标
-	///
-	///	这个武器目前是绑在人身上的
-	/// 
-	/// 另外这个武器不一定会有真实的可显示
-	/// </summary>
-	public class CWeaponEntity : MonoBehaviour{
-		private int m_meta;
 
-		//武器自带的效果, 只会被创建一次
-		//private CEffect m_effect = null;
-
-		public CWeaponMeta Meta{
-			get{ return CEquipmentMetaManager.GetWeapon(m_meta); }
-		}
-
-		public void SetMeta(int id){
-			m_meta = id;
-		}
-
-		/// <summary>
-		/// TODO 目前没有调用
-		/// 完善技能系统后再说
-		/// </summary>
-		/// <param name="owner"></param>
-		/// <param name="target"></param>
-		public void Attack(CAIController owner, CController target){
-			/*if (m_effect == null){
-				m_effect = CEffectHelper.CreateCEffect(m_meta.Effect, gameObject);
-			}
-			if(m_effect != null)m_effect.Apply(owner, target);*/
-		}
-	}
-	#endregion
-
-
-	#region meta
+namespace Sword
+{
 	/// <summary>
 	/// 武器配表, 从目前看来跟abilityeffect有相当一部分重合
 	/// 先这么干着. 然后再看如何合并
 	/// </summary>
-	public class CWeaponMeta : CEquipmentMeta {
+	public class CWeaponMeta : EquipmentMeta
+	{
 		/// <summary>
 		/// 武器的射击间隔, cd时间, 基于秒
 		/// </summary>
@@ -115,15 +71,15 @@ namespace DarkRoom.Item {
 
 		public CWeaponMeta(int id) : base(id) { }
 	}
-	#endregion
 
-
-	#region parser
-	public class WeaponMetaParser : CMetaParser {
-		public override void Execute(string content) {
+	public class WeaponMetaParser : CMetaParser
+	{
+		public override void Execute(string content)
+		{
 			base.Execute(content);
 
-			for (int i = 0; i < m_reader.Row; ++i) {
+			for (int i = 0; i < m_reader.Row; ++i)
+			{
 				m_reader.MarkRow(i);
 				if (i == 0) continue;
 
@@ -138,10 +94,9 @@ namespace DarkRoom.Item {
 				meta.OnEquipedEffect = m_reader.ReadString();
 				meta.Damage = m_reader.ReadInt();
 
-				CEquipmentMetaManager.AddMeta(meta);
+				EquipmentMetaManager.AddMeta(meta);
 			}
 
 		}
 	}
-	#endregion
 }

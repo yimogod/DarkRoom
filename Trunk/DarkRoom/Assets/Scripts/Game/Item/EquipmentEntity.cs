@@ -1,10 +1,11 @@
 ﻿
-namespace DarkRoom.Item {
-	public class CEquipmentEntity : CItemEntity{
-		public CEquipmentMeta equipMeta;
+namespace Sword
+{
+	public class EquipmentEntity : ItemEntity{
+		public EquipmentMeta equipMeta;
 
-		public static CEquipmentEntity LoadAndCreateEquipEntity(int equipId){
-			CEquipmentMeta meta = CEquipmentMetaManager.GetMeta(equipId);
+		public static EquipmentEntity LoadAndCreateEquipEntity(int equipId){
+			EquipmentMeta meta = EquipmentMetaManager.GetMeta(equipId);
 			//GameObject go = AssetManager.LoadEquipPrefab("1");
 			//CEquipmentEntity equip = go.AddComponent<CEquipmentEntity>();
 			//equip.equipMeta = meta;
