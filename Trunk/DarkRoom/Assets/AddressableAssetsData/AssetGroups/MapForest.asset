@@ -9,9 +9,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Default Local Group
+  m_Name: MapForest
   m_EditorClassIdentifier: 
-  m_name: Default Local Group
+  m_name: MapForest
   m_data:
     m_serializedData:
     - m_assemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
@@ -28,17 +28,18 @@ MonoBehaviour:
       m_data: PackTogether
       m_key: BundleMode
     - m_assemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      m_className: System.Int32
-      m_data: 0
-      m_key: Priority
-    - m_assemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
       m_className: System.Boolean
-      m_data: True
+      m_data: False
       m_key: StaticContent
-  m_guid: 6851d887af3b7412294f4658c2a19fe1
+  m_guid: 7028b618c818e89429031aedbc1737fb
   m_processorAssembly: Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   m_processorClass: UnityEditor.AddressableAssets.BundledAssetGroupProcessor
-  m_serializeEntries: []
+  m_serializeEntries:
+  - m_guid: 1e25c36146b3d3147ae90ac2f8c0601f
+    m_address: map_forest
+    m_readOnly: 0
+    m_serializedLabels:
+    - map
   m_readOnly: 0
   m_settings: {fileID: 11400000, guid: 1c04b48dd86f24f368ac3bd830fd7850, type: 2}

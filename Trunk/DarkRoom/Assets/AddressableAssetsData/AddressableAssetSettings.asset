@@ -18,6 +18,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 75b49b97b8e2e4bffb673239825cfd1e, type: 2}
   - {fileID: 11400000, guid: 582a014139e6d441fa5f011744608c3e, type: 2}
   - {fileID: 11400000, guid: 74c0d9677928e4da7b88eee67ef88e57, type: 2}
+  - {fileID: 11400000, guid: 393bc3ab11400ee44a1444a3d4e60fbc, type: 2}
   m_buildSettings:
     m_compression:
       compression: 3
@@ -68,5 +69,5 @@ MonoBehaviour:
     m_labelNames:
     - default
     - map
-    - meta
+    - data
   m_activeProfileId: e816b614097d04cc78a25b66371c5467

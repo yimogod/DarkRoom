@@ -9,9 +9,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: DataGroup
+  m_Name: Meta
   m_EditorClassIdentifier: 
-  m_name: DataGroup
+  m_name: Meta
   m_data:
     m_serializedData:
     - m_assemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
@@ -40,6 +40,6 @@ MonoBehaviour:
     m_address: meta
     m_readOnly: 0
     m_serializedLabels:
-    - meta
+    - data
   m_readOnly: 0
   m_settings: {fileID: 11400000, guid: 1c04b48dd86f24f368ac3bd830fd7850, type: 2}
