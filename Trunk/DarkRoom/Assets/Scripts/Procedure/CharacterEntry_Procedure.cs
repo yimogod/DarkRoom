@@ -19,6 +19,7 @@ namespace Sword
         public CharacterEntry_Procedure() : base(NAME)
         {
             m_targetSceneName = SwordConst.CHARACTER_ENTRY_SCENE;
+            m_preCreatePrefabAddress.Add("");
         }
 
         //并没有调用父类的enter方法
@@ -32,6 +33,7 @@ namespace Sword
 
                 m_parser.Initialize();
                 m_parser.ExecuteLite();
+                Debug.Log("Parse lite meta Finished");
             }
             else
             {
@@ -72,7 +74,8 @@ namespace Sword
 
                 ProxyPool.UserProxy.User = user;
             }
-            
+
+            Debug.Log("Complete enter Entry Scene.");
             Facade.instance.SendNotification(NotiConst.Open_CharacterEntry);
         }
     }

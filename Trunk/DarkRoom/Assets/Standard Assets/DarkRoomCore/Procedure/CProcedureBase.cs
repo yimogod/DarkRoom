@@ -16,11 +16,10 @@ namespace DarkRoom.Core
         //切换的目标的场景名称
         protected String m_targetSceneName = null;
 
-        //预创建的ui, 在切换场景完毕后可以直接显示, 比如login/hud
-        //或者预创建的角色
+        //预加载的go,主要就是为了把bundle加载进入内存.
+        //加快后面的读取速度
         //重要, 没有配表, 配表要在前面全部加载完毕
-        protected List<KeyValuePair<string, string>> m_preCreatePrefabAddress =
-            new List<KeyValuePair<string, string>>();
+        protected List<string> m_preCreatePrefabAddress = new List<string>();
 
         //全部加载完毕切换场景需要加载的资源数量
         protected int m_enterSceneAssetMaxNum = 0;

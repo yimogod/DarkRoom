@@ -19,7 +19,7 @@ namespace Sword
         /// <summary>
         /// 切换角色游戏
         /// </summary>
-        public Button ChangeCharacterBtn;
+        public Button ChooseCharacterBtn;
 
         /// <summary>
         /// 创建角色游戏
@@ -34,14 +34,14 @@ namespace Sword
         protected override void OnBindEvent()
         {
             EnterBtn.onClick.AddListener(OnClickEnterBtn);
-            ChangeCharacterBtn.onClick.AddListener(OnClickChangeBtn);
+            ChooseCharacterBtn.onClick.AddListener(OnClickChooseBtn);
             CreateCharacterBtn.onClick.AddListener(OnClickCreateBtn);
         }
 
         protected override void OnUnBindEvent()
         {
             EnterBtn.onClick.RemoveAllListeners();
-            ChangeCharacterBtn.onClick.RemoveAllListeners();
+            ChooseCharacterBtn.onClick.RemoveAllListeners();
             CreateCharacterBtn.onClick.RemoveAllListeners();
         }
 
@@ -50,7 +50,7 @@ namespace Sword
             CApplicationManager.Instance.ChangeProcedure(PlayerCastle_Procedure.NAME);
         }
 
-        private void OnClickChangeBtn()
+        private void OnClickChooseBtn()
         {
             CApplicationManager.Instance.ChangeProcedure(CharacterChoose_Procedure.NAME);
         }

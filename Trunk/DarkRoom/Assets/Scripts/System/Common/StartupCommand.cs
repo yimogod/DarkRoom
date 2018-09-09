@@ -5,6 +5,8 @@ namespace Sword
 {
     public class StartupCommand : MacroCommand
     {
+        public const string NAME = "StartupCommand";
+
         public override void Execute(INotification note)
         {
             AddSubCommand(typeof(CmdInitCommand));

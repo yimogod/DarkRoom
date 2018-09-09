@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using DarkRoom.Game;
+﻿using DarkRoom.Game;
 using Sword;
 using UnityEngine;
+using PureMVC.Patterns;
 
 public class StartUp : MonoBehaviour {
 
@@ -21,7 +20,8 @@ public class StartUp : MonoBehaviour {
     void Start()
     {
         CApplicationManager.Instance.AppLaunch();
-        (ApplicationFacade.instance as ApplicationFacade).Startup();
+        Facade.instance.RegisterCommand(StartupCommand.NAME, typeof(StartupCommand));
+        Facade.instance.SendNotification(StartupCommand.NAME);
 
         CApplicationManager.Instance.ChangeProcedure(CharacterEntry_Procedure.NAME);
     }

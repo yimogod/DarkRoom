@@ -20,8 +20,9 @@ namespace Sword
 
         void Start()
         {
-            (Facade.instance as ApplicationFacade).Startup();
-			if (scene != null) scene.Launch();
+            Facade.instance.RegisterCommand(StartupCommand.NAME, typeof(StartupCommand));
+            Facade.instance.SendNotification(StartupCommand.NAME);
+            if (scene != null) scene.Launch();
         }
     }
 }

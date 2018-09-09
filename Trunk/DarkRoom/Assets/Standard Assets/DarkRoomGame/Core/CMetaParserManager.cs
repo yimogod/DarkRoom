@@ -91,6 +91,7 @@ namespace DarkRoom.Game
 
         protected virtual void ParseSingle(KeyValuePair<string, CMetaParser> item)
         {
+            Debug.LogWarning(item.Key);
             CResourceManager.LoadText(item.Key, item.Value.Execute);
         }
     }

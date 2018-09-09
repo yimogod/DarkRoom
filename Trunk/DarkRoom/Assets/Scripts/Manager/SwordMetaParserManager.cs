@@ -14,12 +14,12 @@ namespace Sword
             //AddPaser("Meta/effect_meta", new CEffectMetaParser());
             //AddPaser("Meta/buff_meta", new CBuffMetaParser());
 
-            AddPaser("Meta/race_meta", new RaceMetaParser());
-            AddPaser("Meta/class_meta", new ClassMetaParser());
-            AddPaser("Meta/actor_meta", new ActorMetaParser());
+            AddPaser("meta/race_meta.txt", new RaceMetaParser(), true);
+            AddPaser("meta/class_meta.txt", new ClassMetaParser(), true);
+            AddPaser("meta/actor_meta.txt", new ActorMetaParser(), true);
 
-            AddPaser("Meta/forest_room_meta", new CForestRoomMetaParser());
-            AddPaser("Meta/map_meta", new MapMetaParser());
+            //AddPaser("Meta/forest_room_meta", new CForestRoomMetaParser());
+            //AddPaser("Meta/map_meta", new MapMetaParser());
         }
     }
 }
