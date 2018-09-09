@@ -70,9 +70,7 @@ namespace Sword
 	}
 
 	public class ItemMetaParser : CMetaParser{
-		public override void Execute(string content){
-			base.Execute(content);
-
+        protected override void Parse(){
 			for(int i = 0; i < m_reader.Row; ++i){
 				m_reader.MarkRow(i);
 

@@ -81,10 +81,8 @@ namespace Sword
     {
         public ActorMetaParser(Action complete) : base(complete){}
 
-        public override void Execute(string content)
+        protected override void Parse()
         {
-            base.Execute(content);
-
             for (int i = 0; i < m_reader.Row; ++i)
             {
                 m_reader.MarkRow(i);

@@ -75,7 +75,7 @@ namespace DarkRoom.Game{
             Debug.LogWarningFormat("OnLoadText Started {0}", address);
             CResourceLoader loader = new CResourceLoader();
             loader.LoadObject<UnityEngine.Object>(address, o => {
-                Debug.LogWarningFormat("OnLoadText Finish {0}", address);
+                //Debug.LogWarningFormat("OnLoadText Finish {0}", address);
                 onComplete(o.ToString());
             });
         }

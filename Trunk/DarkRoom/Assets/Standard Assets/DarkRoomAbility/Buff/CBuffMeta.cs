@@ -135,9 +135,7 @@ namespace DarkRoom.GamePlayAbility {
         public CBuffMetaParser() : base() { }
 		public CBuffMetaParser(bool useXml) : base(useXml) { }
 
-		public override void Execute(string content) {
-			base.Execute(content);
-
+        protected override void Parse(){
 			m_xreader.ReadRootNode();
 			foreach (XmlElement node in m_xreader.rootChildNodes) {
 				switch (node.LocalName) {

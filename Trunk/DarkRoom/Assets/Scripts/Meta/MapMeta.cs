@@ -46,8 +46,7 @@ namespace Sword{
 	public class MapMetaParser: CMetaParser{
         public MapMetaParser() : base(true){}
 
-		public override void Execute (string content){
-			base.Execute(content);
+        protected override void Parse(){
 		    m_xreader.ReadRootNode();
 
 		    foreach (XmlElement node in m_xreader.rootChildNodes)

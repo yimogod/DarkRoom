@@ -169,9 +169,8 @@ namespace DarkRoom.GamePlayAbility {
         public CAbilityMetaParser() : base(true) {
 		}
 
-		public override void Execute(string content)
+        protected override void Parse()
 		{
-			base.Execute(content);
 			m_xreader.ReadRootNode();
 
 			foreach (XmlElement node in m_xreader.rootChildNodes) {

@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace DarkRoom.Game
 {
@@ -28,16 +29,22 @@ namespace DarkRoom.Game
             m_onParseComplete = complete;
         }
 
-		public virtual void Execute(string content)
+		public void Execute(string content)
 		{
 			if (m_useXml){
 				m_xreader.Parse(content);
+                Parse();
                 m_onParseComplete?.Invoke();
                 return;
 			}
 
 			m_reader.Parse(content);
+            Parse();
             m_onParseComplete?.Invoke();
+        }
+
+        protected virtual void Parse(){
+
         }
 
 		public void Dispose()

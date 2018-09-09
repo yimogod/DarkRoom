@@ -42,7 +42,8 @@ namespace Sword
 
         protected override void StartLoadingPrefab()
         {
-            foreach(var item in m_preCreatePrefabAddress){
+            m_parser.Execute();
+            foreach (var item in m_preCreatePrefabAddress){
                 CResourceManager.LoadPrefab(item, OnPrefabLoaded);
             }
         }
