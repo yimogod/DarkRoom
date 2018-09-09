@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DarkRoom.Core;
 using PureMVC.Patterns;
 using UnityEngine;
+using DarkRoom.Game;
 
 namespace Sword
 {
@@ -19,10 +20,11 @@ namespace Sword
         public CharacterEntry_Procedure() : base(NAME)
         {
             m_targetSceneName = SwordConst.CHARACTER_ENTRY_SCENE;
-            m_preCreatePrefabAddress.Add("");
+
+            m_parser.OnSingleParseComplete = OnMetaLoaded;
+            m_preCreatePrefabAddress.Add("UI_CharacterEntry");
         }
 
-        //并没有调用父类的enter方法
         public override void Enter(CStateMachine sm)
         {
             m_firstEnter = sm.LastState == null;
@@ -30,27 +32,29 @@ namespace Sword
             if (m_firstEnter)
             {
                 Debug.Log("Enter Character Entry First Time");
-
-                m_parser.Initialize();
-                m_parser.ExecuteLite();
-                Debug.Log("Parse lite meta Finished");
+                m_parser.InitLite();
             }
-            else
-            {
-                Debug.Log("Enter Character Entry = Come Back");
-                base.Enter(sm);
+            base.Enter(sm);
+
+            //加载数字添加上meta需要解析数据
+            m_enterSceneAssetMaxNum += m_parser.MainMetaNum;
+        }
+
+        protected override void StartLoadingPrefab()
+        {
+            foreach(var item in m_preCreatePrefabAddress){
+                CResourceManager.LoadPrefab(item, OnPrefabLoaded);
             }
         }
 
-        public override void Execute(CStateMachine sm)
-        {
-            base.Execute(sm);
+        private void OnPrefabLoaded(GameObject go){
+            m_enterSceneAssetLoadedNum++;
+            CheckAllAssetsLoadComplete();
+        }
 
-            if (sm.LastState == null && !m_parseComplete)
-            {
-                m_parseComplete = m_parser.ExcuteNextMain();
-                if (m_parseComplete)StartLoading();
-            }
+        private void OnMetaLoaded(){
+            m_enterSceneAssetLoadedNum++;
+            CheckAllAssetsLoadComplete();
         }
 
         protected override void OnPostEnterLevel()

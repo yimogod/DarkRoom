@@ -109,7 +109,9 @@ namespace DarkRoom.Core
         /// </summary>
         protected virtual void CheckAllAssetsLoadComplete()
         {
-            if(m_enterSceneAssetLoadedNum < m_enterSceneAssetMaxNum)return;
+            Debug.LogWarningFormat("curr load num is {0}", m_enterSceneAssetLoadedNum);
+            Debug.LogWarningFormat("max load num is {0}", m_enterSceneAssetMaxNum);
+            if (m_enterSceneAssetLoadedNum < m_enterSceneAssetMaxNum)return;
             SceneManager.UnloadSceneAsync(LoadingSceneName);
             OnPostEnterLevel();
         }

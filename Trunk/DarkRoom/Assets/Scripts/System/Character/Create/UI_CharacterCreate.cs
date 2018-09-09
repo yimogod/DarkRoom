@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Sword
 {
-    public class UICharacterCreate : CUIWindowBase
+    public class UI_CharacterCreate : CUIWindowBase
     {
         /// <summary>
         /// 创建角色游戏

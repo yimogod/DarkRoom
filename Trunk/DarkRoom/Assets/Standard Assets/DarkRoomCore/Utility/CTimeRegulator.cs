@@ -58,30 +58,28 @@ namespace DarkRoom.Core {
 			}
 		}
 
-		/// <summary>
-		/// 两帧间隔
-		/// </summary>
-		public float DeltaTime {
-			get { return m_deltaTime; }
-		}
+        /// <summary>
+        /// 两帧间隔
+        /// </summary>
+        public float DeltaTime => m_deltaTime;
 
 		/// <summary>
 		/// 时间间隔走了多少百分比(0, 1)
 		/// </summary>
-		public float PastProcess {
-			get {
-				return m_timePast / m_period;
-			}
-		}
+		public float PastProcess => m_timePast / m_period;
 
-		public bool IsReady {
-			get { return m_isReady; }
-		}
+        public bool IsReady => m_isReady;
 
-		/// <summary>
-		/// 重置规划器的数据
-		/// </summary>
-		public void Restart()
+        /// <summary>
+        /// 执行的次数是否完毕
+        /// </summary>
+        public bool ExcuteTimesFinished => 
+                m_excuteMaxTimes >= 0 && m_excuteTimes >= m_excuteMaxTimes;
+
+        /// <summary>
+        /// 重置规划器的数据
+        /// </summary>
+        public void Restart()
 		{
 			m_timePast = 0;
 			m_isReady = false;
@@ -91,7 +89,10 @@ namespace DarkRoom.Core {
 		public bool Update()
 		{
             //执行次数已经到了
-		    if (m_excuteMaxTimes >= 0 && m_excuteTimes >= m_excuteMaxTimes) return false;
+            if (ExcuteTimesFinished) {
+                m_isReady = false;
+                return m_isReady;
+            }
 
             m_deltaTime = Time.deltaTime;
 			//计算时间间隔, 我们不需要每帧都计算

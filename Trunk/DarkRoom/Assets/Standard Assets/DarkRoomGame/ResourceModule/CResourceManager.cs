@@ -46,6 +46,14 @@ namespace DarkRoom.Game{
 	        loader.InstantiateGameObject(address, parent, Vector3.zero, onComplete);
 	    }
 
+        /// <summary>
+        /// Loads the prefab.
+        /// </summary>
+        public static void LoadPrefab(string address, Action<GameObject> onComplete = null){
+            CResourceLoader loader = new CResourceLoader();
+            loader.LoadGameObject(address, onComplete);
+        }
+
         public static void InstantiateSprite(string address)
         {
 			
@@ -64,8 +72,12 @@ namespace DarkRoom.Game{
         /// </summary>
         public static void LoadText(string address, Action<string> onComplete)
 	    {
-	        CResourceLoader loader = new CResourceLoader();
-            loader.LoadObject<UnityEngine.Object>(address, o => onComplete(o.ToString()));
+            Debug.LogWarningFormat("OnLoadText Started {0}", address);
+            CResourceLoader loader = new CResourceLoader();
+            loader.LoadObject<UnityEngine.Object>(address, o => {
+                Debug.LogWarningFormat("OnLoadText Finish {0}", address);
+                onComplete(o.ToString());
+            });
         }
 	}
 }

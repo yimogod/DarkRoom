@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using DarkRoom.Game;
@@ -73,6 +74,8 @@ namespace Sword
 
     public class RaceMetaParser : CMetaParser
     {
+        public RaceMetaParser(Action complete):base(complete){}
+
         public override void Execute(string content)
         {
             base.Execute(content);
@@ -112,6 +115,7 @@ namespace Sword
 
     public class ClassMetaParser : CMetaParser
     {
+        public ClassMetaParser(Action complete) : base(complete){}
         public override void Execute(string content)
         {
             base.Execute(content);

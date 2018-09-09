@@ -9,7 +9,7 @@ namespace Sword
     {
         public new const string NAME = "CharacterCreateMediator";
 
-        private UICharacterCreate m_view => ViewComponent as UICharacterCreate;
+        private UI_CharacterCreate m_view => ViewComponent as UI_CharacterCreate;
 
         public CharacterCreateMediator() : base(NAME)
         {
@@ -27,7 +27,7 @@ namespace Sword
             switch (note.Name)
             {
                 case NotiConst.Open_CharacterCreate:
-                    OpenPanel<UICharacterCreate>();
+                    OpenPanel<UI_CharacterCreate>();
                     break;
             }
         }

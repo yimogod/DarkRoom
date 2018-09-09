@@ -9,7 +9,7 @@ namespace Sword
     /// <summary>
     /// 记录下ui的方案, 从ui上面生成一个json文件.挂在ui上, 然后打包到boundle里面. 
     /// </summary>
-    public class UICharacterEntry : CUIWindowBase
+    public class UI_CharacterEntry : CUIWindowBase
     {
         /// <summary>
         /// 进入游戏

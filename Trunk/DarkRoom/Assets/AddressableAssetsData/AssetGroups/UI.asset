@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UI
+  m_EditorClassIdentifier: 
+  m_name: UI
+  m_data:
+    m_serializedData:
+    - m_assemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      m_className: System.String
+      m_data: 1350e7b7642884dd89cd512dcea227ab
+      m_key: BuildPath
+    - m_assemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      m_className: System.String
+      m_data: 13bd7a4fd2e3642fc98cb040fe69da66
+      m_key: LoadPath
+    - m_assemblyName: Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      m_className: UnityEditor.AddressableAssets.BundledAssetGroupProcessor+BundleMode
+      m_data: PackTogether
+      m_key: BundleMode
+    - m_assemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      m_className: System.Boolean
+      m_data: False
+      m_key: StaticContent
+  m_guid: bdf7735d42e2143e0a7f9ed752b40c6e
+  m_processorAssembly: Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
+  m_processorClass: UnityEditor.AddressableAssets.BundledAssetGroupProcessor
+  m_serializeEntries:
+  - m_guid: a211c2b5b5ee2441ebe17cc55794035e
+    m_address: UI_CharacterEntry
+    m_readOnly: 0
+    m_serializedLabels:
+    - ui
+  m_readOnly: 0
+  m_settings: {fileID: 11400000, guid: 1c04b48dd86f24f368ac3bd830fd7850, type: 2}

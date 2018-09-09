@@ -8,25 +8,37 @@ namespace DarkRoom.Game
 		protected CTabReader m_reader = new CTabReader();
 		protected CXmlReader m_xreader = new CXmlReader();
 
-		public CMetaParser()
+        private Action m_onParseComplete;
+
+        public CMetaParser()
+        {
+            m_useXml = false;
+            m_onParseComplete = null;
+        }
+
+        public CMetaParser(Action complete)
 		{
 			m_useXml = false;
-		}
+            m_onParseComplete = complete;
+        }
 
-		public CMetaParser(bool useXml)
+		public CMetaParser(bool useXml, Action complete = null)
 		{
 			m_useXml = useXml;
-		}
+            m_onParseComplete = complete;
+        }
 
 		public virtual void Execute(string content)
 		{
 			if (m_useXml){
 				m_xreader.Parse(content);
-				return;
+                m_onParseComplete?.Invoke();
+                return;
 			}
 
 			m_reader.Parse(content);
-		}
+            m_onParseComplete?.Invoke();
+        }
 
 		public void Dispose()
 		{

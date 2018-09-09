@@ -6,10 +6,7 @@ namespace Sword
 {
     public class MediatorPool
     {
-        /*public static LoginMediator loginMediator{
-            get{
-                return _facade.RetrieveMediator(LoginMediator.NAME) as LoginMediator;
-            }
-        }*/
+        public static CharacterEntryMediator CharacterEntryMediator =>
+                Facade.instance.RetrieveMediator(CharacterEntryMediator.NAME) as CharacterEntryMediator;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using DarkRoom.Game;
@@ -78,6 +79,8 @@ namespace Sword
 
     public class ActorMetaParser : CMetaParser
     {
+        public ActorMetaParser(Action complete) : base(complete){}
+
         public override void Execute(string content)
         {
             base.Execute(content);
