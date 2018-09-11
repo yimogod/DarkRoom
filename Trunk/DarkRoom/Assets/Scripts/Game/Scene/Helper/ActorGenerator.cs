@@ -48,7 +48,6 @@ namespace Sword
             var meta = ActorMetaManager.GetMeta(metaId);
             HeroVO vo = new HeroVO();
             //var vo = ProxyPool.UserProxy.Hero;
-            vo.SetMeta(meta);
 
             var pos = CMapUtil.GetTileCenterPosByColRow(tile);
             var entity = CWorld.Instance.SpawnUnit<HeroEntity>("Hero_" + metaId, pos);
@@ -73,7 +72,7 @@ namespace Sword
         private void CreateMonsterAtPos(int metaId, int lv, Vector3 pos)
         {
             var meta = ActorMetaManager.GetMeta(metaId);
-            ActorVO vo = new ActorVO(null);
+            ActorVO vo = new ActorVO();
             //vo.ai = AIMetaManager.GetMeta(ai);
             //vo.Init(lv);
 

@@ -17,7 +17,7 @@ namespace Sword
         /*创建角色*/
         public void CreateActor(ActorVO vo, ActorEntity entity)
         {
-            var meta = vo.MetaBase;
+            //var meta = vo.MetaBase;
             var attr = entity.AttributeSet;
 
             attr.InitLevel(1);

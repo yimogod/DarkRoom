@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DarkRoom.Core;
 using DarkRoom.Game;
 
 namespace Sword
@@ -23,10 +24,12 @@ namespace Sword
 	{
 		//--------Warrier--------
 		//狂战, 双手武器, 牺牲防御增加攻击, 最重要的属性Strength and Constitution
+		[CEnumStringValue("Berserker")]
 		Berserker = 1,
 
 		//-------- mage ------------
 		// 术士
+		[CEnumStringValue("Alchemist")]
 		Alchemist
 	}
 

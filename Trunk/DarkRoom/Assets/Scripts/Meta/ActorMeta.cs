@@ -67,7 +67,6 @@ namespace Sword
 				meta.Address = m_reader.ReadString();
 				meta.SubClass = (ActorClass) m_reader.ReadInt();
 				meta.SubRace = (ActorRace) m_reader.ReadInt();
-				meta.Speed = m_reader.ReadInt();
 				meta.DeadExp = m_reader.ReadInt();
 
 				ActorMetaManager.AddMeta(meta);
