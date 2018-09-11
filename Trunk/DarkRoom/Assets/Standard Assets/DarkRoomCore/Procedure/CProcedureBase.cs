@@ -113,13 +113,13 @@ namespace DarkRoom.Core
             Debug.LogWarningFormat("max load num is {0}", m_enterSceneAssetMaxNum);
             if (m_enterSceneAssetLoadedNum < m_enterSceneAssetMaxNum)return;
             SceneManager.UnloadSceneAsync(LoadingSceneName);
-            OnPostEnterLevel();
+            OnEntireLevelComplete();
         }
 
         /// <summary>
         /// 完整进入场景后调用
         /// </summary>
-        protected virtual void OnPostEnterLevel()
+        protected virtual void OnEntireLevelComplete()
         {
 
         }

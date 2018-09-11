@@ -14,7 +14,7 @@ namespace Sword
             m_targetSceneName = SwordConst.DUNGEON_BATTLE_SCENE;
         }
 
-        protected override void OnPostEnterLevel()
+        protected override void OnEntireLevelComplete()
         {
             //Facade.instance.SendNotification(NotiConst.Open_CharacterEntry);
 

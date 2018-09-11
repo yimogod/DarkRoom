@@ -7,81 +7,96 @@ using DarkRoom.Game;
 
 namespace Sword
 {
-    public class CharacterEntry_Procedure : CProcedureBase
-    {
-        public const string NAME = "CharacterEntry";
+	public class CharacterEntry_Procedure : CProcedureBase
+	{
+		public const string NAME = "CharacterEntry";
 
-        private SwordMetaParserManager m_parser = new SwordMetaParserManager();
+		private SwordMetaParserManager m_parser = new SwordMetaParserManager();
 
-        private bool m_parseComplete = false;
-        //第一次进入
-        private bool m_firstEnter = true;
+		private bool m_parseComplete = false;
 
-        public CharacterEntry_Procedure() : base(NAME)
-        {
-            m_targetSceneName = SwordConst.CHARACTER_ENTRY_SCENE;
+		//第一次进入
+		private bool m_firstEnter = true;
 
-            m_parser.OnSingleParseComplete = OnMetaLoaded;
-            m_preCreatePrefabAddress.Add("UI_CharacterEntry");
-        }
+		public CharacterEntry_Procedure() : base(NAME)
+		{
+			m_targetSceneName = SwordConst.CHARACTER_ENTRY_SCENE;
 
-        public override void Enter(CStateMachine sm)
-        {
-            m_firstEnter = sm.LastState == null;
-            //第一次进入 entry
-            if (m_firstEnter)
-            {
-                Debug.Log("Enter Character Entry First Time");
-                m_parser.InitLite();
-            }
-            base.Enter(sm);
+			m_parser.OnSingleParseComplete = OnMetaLoaded;
+			m_preCreatePrefabAddress.Add("UI_CharacterEntry");
+		}
 
-            //加载数字添加上meta需要解析数据
-            m_enterSceneAssetMaxNum += m_parser.MainMetaNum;
-        }
+		public override void Enter(CStateMachine sm)
+		{
+			m_firstEnter = sm.LastState == null;
+			//第一次进入 entry
+			if (m_firstEnter)
+			{
+				Debug.Log("Enter Character Entry First Time");
+				m_parser.InitLite();
+			}
 
-        protected override void StartLoadingPrefab()
-        {
-            m_parser.Execute();
-            foreach (var item in m_preCreatePrefabAddress){
-                CResourceManager.LoadPrefab(item, OnPrefabLoaded);
-            }
-        }
+			base.Enter(sm);
 
-        private void OnPrefabLoaded(GameObject go){
-            m_enterSceneAssetLoadedNum++;
-            CheckAllAssetsLoadComplete();
-        }
+			//加载数字添加上meta需要解析数据
+			m_enterSceneAssetMaxNum += m_parser.MainMetaNum;
+		}
 
-        private void OnMetaLoaded(){
-            m_enterSceneAssetLoadedNum++;
-            CheckAllAssetsLoadComplete();
-        }
+		protected override void StartLoadingPrefab()
+		{
+			m_parser.Execute();
+			foreach (var item in m_preCreatePrefabAddress)
+			{
+				CResourceManager.LoadPrefab(item, OnPrefabLoaded);
+			}
+		}
 
-        protected override void OnPostEnterLevel()
-        {
-            if (m_firstEnter)
-            {
-                m_parser.Dispose();
+		private void OnPrefabLoaded(GameObject go)
+		{
+			m_enterSceneAssetLoadedNum++;
+			CheckAllAssetsLoadComplete();
+		}
 
-                var user = UserVO.LoadOrCreate();
-                if (user.HasCurrentCharacter)
-                {
-                    var character = UserProxy.Load(user.CurrentCharacterName);
-                    ProxyPool.UserProxy.Character = character;
+		private void OnMetaLoaded()
+		{
+			m_enterSceneAssetLoadedNum++;
+			CheckAllAssetsLoadComplete();
+		}
 
-                    var hero = HeroProxy.Load(user.CurrentCharacterName);
-                    hero.Class = character.Class;
-                    hero.Race = character.Race;
-                    hero.Level = character.Level;
-                    ProxyPool.HeroProxy.Hero = hero;
-                }
+		protected override void OnEntireLevelComplete()
+		{
+			if (m_firstEnter)
+			{
+				m_parser.Dispose();
 
-                ProxyPool.UserProxy.User = user;
-            }
+				var user = UserVO.LoadOrCreate();
+				if (user.HasCurrentCharacter)
+				{
+					var character = UserProxy.Load(user.CurrentCharacterName);
+					ProxyPool.UserProxy.Character = character;
 
-            Debug.Log("Complete enter Entry Scene.");
-            Facade.instance.SendNotification(NotiConst.Open_CharacterEntry);
-        }
-    }
+					var hero = HeroProxy.Load(user.CurrentCharacterName);
+					hero.Class = character.Class;
+					hero.Race = character.Race;
+					hero.Level = character.Level;
+					ProxyPool.HeroProxy.Hero = hero;
+				}
+
+				ProxyPool.UserProxy.User = user;
+			}
+
+			Debug.Log("Complete enter Entry Scene.");
+			Facade.instance.SendNotification(NotiConst.Open_CharacterEntry);
+
+			CharacterEntryScene scene = GameObject.FindObjectOfType<CharacterEntryScene>();
+			if (scene == null)
+			{
+				Debug.LogError("Please add CharacterEntryScene on Scene Object In Unity");
+				return;
+			}
+
+			//ProxyPool.HeroProxy.Hero.MetaBase;
+			//scene.LoadHero();
+		}
+	}
 }

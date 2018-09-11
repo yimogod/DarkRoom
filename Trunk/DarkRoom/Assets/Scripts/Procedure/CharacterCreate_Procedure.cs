@@ -20,7 +20,7 @@ namespace Sword
             base.Enter(sm);
         }
 
-        protected override void OnPostEnterLevel()
+        protected override void OnEntireLevelComplete()
         {
             Facade.instance.SendNotification(NotiConst.Open_CharacterCreate);
         }
