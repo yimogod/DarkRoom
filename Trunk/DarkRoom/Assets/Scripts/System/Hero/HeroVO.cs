@@ -3,10 +3,11 @@ using System.Collections.Generic;
 
 namespace Sword
 {
+	/// <summary>
+	/// 玩家角色信息, 通过创建界面创建出来
+	/// </summary>
     public class HeroVO : ActorVO
     {
-        public string Name;
-
         /// <summary>
         /// 还没有使用的属性点
         /// </summary>

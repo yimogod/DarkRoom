@@ -17,9 +17,10 @@ namespace Sword
 			if (HeroRoot == null)Debug.LogError("HeroRoot Must Not be Null");
 		}
 
-		public void LoadHero(ActorBornAttributeMeta meta)
+		public void LoadHero(HeroVO hero)
 		{
-			CResourceManager.InstantiatePrefab(meta.Address, HeroRoot);
+			if(hero == null)return;
+			CResourceManager.InstantiatePrefab(hero.Address, HeroRoot);
 		}
 	}
 }

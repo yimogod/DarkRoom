@@ -94,9 +94,7 @@ namespace Sword
 				Debug.LogError("Please add CharacterEntryScene on Scene Object In Unity");
 				return;
 			}
-
-			//ProxyPool.HeroProxy.Hero.MetaBase;
-			//scene.LoadHero();
+			scene.LoadHero(ProxyPool.HeroProxy.Hero);
 		}
 	}
 }

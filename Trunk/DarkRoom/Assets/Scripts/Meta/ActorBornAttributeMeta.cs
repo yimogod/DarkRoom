@@ -33,11 +33,6 @@ namespace Sword
 		/// </summary>
 		public float ExpPenalty;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public string Address;
-
 		public ActorBornAttributeMeta(int id) : base(id)
 		{
 		}
