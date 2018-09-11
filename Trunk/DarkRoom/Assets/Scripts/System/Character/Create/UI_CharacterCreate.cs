@@ -13,17 +13,22 @@ namespace Sword
 		/// <summary>
 		/// 角色的名称
 		/// </summary>
-		public Text NameTxt;
+		public InputField NameTxt;
 
 		/// <summary>
 		/// 创建角色游戏
 		/// </summary>
 		public Button CreateCharacterBtn;
 
-		/// <summary>
-		/// 种族选择
-		/// </summary>
-		public ToggleGroup RaceToggle;
+        /// <summary>
+        /// 返回角色界面
+        /// </summary>
+        public Button BackEntryBtn;
+
+        /// <summary>
+        /// 种族选择
+        /// </summary>
+        public ToggleGroup RaceToggle;
 
 		/// <summary>
 		/// 职业选择
@@ -35,20 +40,22 @@ namespace Sword
 		/// </summary>
 		public ToggleGroup AvatarToggle;
 
-		public override void OnDisplay()
+		public override void OnReveal()
 		{
-			base.OnDisplay();
+			base.OnReveal();
 		}
 
 		protected override void OnBindEvent()
 		{
 			CreateCharacterBtn.onClick.AddListener(OnClickCreateBtn);
-		}
+            BackEntryBtn.onClick.AddListener(OnClickEntryBtn);
+        }
 
 		protected override void OnUnBindEvent()
 		{
 			CreateCharacterBtn.onClick.RemoveAllListeners();
-		}
+            BackEntryBtn.onClick.RemoveAllListeners();
+        }
 
 		// 判断选项是否合法
 		private bool ValidDectecte()
@@ -62,12 +69,17 @@ namespace Sword
 			return true;
 		}
 
-		private void OnClickCreateBtn()
+        private void OnClickEntryBtn(){
+
+        }
+
+
+        private void OnClickCreateBtn()
 		{
 			bool b = ValidDectecte();
 			if(!b)return;
 
-			var name = NameTxt.text;
+			var heroName = NameTxt.text;
 			var activeRaces = RaceToggle.ActiveToggles();
 			var raceName = activeRaces.ElementAt(0).name;
 			int raceValue = (int)CStringEnum.Parse(typeof(ActorRace), raceName, true);
@@ -77,7 +89,7 @@ namespace Sword
 			int classValue = (int)CStringEnum.Parse(typeof(ActorClass), className, true);
 
 			ProxyPool.UserProxy.CreateCharacter(name, raceValue, classValue);
-			ProxyPool.HeroProxy.CreateHero(name, raceValue, classValue);
+			ProxyPool.HeroProxy.CreateHero(heroName, raceValue, classValue);
 			CApplicationManager.Instance.ChangeProcedure(CharacterEntry_Procedure.NAME);
 		}
 	}

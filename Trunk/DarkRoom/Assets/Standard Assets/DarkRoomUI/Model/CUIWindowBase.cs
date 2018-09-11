@@ -39,7 +39,7 @@ namespace DarkRoom.UI
         public virtual void OnOpen()
         {
             OnBindEvent();
-            OnDisplay();
+            OnReveal();
         }
 
         public virtual void OnClose()
@@ -53,7 +53,7 @@ namespace DarkRoom.UI
             gameObject.SetActive(false);
         }
 
-        public virtual void OnDisplay()
+        public virtual void OnReveal()
         {
             gameObject.SetActive(true);
         }

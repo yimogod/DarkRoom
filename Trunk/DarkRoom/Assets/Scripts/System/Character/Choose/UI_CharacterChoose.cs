@@ -23,9 +23,9 @@ namespace Sword
         /// </summary>
         public Button CreateCharacterBtn;
 
-        public override void OnDisplay()
+        public override void OnReveal()
         {
-            base.OnDisplay();
+            base.OnReveal();
         }
 
         protected override void OnBindEvent()

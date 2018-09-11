@@ -25,7 +25,7 @@ MonoBehaviour:
     - m_assemblyName: Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       m_className: UnityEditor.AddressableAssets.BundledAssetGroupProcessor+BundleMode
-      m_data: PackTogether
+      m_data: PackSeparately
       m_key: BundleMode
     - m_assemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
       m_className: System.Boolean
@@ -38,6 +38,11 @@ MonoBehaviour:
   m_serializeEntries:
   - m_guid: a211c2b5b5ee2441ebe17cc55794035e
     m_address: UI_CharacterEntry
+    m_readOnly: 0
+    m_serializedLabels:
+    - ui
+  - m_guid: cff1f9aea4cf84760a8d6958084f3bc1
+    m_address: UI_CharacterCreate
     m_readOnly: 0
     m_serializedLabels:
     - ui

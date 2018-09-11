@@ -24,12 +24,12 @@ namespace Sword
 	{
 		//--------Warrier--------
 		//狂战, 双手武器, 牺牲防御增加攻击, 最重要的属性Strength and Constitution
-		[CEnumStringValue("Berserker")]
+		[StringValueAttribute("Berserker")]
 		Berserker = 1,
 
 		//-------- mage ------------
 		// 术士
-		[CEnumStringValue("Alchemist")]
+		[StringValueAttribute("Alchemist")]
 		Alchemist
 	}
 
@@ -47,13 +47,17 @@ namespace Sword
 	/// </summary>
 	public enum ActorRace
 	{
-		//------- human ------
-		Cornac = 1,
-		Higher,
+        //------- human ------
+        [StringValueAttribute("Cornac")]
+        Cornac = 1,
+        [StringValueAttribute("Higher")]
+        Higher,
 
-		//------- elf ------
-		Shalore,
-		Thalore,
+        //------- elf ------
+        [StringValueAttribute("Shalore")]
+        Shalore,
+        [StringValueAttribute("Thalore")]
+        Thalore,
 	}
 
 	/// <summary>

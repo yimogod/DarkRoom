@@ -212,7 +212,7 @@ namespace DarkRoom.UI
         {
             try
             {
-                view.OnDisplay();
+                view.OnReveal();
             }
             catch (Exception e)
             {

@@ -13,6 +13,7 @@ namespace Sword
         public CharacterCreate_Procedure() : base(NAME)
         {
             m_targetSceneName = SwordConst.CHARACTER_CREATE_SCENE;
+            m_preCreatePrefabAddress.Add("UI_CharacterCreate");
         }
 
         public override void Enter(CStateMachine sm)
