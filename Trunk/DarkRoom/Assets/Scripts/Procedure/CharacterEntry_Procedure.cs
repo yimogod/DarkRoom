@@ -4,6 +4,7 @@ using DarkRoom.Core;
 using PureMVC.Patterns;
 using UnityEngine;
 using DarkRoom.Game;
+using DarkRoom.UI;
 
 namespace Sword
 {
@@ -74,7 +75,9 @@ namespace Sword
 				m_parser.Dispose();
 
 				var user = UserVO.LoadOrCreate();
-				if (user.HasCurrentCharacter)
+                ProxyPool.UserProxy.User = user;
+
+                if (user.HasAnyCharacter)
 				{
 					var character = UserProxy.Load(user.CurrentCharacterName);
 					ProxyPool.UserProxy.Character = character;
@@ -84,12 +87,9 @@ namespace Sword
 					hero.Race = character.Race;
 					hero.Level = character.Level;
 					ProxyPool.HeroProxy.Hero = hero;
-				}
-
-				ProxyPool.UserProxy.User = user;
+                }
 			}
 
-			Debug.Log("Complete enter Entry Scene.");
 			Facade.instance.SendNotification(NotiConst.Open_CharacterEntry);
 
 			CharacterEntryScene scene = GameObject.FindObjectOfType<CharacterEntryScene>();

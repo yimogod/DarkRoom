@@ -8,6 +8,7 @@ namespace Sword
         public override void Execute(INotification note)
         {
             Facade.RegisterProxy(new UserProxy());
+            Facade.RegisterProxy(new HeroProxy());
         }
     }
 }

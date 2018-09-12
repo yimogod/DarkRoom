@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using DarkRoom.Core;
+using DarkRoom.UI;
 using PureMVC.Patterns;
 
 namespace Sword

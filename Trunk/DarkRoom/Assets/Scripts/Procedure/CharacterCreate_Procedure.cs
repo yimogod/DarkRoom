@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using DarkRoom.Core;
+using DarkRoom.UI;
 using PureMVC.Patterns;
+using DarkRoom.Game;
 using UnityEngine;
 
 namespace Sword
@@ -14,6 +15,20 @@ namespace Sword
         {
             m_targetSceneName = SwordConst.CHARACTER_CREATE_SCENE;
             m_preCreatePrefabAddress.Add("UI_CharacterCreate");
+        }
+
+        protected override void StartLoadingPrefab()
+        {
+            foreach (var item in m_preCreatePrefabAddress)
+            {
+                CResourceManager.LoadPrefab(item, OnPrefabLoaded);
+            }
+        }
+
+        private void OnPrefabLoaded(GameObject go)
+        {
+            m_enterSceneAssetLoadedNum++;
+            CheckAllAssetsLoadComplete();
         }
 
         protected override void OnEntireLevelComplete()

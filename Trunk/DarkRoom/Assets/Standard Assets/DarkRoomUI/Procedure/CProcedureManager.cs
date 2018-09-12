@@ -1,7 +1,8 @@
 ﻿using System;
 using UnityEngine;
+using DarkRoom.Core;
 
-namespace DarkRoom.Core
+namespace DarkRoom.UI
 {
     /// <summary>
     /// 流程管理器。

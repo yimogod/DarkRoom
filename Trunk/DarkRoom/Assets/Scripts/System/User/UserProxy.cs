@@ -42,6 +42,12 @@ namespace Sword
         /// </summary>
         public static CharacterVO Load(string name)
         {
+            //如果name不合法, 那就取一个
+            if (string.IsNullOrEmpty(name)){
+                return null;
+            }
+
+
             var slot = GetCharacterSlot(name);
             CharacterVO vo = null;
 

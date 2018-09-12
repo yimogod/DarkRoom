@@ -26,9 +26,19 @@ namespace Sword
 		/// </summary>
 		public Button CreateCharacterBtn;
 
-		public override void OnReveal()
+        public override void OnCreated()
+        {
+            base.OnCreated();
+            m_uiType = UIType.HUD;
+        }
+
+        public override void OnReveal()
 		{
 			base.OnReveal();
+
+            var user = ProxyPool.UserProxy.User;
+            EnterBtn.gameObject.SetActive(user.HasAnyCharacter);
+            ChooseCharacterBtn.gameObject.SetActive(user.HasAnyCharacter);
 		}
 
 		protected override void OnBindEvent()

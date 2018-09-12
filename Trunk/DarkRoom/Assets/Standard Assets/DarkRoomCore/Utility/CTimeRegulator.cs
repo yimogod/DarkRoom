@@ -16,6 +16,9 @@ namespace DarkRoom.Core {
 		//是否间隔到了
 		private bool m_isReady = false;
 
+        //是否停止
+        private bool m_stopped = false;
+
         //执行的次数. 如果<0则代表用于执行
 	    private int m_excuteMaxTimes = -1;
         private int m_excuteTimes = 0;
@@ -84,12 +87,22 @@ namespace DarkRoom.Core {
 			m_timePast = 0;
 			m_isReady = false;
 		    m_excuteTimes = 0;
+            m_stopped = false;
+        }
+
+        /// <summary>
+        /// 停止计时
+        /// </summary>
+        public void Stop(){
+            Restart();
+            m_stopped = true;
         }
 
 		public bool Update()
 		{
             //执行次数已经到了
-            if (ExcuteTimesFinished) {
+            //或者停止了
+            if (m_stopped || ExcuteTimesFinished) {
                 m_isReady = false;
                 return m_isReady;
             }

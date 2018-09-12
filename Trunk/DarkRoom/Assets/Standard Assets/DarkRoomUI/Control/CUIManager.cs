@@ -16,9 +16,6 @@ namespace DarkRoom.UI
     [RequireComponent(typeof(CUIAnimManager))]
     public class CUIManager : CSingletonMono<CUIManager>
     {
-        /// <summary>
-        /// 所有ui挂在UIRoot下面
-        /// </summary>
         public Transform UIRoot => transform;
 
         /// <summary>
@@ -76,6 +73,7 @@ namespace DarkRoom.UI
             {
                 int id = CUIManagerHelper.GetUIIDFromCache(winName, ActiveDict);
                 window.Init(id);
+                window.OnCreated();
             }
             catch (Exception e)
             {
@@ -205,10 +203,13 @@ namespace DarkRoom.UI
         public CUIWindowBase ShowUI(string viewName)
         {
             CUIWindowBase ui = CUIManagerHelper.GetUIFromCache(viewName, ActiveDict);
-            return ShowUI(ui);
+            return RevealUI(ui);
         }
 
-        public CUIWindowBase ShowUI(CUIWindowBase view)
+        /// <summary>
+        /// 从隐藏状态中 显示ui,
+        /// </summary>
+        public CUIWindowBase RevealUI(CUIWindowBase view)
         {
             try
             {

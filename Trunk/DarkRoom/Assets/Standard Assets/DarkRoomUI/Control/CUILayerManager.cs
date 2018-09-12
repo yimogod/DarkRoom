@@ -13,7 +13,22 @@ namespace DarkRoom.UI
 
         void Awake()
         {
-           
+            var tran = transform;
+
+            m_hudLayer = new GameObject("hud").transform;
+            m_hudLayer.SetParent(tran);
+
+            m_normalLayer = new GameObject("normal").transform;
+            m_normalLayer.SetParent(tran);
+
+            m_dialogLayer = new GameObject("dialog").transform;
+            m_dialogLayer.SetParent(tran);
+
+            m_tipsLayer = new GameObject("tips").transform;
+            m_tipsLayer.SetParent(tran);
+
+            m_maskLayer = new GameObject("mask").transform;
+            m_maskLayer.SetParent(tran);
         }
 
         public void SetLayer(CUIWindowBase window)

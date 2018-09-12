@@ -16,10 +16,20 @@ namespace Sword
         /// <summary>
         /// 是否有之前玩的玩家
         /// </summary>
-        public bool HasCurrentCharacter => CharacterNameList.Count > 0;
+        public bool HasAnyCharacter => CharacterNameList.Count > 0;
 
         public UserVO()
         {
+        }
+
+        /// <summary>
+        /// 如果当前角色为空, 就找一个
+        /// </summary>
+        public void FindCurrentCharacter(){
+            if (!HasAnyCharacter) return;
+            if (!string.IsNullOrEmpty(CurrentCharacterName)) return;
+
+            CurrentCharacterName = CharacterNameList[0];
         }
 
         public void Save()
@@ -33,17 +43,14 @@ namespace Sword
             if (ES3.KeyExists(m_saveSlot))
             {
                 vo = ES3.Load<UserVO>(m_saveSlot);
-                if (string.IsNullOrEmpty(vo.CurrentCharacterName) && vo.HasCurrentCharacter)
-                {
-                    vo.CurrentCharacterName = vo.CharacterNameList[0];
-                }
+                vo.FindCurrentCharacter();
             }
             else
             {
                 vo = new UserVO();
-                vo.Save();
             }
 
+            vo.Save();
             return vo;
         }
     }

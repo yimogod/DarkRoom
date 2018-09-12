@@ -23,7 +23,7 @@ namespace DarkRoom.UI
         /// 在awake后面, start前面调用
         /// 创建的时候调用一次
         /// </summary>
-        protected virtual void OnCreated()
+        public virtual void OnCreated()
         {
 
         }

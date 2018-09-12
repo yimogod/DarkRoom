@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ES3Types
 {
-	[ES3PropertiesAttribute("Name", "AttributePoint", "SkillPoint", "Strength", "Dexterity", "Constitution", "Magic", "Willpower", "Cunning", "Luck")]
+	[ES3PropertiesAttribute("AttributePoint", "SkillPoint", "Strength", "Dexterity", "Constitution", "Magic", "Willpower", "Cunning", "Luck", "Name", "Level", "Class", "Race", "Address")]
 	public class ES3Type_HeroVO : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -14,7 +14,6 @@ namespace ES3Types
 		{
 			var instance = (Sword.HeroVO)obj;
 			
-			writer.WriteProperty("Name", instance.Name, ES3Type_string.Instance);
 			writer.WriteProperty("AttributePoint", instance.AttributePoint, ES3Type_int.Instance);
 			writer.WriteProperty("SkillPoint", instance.SkillPoint, ES3Type_int.Instance);
 			writer.WriteProperty("Strength", instance.Strength, ES3Type_int.Instance);
@@ -24,6 +23,11 @@ namespace ES3Types
 			writer.WriteProperty("Willpower", instance.Willpower, ES3Type_int.Instance);
 			writer.WriteProperty("Cunning", instance.Cunning, ES3Type_int.Instance);
 			writer.WriteProperty("Luck", instance.Luck, ES3Type_int.Instance);
+			writer.WriteProperty("Name", instance.Name, ES3Type_string.Instance);
+			writer.WriteProperty("Level", instance.Level, ES3Type_int.Instance);
+			writer.WriteProperty("Class", instance.Class, ES3Type_int.Instance);
+			writer.WriteProperty("Race", instance.Race, ES3Type_int.Instance);
+			writer.WriteProperty("Address", instance.Address, ES3Type_string.Instance);
 		}
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
@@ -34,9 +38,6 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
-					case "Name":
-						instance.Name = reader.Read<System.String>(ES3Type_string.Instance);
-						break;
 					case "AttributePoint":
 						instance.AttributePoint = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
@@ -63,6 +64,21 @@ namespace ES3Types
 						break;
 					case "Luck":
 						instance.Luck = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "Name":
+						instance.Name = reader.Read<System.String>(ES3Type_string.Instance);
+						break;
+					case "Level":
+						instance.Level = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "Class":
+						instance.Class = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "Race":
+						instance.Race = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "Address":
+						instance.Address = reader.Read<System.String>(ES3Type_string.Instance);
 						break;
 					default:
 						reader.Skip();

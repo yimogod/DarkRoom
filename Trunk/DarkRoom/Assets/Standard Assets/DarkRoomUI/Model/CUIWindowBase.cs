@@ -9,7 +9,7 @@ namespace DarkRoom.UI
     [RequireComponent(typeof(Canvas))]
     public class CUIWindowBase : CUIBase
     {
-        protected UIType m_uiType;
+        protected UIType m_uiType = UIType.Normal;
         private int m_UIID = -1;
         private string m_UIName;
 
@@ -25,8 +25,6 @@ namespace DarkRoom.UI
         {
             m_UIID = id;
             m_UIName = null;
-
-            OnCreated();
         }
 
         /// <summary>
