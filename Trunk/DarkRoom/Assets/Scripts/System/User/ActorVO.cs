@@ -10,10 +10,31 @@ namespace Sword
 	public class ActorVO
 	{
 		public int MetaId;
+
+		/// <summary>
+		/// 角色名称
+		/// </summary>
 		public string Name;
+
+		/// <summary>
+		/// 角色等级
+		/// </summary>
 		public int Level;
+
+		/// <summary>
+		/// 只做存储用, 读取请用emun字段
+		/// </summary>
 		public int Class;
+
+		/// <summary>
+		/// 只做存储用, 读取请用emun字段
+		/// </summary>
 		public int Race;
+
+		/// <summary>
+		/// 角色模型的地址
+		/// 其他相关的prefab可以通过拼接出来
+		/// </summary>
 		public string Address;
 
 
@@ -28,6 +49,16 @@ namespace Sword
 		/// key是ability id, value是级别
 		/// </summary>
 		public Dictionary<int, int> AbilityLvDict = new Dictionary<int, int>();
+
+		/// <summary>
+		/// 职业枚举
+		/// </summary>
+		public ActorClass ClassEnum => (ActorClass)Class;
+
+		/// <summary>
+		/// 种族枚举
+		/// </summary>
+		public ActorRace RaceEnum => (ActorRace)Race;
 
 		//角色元数据
 		protected float m_speedBase;

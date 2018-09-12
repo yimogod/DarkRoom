@@ -43,5 +43,37 @@ namespace Sword
 			}
 			return v;
 		}
+
+		/// <summary>
+		/// 获取职业的string
+		/// </summary>
+		public static string GetClassName(ActorClass actorClass)
+		{
+			return actorClass.ToString();
+		}
+
+		/// <summary>
+		/// 根据名称获取枚举
+		/// </summary>
+		public static ActorClass GetClassEnum(string name)
+		{
+			return (ActorClass)CStringEnum.Parse(typeof(ActorClass), name, true);
+		}
+
+		/// <summary>
+		/// 获取职业的string
+		/// </summary>
+		public static string GetRaceName(ActorRace race)
+		{
+			return race.ToString();
+		}
+
+		/// <summary>
+		/// 根据名称获取枚举
+		/// </summary>
+		public static ActorRace GetRaceEnum(string name)
+		{
+			return (ActorRace)CStringEnum.Parse(typeof(ActorRace), name, true);
+		}
 	}
 }

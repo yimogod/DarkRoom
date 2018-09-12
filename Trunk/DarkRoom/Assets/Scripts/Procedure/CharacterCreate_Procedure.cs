@@ -16,11 +16,6 @@ namespace Sword
             m_preCreatePrefabAddress.Add("UI_CharacterCreate");
         }
 
-        public override void Enter(CStateMachine sm)
-        {
-            base.Enter(sm);
-        }
-
         protected override void OnEntireLevelComplete()
         {
             Facade.instance.SendNotification(NotiConst.Open_CharacterCreate);

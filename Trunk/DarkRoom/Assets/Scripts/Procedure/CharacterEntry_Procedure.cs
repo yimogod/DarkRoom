@@ -29,17 +29,21 @@ namespace Sword
 		public override void Enter(CStateMachine sm)
 		{
 			m_firstEnter = sm.LastState == null;
-			//第一次进入 entry
+			base.Enter(sm);
+		}
+
+		protected override void PreEnter(CStateMachine sm)
+		{
 			if (m_firstEnter)
 			{
 				Debug.Log("Enter Character Entry First Time");
 				m_parser.InitLite();
+				m_enterSceneAssetMaxNum = m_parser.MainMetaNum;
 			}
-
-			base.Enter(sm);
-
-			//加载数字添加上meta需要解析数据
-			m_enterSceneAssetMaxNum += m_parser.MainMetaNum;
+			else
+			{
+				base.PreEnter(sm);
+			}
 		}
 
 		protected override void StartLoadingPrefab()

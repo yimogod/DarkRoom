@@ -38,7 +38,7 @@ namespace Sword
 		/// <summary>
 		/// 形象显示
 		/// </summary>
-		public Image AvatarIcon;
+		public CLazyImage AvatarIcon;
 
 		public override void OnReveal()
 		{
@@ -49,12 +49,53 @@ namespace Sword
 		{
 			CreateCharacterBtn.onClick.AddListener(OnClickCreateBtn);
 			BackEntryBtn.onClick.AddListener(OnClickEntryBtn);
+
+			var races = RaceToggle.GetComponentsInChildren<Toggle>();
+			foreach (var toggle in races)
+			{
+				toggle.onValueChanged.AddListener(OnRaceClick);
+			}
+
+			var classes = ClassToggle.GetComponentsInChildren<Toggle>();
+			foreach (var toggle in classes)
+			{
+				toggle.onValueChanged.AddListener(OnClassClick);
+			}
 		}
 
 		protected override void OnUnBindEvent()
 		{
 			CreateCharacterBtn.onClick.RemoveAllListeners();
 			BackEntryBtn.onClick.RemoveAllListeners();
+
+			var races = RaceToggle.GetComponentsInChildren<Toggle>();
+			foreach (var toggle in races)
+			{
+				toggle.onValueChanged.RemoveAllListeners();
+			}
+
+			var classes = ClassToggle.GetComponentsInChildren<Toggle>();
+			foreach (var toggle in classes)
+			{
+				toggle.onValueChanged.RemoveAllListeners();
+			}
+		}
+
+		//点击单个种族
+		private void OnRaceClick(bool v)
+		{
+			if(!v)return;
+			var raceName = GetSelectedRaceName();
+			var className = GetSelectedClassName();
+
+		}
+
+		//点击单个职业
+		private void OnClassClick(bool v)
+		{
+			if (!v) return;
+			var raceName = GetSelectedRaceName();
+			var className = GetSelectedClassName();
 		}
 
 		// 判断选项是否合法
@@ -75,24 +116,36 @@ namespace Sword
 			CApplicationManager.Instance.ChangeProcedure(CharacterEntry_Procedure.NAME);
 		}
 
-
 		private void OnClickCreateBtn()
 		{
 			bool b = ValidDectecte();
 			if (!b) return;
 
 			var heroName = NameTxt.text;
-			var activeRaces = RaceToggle.ActiveToggles();
-			var raceName = activeRaces.ElementAt(0).name;
-			int raceValue = (int) CStringEnum.Parse(typeof(ActorRace), raceName, true);
 
-			var activesClasses = ClassToggle.ActiveToggles();
-			var className = activesClasses.ElementAt(0).name;
-			int classValue = (int) CStringEnum.Parse(typeof(ActorClass), className, true);
+			var raceName = GetSelectedRaceName();
+			int raceValue = (int) SwordUtil.GetRaceEnum(raceName);
+
+			var className = GetSelectedClassName();
+			int classValue = (int) SwordUtil.GetClassEnum(className);
 
 			ProxyPool.UserProxy.CreateCharacter(name, raceValue, classValue);
 			ProxyPool.HeroProxy.CreateHero(heroName, raceValue, classValue);
 			CApplicationManager.Instance.ChangeProcedure(CharacterEntry_Procedure.NAME);
+		}
+
+		private string GetSelectedRaceName()
+		{
+			var activeRaces = RaceToggle.ActiveToggles();
+			var raceName = activeRaces.ElementAt(0).name;
+			return raceName;
+		}
+
+		private string GetSelectedClassName()
+		{
+			var activesClasses = ClassToggle.ActiveToggles();
+			var className = activesClasses.ElementAt(0).name;
+			return className;
 		}
 	}
 }

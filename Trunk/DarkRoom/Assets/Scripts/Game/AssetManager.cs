@@ -18,6 +18,17 @@ namespace Sword
 
 		public static string FOLDER_ROOT_SKILL = "Prefabs/Skill/";
 
+		/// <summary>
+		/// 通过种族职业获取英雄图标的地址
+		/// </summary>
+		public static string GetHeroIconAddress(string race, string pclass)
+		{
+			return $"Icon_{race}_{pclass}";
+		}
+
+
+
+
 		public static void LoadItemIcon(string name)
 		{
 			//string path = string.Format("{0}{1}", FOLDER_ROOT_ITEM_ICON, name);

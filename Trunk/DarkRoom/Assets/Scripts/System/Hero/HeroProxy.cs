@@ -72,7 +72,7 @@ namespace Sword
             entity.Team = CUnitEntity.TeamSide.Red;
 
             var attr = entity.AttributeSet;
-            attr.InitAttr((ActorClass)Hero.Class, (ActorRace)Hero.Race);
+            attr.InitAttr(Hero.ClassEnum, Hero.RaceEnum);
             attr.SetPrimaryAttrPersistentValue(Hero.Strength, Hero.Dexterity, Hero.Constitution,
                                               Hero.Magic, Hero.Willpower, Hero.Cunning, Hero.Luck);
             attr.InitSubAttr();
