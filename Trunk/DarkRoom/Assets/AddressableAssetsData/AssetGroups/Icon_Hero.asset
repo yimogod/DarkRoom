@@ -37,22 +37,22 @@ MonoBehaviour:
   m_processorClass: UnityEditor.AddressableAssets.BundledAssetGroupProcessor
   m_serializeEntries:
   - m_guid: 3b96cdb043b8c9e469c9ce38a006a942
-    m_address: Hero_Cornac_Rogue
+    m_address: Icon_Cornac_Rogue
     m_readOnly: 0
     m_serializedLabels:
     - icon
   - m_guid: 66b6caa9f4cd2b041acb76ac0b6471b1
-    m_address: Hero_Cornac_Alchemist
+    m_address: Icon_Cornac_Alchemist
     m_readOnly: 0
     m_serializedLabels:
     - icon
   - m_guid: 6cd8c17037eabd9428b80947ed9973ba
-    m_address: Hero_Shalore_Rogue
+    m_address: Icon_Shalore_Rogue
     m_readOnly: 0
     m_serializedLabels:
     - icon
   - m_guid: 7d90daabb06b7cf46a2866c1cca5c264
-    m_address: Hero_Cornac_Berserker
+    m_address: Icon_Cornac_Berserker
     m_readOnly: 0
     m_serializedLabels:
     - icon

@@ -36,9 +36,9 @@ namespace Sword
 		public ToggleGroup ClassToggle;
 
 		/// <summary>
-		/// 形象选择
+		/// 形象显示
 		/// </summary>
-		public ToggleGroup AvatarToggle;
+		public Image AvatarIcon;
 
 		public override void OnReveal()
 		{
