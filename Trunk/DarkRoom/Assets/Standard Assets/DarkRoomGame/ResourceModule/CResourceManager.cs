@@ -59,6 +59,15 @@ namespace DarkRoom.Game{
 			
 		}
 
+        /// <summary>
+        /// 加载ui用的sprite
+        /// </summary>
+        public static void LoadSprite(string address, Action<Sprite> onComplete)
+        {
+            CResourceLoader loader = new CResourceLoader();
+            loader.LoadObject<Sprite>(address, onComplete);
+        }
+
 		/// <summary>
         /// 加载icon之类, 我们会放入image控件
         /// </summary>

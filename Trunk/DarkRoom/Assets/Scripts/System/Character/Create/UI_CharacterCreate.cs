@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DarkRoom.Core;
 using DarkRoom.Game;
 using DarkRoom.UI;
 using UnityEngine.UI;
@@ -88,7 +87,10 @@ namespace Sword
 			var raceName = GetSelectedRaceName();
 			var className = GetSelectedClassName();
 
-		}
+            string address = AssetManager.GetHeroIconAddress(raceName, className);
+            UnityEngine.Debug.LogWarning(address);
+            AvatarIcon.LoadSprite(address);
+        }
 
 		//点击单个职业
 		private void OnClassClick(bool v)
@@ -96,7 +98,11 @@ namespace Sword
 			if (!v) return;
 			var raceName = GetSelectedRaceName();
 			var className = GetSelectedClassName();
-		}
+
+            string address = AssetManager.GetHeroIconAddress(raceName, className);
+            UnityEngine.Debug.LogWarning(address);
+            AvatarIcon.LoadSprite(address);
+        }
 
 		// 判断选项是否合法
 		private bool ValidDectecte()

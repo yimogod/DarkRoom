@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DarkRoom.Game;
 
 namespace DarkRoom.UI
 {
@@ -17,7 +18,11 @@ namespace DarkRoom.UI
 
 		public void LoadSprite(string address)
 		{
-
+            CResourceManager.LoadSprite(address, OnLoaded);
 		}
+
+        private void OnLoaded(Sprite sprite){
+            m_img.sprite = sprite;
+        }
 	}
 }

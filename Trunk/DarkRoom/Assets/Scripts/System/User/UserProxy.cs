@@ -24,7 +24,7 @@ namespace Sword
         /// <summary>
         /// 玩家创建所有的角色
         /// </summary>
-        public List<CharacterVO> CharacterList = null;
+        public List<CharacterVO> CharacterList = new List<CharacterVO>();
 
         public UserProxy() : base(NAME) { }
 
