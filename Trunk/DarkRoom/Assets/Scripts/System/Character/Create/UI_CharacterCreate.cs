@@ -20,15 +20,15 @@ namespace Sword
 		/// </summary>
 		public Button CreateCharacterBtn;
 
-        /// <summary>
-        /// 返回角色界面
-        /// </summary>
-        public Button BackEntryBtn;
+		/// <summary>
+		/// 返回角色界面
+		/// </summary>
+		public Button BackEntryBtn;
 
-        /// <summary>
-        /// 种族选择
-        /// </summary>
-        public ToggleGroup RaceToggle;
+		/// <summary>
+		/// 种族选择
+		/// </summary>
+		public ToggleGroup RaceToggle;
 
 		/// <summary>
 		/// 职业选择
@@ -48,14 +48,14 @@ namespace Sword
 		protected override void OnBindEvent()
 		{
 			CreateCharacterBtn.onClick.AddListener(OnClickCreateBtn);
-            BackEntryBtn.onClick.AddListener(OnClickEntryBtn);
-        }
+			BackEntryBtn.onClick.AddListener(OnClickEntryBtn);
+		}
 
 		protected override void OnUnBindEvent()
 		{
 			CreateCharacterBtn.onClick.RemoveAllListeners();
-            BackEntryBtn.onClick.RemoveAllListeners();
-        }
+			BackEntryBtn.onClick.RemoveAllListeners();
+		}
 
 		// 判断选项是否合法
 		private bool ValidDectecte()
@@ -69,24 +69,26 @@ namespace Sword
 			return true;
 		}
 
-        private void OnClickEntryBtn(){
+		//返回角色入口
+		private void OnClickEntryBtn()
+		{
+			CApplicationManager.Instance.ChangeProcedure(CharacterEntry_Procedure.NAME);
+		}
 
-        }
 
-
-        private void OnClickCreateBtn()
+		private void OnClickCreateBtn()
 		{
 			bool b = ValidDectecte();
-			if(!b)return;
+			if (!b) return;
 
 			var heroName = NameTxt.text;
 			var activeRaces = RaceToggle.ActiveToggles();
 			var raceName = activeRaces.ElementAt(0).name;
-			int raceValue = (int)CStringEnum.Parse(typeof(ActorRace), raceName, true);
+			int raceValue = (int) CStringEnum.Parse(typeof(ActorRace), raceName, true);
 
 			var activesClasses = ClassToggle.ActiveToggles();
 			var className = activesClasses.ElementAt(0).name;
-			int classValue = (int)CStringEnum.Parse(typeof(ActorClass), className, true);
+			int classValue = (int) CStringEnum.Parse(typeof(ActorClass), className, true);
 
 			ProxyPool.UserProxy.CreateCharacter(name, raceValue, classValue);
 			ProxyPool.HeroProxy.CreateHero(heroName, raceValue, classValue);
