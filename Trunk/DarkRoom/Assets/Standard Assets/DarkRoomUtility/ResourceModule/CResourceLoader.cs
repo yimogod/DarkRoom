@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement;
 
-namespace DarkRoom.Game {
+namespace DarkRoom.Utility {
     public struct CResourceLoader
     {
         public void LoadObject<T>(string address, Action<T> onComplete = null) where T : class

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 
-namespace Rayman {
-	public sealed class PlatformKit{
+namespace DarkRoom.Utility
+{
+	public sealed class CPlatformKit{
 		public static string GetPlatformName(RuntimePlatform platform){
 			string name = "Windows";
 			switch (platform) {

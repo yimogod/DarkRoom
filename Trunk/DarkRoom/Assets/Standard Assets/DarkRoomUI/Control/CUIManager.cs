@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 using DarkRoom.Core;
-using DarkRoom.Game;
+using DarkRoom.Utility;
 
 /// <summary>
 /// ui板子总体的管理器, 每个板子存在6中行为

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using DarkRoom.UI;
 using PureMVC.Patterns;
-using DarkRoom.Game;
+using DarkRoom.UI;
+using DarkRoom.Utility;
 using UnityEngine;
 
 namespace Sword

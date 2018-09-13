@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using DarkRoom.Game;
+using DarkRoom.Utility;
 using UnityEngine;
 
 namespace Sword

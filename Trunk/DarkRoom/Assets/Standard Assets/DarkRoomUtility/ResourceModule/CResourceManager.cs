@@ -4,7 +4,7 @@ using DarkRoom.Core;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace DarkRoom.Game{
+namespace DarkRoom.Utility{
 	public class CResourceManager{
 
 		public static string GetStreamAssetsPath(RuntimePlatform platform)

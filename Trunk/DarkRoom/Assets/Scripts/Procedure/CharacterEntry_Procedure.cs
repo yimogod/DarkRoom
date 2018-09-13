@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using DarkRoom.Core;
 using PureMVC.Patterns;
 using UnityEngine;
-using DarkRoom.Game;
+using DarkRoom.Core;
 using DarkRoom.UI;
+using DarkRoom.Utility;
 
 namespace Sword
 {
@@ -75,9 +74,9 @@ namespace Sword
 				m_parser.Dispose();
 
 				var user = UserVO.LoadOrCreate();
-                ProxyPool.UserProxy.User = user;
+				ProxyPool.UserProxy.User = user;
 
-                if (user.HasAnyCharacter)
+				if (user.HasAnyCharacter)
 				{
 					var character = UserProxy.Load(user.CurrentCharacterName);
 					ProxyPool.UserProxy.Character = character;
@@ -87,7 +86,7 @@ namespace Sword
 					hero.Race = character.Race;
 					hero.Level = character.Level;
 					ProxyPool.HeroProxy.Hero = hero;
-                }
+				}
 			}
 
 			Facade.instance.SendNotification(NotiConst.Open_CharacterEntry);
@@ -98,6 +97,7 @@ namespace Sword
 				Debug.LogError("Please add CharacterEntryScene on Scene Object In Unity");
 				return;
 			}
+
 			scene.LoadHero(ProxyPool.HeroProxy.Hero);
 		}
 	}

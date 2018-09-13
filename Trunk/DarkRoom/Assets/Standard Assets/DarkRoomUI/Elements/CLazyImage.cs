@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using DarkRoom.Game;
+using DarkRoom.Utility;
 
 namespace DarkRoom.UI
 {

@@ -42,6 +42,7 @@ namespace Sword
 		public override void OnReveal()
 		{
 			base.OnReveal();
+			OnRaceClick(true);
 		}
 
 		protected override void OnBindEvent()
