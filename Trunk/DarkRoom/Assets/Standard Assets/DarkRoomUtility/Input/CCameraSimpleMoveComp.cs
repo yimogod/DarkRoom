@@ -3,37 +3,42 @@
 namespace DarkRoom.Utility
 {
 	public class CCameraSimpleMoveComp : MonoBehaviour {
-		public float speed = 0.1f;
-		public Transform tran;
+        public float Speed = 0.1f;
+        public Transform Tran;
 
-		void Update() {
-			Vector3 pos = tran.position;
+        private void Start()
+        {
+            if (Tran == null) Tran = transform;
+        }
+
+        void Update() {
+			Vector3 pos = Tran.position;
 
 			if (Input.GetKey(KeyCode.A)) {
-				pos.x -= speed;
+				pos.x -= Speed;
 			}
 
 			if (Input.GetKey(KeyCode.D)) {
-				pos.x += speed;
+				pos.x += Speed;
 			}
 
 			if (Input.GetKey(KeyCode.W)) {
-				pos.z += speed;
+				pos.z += Speed;
 			}
 
 			if (Input.GetKey(KeyCode.S)) {
-				pos.z -= speed;
+				pos.z -= Speed;
 			}
 
 			if (Input.GetKey(KeyCode.Z)) {
-				pos.y += speed;
+				pos.y += Speed;
 			}
 
 			if (Input.GetKey(KeyCode.X)) {
-				pos.y -= speed;
+				pos.y -= Speed;
 			}
 
-			tran.position = pos;
+			Tran.position = pos;
 		}
 	}
 

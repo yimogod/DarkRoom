@@ -57,10 +57,13 @@ namespace DarkRoom.Utility
 
 			if (!m_enabled) return;
 
-			//每帧我们都探测鼠标经过terrain的位置
-			m_overWorldPos = Vector3.zero;
+            var cam = Camera.main;
+            if (cam == null) return;
+
+            //每帧我们都探测鼠标经过terrain的位置
+            m_overWorldPos = Vector3.zero;
 			Vector3 mousePos = Input.mousePosition;
-			Ray ray = Camera.main.ScreenPointToRay(mousePos);
+			Ray ray = cam.ScreenPointToRay(mousePos);
 			RaycastHit hit;
 			int layerMask = 1 << LayerMask.NameToLayer(CWorldLayer.LAYER_NAME_TERRAIN);
 			if (Physics.Raycast(ray, out hit, 1000f, layerMask))
@@ -85,26 +88,25 @@ namespace DarkRoom.Utility
 
 				m_downScreenPos = mousePos;
 				m_hasDown = true;
-
-				//探测鼠标点击到的世界坐标和单位.
-
-				if (m_overUnit != null)
-				{
-					m_hitUnit = m_overUnit;
-					m_downWorldPos = m_hitUnit.position;
-				}
-				else
-				{
-					//如果没有点击到单位, 那么就直接赋值在terrain上的世界坐标
-					m_downWorldPos = m_overWorldPos;
-				}
 			}
 
 			//鼠标松开
 			if (Input.GetMouseButtonUp(0))
 			{
 				m_hasClicked = true;
-			}
+
+                //探测鼠标点击到的世界坐标和单位.
+                if (m_overUnit != null)
+                {
+                    m_hitUnit = m_overUnit;
+                    m_downWorldPos = m_hitUnit.position;
+                }
+                else
+                {
+                    //如果没有点击到单位, 那么就直接赋值在terrain上的世界坐标
+                    m_downWorldPos = m_overWorldPos;
+                }
+            }
 		}
 	}
 }

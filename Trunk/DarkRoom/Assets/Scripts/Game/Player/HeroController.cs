@@ -23,7 +23,7 @@ namespace Sword
 		protected override void Update()
 		{
 			base.Update();
-			CMouseInput.Instance.Update();
+			
 		}
 	}
 }

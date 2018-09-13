@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using DarkRoom.Core;
 using DarkRoom.UI;
+using DarkRoom.Utility;
 
 namespace DarkRoom.Game
 {
@@ -175,6 +176,7 @@ namespace DarkRoom.Game
         void Update()
         {
             m_procedure.Update();
+            CMouseInput.Instance.Update();
 
             if (s_OnApplicationUpdate != null)
                 s_OnApplicationUpdate();
