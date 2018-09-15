@@ -19,13 +19,25 @@ namespace Sword
 		/// <summary>
 		/// 通过种族职业获取英雄图标的地址
 		/// </summary>
-		public static string GetHeroIconAddress(string race, string pclass)
+		public static string GetHeroIconAddress(string actorRace, string actorClass)
 		{
-			return $"Icon_{race}_{pclass}";
+			return $"Icon_{actorRace}_{actorClass}";
 		}
 
+		public static string GetHeroModelAddress(ActorRace actorRace, ActorClass actorClass)
+		{
+			string rn = SwordUtil.GetRaceName(actorRace);
+			string cn = SwordUtil.GetClassName(actorClass);
+			return GetHeroModelAddress(rn, cn);
+		}
 
-
+		/// <summary>
+		/// 获取英雄模型地址
+		/// </summary>
+		public static string GetHeroModelAddress(string actorRace, string actorClass)
+		{
+			return $"Hero_{actorRace}_{actorClass}";
+		}
 
 		public static void LoadItemIcon(string name)
 		{

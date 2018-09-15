@@ -51,13 +51,16 @@ namespace DarkRoom.UI
 			PostEnter(sm);
 		}
 
-        public override void Exit(CStateMachine sm)
-        {
-            base.Exit(sm);
-            CUIManager.Instance.DestroyAllUI();
-        }
+		public override void Exit(CStateMachine sm)
+		{
+			base.Exit(sm);
 
-        protected virtual void PreEnter(CStateMachine sm)
+			//清理预加载资源
+			m_preCreatePrefabAddress.Clear();
+			CUIManager.Instance.DestroyAllUI();
+		}
+
+		protected virtual void PreEnter(CStateMachine sm)
 		{
 			m_enterSceneAssetMaxNum = 0;
 		}
@@ -72,7 +75,6 @@ namespace DarkRoom.UI
 
 		protected virtual void PostEnter(CStateMachine sm)
 		{
-			
 		}
 
 		public override void Execute(CStateMachine sm)
@@ -136,12 +138,12 @@ namespace DarkRoom.UI
 		{
 			Debug.LogWarningFormat("curr load num is {0}", m_enterSceneAssetLoadedNum);
 			Debug.LogWarningFormat("max load num is {0}", m_enterSceneAssetMaxNum);
-			if (m_enterSceneAssetLoadedNum < m_enterSceneAssetMaxNum)return;
+			if (m_enterSceneAssetLoadedNum < m_enterSceneAssetMaxNum) return;
 
-            SceneManager.UnloadSceneAsync(LoadingSceneName);
-            m_loadingTimeReg.Stop();
+			SceneManager.UnloadSceneAsync(LoadingSceneName);
+			m_loadingTimeReg.Stop();
 
-            OnEntireLevelComplete();
+			OnEntireLevelComplete();
 		}
 
 		/// <summary>

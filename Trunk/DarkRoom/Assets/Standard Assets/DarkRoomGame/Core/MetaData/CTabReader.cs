@@ -6,9 +6,10 @@ namespace DarkRoom.Game
 	/// <summary>
 	/// 读取二维表格的数据, 列数据直接用tab分开
 	/// </summary>
-	public class CTabReader {
-		public static char[] RowSpliter = new char[] { '\r', '\n' };
-		public static char[] ColSpliter = new char[] { '\t' };
+	public class CTabReader
+	{
+		public static char[] RowSpliter = new char[] {'\r', '\n'};
+		public static char[] ColSpliter = new char[] {'\t'};
 
 		private List<string[]> m_tabValues = new List<string[]>();
 		private TabRow m_tabRow = new TabRow();
@@ -16,7 +17,9 @@ namespace DarkRoom.Game
 		//数据的行数和列数
 		private int m_row;
 
-		public CTabReader() { }
+		public CTabReader()
+		{
+		}
 
 		public int Row => m_row;
 
@@ -25,25 +28,30 @@ namespace DarkRoom.Game
 		/// </summary>
 		/// <param name="content">需要解析的内容的字符串</param>
 		/// <returns></returns>
-		public bool Parse(string content) {
+		public bool Parse(string content)
+		{
 			string[] rawLines = content.Split(RowSpliter);
-            List<string> lines = new List<string>();
-            //预处理下原始的line数据
-		    foreach (var item in rawLines){
-		        string trim = item.Trim();
-		        if (trim.Length == 0) continue;
-		        lines.Add(trim);
-            }
+
+			List<string> lines = new List<string>();
+			//预处理下原始的line数据
+			foreach (var item in rawLines)
+			{
+				string trim = item.Trim();
+				if (trim.Length == 0) continue;
+				lines.Add(trim);
+			}
 
 			int lineCount = lines.Count;
-			if (lineCount <= 2) {
-				Debug.LogError("you tab file has no key or desc rows " + lines[0]);
+			if (lineCount <= 2)
+			{
+				Debug.LogError("you tab file has no key or desc rows " + lines[0] + " or see file encode");
 				return false;
 			}
 
-            // 第一行是表头, 第二行是解释, 第三行才是开始的数据, 忽略空行和以#注释掉的行
-            string line;
-			for (int i = 2; i < lineCount; ++i) {
+			// 第一行是表头, 第二行是解释, 第三行才是开始的数据, 忽略空行和以#注释掉的行
+			string line;
+			for (int i = 2; i < lineCount; ++i)
+			{
 				m_tabValues.Add(ParseLine(lines[i]));
 			}
 
@@ -56,30 +64,36 @@ namespace DarkRoom.Game
 		/// 标记开始读第row行
 		/// </summary>
 		/// <param name="row">标记的行数</param>
-		public void MarkRow(int row) {
+		public void MarkRow(int row)
+		{
 			m_tabRow.SetData(m_tabValues[row]);
 		}
 
-		public string ReadString() {
+		public string ReadString()
+		{
 			return m_tabRow.ReadString();
 		}
 
-		public int ReadInt() {
+		public int ReadInt()
+		{
 			return m_tabRow.ReadInt();
 		}
 
-		public float ReadFloat() {
+		public float ReadFloat()
+		{
 			return m_tabRow.ReadFloat();
 		}
 
-		public bool ReadBool() {
+		public bool ReadBool()
+		{
 			return m_tabRow.ReadBool();
 		}
 
 		/// <summary>
 		/// 清理reader的数据. 当读完后需要清理
 		/// </summary>
-		public void Close() {
+		public void Close()
+		{
 			m_tabValues.Clear();
 			m_tabRow.Close();
 
@@ -89,66 +103,78 @@ namespace DarkRoom.Game
 
 		// Excel导出时，对内容中包含逗号时会对该字符串首尾加上双引号，
 		// 这里我们需要进行处理，忽略掉多加上的双引号。
-		private string[] ParseLine(string line) {
+		private string[] ParseLine(string line)
+		{
 			string[] values = line.Split(ColSpliter);
 
-			for (int i = 0, len = values.Length; i < len; ++i) {
-				if (values[i].StartsWith("\"") && values[i].EndsWith("\"")) {
+			for (int i = 0, len = values.Length; i < len; ++i)
+			{
+				if (values[i].StartsWith("\"") && values[i].EndsWith("\""))
+				{
 					values[i] = values[i].Substring(1, values[i].Length - 2);
 				}
 			}
 
 			return values;
 		}
-
 	}
 
 	/// <summary>
 	/// 对于表格数据每行的抽象
 	/// </summary>
-	public class TabRow {
+	public class TabRow
+	{
 		private string[] m_value;
 		private int m_index = 0;
 
-		public TabRow() { }
+		public TabRow()
+		{
+		}
 
 		/// <summary>
 		/// 填充tab row的数据. 
 		/// </summary>
 		/// <param name="value">string数组. 每行的数据由tab分开后形成的数组</param>
-		public void SetData(string[] value) {
+		public void SetData(string[] value)
+		{
 			m_value = value;
 			m_index = 0;
 		}
 
-		public string ReadString() {
+		public string ReadString()
+		{
 			string value = m_value[m_index];
 			m_index += 1;
 			return value;
 		}
 
-		public int ReadInt() {
+		public int ReadInt()
+		{
 			string value = ReadString();
-		    int r = -1;
-		    var b = int.TryParse(value, out r);
-		    if (!b)
-		    {
-                Debug.LogError(string.Format("{0} is not int", value));
-		    }
-		    return r;
+			int r = -1;
+			var b = int.TryParse(value, out r);
+			if (!b)
+			{
+				Debug.LogError(string.Format("{0} is not int", value));
+			}
+
+			return r;
 		}
 
-		public float ReadFloat() {
+		public float ReadFloat()
+		{
 			string value = ReadString();
 			return float.Parse(value);
 		}
 
-		public bool ReadBool() {
+		public bool ReadBool()
+		{
 			int value = ReadInt();
 			return value > 0;
 		}
 
-		public void Close() {
+		public void Close()
+		{
 			m_value = null;
 		}
 	}

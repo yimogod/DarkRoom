@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DarkRoom.Game;
 using DarkRoom.UI;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Sword
@@ -126,7 +127,11 @@ namespace Sword
 		private void OnClickCreateBtn()
 		{
 			bool b = ValidDectecte();
-			if (!b) return;
+			if (!b)
+			{
+				Debug.LogError("Create Check Invalid");
+				return;
+			}
 
 			var heroName = NameTxt.text;
 
@@ -136,7 +141,8 @@ namespace Sword
 			var className = GetSelectedClassName();
 			int classValue = (int) SwordUtil.GetClassEnum(className);
 
-			ProxyPool.UserProxy.CreateCharacter(name, raceValue, classValue);
+			//创建角色和英雄, 并存储数据
+			ProxyPool.UserProxy.CreateCharacter(heroName, raceValue, classValue);
 			ProxyPool.HeroProxy.CreateHero(heroName, raceValue, classValue);
 			CApplicationManager.Instance.ChangeProcedure(CharacterEntry_Procedure.NAME);
 		}

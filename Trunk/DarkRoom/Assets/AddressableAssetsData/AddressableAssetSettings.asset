@@ -21,6 +21,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 393bc3ab11400ee44a1444a3d4e60fbc, type: 2}
   - {fileID: 11400000, guid: bbee88e35cb1b49408ce907525f89c52, type: 2}
   - {fileID: 11400000, guid: 683db167735239149bd631c6f2674a5a, type: 2}
+  - {fileID: 11400000, guid: ff94f43446fd0ae4f93b54d0b866ebbb, type: 2}
   m_buildSettings:
     m_compression:
       compression: 3
@@ -74,4 +75,5 @@ MonoBehaviour:
     - data
     - ui
     - icon
+    - actor
   m_activeProfileId: e816b614097d04cc78a25b66371c5467

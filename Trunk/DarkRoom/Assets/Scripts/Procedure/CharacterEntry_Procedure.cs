@@ -21,9 +21,6 @@ namespace Sword
 		public CharacterEntry_Procedure() : base(NAME)
 		{
 			m_targetSceneName = SwordConst.CHARACTER_ENTRY_SCENE;
-
-			m_parser.OnSingleParseComplete = OnMetaLoaded;
-			m_preCreatePrefabAddress.Add("UI_CharacterEntry");
 		}
 
 		public override void Enter(CStateMachine sm)
@@ -32,10 +29,19 @@ namespace Sword
 			base.Enter(sm);
 		}
 
+		public override void Exit(CStateMachine sm)
+		{
+			base.Exit(sm);
+			m_parser.Dispose();
+		}
+
 		protected override void PreEnter(CStateMachine sm)
 		{
+			m_preCreatePrefabAddress.Add("UI_CharacterEntry");
+
 			if (m_firstEnter)
 			{
+				m_parser.OnSingleParseComplete = OnMetaLoaded;
 				Debug.Log("Enter Character Entry First Time");
 				m_parser.InitLite();
 				m_enterSceneAssetMaxNum = m_parser.MainMetaNum;
@@ -48,7 +54,8 @@ namespace Sword
 
 		protected override void StartLoadingPrefab()
 		{
-			m_parser.Execute();
+			if (m_firstEnter)m_parser.Execute();
+
 			foreach (var item in m_preCreatePrefabAddress)
 			{
 				CResourceManager.LoadPrefab(item, OnPrefabLoaded);
@@ -71,23 +78,29 @@ namespace Sword
 		{
 			if (m_firstEnter)
 			{
-				m_parser.Dispose();
-
-				var user = UserVO.LoadOrCreate();
-				ProxyPool.UserProxy.User = user;
-
-				if (user.HasAnyCharacter)
-				{
-					var character = UserProxy.Load(user.CurrentCharacterName);
-					ProxyPool.UserProxy.Character = character;
-
-					var hero = HeroProxy.Load(user.CurrentCharacterName);
-					hero.Class = character.Class;
-					hero.Race = character.Race;
-					hero.Level = character.Level;
-					ProxyPool.HeroProxy.Hero = hero;
-				}
+				var u = UserVO.LoadOrCreate();
+				ProxyPool.UserProxy.User = u;
 			}
+
+			UserVO user = ProxyPool.UserProxy.User;
+			user.FindCurrentCharacter();
+
+			//设置当前角色的数据
+			if (user.HasAnyCharacter)
+			{
+				var character = UserProxy.Load(user.CurrentCharacterName);
+				ProxyPool.UserProxy.Character = character;
+				Debug.LogWarning(user.CurrentCharacterName);
+				Debug.LogWarning(character);
+
+				var hero = HeroProxy.Load(user.CurrentCharacterName);
+				Debug.LogWarning(hero);
+				hero.Class = character.Class;
+				hero.Race = character.Race;
+				hero.Level = character.Level;
+				ProxyPool.HeroProxy.Hero = hero;
+			}
+
 
 			Facade.instance.SendNotification(NotiConst.Open_CharacterEntry);
 
