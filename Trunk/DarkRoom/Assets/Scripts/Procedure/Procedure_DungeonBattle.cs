@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace Sword
 {
-    public class DungeonBattle_Procedure : CProcedureBase
+    public class Procedure_DungeonBattle : CProcedureBase
     {
         public const string NAME = "DungeonBattle";
 
-        public DungeonBattle_Procedure() : base(NAME)
+        public Procedure_DungeonBattle() : base(NAME)
         {
             m_targetSceneName = SwordConst.DUNGEON_BATTLE_SCENE;
         }

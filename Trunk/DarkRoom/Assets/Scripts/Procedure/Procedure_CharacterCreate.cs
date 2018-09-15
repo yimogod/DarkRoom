@@ -8,11 +8,11 @@ using UnityEngine;
 
 namespace Sword
 {
-	public class CharacterCreate_Procedure : CProcedureBase
+	public class Procedure_CharacterCreate : CProcedureBase
 	{
 		public const string NAME = "CharacterCreate";
 
-		public CharacterCreate_Procedure() : base(NAME)
+		public Procedure_CharacterCreate() : base(NAME)
 		{
 			m_targetSceneName = SwordConst.CHARACTER_CREATE_SCENE;
 		}

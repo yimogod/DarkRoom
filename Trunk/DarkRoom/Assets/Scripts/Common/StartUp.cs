@@ -9,11 +9,11 @@ public class StartUp : MonoBehaviour {
 	    Application.targetFrameRate = 30;
 
 	    CApplicationManager.Instance.InitializeProcedure(
-	        new CharacterEntry_Procedure(),
-	        new CharacterCreate_Procedure(),
-	        new CharacterChoose_Procedure(),
-	        new PlayerCastle_Procedure(),
-	        new DungeonBattle_Procedure()
+	        new Procedure_CharacterEntry(),
+	        new Procedure_CharacterCreate(),
+	        new Procedure_CharacterChoose(),
+	        new Procedure_PlayerCastle(),
+	        new Procedure_DungeonBattle()
 	    );
     }
 
@@ -23,6 +23,6 @@ public class StartUp : MonoBehaviour {
         Facade.instance.RegisterCommand(StartupCommand.NAME, typeof(StartupCommand));
         Facade.instance.SendNotification(StartupCommand.NAME);
 
-        CApplicationManager.Instance.ChangeProcedure(CharacterEntry_Procedure.NAME);
+        CApplicationManager.Instance.ChangeProcedure(Procedure_CharacterEntry.NAME);
     }
 }

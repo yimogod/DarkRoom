@@ -7,7 +7,7 @@ using DarkRoom.Utility;
 
 namespace Sword
 {
-	public class CharacterEntry_Procedure : CProcedureBase
+	public class Procedure_CharacterEntry : CProcedureBase
 	{
 		public const string NAME = "CharacterEntry";
 
@@ -18,7 +18,7 @@ namespace Sword
 		//第一次进入
 		private bool m_firstEnter = true;
 
-		public CharacterEntry_Procedure() : base(NAME)
+		public Procedure_CharacterEntry() : base(NAME)
 		{
 			m_targetSceneName = SwordConst.CHARACTER_ENTRY_SCENE;
 		}

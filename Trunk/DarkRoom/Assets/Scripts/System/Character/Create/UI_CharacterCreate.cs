@@ -121,7 +121,7 @@ namespace Sword
 		//返回角色入口
 		private void OnClickEntryBtn()
 		{
-			CApplicationManager.Instance.ChangeProcedure(CharacterEntry_Procedure.NAME);
+			CApplicationManager.Instance.ChangeProcedure(Procedure_CharacterEntry.NAME);
 		}
 
 		private void OnClickCreateBtn()
@@ -144,7 +144,7 @@ namespace Sword
 			//创建角色和英雄, 并存储数据
 			ProxyPool.UserProxy.CreateCharacter(heroName, raceValue, classValue);
 			ProxyPool.HeroProxy.CreateHero(heroName, raceValue, classValue);
-			CApplicationManager.Instance.ChangeProcedure(CharacterEntry_Procedure.NAME);
+			CApplicationManager.Instance.ChangeProcedure(Procedure_CharacterEntry.NAME);
 		}
 
 		private string GetSelectedRaceName()

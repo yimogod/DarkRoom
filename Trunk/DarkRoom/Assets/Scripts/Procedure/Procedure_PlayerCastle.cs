@@ -5,11 +5,11 @@ using PureMVC.Patterns;
 
 namespace Sword
 {
-    public class PlayerCastle_Procedure : CProcedureBase
+    public class Procedure_PlayerCastle : CProcedureBase
     {
         public const string NAME = "PlayerCastle";
 
-        public PlayerCastle_Procedure() : base(NAME)
+        public Procedure_PlayerCastle() : base(NAME)
         {
             m_targetSceneName = SwordConst.PLAYER_CASTLE_SCENE;
         }

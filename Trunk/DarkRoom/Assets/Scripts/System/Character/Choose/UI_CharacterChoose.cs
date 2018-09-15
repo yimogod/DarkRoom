@@ -44,17 +44,17 @@ namespace Sword
 
         private void OnClickEnterBtn()
         {
-            CApplicationManager.Instance.ChangeProcedure(PlayerCastle_Procedure.NAME);
+            CApplicationManager.Instance.ChangeProcedure(Procedure_PlayerCastle.NAME);
         }
 
         private void OnClickChangeBtn()
         {
-            CApplicationManager.Instance.ChangeProcedure(CharacterChoose_Procedure.NAME);
+            CApplicationManager.Instance.ChangeProcedure(Procedure_CharacterChoose.NAME);
         }
 
         private void OnClickCreateBtn()
         {
-            CApplicationManager.Instance.ChangeProcedure(CharacterCreate_Procedure.NAME);
+            CApplicationManager.Instance.ChangeProcedure(Procedure_CharacterCreate.NAME);
         }
     }
 }

@@ -4,11 +4,11 @@ using DarkRoom.UI;
 
 namespace Sword
 {
-    public class CharacterChoose_Procedure : CProcedureBase
+    public class Procedure_CharacterChoose : CProcedureBase
     {
         public const string NAME = "CharacterChoose";
 
-        public CharacterChoose_Procedure() : base(NAME)
+        public Procedure_CharacterChoose() : base(NAME)
         {
             m_targetSceneName = SwordConst.CHARACTER_CHOOSE_SCENE;
         }
