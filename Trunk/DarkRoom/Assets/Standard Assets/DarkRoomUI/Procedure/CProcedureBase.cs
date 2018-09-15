@@ -62,6 +62,7 @@ namespace DarkRoom.UI
 
 		protected virtual void PreEnter(CStateMachine sm)
 		{
+			m_enterSceneAssetLoadedNum = 0;
 			m_enterSceneAssetMaxNum = 0;
 		}
 

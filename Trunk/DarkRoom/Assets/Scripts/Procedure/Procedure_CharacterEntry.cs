@@ -90,11 +90,8 @@ namespace Sword
 			{
 				var character = UserProxy.Load(user.CurrentCharacterName);
 				ProxyPool.UserProxy.Character = character;
-				Debug.LogWarning(user.CurrentCharacterName);
-				Debug.LogWarning(character);
 
 				var hero = HeroProxy.Load(user.CurrentCharacterName);
-				Debug.LogWarning(hero);
 				hero.Class = character.Class;
 				hero.Race = character.Race;
 				hero.Level = character.Level;
