@@ -35,6 +35,11 @@ MonoBehaviour:
   m_processorAssembly: Unity.Addressables.Editor, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   m_processorClass: UnityEditor.AddressableAssets.BundledAssetGroupProcessor
-  m_serializeEntries: []
+  m_serializeEntries:
+  - m_guid: d2cc94e034645754e853a835a500bee9
+    m_address: Hero_Cornac_Berserker
+    m_readOnly: 0
+    m_serializedLabels:
+    - actor
   m_readOnly: 0
   m_settings: {fileID: 11400000, guid: 1c04b48dd86f24f368ac3bd830fd7850, type: 2}
