@@ -70,7 +70,7 @@ namespace DarkRoom.Core
             //如果已经有instance, 就报错
             if (m_instance != null && thisInstance != m_instance)
             {
-                Debug.LogError(string.Format("{0} alreay have one instance", typeof(T).Name));
+                Debug.LogError(string.Format("{0} alreay have one instance, have u place one in the scene already", typeof(T).Name));
                 return;
             }
 
