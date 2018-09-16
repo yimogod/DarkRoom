@@ -34,7 +34,7 @@ namespace Sword
 			else
 			{
 				m_parser.OnSingleParseComplete = OnMetaLoaded;
-				m_parser.InitLite();
+				m_parser.InitMain();
 				m_enterSceneAssetMaxNum = m_parser.MainMetaNum;
 			}
 		}
@@ -42,7 +42,7 @@ namespace Sword
 		protected override void StartLoadingPrefab()
 		{
 			//如果没有解析过才解析
-			if (!m_parser.HasInitMain) m_parser.Execute();
+			m_parser.Execute();
 
 			foreach (var item in m_preCreatePrefabAddress)
 			{

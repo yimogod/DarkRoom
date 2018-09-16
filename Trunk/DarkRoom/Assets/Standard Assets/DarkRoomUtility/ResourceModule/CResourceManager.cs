@@ -83,6 +83,7 @@ namespace DarkRoom.Utility{
 	    {
             CResourceLoader loader = new CResourceLoader();
             loader.LoadObject<UnityEngine.Object>(address, o => {
+				if(o == null)Debug.LogWarning(address + "| is null");
                 onComplete(o.ToString());
             });
         }

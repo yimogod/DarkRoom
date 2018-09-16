@@ -25,12 +25,12 @@ namespace Sword
 		public void InitMain()
 		{
 			if (HasInitMain) return;
-			//AddPaser("Meta/ability_meta", new CAbilityMetaParser());
-			//AddPaser("Meta/effect_meta", new CEffectMetaParser());
-			//AddPaser("Meta/buff_meta", new CBuffMetaParser());
+			//AddPaser("meta/ability_meta.xml", new CAbilityMetaParser(OnSingleParseComplete));
+			//AddPaser(meta/effect_meta.xml", new CEffectMetaParser(OnSingleParseComplete));
+			//AddPaser("meta/buff_meta.xml", new CBuffMetaParser(OnSingleParseComplete));
 
-			AddPaser("Meta/forest_room_meta", new CForestRoomMetaParser(OnSingleParseComplete));
-			AddPaser("Meta/map_meta", new MapMetaParser(OnSingleParseComplete));
+			AddPaser("meta/map_meta.txt", new MapMetaParser(OnSingleParseComplete));
+			AddPaser("meta/room_meta.txt", new CForestRoomMetaParser(OnSingleParseComplete));
 			HasInitMain = true;
 		}
 

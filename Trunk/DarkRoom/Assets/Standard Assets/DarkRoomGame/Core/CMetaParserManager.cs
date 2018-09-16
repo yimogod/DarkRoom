@@ -15,6 +15,8 @@ namespace DarkRoom.Game
 
 		public int MainMetaNum => m_list.Count;
 
+		protected bool HasExecuted { get; private set; }
+
 		public CMetaParserManager()
 		{
 		}
@@ -24,10 +26,13 @@ namespace DarkRoom.Game
 		/// </summary>
 		public virtual void Execute()
 		{
+			if(HasExecuted)return;
+
 			foreach (var item in m_list)
 			{
 				ParseSingle(item);
 			}
+			HasExecuted = true;
 		}
 
 		/// <summary>
@@ -49,6 +54,8 @@ namespace DarkRoom.Game
 
 		public virtual void Dispose()
 		{
+			if (m_list == null) return;
+
 			foreach (var item in m_list)
 			{
 				item.Value.Dispose();
