@@ -13,12 +13,12 @@ namespace Sword
 	/// </summary>
 	public class TileTerrainLayerComp : MonoBehaviour
 	{
-		public Terrain terrain;
+		public Terrain Terrain;
 
-		private TerrainData _data;
+		private TerrainData m_data;
 		//我们的高度图是alpha图的4呗. 这样做是让陡崖更陡
-		private float[,] _heightsList;
-		private float[,,] _alphasList;
+		private float[,] m_heightsList;
+		private float[,,] m_alphasList;
 
 		private CAssetGrid m_assetGrid;
 
@@ -27,28 +27,29 @@ namespace Sword
 		/// <summary>
 		/// 高度图的尺寸
 		/// </summary>
-		public int numRowsOfHeight
+		public int NumRowsOfHeight
 		{
-			get { return _data.heightmapHeight; }
+			get { return m_data.heightmapHeight; }
 		}
 
 		/// <summary>
 		/// 高度图的尺寸
 		/// </summary>
-		public int numColsOfHeight
+		public int NumColsOfHeight
 		{
-			get { return _data.heightmapWidth; }
+			get { return m_data.heightmapWidth; }
 		}
 
 		/// <summary>
 		/// terrain 绘制的图层数
+		/// 相当于texture的个数
 		/// </summary>
-		public int layerNum
+		public int LayerNum
 		{
-			get { return _data.alphamapLayers; }
+			get { return m_data.alphamapLayers; }
 		}
 
-		protected void Start()
+		void Awake()
 		{
 			m_tran = transform;
 
@@ -58,16 +59,22 @@ namespace Sword
 				Debug.LogError("We Do Not Set Terrain Layer. Please Set One Terrain layer");
 			}
 
+			Terrain = Terrain.activeTerrain;
+
+
 			//获取terrain相关数据
-			_data = terrain.terrainData;
+			m_data = Terrain.terrainData;
 
-			int width = _data.heightmapWidth;
-			int height = _data.heightmapHeight;
-			_heightsList = _data.GetHeights(0, 0, width, height);
+			int width = m_data.heightmapWidth;
+			int height = m_data.heightmapHeight;
+			m_heightsList = m_data.GetHeights(0, 0, width, height);
+			Debug.Log(width + "  " + height);
 
-			width = _data.alphamapWidth;
-			height = _data.alphamapHeight;
-			_alphasList = _data.GetAlphamaps(0, 0, width, height);
+			width = m_data.alphamapWidth;
+			height = m_data.alphamapHeight;
+			m_alphasList = m_data.GetAlphamaps(0, 0, width, height);
+			Debug.Log(LayerNum);
+			Debug.Log(width + "  " + height);
 		}
 
 		public void SetAssetGrid(CAssetGrid grid)
@@ -86,14 +93,41 @@ namespace Sword
 			CreateTerrain();
 			CreatePond();
 
-			_data.SetAlphamaps(0, 0, _alphasList);
-			_data.SetHeights(0, 0, _heightsList);
-			terrain.Flush();
+			m_data.SetAlphamaps(0, 0, m_alphasList);
+			m_data.SetHeights(0, 0, m_heightsList);
+			Terrain.Flush();
 		}
 
 		public void CreateTerrain()
 		{
+			//CMapUtil.PrintGird(m_assetGrid.RawData);
+			for (int col = 0; col < m_assetGrid.NumCols; col++)
+			{
+				for (int row = 0; row < m_assetGrid.NumRows; row++)
+				{
+					int subType = m_assetGrid.GetNodeSubType(col, row);
+					SetTileByName(col, row, subType, 1);
+					switch ((CForestTerrainSubType)subType)
+					{
+						case CForestTerrainSubType.Grass1:
+						case CForestTerrainSubType.Grass2:
+						case CForestTerrainSubType.Land1:
+						case CForestTerrainSubType.Land2:
+							SetTileByHeight(col, row, 0.5f);
+							break;
+						case CForestTerrainSubType.Hill:
+							SetTileByHeight(col, row, 1f);
+							break;
+						case CForestTerrainSubType.Pond:
+							SetTileByHeight(col, row, 0f);
+							break;
+						case CForestTerrainSubType.Road:
+							SetTileByHeight(col, row, 0.5f);
+							break;
 
+					}
+				}
+			}
 		}
 
 		//我们简单的将地形推低, 露出之前铺满的水平面即可
@@ -122,25 +156,39 @@ namespace Sword
 
 		//用value来填充整个tile, 覆盖其他layer
 		//unity的terrain用的是索引来代表图层.
-		private void SetTileByName(int row, int col, int layer, float value)
+		private void SetTileByName(int col, int row, int layer, float value)
 		{
-			for (int i = 0; i < layerNum; ++i)
+			for (int i = 0; i < LayerNum; ++i)
 			{
-				_alphasList[row, col, i] = 0;
+				m_alphasList[row, col, i] = 0;
 			}
 
-			_alphasList[row, col, layer] = value;
+			m_alphasList[row, col, layer] = value;
 		}
 
-		private void SetTileAddiveByName(int row, int col, int layer, float value)
+		private void SetTileAddiveByName(int col, int row, int layer, float value)
 		{
-			_alphasList[row, col, layer] = value;
+			m_alphasList[row, col, layer] = value;
 		}
 
-		//这个col, row是heightmap的col, row. 跟alphamap不一样
-		private void SetTileByHeight(int row, int col, float value)
+
+		//这个col, row是alphamap的col, row
+		//所以我们要做个转换
+		private void SetTileByHeight(int col, int row, float value)
 		{
-			_heightsList[row, col] = value;
+			int scale = 8;
+			int sc = col * scale;
+			int ec = sc + scale;
+			int sr = row * scale;
+			int er = sr + scale;
+			
+			for (int c = sc; c < ec; c++)
+			{
+				for (int r = sr; r < er; r++)
+				{
+					m_heightsList[c, r] = value;
+				}
+			}
 		}
 
 		IEnumerator CoroutineBuild()
@@ -151,43 +199,20 @@ namespace Sword
 				for (int j = 0; j < m_assetGrid.NumRows; j++)
 				{
 					var tile = m_assetGrid.GetNodeSubType(i, j);
-					var prefab = GetPrefabBySubType(tile);
+					//var prefab = GetPrefabBySubType(tile);
 
-					var pos = CMapUtil.GetTileCenterPosByColRow(i, j);
-					LoadAndCreateTile(prefab, pos);
+					//var pos = CMapUtil.GetTileCenterPosByColRow(i, j);
+					//LoadAndCreateTile(prefab, pos);
 				}
 			}
 
 			yield return new WaitForEndOfFrame();
 		}
 
-		private string GetPrefabBySubType(int subType)
-		{
-			CForestTerrainSubType index = (CForestTerrainSubType) subType;
-			string str = string.Empty;
-			switch (index)
-			{
-				case CForestTerrainSubType.Grass1:
-					str = "Tile_1_A";
-					break;
-				case CForestTerrainSubType.Grass2:
-					str = "Tile_1_B";
-					break;
-				case CForestTerrainSubType.Land1:
-					str = "Tile_1_C";
-					break;
-				case CForestTerrainSubType.Land2:
-					str = "Tile_1_D";
-					break;
-			}
-
-			return str;
-		}
-
-		private void LoadAndCreateTile(string prefab, Vector3 pos)
-		{
-			AssetManager.LoadTilePrefab("map_forest", prefab, m_tran, pos);
-		}
+		//private void LoadAndCreateTile(string prefab, Vector3 pos)
+		//{
+		//	AssetManager.LoadTilePrefab("map_forest", prefab, m_tran, pos);
+		//}
 
 		//end class
 	}

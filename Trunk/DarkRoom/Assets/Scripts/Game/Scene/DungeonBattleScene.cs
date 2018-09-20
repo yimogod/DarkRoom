@@ -19,7 +19,7 @@ namespace Sword
 
 		public void Launch()
 		{
-			InitMapThing();
+			CreateMapData();
 			CreateMapThing();
 
 			//GameUtil.CameraFocusHero();
@@ -28,7 +28,7 @@ namespace Sword
 			GameEngine.Instance.Start();
 		}
 
-		private void InitMapThing()
+		private void CreateMapData()
 		{
 			MapMeta m_mapMeta = MapMetaManager.GetMeta(LevelId);
 			if (m_mapMeta == null)

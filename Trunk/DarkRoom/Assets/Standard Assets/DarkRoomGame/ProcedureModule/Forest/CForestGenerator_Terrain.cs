@@ -64,7 +64,7 @@ namespace DarkRoom.PCG
 			if (num <= 0) return;
 
 			//池塘的相关配置
-			var type = (int) CProcedureLayer.Terrain;
+			var type = (int) CPCGLayer.Terrain;
 			var subType = CForestTerrainSubType.Pond;
 			var walkable = CForestUtil.GetSubTypeWalkable(subType);
 
@@ -100,7 +100,7 @@ namespace DarkRoom.PCG
 			var perlin = new CPerlinMap(m_numCols, m_numRows);
 			perlin.Generate();
 
-			var type = (int) CProcedureLayer.Terrain;
+			var type = (int) CPCGLayer.Terrain;
 			for (int x = 0; x < m_numCols; x++)
 			{
 				for (int z = 0; z < m_numRows; z++)

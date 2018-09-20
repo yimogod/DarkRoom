@@ -169,8 +169,9 @@ namespace DarkRoom.Game
 
 		public override string ToString()
 		{
-			string str = "col: " + Col + ", row: " + Row;
-			return str;
+			//string str = "col: " + Col + ", row: " + Row;
+			//return str;
+			return SubType.ToString();
 		}
 	}
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DarkRoom.PCG
 {
-    public enum CProcedureLayer{
+    public enum CPCGLayer{
         Terrain,
         Decal,
         Unit, //单位
