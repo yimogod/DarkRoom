@@ -20,7 +20,7 @@ namespace DarkRoom.PCG
 	/// </summary>
 	public enum CForestTerrainSubType
 	{
-		Grass1,
+		Grass1 = 0,
 		Grass2,
 		Land1,
 		Land2,

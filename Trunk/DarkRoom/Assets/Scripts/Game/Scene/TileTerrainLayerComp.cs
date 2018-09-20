@@ -100,7 +100,7 @@ namespace Sword
 
 		public void CreateTerrain()
 		{
-			//CMapUtil.PrintGird(m_assetGrid.RawData);
+			CMapUtil.PrintGird(m_assetGrid.RawData);
 			for (int col = 0; col < m_assetGrid.NumCols; col++)
 			{
 				for (int row = 0; row < m_assetGrid.NumRows; row++)
@@ -186,7 +186,7 @@ namespace Sword
 			{
 				for (int r = sr; r < er; r++)
 				{
-					m_heightsList[c, r] = value;
+					m_heightsList[r, c] = value;
 				}
 			}
 		}

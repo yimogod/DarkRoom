@@ -19,10 +19,10 @@ namespace DarkRoom.PCG
 		/// 四种地面的基础材质, 看情况如果太多,会适当减少种类
 		/// </summary>
 		public float GrassHeight = 0.24f;
+		public float GrassHeight2 = 0.38f;
 
-		public float GrassHeight2 = 0.35f;
-		public float LandHeight = 0.52f;
-		public float LandHeight2 = 0.8f;
+		public float LandHeight = 0.55f;
+		public float LandHeight2 = 0.7f;
 
 		/// <summary>
 		/// 指代地图凸起
