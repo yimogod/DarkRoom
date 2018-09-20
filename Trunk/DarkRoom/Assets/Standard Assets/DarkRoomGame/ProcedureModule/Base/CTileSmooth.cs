@@ -9,6 +9,18 @@ namespace DarkRoom.PCG {
 	public class CTileSmooth
 	{
 		public void SmoothTileMapSprite(CAssetGrid tileMap){
+
+			//先将corner值都设置为0
+			for (int x = 0; x < tileMap.NumCols; x++)
+			{
+				for (int z = 0; x < tileMap.NumRows; z++)
+				{
+					CAssetNode tile = tileMap.GetNode(x, z);
+					tile.ResetCornerValue();
+				}
+			}
+
+			//再重新计算
 			for (int x = 0; x < tileMap.NumCols; x++)
 			{
 				for (int z = 0; x < tileMap.NumRows; z++)
