@@ -22,7 +22,7 @@ namespace DarkRoom.PCG{
 		//存储着自动机生成的数据 [x, y]
 		private CCellularGrid m_map;
 
-		private CFloodFill m_floodFill = new CFloodFill();
+		private CFloodFill<int> m_floodFill = new CFloodFill<int>();
 
 		//本地图中的房子
 		private List<CCaveRoom> m_survivingRooms = new List<CCaveRoom>();
@@ -77,16 +77,8 @@ namespace DarkRoom.PCG{
 		private void ProcessLittleRegion(int threshold, 
 			int little, int large, List<List<Vector2Int>> largeRegion)
 		{
-			List<List<Vector2Int>> roomRegions = m_floodFill.GetRegions(m_map, little);
+			List<List<Vector2Int>> roomRegions = m_floodFill.Process(m_map.RawData, threshold, little, large);
 			foreach (List<Vector2Int> roomRegion in roomRegions) {
-				//如果区域太小, 就抹去
-				if (roomRegion.Count < threshold) {
-					foreach (Vector2Int tile in roomRegion) {
-						m_map[tile.x, tile.y] = large;
-					}
-					continue;
-				}
-
 				if (largeRegion != null) {
 					largeRegion.Add(roomRegion);
 				}

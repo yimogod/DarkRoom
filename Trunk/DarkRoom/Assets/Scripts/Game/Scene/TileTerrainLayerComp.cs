@@ -19,7 +19,6 @@ namespace Sword
 		public Terrain Terrain;
 
 		private TerrainData m_data;
-		//我们的高度图是alpha图的4呗. 这样做是让陡崖更陡
 		private float[,] m_heightsList;
 		private float[,,] m_alphasList;
 
@@ -161,11 +160,11 @@ namespace Sword
 		//unity的terrain用的是索引来代表图层.
 		private void SetTileByName(int col, int row, int layer, float value)
 		{
-			int scale = 2;
-			int sc = col * scale;
-			int ec = sc + scale;
-			int sr = row * scale;
-			int er = sr + scale;
+            int unit = 2;
+			int sc = col * unit;
+			int ec = sc + unit;
+			int sr = row * unit;
+			int er = sr + unit;
 
 			for (int c = sc; c < ec; c++){
 				for (int r = sr; r < er; r++){
@@ -187,11 +186,11 @@ namespace Sword
 		//所以我们要做个转换
 		private void SetTileByHeight(int col, int row, float value)
 		{
-			int scale = 4;
-			int sc = col * scale;
-			int ec = sc + scale;
-			int sr = row * scale;
-			int er = sr + scale;
+            int unit = 4;
+			int sc = col * unit;
+			int ec = sc + unit;
+			int sr = row * unit;
+			int er = sr + unit;
 			
 			for (int c = sc; c < ec; c++)
 			{

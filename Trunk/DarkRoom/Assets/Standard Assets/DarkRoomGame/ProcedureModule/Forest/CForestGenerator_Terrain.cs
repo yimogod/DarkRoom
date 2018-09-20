@@ -34,7 +34,10 @@ namespace DarkRoom.PCG
 		/// </summary>
 		public int MaxPondNum = 5;
 
-		public CForestGenerator_Terrain()
+        //用于冲刷小块高地
+        private CFloodFill<int> m_floodFill = new CFloodFill<int>();
+
+        public CForestGenerator_Terrain()
 		{
 		}
 
@@ -100,16 +103,41 @@ namespace DarkRoom.PCG
 			var perlin = new CPerlinMap(m_numCols, m_numRows);
 			perlin.Generate();
 
-			var type = (int) CPCGLayer.Terrain;
-			for (int x = 0; x < m_numCols; x++)
+            //处理高地
+            //存储高地的数据
+            int[,] hillGrid = new int[m_numCols, m_numRows];
+
+            var type = (int) CPCGLayer.Terrain;
+            for (int x = 0; x < m_numCols; x++)
 			{
 				for (int z = 0; z < m_numRows; z++)
 				{
 					CForestTerrainSubType subType = GetSubTypeAtHeight(perlin[x, z]);
-					m_grid.FillData(x, z, type, (int) subType, CForestUtil.GetSubTypeWalkable(subType));
-				}
+					m_grid.FillData(x, z, type, (int)subType, CForestUtil.GetSubTypeWalkable(subType));
+                    hillGrid[x, z] = 0;
+                    if (subType == CForestTerrainSubType.Hill)
+                    {
+                        hillGrid[x, z] = 1;
+                    }
+                }
 			}
-		}
+
+
+            var hillType = (int)CForestTerrainSubType.Hill;
+            var landType = (int)CForestTerrainSubType.Land1;
+            m_floodFill.Process(hillGrid, 11, 1, 0);
+            //将处理过后的数据返还给assets
+            for (int x = 0; x < m_numCols; x++)
+            {
+                for (int z = 0; z < m_numRows; z++)
+                {
+                    var subType = m_grid.GetNodeSubType(x, z);
+                    if (subType == hillType && hillGrid[x, z] == 0)
+                        m_grid.SetNodeSubType(x, z, landType);
+                }
+            }
+
+        }
 
 		/// <summary>
 		/// 根据高度, 从配置中读取相关的asset

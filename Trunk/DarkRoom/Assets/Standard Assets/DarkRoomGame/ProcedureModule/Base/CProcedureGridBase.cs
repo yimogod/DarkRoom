@@ -11,6 +11,8 @@ namespace DarkRoom.PCG
         protected int m_numCols;
         protected int m_numRows;
 
+        public T[,] RawData => m_map;
+
         /// <summary>
         /// 返回网格列数
         /// </summary>
