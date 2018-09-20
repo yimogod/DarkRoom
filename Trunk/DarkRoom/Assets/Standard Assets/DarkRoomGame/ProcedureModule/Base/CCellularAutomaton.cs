@@ -28,15 +28,32 @@ namespace DarkRoom.PCG {
 
 		private int m_iterations = 5;
 
-		//x, y
-		private int[,] m_values;
+        private bool m_edgeAlive = true;
+
+        //x, y
+        private int[,] m_values;
         private int m_numCols;
 		private int m_numRows;
 
         /// <summary>
+        /// 细胞自动机, 0是死亡 1是活着
+        /// </summary>
+        public CCellularAutomaton()
+        {
+        }
+
+        /// <summary>
+        /// 处于边缘的是否活着
+        /// </summary>
+        public CCellularAutomaton(bool edgeAlive)
+        {
+            m_edgeAlive = edgeAlive;
+        }
+        
+        /// <summary>
         /// 对传入的数组做一次平滑处理
         /// </summary>
-	    public void SmoothOnce(int[,]  values)
+	    public void SmoothOnce(int[,] values)
 	    {
 	        m_values = values;
 	        m_numCols = m_values.GetLength(0);
@@ -67,49 +84,44 @@ namespace DarkRoom.PCG {
 
 		/*少数服从多数*/
 		private void MoreIsBetterThanLess() {
-			for(int y = 0; y < m_numRows; y++){
-				for(int x = 0; x < m_numCols; x++){
-					int num = FindSurroundAliveNum(x, y);
-					if(num < 4) {
-						m_values[x, y] = 0;
-					}else if(num > 4){
-						m_values[x, y] = 1;
-					}
-				}
-			}
+            //平滑池塘
+            for (int y = 0; y < m_numRows; y++)
+            {
+                for (int x = 0; x < m_numCols; x++)
+                {
+                    int cell = 0;
+                    cell += HasPondTileConnected(x + 1, y);
+                    cell += HasPondTileConnected(x + 1, y + 1);
+                    cell += HasPondTileConnected(x, y + 1);
+                    cell += HasPondTileConnected(x - 1, y + 1);
+                    cell += HasPondTileConnected(x - 1, y);
+                    cell += HasPondTileConnected(x - 1, y - 1);
+                    cell += HasPondTileConnected(x, y - 1);
+                    cell += HasPondTileConnected(x + 1, y - 1);
+
+                    if (cell < 4){
+                        m_values[x, y] = 0;
+                    }else if (cell > 4){
+                        m_values[x, y] = 1;
+                    }
+                }
+            }
+
+
 		}
 
-		/*寻找9宫格或者的个数*/
-		private int FindSurroundAliveNum(int col, int row){
-			int leftX = col - 1;
-			int rightX = col + 1;
-			int downY = row - 1;
-			int upY = row + 1;
 
-			int num = 0;
-			for (int x = leftX; x <= rightX; x ++){
-				for (int y = downY; y <= upY; y ++) {
-					//格子不合法就下一个
-					bool b = IsCoordValid(x, y);
-					//如果在边缘, 则算它生存条件良好
-					if (!b) {
-						num += 1;
-                        continue;
-					}
-					
-					if(m_values[x, y] == 1) {
-						num += 1;
-					}
-				}
-			}
+        //四周是不是有邻居
+        private int HasPondTileConnected(int x, int y)
+        {
+            int edgeValue = m_edgeAlive ? 1 : 0;
+            if (x <= 0 || x >= (m_numCols - 1)) return edgeValue;
+            if (y <= 0 || y >= (m_numRows - 1)) return edgeValue;
 
-			return num;
-		}
+            float v = m_values[x, y];
+            return v > 0 ? 1 : 0;
+        }
 
-		//坐标是否合法
-		private bool IsCoordValid(int x, int y) {
-			return x >= 0 && x < m_numCols && y >= 0 && y < m_numRows;
-		}
 
         //随机填充地图
 	    private void RandomFillMap() {

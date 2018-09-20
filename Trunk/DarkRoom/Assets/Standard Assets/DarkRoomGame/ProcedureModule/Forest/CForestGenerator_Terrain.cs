@@ -36,6 +36,8 @@ namespace DarkRoom.PCG
 
         //用于冲刷小块高地
         private CFloodFill<int> m_floodFill = new CFloodFill<int>();
+        //用细胞自动机平滑高地
+        private CCellularAutomaton m_cell = new CCellularAutomaton(false);
 
         public CForestGenerator_Terrain()
 		{
@@ -72,23 +74,24 @@ namespace DarkRoom.PCG
 			var walkable = CForestUtil.GetSubTypeWalkable(subType);
 
 			CPondGenerator p = new CPondGenerator();
-			int pondCols = 32;
-			int pondRows = 32;
-			int leftCols = m_numCols - pondCols;
+			int pondCols = CDarkRandom.Next(16, 32);
+			int pondRows = CDarkRandom.Next(16, 32);
+            int leftCols = m_numCols - pondCols;
 			int leftRows = m_numRows - pondRows;
 			Vector2Int size = new Vector2Int(pondCols, pondRows);
 
 			for (int i = 0; i < num; i++)
 			{
-				int startX = CDarkRandom.Next(pondCols, leftCols);
-				int startZ = CDarkRandom.Next(pondRows, leftRows);
+				int startX = CDarkRandom.Next(0, leftCols);
+				int startZ = CDarkRandom.Next(0, leftRows);
 				var ponds = p.Generate(size);
 
+                //活着的是池塘
 				for (int x = 0; x < pondCols; x++)
 				{
 					for (int z = 0; z < pondRows; z++)
 					{
-						if (ponds[x, z] < 0) continue;
+						if (ponds[x, z] < 1) continue;
 						m_grid.FillData(startX + x, startZ + z, type, (int) subType, walkable);
 					}
 				}
@@ -123,6 +126,7 @@ namespace DarkRoom.PCG
 			}
 
 
+            m_cell.SmoothOnce(hillGrid);
             var hillType = (int)CForestTerrainSubType.Hill;
             var landType = (int)CForestTerrainSubType.Land1;
             m_floodFill.Process(hillGrid, 11, 1, 0);
