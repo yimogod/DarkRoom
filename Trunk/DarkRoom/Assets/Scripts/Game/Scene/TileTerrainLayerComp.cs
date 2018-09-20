@@ -10,6 +10,9 @@ namespace Sword
 	/// 代表整个terrain go
 	/// 
 	/// 存储着地形数据/装饰物信息等无关逻辑的信息
+	/// 
+	/// 注意, alpha的尺寸是terrain尺寸的2x2=4倍
+	/// 高度图的尺寸是4x4 =16
 	/// </summary>
 	public class TileTerrainLayerComp : MonoBehaviour
 	{
@@ -158,12 +161,20 @@ namespace Sword
 		//unity的terrain用的是索引来代表图层.
 		private void SetTileByName(int col, int row, int layer, float value)
 		{
-			for (int i = 0; i < LayerNum; ++i)
-			{
-				m_alphasList[row, col, i] = 0;
-			}
+			int scale = 2;
+			int sc = col * scale;
+			int ec = sc + scale;
+			int sr = row * scale;
+			int er = sr + scale;
 
-			m_alphasList[row, col, layer] = value;
+			for (int c = sc; c < ec; c++){
+				for (int r = sr; r < er; r++){
+					for (int i = 0; i < LayerNum; ++i){
+						m_alphasList[r, c, i] = 0;
+					}
+					m_alphasList[r, c, layer] = value;
+				}
+			}
 		}
 
 		private void SetTileAddiveByName(int col, int row, int layer, float value)
@@ -176,7 +187,7 @@ namespace Sword
 		//所以我们要做个转换
 		private void SetTileByHeight(int col, int row, float value)
 		{
-			int scale = 8;
+			int scale = 4;
 			int sc = col * scale;
 			int ec = sc + scale;
 			int sr = row * scale;
