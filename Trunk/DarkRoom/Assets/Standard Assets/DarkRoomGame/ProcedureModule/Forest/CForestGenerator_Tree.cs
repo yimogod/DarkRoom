@@ -6,40 +6,26 @@ using UnityEngine;
 namespace DarkRoom.PCG
 {
 	/// <summary>
-	/// 产生terrain的数据, 包含路和池塘
+	/// 产生森林里面的树, 石头, 蘑菇, 坟地等障碍
 	/// 
-	/// 关于terrain的资源
-	/// 0, 1两种草地
-	/// 2, 3两种土路
-	/// 4 凸起
+	/// 注意, 树会占用3x3的不可通行的格子
+	/// 我们在产生树之后清理他周围的东西
 	/// </summary>
 	public class CForestGenerator_Tree : CTileMapGeneratorBase
 	{
 		/// <summary>
-		/// 四种地面的基础材质, 看情况如果太多,会适当减少种类
+		/// 障碍物的比例
 		/// </summary>
-		public float GrassHeight = 0.24f;
+		public float TreePercent = 0.4f;
 
-		public float GrassHeight2 = 0.38f;
+		public float TreeHeight1 = 0.23f;
+		public float TreeHeight2 = 0.5f;
 
-		public float LandHeight = 0.55f;
-		public float LandHeight2 = 0.7f;
+		public float RockHeight1 = 0.6f;
+		public float RockHeight2 = 0.8f;
 
-		/// <summary>
-		/// 指代地图凸起
-		/// </summary>
-		public float WallHeight = 1f;
-
-		/// <summary>
-		/// 创建池塘的个数
-		/// </summary>
-		public int MaxPondNum = 5;
-
-		//用于冲刷小块高地
-		private CFloodFill<int> m_floodFill = new CFloodFill<int>();
-
-		//用细胞自动机平滑高地
-		private CCellularAutomaton m_cell = new CCellularAutomaton(false);
+		public float PlantHeight1 = 0.85f;
+		public float PlantHeight2 = 0.94f;
 
 		public CForestGenerator_Tree()
 		{
@@ -52,94 +38,40 @@ namespace DarkRoom.PCG
 		{
 			m_grid.Init(cols, rows);
 
-			GenerateTerrain();
-			GeneratePond();
-			GenerateRoad();
-		}
-
-		/// <summary>
-		/// 创建道路, 需要在创建房屋之后再调用
-		/// </summary>
-		public void GenerateRoad()
-		{
-		}
-
-		private void GeneratePond()
-		{
-			if (MaxPondNum <= 0) return;
-			int num = CDarkRandom.Next(MaxPondNum + 1);
-			if (num <= 0) return;
-
-			//池塘的相关配置
-			var type = (int) CPCGLayer.Terrain;
-			var subType = CForestTerrainSubType.Pond;
-			var walkable = CForestUtil.GetSubTypeWalkable(subType);
-
-			CPondGenerator p = new CPondGenerator();
-			int pondCols = CDarkRandom.Next(16, 32);
-			int pondRows = CDarkRandom.Next(16, 32);
-			int leftCols = m_numCols - pondCols;
-			int leftRows = m_numRows - pondRows;
-			Vector2Int size = new Vector2Int(pondCols, pondRows);
-
-			for (int i = 0; i < num; i++)
-			{
-				int startX = CDarkRandom.Next(0, leftCols);
-				int startZ = CDarkRandom.Next(0, leftRows);
-				var ponds = p.Generate(size);
-
-				//活着的是池塘
-				for (int x = 0; x < pondCols; x++)
-				{
-					for (int z = 0; z < pondRows; z++)
-					{
-						if (ponds[x, z] < 1) continue;
-						m_grid.FillData(startX + x, startZ + z, type, (int) subType, walkable);
-					}
-				}
-			}
+			GenerateTree();
+			BreatheTree();
 		}
 
 		/// <summary>
 		/// 柏林噪声产生地形数据, 
 		/// </summary>
-		private void GenerateTerrain()
+		private void GenerateTree()
 		{
 			var perlin = new CPerlinMap(m_numCols, m_numRows);
 			perlin.Generate();
 
-			//处理高地
-			//存储高地的数据
-			int[,] hillGrid = new int[m_numCols, m_numRows];
+			var type = (int) CPCGLayer.Block;
+			var scaleHeight = 1.0f / (1.0f - TreePercent);
 
-			var type = (int) CPCGLayer.Terrain;
-			for (int x = 0; x < m_numCols; x++)
+			for (int col = 0; col < m_numCols; col++)
 			{
-				for (int z = 0; z < m_numRows; z++)
+				for (int row = 0; row < m_numRows; row++)
 				{
-					CForestTerrainSubType subType = GetSubTypeAtHeight(perlin[x, z]);
-					m_grid.FillData(x, z, type, (int) subType, CForestUtil.GetSubTypeWalkable(subType));
-					hillGrid[x, z] = 0;
-					if (subType == CForestTerrainSubType.Hill)
+					var height = perlin[col, row];
+
+					//不是树
+					if (height > TreePercent)
 					{
-						hillGrid[x, z] = 1;
+						var subType = CForestBlockSubType.None;
+						m_grid.FillData(col, row, type, (int)subType, true);
+						continue;
 					}
-				}
-			}
-
-
-			m_cell.SmoothOnce(hillGrid);
-			var hillType = (int) CForestTerrainSubType.Hill;
-			var landType = (int) CForestTerrainSubType.Land1;
-			m_floodFill.Process(hillGrid, 11, 1, 0);
-			//将处理过后的数据返还给assets
-			for (int x = 0; x < m_numCols; x++)
-			{
-				for (int z = 0; z < m_numRows; z++)
-				{
-					var subType = m_grid.GetNodeSubType(x, z);
-					if (subType == hillType && hillGrid[x, z] == 0)
-						m_grid.SetNodeSubType(x, z, landType);
+					else
+					{
+						height = (height - TreePercent) * scaleHeight;
+						var subType = GetSubTypeAtHeight(height);
+						m_grid.FillData(col, row, type, (int)subType, false);
+					}
 				}
 			}
 		}
@@ -147,27 +79,35 @@ namespace DarkRoom.PCG
 		/// <summary>
 		/// 根据高度, 从配置中读取相关的asset
 		/// </summary>
-		private CForestTerrainSubType GetSubTypeAtHeight(float height)
+		private CForestBlockSubType GetSubTypeAtHeight(float height)
 		{
-			//两种草
-			if (height <= GrassHeight)
-			{
-				if (CDarkRandom.SmallerThan(0.5f)) return CForestTerrainSubType.Grass1;
-				return CForestTerrainSubType.Grass1;
-			}
+			if (height <= TreeHeight1)return CForestBlockSubType.Tree1;
+			if (height <= TreeHeight2) return CForestBlockSubType.Tree2;
 
-			//另外一种草
-			if (height <= GrassHeight2) return CForestTerrainSubType.Grass2;
+			if (height <= RockHeight1) return CForestBlockSubType.Rock1;
+			if (height <= RockHeight2) return CForestBlockSubType.Rock2;
 
-			//两种地面
-			if (height <= LandHeight) return CForestTerrainSubType.Land1;
-			if (height <= LandHeight2) return CForestTerrainSubType.Land2;
+			if (height <= PlantHeight1) return CForestBlockSubType.Plant1;
+			if (height <= PlantHeight2) return CForestBlockSubType.Plant2;
 
-			//墙壁
-			if (height <= WallHeight) return CForestTerrainSubType.Hill;
-
-			//默认的绿草地
-			return CForestTerrainSubType.Grass1;
+			return CForestBlockSubType.Tree1;
 		}
+
+		/// <summary>
+		/// 树周边没有东西, 但不可通行
+		/// </summary>
+		private void BreatheTree()
+		{
+			//我们是从左下角开始遍历的, 所以只看右上方向即可
+			for (int row = 0; row < m_numRows; ++row)
+			{
+				for (int col = 0; col < m_numCols; ++col)
+				{
+					var node = m_grid.GetNode(col, row);
+					if (!node.Walkable) continue;
+
+				}
+			}
+		}//现在可以呼吸新鲜空气了
 	}
 }

@@ -29,9 +29,28 @@ namespace DarkRoom.PCG
 		Road,
 	}
 
+	/// <summary>
+	/// 森林里面障碍物的类型
+	/// 在使用的时候, 可以接着随机使用不同的asset
+	/// 本质上是6类, 每类可以是任何block
+	/// 
+	/// none说明没东西.但是否可通行不确定
+	/// 默认是可通行, 但如果周边的格子有树, 就不可通行
+	/// </summary>
+	public enum CForestBlockSubType
+	{
+		None = 0,
+		Tree1,
+		Tree2,
+		Rock1,
+		Rock2,
+		Plant1,
+		Plant2,
+	}
+
 	public class CForestUtil
 	{
-		public static bool GetSubTypeWalkable(CForestTerrainSubType subType)
+		public static bool GetTerrainTypeWalkable(CForestTerrainSubType subType)
 		{
 			bool v = false;
 			switch (subType)

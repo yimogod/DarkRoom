@@ -73,7 +73,7 @@ namespace DarkRoom.PCG
 			//池塘的相关配置
 			var type = (int) CPCGLayer.Terrain;
 			var subType = CForestTerrainSubType.Pond;
-			var walkable = CForestUtil.GetSubTypeWalkable(subType);
+			var walkable = CForestUtil.GetTerrainTypeWalkable(subType);
 
 			CPondGenerator p = new CPondGenerator();
 			int pondCols = CDarkRandom.Next(16, 32);
@@ -118,7 +118,7 @@ namespace DarkRoom.PCG
 				for (int z = 0; z < m_numRows; z++)
 				{
 					CForestTerrainSubType subType = GetSubTypeAtHeight(perlin[x, z]);
-					m_grid.FillData(x, z, type, (int) subType, CForestUtil.GetSubTypeWalkable(subType));
+					m_grid.FillData(x, z, type, (int) subType, CForestUtil.GetTerrainTypeWalkable(subType));
 					hillGrid[x, z] = 0;
 					if (subType == CForestTerrainSubType.Hill)
 					{
