@@ -18,7 +18,7 @@ namespace Sword
 		private ActorGenerator m_actorGen;
 		private CForestGenerator m_mapGen;
 
-		public CAssetGrid AssetGrid => m_mapGen.TerrainGrid;
+		public CAssetGrid TerrainGrid => m_mapGen.TerrainGrid;
 
 		public DungeonMapBuilder(MapMeta meta)
 		{
@@ -42,7 +42,7 @@ namespace Sword
 		public void CreateActor(TileUnitLayerComp unitLayer)
 		{
 			m_actorGen = unitLayer.GetOrCreateComponentOnGameObject<ActorGenerator>();
-			m_actorGen.Generate(m_mapMeta, AssetGrid);
+			m_actorGen.Generate(m_mapMeta, TerrainGrid);
 		}
 
 		/// <summary>

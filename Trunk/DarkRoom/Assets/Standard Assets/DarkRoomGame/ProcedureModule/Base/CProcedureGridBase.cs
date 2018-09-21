@@ -27,7 +27,9 @@ namespace DarkRoom.PCG
         {
             m_numCols = cols;
             m_numRows = rows;
-        }
+	        m_map = new T[cols, rows];
+
+		}
 
         /// <summary>
         /// 坐标是否在地图里面

@@ -7,305 +7,305 @@ using Random = UnityEngine.Random;
 
 namespace DarkRoom.PCG
 {
-    public class CForestGenerator_Room
-    {
-        /// <summary>
-        /// 入口要在地图边缘的方位
-        /// -1代表不需要在边缘
-        /// 正x轴为0, 逆时针增加
-        /// </summary>
-        public int EdgeEntrances = -1;
+	public class CForestGenerator_Room
+	{
+		/// <summary>
+		/// 入口要在地图边缘的方位
+		/// -1代表不需要在边缘
+		/// 正x轴为0, 逆时针增加
+		/// </summary>
+		public int EdgeEntrances = -1;
 
-        /// <summary>
-        /// 路尽头的房子来一个
-        /// </summary>
-        public int EndRoadRoomId = -1;
+		/// <summary>
+		/// 路尽头的房子来一个
+		/// </summary>
+		public int EndRoadRoomId = -1;
 
-        /// <summary>
-        /// 地图中需要的房子
-        /// </summary>
-        public List<int> RequiredRoomsId = new List<int>();
+		/// <summary>
+		/// 地图中需要的房子
+		/// </summary>
+		public List<int> RequiredRoomsId = new List<int>();
 
-        /// <summary>
-        /// 随机房子的种子
-        /// </summary>
-        public List<int> RandomRoomSeeds = new List<int>();
+		/// <summary>
+		/// 随机房子的种子
+		/// </summary>
+		public List<int> RandomRoomSeeds = new List<int>();
 
-        /// <summary>
-        /// 随机房子的个数
-        /// </summary>
-        public int RandomRoomNum = 0;
+		/// <summary>
+		/// 随机房子的个数
+		/// </summary>
+		public int RandomRoomNum = 0;
 
-        private Vector2Int m_size;
+		private Vector2Int m_size;
 
-        private CForestRoomMap m_roomMap;
-        private List<CForestRoomData> m_roomList = new List<CForestRoomData>();
+		private CProcedureGridBase<CForestRoomTileType> m_roomMap;
+		private List<CForestRoomData> m_roomList = new List<CForestRoomData>();
 
-        private CStarGrid m_starGrid = new CStarGrid();
-        private CAStar m_astar = new CAStar(CAStar.Connection.Four);
+		private CStarGrid m_starGrid = new CStarGrid();
+		private CAStar m_astar = new CAStar(CAStar.Connection.Four);
 
-        /// <summary>
-        /// 房屋地图数据, 其实就是个二维数组
-        /// </summary>
-        public CForestRoomMap RoomMap => m_roomMap;
+		/// <summary>
+		/// 房屋地图数据, 其实就是个二维数组
+		/// </summary>
+		public CProcedureGridBase<CForestRoomTileType> RoomMap => m_roomMap;
 
-        public void Generate(int cols, int rows)
-        {
-            m_roomMap = new CForestRoomMap(cols, rows);
+		public void Generate(int cols, int rows)
+		{
+			m_roomMap = new CProcedureGridBase<CForestRoomTileType>(cols, rows);
 
-            //开辟路尽头房子
-            RoomAllocInEdge(EndRoadRoomId);
+			//开辟路尽头房子
+			RoomAllocInEdge(EndRoadRoomId);
 
-            //开辟指定的房子
-            foreach (int id in RequiredRoomsId)
-            {
-                RoomAlloc(id);
-            }
+			//开辟指定的房子
+			foreach (int id in RequiredRoomsId)
+			{
+				RoomAlloc(id);
+			}
 
-            //开辟随机房子
-            int tryNum = Mathf.FloorToInt(RandomRoomNum * 1.5f);
-            tryNum = Random.Range(0, tryNum);
-            for (int i = 0; i < tryNum; i++)
-            {
-                int id = Random.Range(0, RandomRoomSeeds.Count);
-                RoomAlloc(id);
-            }
+			//开辟随机房子
+			int tryNum = Mathf.FloorToInt(RandomRoomNum * 1.5f);
+			tryNum = Random.Range(0, tryNum);
+			for (int i = 0; i < tryNum; i++)
+			{
+				int id = Random.Range(0, RandomRoomSeeds.Count);
+				RoomAlloc(id);
+			}
 
-            //给房子们连路
-            TunnelRooms();
-        }
+			//给房子们连路
+			TunnelRooms();
+		}
 
-        /// <summary>
-        /// 全地图开辟一个房间
-        /// 开辟过程中会做20次尝试
-        /// 如果开辟失败就不开辟
-        /// </summary>
-        private void RoomAlloc(int roomId)
-        {
-            if(roomId < 0)return;
-            var meta = CForestRoomMetaManager.GetMeta(roomId.ToString());
+		/// <summary>
+		/// 全地图开辟一个房间
+		/// 开辟过程中会做20次尝试
+		/// 如果开辟失败就不开辟
+		/// </summary>
+		private void RoomAlloc(int roomId)
+		{
+			if (roomId < 0) return;
+			var meta = CForestRoomMetaManager.GetMeta(roomId.ToString());
 
-            if (meta.HasPreferLocation)
-            {
-                PreferLocation(roomId);
-                return;
-            }
+			if (meta.HasPreferLocation)
+			{
+				PreferLocation(roomId);
+				return;
+			}
 
-            TryRoomAllocInRange(meta, new Vector2Int(0, 0), m_size);
-        }
+			TryRoomAllocInRange(meta, new Vector2Int(0, 0), m_size);
+		}
 
-        /// <summary>
-        /// 在地图外围1/3的区域开辟房间
-        /// </summary>
-        private void RoomAllocInEdge(int roomId)
-        {
-            if (roomId < 0) return;
-            var meta = CForestRoomMetaManager.GetMeta(roomId.ToString());
+		/// <summary>
+		/// 在地图外围1/3的区域开辟房间
+		/// </summary>
+		private void RoomAllocInEdge(int roomId)
+		{
+			if (roomId < 0) return;
+			var meta = CForestRoomMetaManager.GetMeta(roomId.ToString());
 
-            Vector2Int bottomLeft = new Vector2Int(0, 0);
-            Vector2Int topRight = m_size;
+			Vector2Int bottomLeft = new Vector2Int(0, 0);
+			Vector2Int topRight = m_size;
 
-            int edgeCols = Mathf.CeilToInt(m_size.x * 0.33f);
-            int edgeRows = Mathf.CeilToInt(m_size.y * 0.33f);
-            //45 90 135 在下半区域放房子
-            if (EdgeEntrances == 1 || EdgeEntrances == 2 || EdgeEntrances == 3)
-            {
-                bottomLeft.x = 0;
-                bottomLeft.y = 0;
-                topRight.x = m_size.x;
-                topRight.y = edgeRows;
-            }
-            //225, 270, 315 在上半区域放房子
-            else if (EdgeEntrances == 4 || EdgeEntrances == 6 || EdgeEntrances == 7)
-            {
-                bottomLeft.x = 0;
-                bottomLeft.y = m_size.y - edgeRows;
-                topRight.x = m_size.x;
-                topRight.y = m_size.y;
-            }
-            else if (EdgeEntrances == 0) //0 在左侧放房子
-            {
-                bottomLeft.x = 0;
-                bottomLeft.y = 0;
-                topRight.x = edgeCols;
-                topRight.y = m_size.y;
-            }
-            else//剩余的在右侧放房子
-            {
-                bottomLeft.x = m_size.x - edgeCols;
-                bottomLeft.y = 0;
-                topRight.x = m_size.x;
-                topRight.y = m_size.y;
-            }
+			int edgeCols = Mathf.CeilToInt(m_size.x * 0.33f);
+			int edgeRows = Mathf.CeilToInt(m_size.y * 0.33f);
+			//45 90 135 在下半区域放房子
+			if (EdgeEntrances == 1 || EdgeEntrances == 2 || EdgeEntrances == 3)
+			{
+				bottomLeft.x = 0;
+				bottomLeft.y = 0;
+				topRight.x = m_size.x;
+				topRight.y = edgeRows;
+			}
+			//225, 270, 315 在上半区域放房子
+			else if (EdgeEntrances == 4 || EdgeEntrances == 6 || EdgeEntrances == 7)
+			{
+				bottomLeft.x = 0;
+				bottomLeft.y = m_size.y - edgeRows;
+				topRight.x = m_size.x;
+				topRight.y = m_size.y;
+			}
+			else if (EdgeEntrances == 0) //0 在左侧放房子
+			{
+				bottomLeft.x = 0;
+				bottomLeft.y = 0;
+				topRight.x = edgeCols;
+				topRight.y = m_size.y;
+			}
+			else //剩余的在右侧放房子
+			{
+				bottomLeft.x = m_size.x - edgeCols;
+				bottomLeft.y = 0;
+				topRight.x = m_size.x;
+				topRight.y = m_size.y;
+			}
 
-            TryRoomAllocInRange(meta, bottomLeft, topRight);
-        }
+			TryRoomAllocInRange(meta, bottomLeft, topRight);
+		}
 
-        private void TryRoomAllocInRange(CForestRoomMeta meta, Vector2Int bottomLeft, Vector2Int topRight)
-        {
-            int tryNum = 20;
-            while (tryNum > 0)
-            {
-                int sx = Random.Range(bottomLeft.x, topRight.x - meta.Size.x);
-                int sy = Random.Range(bottomLeft.y, topRight.y - meta.Size.y);
-                int ex = sx + meta.Size.x;
-                int ey = sy + meta.Size.y;
-                bool b = CanPlaceRoom(sx, sy, ex, ey);
-                if (b) PlaceRoom(sx, sy, meta);
+		private void TryRoomAllocInRange(CForestRoomMeta meta, Vector2Int bottomLeft, Vector2Int topRight)
+		{
+			int tryNum = 20;
+			while (tryNum > 0)
+			{
+				int sx = Random.Range(bottomLeft.x, topRight.x - meta.Size.x);
+				int sy = Random.Range(bottomLeft.y, topRight.y - meta.Size.y);
+				int ex = sx + meta.Size.x;
+				int ey = sy + meta.Size.y;
+				bool b = CanPlaceRoom(sx, sy, ex, ey);
+				if (b) PlaceRoom(sx, sy, meta);
 
-                tryNum--;
-            }
-        }
+				tryNum--;
+			}
+		}
 
-        //这个矩形内是否有其他的房子
-        //我们假定ex,ey肯定大于sxsy
-        private bool CanPlaceRoom(int sx, int sy, int ex, int ey)
-        {
-            for (int x = sx; x < ex; x++)
-            {
-                for (int y = sy; y < ey; y++)
-                {
-                    var tile = m_roomMap[x, y];
-                    if (tile != null) return false;
-                }
-            }
+		//这个矩形内是否有其他的房子
+		//我们假定ex,ey肯定大于sxsy
+		private bool CanPlaceRoom(int sx, int sy, int ex, int ey)
+		{
+			for (int x = sx; x < ex; x++)
+			{
+				for (int y = sy; y < ey; y++)
+				{
+					var tile = m_roomMap[x, y];
+					if (tile != null) return false;
+				}
+			}
 
-            return true;
-        }
+			return true;
+		}
 
-        private void PlaceRoom(int sx, int sy, CForestRoomMeta meta)
-        {
-            for (int x = 0; x < meta.Size.x; x++)
-            {
-                for (int y = 0; y < meta.Size.y; y++)
-                {
-                    SetTileData(sx + x, sy + y, meta.sId, meta.GetSpot(x, y));
-                }
-            }
-            var room = new CForestRoomData(meta.sId, sx, sy);
-            m_roomList.Add(room);
-        }
+		private void PlaceRoom(int sx, int sy, CForestRoomMeta meta)
+		{
+			for (int x = 0; x < meta.Size.x; x++)
+			{
+				for (int y = 0; y < meta.Size.y; y++)
+				{
+					SetTileData(sx + x, sy + y, meta.sId, meta.GetSpot(x, y));
+				}
+			}
 
-        /// <summary>
-        /// 我们期望房子开辟在这里, 所以会覆盖所有的其他数据
-        /// </summary>
-        private void PreferLocation(int roomId)
-        {
-            if (roomId < 0) return;
-            var meta = CForestRoomMetaManager.GetMeta(roomId.ToString());
-            if (!meta.HasPreferLocation)return;
+			var room = new CForestRoomData(meta.sId, sx, sy);
+			m_roomList.Add(room);
+		}
 
-            int sx = meta.PreferLocation.x;
-            int sy = meta.PreferLocation.y;
-            int ex = sx + meta.Size.x;
-            int ey = sy + meta.Size.y;
+		/// <summary>
+		/// 我们期望房子开辟在这里, 所以会覆盖所有的其他数据
+		/// </summary>
+		private void PreferLocation(int roomId)
+		{
+			if (roomId < 0) return;
+			var meta = CForestRoomMetaManager.GetMeta(roomId.ToString());
+			if (!meta.HasPreferLocation) return;
 
-            if (sx < 0 || sy < 0)
-            {
-                Debug.LogError("PreferLocation Must Bigger Than 0!!");
-                return;
-            }
+			int sx = meta.PreferLocation.x;
+			int sy = meta.PreferLocation.y;
+			int ex = sx + meta.Size.x;
+			int ey = sy + meta.Size.y;
 
-            if (ex >= m_size.x || ey >= m_size.y)
-            {
-                Debug.LogError("PreferLocation + RoomSize Must Smaller Than MapSize!!");
-                return;
-            }
+			if (sx < 0 || sy < 0)
+			{
+				Debug.LogError("PreferLocation Must Bigger Than 0!!");
+				return;
+			}
 
-            PlaceRoom(sx, sy, meta);
-        }
+			if (ex >= m_size.x || ey >= m_size.y)
+			{
+				Debug.LogError("PreferLocation + RoomSize Must Smaller Than MapSize!!");
+				return;
+			}
 
-        /// <summary>
-        /// 在地图边缘做个梯子
-        /// </summary>
-        private void MakeStairsSides()
-        {
+			PlaceRoom(sx, sy, meta);
+		}
 
-        }
+		/// <summary>
+		/// 在地图边缘做个梯子
+		/// </summary>
+		private void MakeStairsSides()
+		{
+		}
 
-        private void MakeStairsInside()
-        {
+		private void MakeStairsInside()
+		{
+		}
 
-        }
+		/// <summary>
+		/// 连接房子
+		/// </summary>
+		private void TunnelRooms()
+		{
+			if (m_roomList.Count == 0) return;
 
-        /// <summary>
-        /// 连接房子
-        /// </summary>
-        private void TunnelRooms()
-        {
-            if (m_roomList.Count == 0)return;
+			m_starGrid.Init(m_size.x, m_size.y);
+			//读取所有房子的站位数据到寻路地图中
+			foreach (var room in m_roomList)
+			{
+				for (int c = 0; c < room.NumCols; c++)
+				{
+					for (int r = 0; r < room.NumRows; r++)
+					{
+						var pos = room.GetTilePosition(c, r);
+						m_starGrid.SetWalkable(pos, false);
+					}
+				}
+			}
 
-            m_starGrid.Init(m_size.x, m_size.y);
-            //读取所有房子的站位数据到寻路地图中
-            foreach (var room in m_roomList)
-            {
-                for (int c = 0; c < room.NumCols; c++)
-                {
-                    for (int r = 0; r < room.NumRows; r++)
-                    {
-                        var pos = room.GetTilePosition(c, r);
-                        m_starGrid.SetWalkable(pos, false);
-                    }
-                }
-            }
+			for (int i = 0; i < m_roomList.Count - 1; i++)
+			{
+				if (Random.value > 0.5) continue;
+				TunnelTwoRoom(m_roomList[i], m_roomList[i + 1]);
+			}
+		}
 
-            for (int i = 0; i < m_roomList.Count - 1; i++)
-            {
-                if(Random.value > 0.5)continue;
-                TunnelTwoRoom(m_roomList[i], m_roomList[i + 1]);
-            }
-        }
+		private void TunnelTwoRoom(CForestRoomData a, CForestRoomData b)
+		{
+			bool v = CheckTunnelDoor(a, b);
+			if (!v) return;
 
-        private void TunnelTwoRoom(CForestRoomData a, CForestRoomData b)
-        {
-            bool v = CheckTunnelDoor(a, b);
-            if (!v)return;
+			m_starGrid.SetStartNode(a.DoorForTunnel);
+			m_starGrid.SetEndNode(b.DoorForTunnel);
+			m_astar.FindPath(m_starGrid);
+			var path = m_astar.path;
+			foreach (var node in path)
+			{
+				SetTileData(node.Col, node.Row, "-1", CForestRoomTileType.OuterRoad);
+			}
+		}
 
-            m_starGrid.SetStartNode(a.DoorForTunnel);
-            m_starGrid.SetEndNode(b.DoorForTunnel);
-            m_astar.FindPath(m_starGrid);
-            var path = m_astar.path;
-            foreach (var node in path)
-            {
-                SetTileData(node.Col, node.Row, "-1", CForestRoomTileType.OuterRoad);
-            }
-        }
+		/// <summary>
+		/// 根据两个房子的方向, 确认两个房子的连接路时的门
+		/// </summary>
+		private bool CheckTunnelDoor(CForestRoomData a, CForestRoomData b)
+		{
+			if (a.Meta.DoorPosList.Count == 0) return false;
+			if (b.Meta.DoorPosList.Count == 0) return false;
 
-        /// <summary>
-        /// 根据两个房子的方向, 确认两个房子的连接路时的门
-        /// </summary>
-        private bool CheckTunnelDoor(CForestRoomData a, CForestRoomData b)
-        {
-            if (a.Meta.DoorPosList.Count == 0) return false;
-            if (b.Meta.DoorPosList.Count == 0) return false;
+			int minDis = int.MaxValue;
+			int aIndex = -1;
+			int bIndex = -1;
+			for (int i = 0; i < a.Meta.DoorPosList.Count; i++)
+			{
+				Vector2Int ad = a.GetDoorPosition(i);
+				for (int j = 0; j < b.Meta.DoorPosList.Count; j++)
+				{
+					Vector2Int bd = b.GetDoorPosition(j);
+					int dis = ad.ManhattanMagnitude(bd);
+					if (dis < minDis)
+					{
+						minDis = dis;
+						aIndex = i;
+						bIndex = j;
+					}
+				}
+			}
 
-            int minDis = int.MaxValue;
-            int aIndex = -1;
-            int bIndex = -1;
-            for (int i = 0; i < a.Meta.DoorPosList.Count; i++)
-            {
-                Vector2Int ad = a.GetDoorPosition(i);
-                for (int j = 0; j < b.Meta.DoorPosList.Count; j++)
-                {
-                    Vector2Int bd = b.GetDoorPosition(j);
-                    int dis = ad.ManhattanMagnitude(bd);
-                    if (dis < minDis)
-                    {
-                        minDis = dis;
-                        aIndex = i;
-                        bIndex = j;
-                    }
-                }
-            }
-            a.SetTempDoorForTunnel(aIndex);
-            b.SetTempDoorForTunnel(bIndex);
+			a.SetTempDoorForTunnel(aIndex);
+			b.SetTempDoorForTunnel(bIndex);
 
-            return true;
-        }
+			return true;
+		}
 
-        private void SetTileData(int x, int y, string id, CForestRoomTileType type)
-        {
-            m_roomMap[x, y] = type;
-        }
-    }
+		private void SetTileData(int x, int y, string id, CForestRoomTileType type)
+		{
+			m_roomMap[x, y] = type;
+		}
+	}
 }

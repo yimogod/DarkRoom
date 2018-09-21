@@ -13,7 +13,7 @@ namespace DarkRoom.PCG
 	/// 2, 3两种土路
 	/// 4 凸起
 	/// </summary>
-	public class CForestGenerator_Terrain : CTileMapGeneratorBase
+	public class CForestGenerator_Tree : CTileMapGeneratorBase
 	{
 		/// <summary>
 		/// 四种地面的基础材质, 看情况如果太多,会适当减少种类
@@ -41,7 +41,7 @@ namespace DarkRoom.PCG
 		//用细胞自动机平滑高地
 		private CCellularAutomaton m_cell = new CCellularAutomaton(false);
 
-		public CForestGenerator_Terrain()
+		public CForestGenerator_Tree()
 		{
 		}
 
