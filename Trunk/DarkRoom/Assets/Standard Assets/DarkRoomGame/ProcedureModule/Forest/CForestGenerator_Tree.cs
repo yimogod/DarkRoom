@@ -37,8 +37,31 @@ namespace DarkRoom.PCG
 		public void Generate(int cols, int rows)
 		{
 			m_grid.Init(cols, rows);
-
 			GenerateTree();
+		}
+
+		/// <summary>
+		/// 删除不合理的树的位置
+		/// 比如此地块不可通行, 那么就不能种树
+		/// </summary>
+		public void DeleteTreeAtIllegalPostion(CAssetGrid terrainGrid)
+		{
+			var noneType = (int)CForestBlockSubType.None;
+			var type = (int)CPCGLayer.Block;
+
+			for (int col = 0; col < m_numCols; col++)
+			{
+				for (int row = 0; row < m_numRows; row++)
+				{
+					var node = m_grid.GetNode(col, row);
+					if(node.SubType == noneType)continue;
+
+					var terrType = (CForestTerrainSubType)terrainGrid.GetNodeSubType(col, row);
+					if(CForestUtil.CanPlaceTreeOnTerrainType(terrType))continue;
+					m_grid.FillData(col, row, type, noneType, true);
+				}
+			}
+
 			BreatheTree();
 		}
 
@@ -52,6 +75,7 @@ namespace DarkRoom.PCG
 
 			var type = (int) CPCGLayer.Block;
 			var scaleHeight = 1.0f / (1.0f - TreePercent);
+			var noneType = (int)CForestBlockSubType.None;
 
 			for (int col = 0; col < m_numCols; col++)
 			{
@@ -62,8 +86,7 @@ namespace DarkRoom.PCG
 					//不是树
 					if (height > TreePercent)
 					{
-						var subType = CForestBlockSubType.None;
-						m_grid.FillData(col, row, type, (int)subType, true);
+						m_grid.FillData(col, row, type, noneType, true);
 						continue;
 					}
 					else
@@ -98,14 +121,22 @@ namespace DarkRoom.PCG
 		/// </summary>
 		private void BreatheTree()
 		{
+			var tree1 = (int) CForestBlockSubType.Tree1;
+			var tree2 = (int)CForestBlockSubType.Tree2;
+			var newSubType = (int)CForestBlockSubType.None;
+			var type = (int)CPCGLayer.Block;
+
 			//我们是从左下角开始遍历的, 所以只看右上方向即可
 			for (int row = 0; row < m_numRows; ++row)
 			{
 				for (int col = 0; col < m_numCols; ++col)
 				{
-					var node = m_grid.GetNode(col, row);
-					if (!node.Walkable) continue;
+					var subType = m_grid.GetNode(col, row).SubType;
+					if(subType != tree1 && subType != tree2)continue;
 
+					m_grid.FillData(col + 1, row,       type, newSubType, false);
+					m_grid.FillData(col,       row + 1, type, newSubType, false);
+					m_grid.FillData(col + 1, row + 1, type, newSubType, false);
 				}
 			}
 		}//现在可以呼吸新鲜空气了

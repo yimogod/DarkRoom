@@ -70,6 +70,27 @@ namespace DarkRoom.PCG
 
 			return v;
 		}
+
+		public static bool CanPlaceTreeOnTerrainType(CForestTerrainSubType subType)
+		{
+			bool v = false;
+			switch (subType)
+			{
+				case CForestTerrainSubType.Grass1:
+				case CForestTerrainSubType.Grass2:
+				case CForestTerrainSubType.Land1:
+				case CForestTerrainSubType.Land2:
+					v = true;
+					break;
+				case CForestTerrainSubType.Road:
+				case CForestTerrainSubType.Hill:
+				case CForestTerrainSubType.Pond:
+					v = false;
+					break;
+			}
+
+			return v;
+		}
 	}
 
 	/// <summary>

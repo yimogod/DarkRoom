@@ -61,7 +61,7 @@ namespace DarkRoom.Game
 			CAssetNode node = GetNode(col, row);
 			if (node.Invalid)
 			{
-				Debug.LogError("Set Value and Asset Error");
+				Debug.LogWarning("Set Value and Asset Error");
 				return;
 			}
 
