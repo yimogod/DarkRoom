@@ -19,6 +19,7 @@ namespace Sword
 		private CForestGenerator m_mapGen;
 
 		public CAssetGrid TerrainGrid => m_mapGen.TerrainGrid;
+        public CAssetGrid PropsGrid => m_mapGen.TreeGrid;
 
 		public DungeonMapBuilder(MapMeta meta)
 		{
@@ -29,17 +30,14 @@ namespace Sword
 		/// 随机生成地图及tile数据
 		/// 并且把数据填充入TileTerrainComp
 		/// </summary>
-		public void CreateMap(TileTerrainLayerComp terrainLayer)
+		public void CreateMap()
 		{
-			//地图生成器生成地图
-			CForestGenerator gen = terrainLayer.GetOrCreateComponentOnGameObject<CForestGenerator>();
-			gen.Generate();
-			m_mapGen = gen;
-
-			terrainLayer.SetAssetGrid(gen.TerrainGrid);
+            m_mapGen = new CForestGenerator();
+            m_mapGen.Generate();
 		}
 
-		public void CreateActor(TileUnitLayerComp unitLayer)
+
+		public void CreateActor(TilePropsLayerComp unitLayer)
 		{
 			m_actorGen = unitLayer.GetOrCreateComponentOnGameObject<ActorGenerator>();
 			m_actorGen.Generate(m_mapMeta, TerrainGrid);

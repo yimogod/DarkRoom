@@ -66,12 +66,12 @@ namespace DarkRoom.PCG
 
 		private void GeneratePond()
 		{
-			if (MaxPondNum <= 0) return;
+			if (MaxPondNum <= 0)return;
 			int num = CDarkRandom.Next(MaxPondNum + 1);
-			if (num <= 0) return;
+			if (num <= 0)return;
 
 			//池塘的相关配置
-			var type = (int) CPCGLayer.Terrain;
+			var type = (int)CPCGLayer.Terrain;
 			var subType = CForestTerrainSubType.Pond;
 			var walkable = CForestUtil.GetTerrainTypeWalkable(subType);
 
@@ -94,7 +94,7 @@ namespace DarkRoom.PCG
 					for (int z = 0; z < pondRows; z++)
 					{
 						if (ponds[x, z] < 1) continue;
-						m_grid.FillData(startX + x, startZ + z, type, (int) subType, walkable);
+						m_grid.FillData(startX + x, startZ + z, type, (int)subType, walkable);
 					}
 				}
 			}

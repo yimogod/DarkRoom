@@ -3,6 +3,12 @@ using UnityEngine;
 namespace Sword {
 	public class GameConst
 	{
+        /// <summary>
+        /// terrain的中间位置
+        /// </summary>
+        public const float DEFAULT_TERRAIN_HEIGHT = 4f;
+
+
 		//tile的尺寸, 如果是3d, 则基于米, 如果是2d, 则基于像素
 		public static float TILE_SIZE = 1f;
 		//在点击地面时是否讲坐标转换为tile中心的坐标

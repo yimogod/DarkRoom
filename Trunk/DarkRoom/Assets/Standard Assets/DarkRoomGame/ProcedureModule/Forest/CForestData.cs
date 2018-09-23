@@ -40,8 +40,7 @@ namespace DarkRoom.PCG
 	public enum CForestBlockSubType
 	{
 		None = 0,
-		Tree1,
-		Tree2,
+		Tree,
 		Rock1,
 		Rock2,
 		Plant1,

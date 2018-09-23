@@ -16,10 +16,9 @@ namespace DarkRoom.PCG
 		/// <summary>
 		/// 障碍物的比例
 		/// </summary>
-		public float TreePercent = 0.4f;
+		public float TreePercent = 0.3f;
 
-		public float TreeHeight1 = 0.23f;
-		public float TreeHeight2 = 0.5f;
+		public float TreeHeight = 0.5f;
 
 		public float RockHeight1 = 0.6f;
 		public float RockHeight2 = 0.8f;
@@ -89,12 +88,10 @@ namespace DarkRoom.PCG
 						m_grid.FillData(col, row, type, noneType, true);
 						continue;
 					}
-					else
-					{
-						height = (height - TreePercent) * scaleHeight;
-						var subType = GetSubTypeAtHeight(height);
-						m_grid.FillData(col, row, type, (int)subType, false);
-					}
+
+					height = (height - TreePercent) * scaleHeight;
+					var subType = GetSubTypeAtHeight(height);
+					m_grid.FillData(col, row, type, (int)subType, false);
 				}
 			}
 		}
@@ -104,8 +101,7 @@ namespace DarkRoom.PCG
 		/// </summary>
 		private CForestBlockSubType GetSubTypeAtHeight(float height)
 		{
-			if (height <= TreeHeight1)return CForestBlockSubType.Tree1;
-			if (height <= TreeHeight2) return CForestBlockSubType.Tree2;
+			if (height <= TreeHeight)return CForestBlockSubType.Tree;
 
 			if (height <= RockHeight1) return CForestBlockSubType.Rock1;
 			if (height <= RockHeight2) return CForestBlockSubType.Rock2;
@@ -113,7 +109,7 @@ namespace DarkRoom.PCG
 			if (height <= PlantHeight1) return CForestBlockSubType.Plant1;
 			if (height <= PlantHeight2) return CForestBlockSubType.Plant2;
 
-			return CForestBlockSubType.Tree1;
+			return CForestBlockSubType.Tree;
 		}
 
 		/// <summary>
@@ -121,8 +117,7 @@ namespace DarkRoom.PCG
 		/// </summary>
 		private void BreatheTree()
 		{
-			var tree1 = (int) CForestBlockSubType.Tree1;
-			var tree2 = (int)CForestBlockSubType.Tree2;
+			var tree = (int)CForestBlockSubType.Tree;
 			var newSubType = (int)CForestBlockSubType.None;
 			var type = (int)CPCGLayer.Block;
 
@@ -132,12 +127,15 @@ namespace DarkRoom.PCG
 				for (int col = 0; col < m_numCols; ++col)
 				{
 					var subType = m_grid.GetNode(col, row).SubType;
-					if(subType != tree1 && subType != tree2)continue;
+					if(subType != tree)continue;
 
-					m_grid.FillData(col + 1, row,       type, newSubType, false);
-					m_grid.FillData(col,       row + 1, type, newSubType, false);
-					m_grid.FillData(col + 1, row + 1, type, newSubType, false);
-				}
+                    m_grid.FillData(col - 1, row + 1, type, newSubType, false);
+                    m_grid.FillData(col,     row + 1,     type, newSubType, false);
+                    m_grid.FillData(col + 1, row + 1, type, newSubType, false);
+                    m_grid.FillData(col + 1, row,     type, newSubType, false);
+                    m_grid.FillData(col + 1, row - 1, type, newSubType, false);
+
+                }
 			}
 		}//现在可以呼吸新鲜空气了
 	}

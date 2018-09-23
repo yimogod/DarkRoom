@@ -123,8 +123,16 @@ namespace DarkRoom.Game {
 
 
         public GameObject Root;
+
+        /// <summary>
+        /// 存放地形以及地面上的非逻辑性的单位, 比如障碍物, 贴花等
+        /// </summary>
         public Transform TerrainLayer;
-        public Transform UnitLayer;//存放所有的可以交互的单位, 英雄,npc,掉落物品等等
+
+        /// <summary>
+        /// 存放所有的可以交互的单位, 英雄,npc,掉落物品等等
+        /// </summary>
+        public Transform UnitLayer;
 
         /// <summary>
         /// 做go缓存的layer

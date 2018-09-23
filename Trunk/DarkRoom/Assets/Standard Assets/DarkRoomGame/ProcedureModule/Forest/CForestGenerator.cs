@@ -22,27 +22,38 @@ namespace DarkRoom.PCG
 	   * 为什么要强调64x64, 因为如果地图小于64的话, 细胞自动机随机的不够, 不能够产生合理数据
 	   * 如果地图小于64, 需要在64上随机, 然后采样成小地图
 	*/
-	public class CForestGenerator : MonoBehaviour
+	public class CForestGenerator
 	{
 		/// <summary>
 		/// 基础地形的数据
 		/// </summary>
 		public CAssetGrid TerrainGrid => m_terrain.Grid;
 
-		private CForestGenerator_Terrain m_terrain;
-		private CForestGenerator_Room m_room;
+        /// <summary>
+        /// 障碍物数据
+        /// </summary>
+        public CAssetGrid TreeGrid => m_tree.Grid;
 
-		void Awake()
+		private CForestGenerator_Terrain m_terrain;
+        private CForestGenerator_Tree m_tree;
+        private CForestGenerator_Room m_room;
+
+		public CForestGenerator()
 		{
 			m_terrain = new CForestGenerator_Terrain();
 			m_room = new CForestGenerator_Room();
-		}
+            m_tree = new CForestGenerator_Tree();
+        }
 
 		public void Generate()
 		{
 			m_terrain.Generate(64, 64);
 			m_room.Generate(64, 64);
-			m_terrain.GenerateRoad();
-		}
+            m_tree.Generate(64, 64);
+
+            m_terrain.GenerateRoad();
+
+            m_tree.DeleteTreeAtIllegalPostion(m_terrain.Grid);
+        }
 	}
 }
