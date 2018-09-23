@@ -23,7 +23,6 @@ namespace Sword
 
 		protected override void StartLoadingPrefab()
 		{
-			CheckAllAssetsLoadComplete();
 		}
 
 		protected override void OnEntireLevelComplete()

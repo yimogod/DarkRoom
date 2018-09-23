@@ -156,7 +156,7 @@ namespace DarkRoom.PCG
 
     public class CForestRoomMetaParser : CMetaParser
     {
-        public CForestRoomMetaParser() : base(true)
+        public CForestRoomMetaParser(Action complete) : base(true, complete)
         {
         }
 

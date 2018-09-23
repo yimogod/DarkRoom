@@ -22,7 +22,7 @@ namespace DarkRoom.Game
 		/// <summary>
 		/// 全部解析主要内容
 		/// </summary>
-		public void Execute()
+		public virtual void Execute()
 		{
 			foreach (var item in m_list)
 			{

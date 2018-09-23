@@ -44,7 +44,7 @@ namespace Sword{
 
 	#region parser
 	public class MapMetaParser: CMetaParser{
-        public MapMetaParser() : base(true){}
+        public MapMetaParser(Action complete) : base(true, complete) {}
 
         protected override void Parse(){
 		    m_xreader.ReadRootNode();

@@ -62,6 +62,7 @@ namespace DarkRoom.UI
 
 		protected virtual void PreEnter(CStateMachine sm)
 		{
+			m_preCreatePrefabAddress.Clear();
 			m_enterSceneAssetLoadedNum = 0;
 			m_enterSceneAssetMaxNum = 0;
 		}
@@ -142,8 +143,10 @@ namespace DarkRoom.UI
 			if (m_enterSceneAssetLoadedNum < m_enterSceneAssetMaxNum) return;
 
 			SceneManager.UnloadSceneAsync(LoadingSceneName);
+
 			m_loadingTimeReg.Stop();
 
+			Debug.LogWarningFormat("load all asset {0} complete", m_enterSceneAssetMaxNum);
 			OnEntireLevelComplete();
 		}
 

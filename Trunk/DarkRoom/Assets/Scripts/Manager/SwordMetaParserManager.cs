@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DarkRoom.Game;
+using DarkRoom.PCG;
 
 namespace Sword
 {
@@ -28,8 +29,8 @@ namespace Sword
 			//AddPaser("Meta/effect_meta", new CEffectMetaParser());
 			//AddPaser("Meta/buff_meta", new CBuffMetaParser());
 
-			//AddPaser("Meta/forest_room_meta", new CForestRoomMetaParser());
-			//AddPaser("Meta/map_meta", new MapMetaParser());
+			AddPaser("Meta/forest_room_meta", new CForestRoomMetaParser(OnSingleParseComplete));
+			AddPaser("Meta/map_meta", new MapMetaParser(OnSingleParseComplete));
 			HasInitMain = true;
 		}
 

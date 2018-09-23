@@ -54,7 +54,8 @@ namespace Sword
 
 		protected override void StartLoadingPrefab()
 		{
-			if (m_firstEnter)m_parser.Execute();
+			//如果没有解析过才解析
+			if (m_firstEnter) m_parser.Execute();
 
 			foreach (var item in m_preCreatePrefabAddress)
 			{
