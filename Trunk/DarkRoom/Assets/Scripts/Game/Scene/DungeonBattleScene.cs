@@ -16,6 +16,7 @@ namespace Sword
 		private DungeonMapBuilder m_builder;
 		private TileTerrainLayerComp m_terrainLayer = null;
 		private TileBlockLayerComp m_blockLayer = null;
+		private TileDecalLayerComp m_decalLayer = null;
 
 		private TileDebugLayerComp m_debugLayer = null;
 
@@ -48,10 +49,14 @@ namespace Sword
             m_terrainLayer.SetAssetGrid(m_builder.TerrainGrid);
 			m_terrainLayer.CopyUnWalkableToGrid(TMap.Instance.WalkableGrid);
 
-            //读取加载没有逻辑的装饰物
+            //读取加载没有逻辑的障碍
             m_blockLayer = gameObject.GetOrCreateComponent<TileBlockLayerComp>();
             m_blockLayer.SetAssetGrid(m_builder.BlockGrid);
 			m_blockLayer.CopyUnWalkableToGrid(TMap.Instance.WalkableGrid);
+
+			//加载没有逻辑的贴花
+			m_decalLayer = gameObject.GetOrCreateComponent<TileDecalLayerComp>();
+			m_decalLayer.SetAssetGrid(m_builder.DecalGrid);
 
 			//创建并读取unit数据. 并组装unit layer comp
 			//var unitTran = CWorld.Instance.Layer.UnitLayer;
@@ -68,6 +73,7 @@ namespace Sword
 		{
 			m_terrainLayer.Build();
             m_blockLayer.Build();
+			m_decalLayer.Build();
 			//m_unitLayer.Build();
 
 			//m_builder.CopyData(TMap.Instance.WalkableGrid);

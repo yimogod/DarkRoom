@@ -45,7 +45,7 @@ namespace DarkRoom.PCG
 		/// 删除不合理的树的位置
 		/// 比如此地块不可通行, 那么就不能种树
 		/// </summary>
-		public void DeleteTreeAtIllegalPostion(CAssetGrid terrainGrid)
+		public void DeleteBlockAtIllegalPostion(CAssetGrid terrainGrid)
 		{
 			var noneType = (int)CForestBlockSubType.None;
 			var type = (int)CPCGLayer.Block;
@@ -58,7 +58,7 @@ namespace DarkRoom.PCG
 					if(node.SubType == noneType)continue;
 
 					var terrType = (CForestTerrainSubType)terrainGrid.GetNodeSubType(col, row);
-					if(CForestUtil.CanPlaceTreeOnTerrainType(terrType))continue;
+					if(CForestUtil.CanPlacePropsOnTerrainType(terrType))continue;
 					m_grid.FillData(col, row, type, noneType, true);
 				}
 			}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3300000}
   - component: {fileID: 2300000}
   m_Layer: 8
-  m_Name: Ground_Decal2
+  m_Name: Ground_Decal_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71,7 +71,7 @@ MeshFilter:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: 678ec740f996f32438bb59a1e31c1b2d, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 9c7fbe63cfd52b749bfe7193caa4d265, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

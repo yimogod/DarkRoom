@@ -14,17 +14,20 @@ namespace DarkRoom.PCG
 	public class CForestGenerator_Decal : CTileMapGeneratorBase
 	{
 		/// <summary>
-		/// 障碍物的比例
+		/// 装饰物的比例
 		/// </summary>
-		public float BlockPercent = 0.06f;
+		public float DecalPercent = 0.06f;
 
-		public float TreeHeight = 0.5f;
-
-		public float RockHeight1 = 0.6f;
-		public float RockHeight2 = 0.8f;
-
-		public float PlantHeight1 = 0.85f;
-		public float PlantHeight2 = 0.94f;
+		public float Height1 = 0.1f;
+		public float Height2 = 0.2f;
+		public float Height3 = 0.3f;
+		public float Height4 = 0.4f;
+		public float Height5 = 0.5f;
+		public float Height6 = 0.6f;
+		public float Height7 = 0.7f;
+		public float Height8 = 0.8f;
+		public float Height9 = 0.9f;
+		public float Height10 = 1f;
 
 		public CForestGenerator_Decal()
 		{
@@ -36,17 +39,16 @@ namespace DarkRoom.PCG
 		public void Generate(int cols, int rows)
 		{
 			m_grid.Init(cols, rows);
-			GenerateTree();
+			GenerateDecal();
 		}
 
 		/// <summary>
-		/// 删除不合理的树的位置
-		/// 比如此地块不可通行, 那么就不能种树
+		/// 删除不合理位置的贴花
 		/// </summary>
-		public void DeleteTreeAtIllegalPostion(CAssetGrid terrainGrid)
+		public void DeleteDecalAtIllegalTerrainPostion(CAssetGrid terrainGrid)
 		{
-			var noneType = (int)CForestBlockSubType.None;
-			var type = (int)CPCGLayer.Block;
+			var noneType = 0;
+			var type = (int)CPCGLayer.Decal;
 
 			for (int col = 0; col < m_numCols; col++)
 			{
@@ -56,25 +58,42 @@ namespace DarkRoom.PCG
 					if(node.SubType == noneType)continue;
 
 					var terrType = (CForestTerrainSubType)terrainGrid.GetNodeSubType(col, row);
-					if(CForestUtil.CanPlaceTreeOnTerrainType(terrType))continue;
+					if(CForestUtil.CanPlacePropsOnTerrainType(terrType))continue;
 					m_grid.FillData(col, row, type, noneType, true);
 				}
 			}
-
-			BreatheTree();
 		}
 
-		private void GenerateTree()
+		/// <summary>
+		/// 删除不合理位置的贴花
+		/// </summary>
+		public void DeleteDecalAtIllegalBlockPostion(CAssetGrid blockGrid)
+		{
+			var noneType = 0;
+			var type = (int)CPCGLayer.Decal;
+
+			for (int col = 0; col < m_numCols; col++)
+			{
+				for (int row = 0; row < m_numRows; row++)
+				{
+					var node = m_grid.GetNode(col, row);
+					if (node.SubType == noneType) continue;
+
+					var walkable = blockGrid.IsWalkable(col, row);
+					if (walkable) continue;
+					m_grid.FillData(col, row, type, noneType, true);
+				}
+			}
+		}
+
+		private void GenerateDecal()
 		{
 			var perlin = new CUnityRandomMap(m_numCols, m_numRows);
 			perlin.Generate();
 
-			var type = (int) CPCGLayer.Block;
-			var scaleHeight = 1.0f / (1.0f - BlockPercent);
-			var noneType = (int)CForestBlockSubType.None;
-
-			int a = 0;
-			int b = 0;
+			var type = (int) CPCGLayer.Decal;
+			var scaleHeight = 1.0f / DecalPercent;
+			var noneType = 0;
 
 			for (int col = 0; col < m_numCols; col++)
 			{
@@ -82,61 +101,38 @@ namespace DarkRoom.PCG
 				{
 					var height = perlin[col, row];
 
-					//不是树
-					if (height > BlockPercent)
+					//没有在放置范围
+					if (height > DecalPercent)
 					{
 						m_grid.FillData(col, row, type, noneType, true);
-						a++;
 						continue;
 					}
 
-					b++;
-					height = (height - BlockPercent) * scaleHeight;
+					height *= scaleHeight;
 					var subType = GetSubTypeAtHeight(height);
-					m_grid.FillData(col, row, type, (int)subType, false);
+					m_grid.FillData(col, row, type, subType, true);
 				}
 			}
-
-			Debug.Log("------------------------------------");
-			Debug.Log(a);
-			Debug.Log(b);
 		}
 
 		/// <summary>
 		/// 根据高度, 从配置中读取相关的asset
 		/// </summary>
-		private CForestBlockSubType GetSubTypeAtHeight(float height)
+		private int GetSubTypeAtHeight(float height)
 		{
-			if (height <= TreeHeight)return CForestBlockSubType.Tree;
+			if (height <= Height1) return 1;
+			if (height <= Height2) return 2;
+			if (height <= Height3) return 3;
+			if (height <= Height4) return 4;
+			if (height <= Height5) return 5;
+			if (height <= Height6) return 6;
+			if (height <= Height7) return 7;
+			if (height <= Height8) return 8;
+			if (height <= Height9) return 9;
+			if (height <= Height10) return 10;
 
-			return CForestBlockSubType.Tree;
+			return 0;
 		}
 
-		/// <summary>
-		/// 树周边没有东西, 但不可通行
-		/// </summary>
-		private void BreatheTree()
-		{
-			var tree = (int)CForestBlockSubType.Tree;
-			var newSubType = (int)CForestBlockSubType.None;
-			var type = (int)CPCGLayer.Block;
-
-			//我们是从左下角开始遍历的, 所以只看右上方向即可
-			for (int row = 0; row < m_numRows; ++row)
-			{
-				for (int col = 0; col < m_numCols; ++col)
-				{
-					var subType = m_grid.GetNode(col, row).SubType;
-					if(subType != tree)continue;
-
-                    m_grid.FillData(col - 1, row + 1, type, newSubType, false);
-                    m_grid.FillData(col,     row + 1,     type, newSubType, false);
-                    m_grid.FillData(col + 1, row + 1, type, newSubType, false);
-                    m_grid.FillData(col + 1, row,     type, newSubType, false);
-                    m_grid.FillData(col + 1, row - 1, type, newSubType, false);
-
-                }
-			}
-		}//现在可以呼吸新鲜空气了
 	}
 }

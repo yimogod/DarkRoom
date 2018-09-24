@@ -50,51 +50,6 @@ namespace DarkRoom.PCG
 		Prop5,
 	}
 
-	public class CForestUtil
-	{
-		public static bool GetTerrainTypeWalkable(CForestTerrainSubType subType)
-		{
-			bool v = false;
-			switch (subType)
-			{
-				case CForestTerrainSubType.Grass1:
-				case CForestTerrainSubType.Grass2:
-				case CForestTerrainSubType.Land1:
-				case CForestTerrainSubType.Land2:
-				case CForestTerrainSubType.Road:
-					v = true;
-					break;
-				case CForestTerrainSubType.Hill:
-				case CForestTerrainSubType.Pond:
-					v = false;
-					break;
-			}
-
-			return v;
-		}
-
-		public static bool CanPlaceTreeOnTerrainType(CForestTerrainSubType subType)
-		{
-			bool v = false;
-			switch (subType)
-			{
-				case CForestTerrainSubType.Grass1:
-				case CForestTerrainSubType.Grass2:
-				case CForestTerrainSubType.Land1:
-				case CForestTerrainSubType.Land2:
-					v = true;
-					break;
-				case CForestTerrainSubType.Road:
-				case CForestTerrainSubType.Hill:
-				case CForestTerrainSubType.Pond:
-					v = false;
-					break;
-			}
-
-			return v;
-		}
-	}
-
 	/// <summary>
 	/// 森林开放房屋信息
 	/// </summary>
@@ -144,6 +99,51 @@ namespace DarkRoom.PCG
 		public Vector2Int GetTilePosition(int innerCol, int innerRow)
 		{
 			return new Vector2Int(innerCol, innerRow) + Pos;
+		}
+	}
+
+	public class CForestUtil
+	{
+		public static bool GetTerrainTypeWalkable(CForestTerrainSubType subType)
+		{
+			bool v = false;
+			switch (subType)
+			{
+				case CForestTerrainSubType.Grass1:
+				case CForestTerrainSubType.Grass2:
+				case CForestTerrainSubType.Land1:
+				case CForestTerrainSubType.Land2:
+				case CForestTerrainSubType.Road:
+					v = true;
+					break;
+				case CForestTerrainSubType.Hill:
+				case CForestTerrainSubType.Pond:
+					v = false;
+					break;
+			}
+
+			return v;
+		}
+
+		public static bool CanPlacePropsOnTerrainType(CForestTerrainSubType subType)
+		{
+			bool v = false;
+			switch (subType)
+			{
+				case CForestTerrainSubType.Grass1:
+				case CForestTerrainSubType.Grass2:
+				case CForestTerrainSubType.Land1:
+				case CForestTerrainSubType.Land2:
+					v = true;
+					break;
+				case CForestTerrainSubType.Road:
+				case CForestTerrainSubType.Hill:
+				case CForestTerrainSubType.Pond:
+					v = false;
+					break;
+			}
+
+			return v;
 		}
 	}
 }

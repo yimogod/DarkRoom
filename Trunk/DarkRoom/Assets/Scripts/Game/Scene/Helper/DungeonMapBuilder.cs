@@ -20,6 +20,7 @@ namespace Sword
 
 		public CAssetGrid TerrainGrid => m_mapGen.TerrainGrid;
         public CAssetGrid BlockGrid => m_mapGen.BlockGrid;
+		public CAssetGrid DecalGrid => m_mapGen.DecalGrid;
 
 		public DungeonMapBuilder(MapMeta meta)
 		{

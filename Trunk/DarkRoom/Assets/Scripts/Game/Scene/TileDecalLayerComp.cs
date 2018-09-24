@@ -14,16 +14,26 @@ namespace Sword
 		protected override string GetPrefabBySubType(int enumType)
 		{
 			string prefab = string.Empty;
-			CForestBlockSubType subType = (CForestBlockSubType) enumType;
+			if (enumType <= 0) return prefab;
 
-			if (subType == CForestBlockSubType.None) return prefab;
-
-			switch (subType)
+			switch (enumType)
 			{
-				case CForestBlockSubType.Tree:
-					prefab = "Tree_01";
+				case 1:
+				case 2:
+				case 3:
+				case 4:
+				case 5:
+					prefab = RandomSelectAddress("Decal/Bush_", 1, 9);
 					break;
-	
+				case 6:
+				case 7:
+				case 8:
+					prefab = RandomSelectAddress("Decal/Ground_Decal_", 1, 5);
+					break;
+				case 9:
+				case 10:
+					prefab = RandomSelectAddress("Decal/Rune_", 1, 6);
+					break;
 			}
 
 			return prefab;

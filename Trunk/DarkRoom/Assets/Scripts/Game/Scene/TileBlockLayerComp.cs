@@ -48,10 +48,6 @@ namespace Sword
 			return prefab;
 		}
 
-		private string RandomSelectAddress(string prefix, int start, int end){
-			int index = Random.Range(start, end + 1);
-			if (index < 10) return $"{prefix}0{index}";
-			return $"{prefix}{index}";
-		}
+
 	}
 }

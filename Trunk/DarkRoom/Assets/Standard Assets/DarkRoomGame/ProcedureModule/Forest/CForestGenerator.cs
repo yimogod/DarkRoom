@@ -34,8 +34,14 @@ namespace DarkRoom.PCG
 		/// </summary>
 		public CAssetGrid BlockGrid => m_block.Grid;
 
+		/// <summary>
+		/// 贴花数据
+		/// </summary>
+		public CAssetGrid DecalGrid => m_decal.Grid;
+
 		private CForestGenerator_Terrain m_terrain;
 		private CForestGenerator_Block m_block;
+		private CForestGenerator_Decal m_decal;
 		private CForestGenerator_Room m_room;
 
 		public CForestGenerator()
@@ -43,6 +49,7 @@ namespace DarkRoom.PCG
 			m_terrain = new CForestGenerator_Terrain();
 			m_room = new CForestGenerator_Room();
 			m_block = new CForestGenerator_Block();
+			m_decal = new CForestGenerator_Decal();
 		}
 
 		public void Generate()
@@ -50,10 +57,13 @@ namespace DarkRoom.PCG
 			m_terrain.Generate(64, 64);
 			m_room.Generate(64, 64);
 			m_block.Generate(64, 64);
+			m_decal.Generate(64, 64);
 
 			m_terrain.GenerateRoad();
 
-			m_block.DeleteTreeAtIllegalPostion(m_terrain.Grid);
+			m_block.DeleteBlockAtIllegalPostion(m_terrain.Grid);
+			m_decal.DeleteDecalAtIllegalTerrainPostion(m_terrain.Grid);
+			m_decal.DeleteDecalAtIllegalBlockPostion(m_block.Grid);
 		}
 	}
 }
