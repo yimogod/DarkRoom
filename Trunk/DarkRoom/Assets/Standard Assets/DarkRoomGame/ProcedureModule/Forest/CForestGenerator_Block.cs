@@ -72,11 +72,8 @@ namespace DarkRoom.PCG
 			perlin.Generate();
 
 			var type = (int) CPCGLayer.Block;
-			var scaleHeight = 1.0f / (1.0f - BlockPercent);
+			var scaleHeight = 1.0f / BlockPercent;
 			var noneType = (int)CForestBlockSubType.None;
-
-			int a = 0;
-			int b = 0;
 
 			for (int col = 0; col < m_numCols; col++)
 			{
@@ -88,12 +85,10 @@ namespace DarkRoom.PCG
 					if (height > BlockPercent)
 					{
 						m_grid.FillData(col, row, type, noneType, true);
-						a++;
 						continue;
 					}
 
-					b++;
-					height = (height - BlockPercent) * scaleHeight;
+					height *= scaleHeight;
 					var subType = GetSubTypeAtHeight(height);
 					m_grid.FillData(col, row, type, (int)subType, false);
 				}

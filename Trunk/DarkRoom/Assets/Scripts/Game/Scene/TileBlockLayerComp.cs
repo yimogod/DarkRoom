@@ -26,13 +26,13 @@ namespace Sword
 					prefab = RandomSelectAddress("Block/Rock_", 1, 7);
 					break;
 				case CForestBlockSubType.Plant:
-					prefab = RandomSelectAddress("Block/Tree_Small_", 1, 5);
+					prefab = RandomSelectAddress("Block/Rock_", 1, 7);
 					break;
 				case CForestBlockSubType.Prop1:
 					prefab = RandomSelectAddress("Block/Bones_", 1, 5);
 					break;
 				case CForestBlockSubType.Prop2:
-					prefab = RandomSelectAddress("Block/Tree_Dead_", 1, 3);
+					prefab = RandomSelectAddress("Block/Tree_Small_", 1, 5);
 					break;
 				case CForestBlockSubType.Prop3:
 					prefab = RandomSelectAddress("Block/Tree_Dead_", 1, 3);
@@ -45,7 +45,6 @@ namespace Sword
 					break;
 			}
 
-			Debug.Log(prefab);
 			return prefab;
 		}
 
