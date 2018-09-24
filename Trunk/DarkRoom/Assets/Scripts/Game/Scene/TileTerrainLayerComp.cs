@@ -133,15 +133,14 @@ namespace Sword
 							SetTileByHeight(col, row, 0.5f);
 							break;
 						case CForestTerrainSubType.Hill:
-							SetTileByHeight(col, row, 1f);
+							SetTileByHeight(col, row, 0.7f);
 							break;
 						case CForestTerrainSubType.Pond:
-							SetTileByHeight(col, row, 0f);
+							SetTileByHeight(col, row, 0.1f);
 							break;
 						case CForestTerrainSubType.Road:
 							SetTileByHeight(col, row, 0.5f);
 							break;
-
 					}
 				}
 			}

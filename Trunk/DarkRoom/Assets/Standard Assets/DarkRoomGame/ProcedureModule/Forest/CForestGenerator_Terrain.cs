@@ -110,6 +110,7 @@ namespace DarkRoom.PCG
 
 			//处理高地
 			//存储高地的数据
+			//1代表是高地, 0代表高地被平了
 			int[,] hillGrid = new int[m_numCols, m_numRows];
 
 			var type = (int) CPCGLayer.Terrain;
@@ -138,8 +139,9 @@ namespace DarkRoom.PCG
 				for (int z = 0; z < m_numRows; z++)
 				{
 					var subType = m_grid.GetNodeSubType(x, z);
-					if (subType == hillType && hillGrid[x, z] == 0)
-						m_grid.SetNodeSubType(x, z, landType);
+					if (subType == hillType && hillGrid[x, z] == 0){
+						m_grid.FillData(x, z, type, landType, true);
+					}
 				}
 			}
 		}
