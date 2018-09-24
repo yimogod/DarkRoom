@@ -32,7 +32,7 @@ namespace DarkRoom.PCG
 		/// <summary>
 		/// 障碍物数据
 		/// </summary>
-		public CAssetGrid TreeGrid => m_block.Grid;
+		public CAssetGrid BlockGrid => m_block.Grid;
 
 		private CForestGenerator_Terrain m_terrain;
 		private CForestGenerator_Block m_block;

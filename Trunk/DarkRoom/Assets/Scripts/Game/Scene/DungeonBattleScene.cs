@@ -47,7 +47,7 @@ namespace Sword
 
             //读取加载没有逻辑的装饰物
             m_propsLayer = gameObject.GetOrCreateComponent<TilePropsLayerComp>();
-            m_propsLayer.SetAssetGrid(m_builder.PropsGrid);
+            m_propsLayer.SetAssetGrid(m_builder.BlockGrid);
 
             //创建并读取unit数据. 并组装unit layer comp
             //var unitTran = CWorld.Instance.Layer.UnitLayer;

@@ -19,7 +19,7 @@ namespace Sword
 		private CForestGenerator m_mapGen;
 
 		public CAssetGrid TerrainGrid => m_mapGen.TerrainGrid;
-        public CAssetGrid PropsGrid => m_mapGen.TreeGrid;
+        public CAssetGrid BlockGrid => m_mapGen.BlockGrid;
 
 		public DungeonMapBuilder(MapMeta meta)
 		{
