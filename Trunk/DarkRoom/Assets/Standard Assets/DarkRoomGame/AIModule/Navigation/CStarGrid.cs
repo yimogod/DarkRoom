@@ -155,5 +155,10 @@ namespace DarkRoom.AI {
             H = h;
             Parent = parent;
         }
-    }
+
+		public override string ToString()
+		{
+			return Walkable ? "1" : "0";
+		}
+	}
 }

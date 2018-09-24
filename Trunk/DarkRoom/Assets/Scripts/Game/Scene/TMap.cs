@@ -25,12 +25,8 @@ namespace Sword {
 		}
 
 		/*格子是否可以通行*/
-		public bool walkable(Vector3 tile) {
-			return WalkableGrid.IsWalkable((int)tile.z, (int)tile.x);
-		}
-
-		public void SetWalkable(Vector3 tile, bool value) {
-			WalkableGrid.SetWalkable((int)tile.z, (int)tile.x, value);
+		public bool Walkable(int col, int row) {
+			return WalkableGrid.IsWalkable(col, row);
 		}
 
 		//寻找四周一圈的可通行的位置

@@ -56,6 +56,7 @@ namespace DarkRoom.Game
 					T t = new T();
 					t.Col = col;
 					t.Row = row;
+					t.Walkable = walkable;
 					m_nodes[col, row] = t;
 				}
 			}

@@ -34,10 +34,10 @@ namespace DarkRoom.PCG {
                 //如果区域太小, 就抹去
                 if (roomRegion.Count < threshold)
                 {
-                    Debug.LogWarning("------ have little roorm " + large.ToString());
+                    //Debug.LogWarning("------ have little roorm " + large.ToString());
                     foreach (Vector2Int tile in roomRegion)
                     {
-                        Debug.LogWarning("set value " + tile.ToString());
+                        //Debug.LogWarning("set value " + tile.ToString());
                         m_map[tile.x, tile.y] = large;
                     }
                     continue;

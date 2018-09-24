@@ -122,7 +122,6 @@ namespace DarkRoom.PCG
 			var newSubType = (int)CForestBlockSubType.None;
 			var type = (int)CPCGLayer.Block;
 
-			//我们是从左下角开始遍历的, 所以只看右上方向即可
 			for (int row = 0; row < m_numRows; ++row)
 			{
 				for (int col = 0; col < m_numCols; ++col)
@@ -133,8 +132,13 @@ namespace DarkRoom.PCG
                     m_grid.FillData(col - 1, row + 1, type, newSubType, false);
                     m_grid.FillData(col,     row + 1, type, newSubType, false);
                     m_grid.FillData(col + 1, row + 1, type, newSubType, false);
-                    m_grid.FillData(col + 1, row,     type, newSubType, false);
-                    m_grid.FillData(col + 1, row - 1, type, newSubType, false);
+
+					m_grid.FillData(col - 1, row,     type, newSubType, false);
+					m_grid.FillData(col + 1, row,     type, newSubType, false);
+
+					m_grid.FillData(col - 1, row - 1, type, newSubType, false);
+					m_grid.FillData(col    , row - 1, type, newSubType, false);
+					m_grid.FillData(col + 1, row - 1, type, newSubType, false);
 
                 }
 			}

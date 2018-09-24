@@ -15,7 +15,9 @@ namespace Sword
 
 		private DungeonMapBuilder m_builder;
 		private TileTerrainLayerComp m_terrainLayer = null;
-        private TileBlockLayerComp m_blockLayer = null;
+		private TileBlockLayerComp m_blockLayer = null;
+
+		private TileDebugLayerComp m_debugLayer = null;
 
 		public void Launch()
 		{
@@ -41,19 +43,26 @@ namespace Sword
 			m_builder = new DungeonMapBuilder(m_mapMeta);
             m_builder.CreateMap();
 
-            //读取加载地形数据, 并组装terrain3d comp
-            m_terrainLayer = gameObject.GetOrCreateComponent<TileTerrainLayerComp>();
+			//读取加载地形数据, 并组装terrain3d comp
+			m_terrainLayer = gameObject.GetOrCreateComponent<TileTerrainLayerComp>();
             m_terrainLayer.SetAssetGrid(m_builder.TerrainGrid);
+			m_terrainLayer.CopyUnWalkableToGrid(TMap.Instance.WalkableGrid);
 
             //读取加载没有逻辑的装饰物
             m_blockLayer = gameObject.GetOrCreateComponent<TileBlockLayerComp>();
             m_blockLayer.SetAssetGrid(m_builder.BlockGrid);
+			m_blockLayer.CopyUnWalkableToGrid(TMap.Instance.WalkableGrid);
 
-            //创建并读取unit数据. 并组装unit layer comp
-            //var unitTran = CWorld.Instance.Layer.UnitLayer;
-            //m_unitLayer = unitTran.gameObject.GetOrCreateComponent<TileUnitLayerComp>();
-            //m_builder.CreateActor(m_unitLayer);
-        }
+			//创建并读取unit数据. 并组装unit layer comp
+			//var unitTran = CWorld.Instance.Layer.UnitLayer;
+			//m_unitLayer = unitTran.gameObject.GetOrCreateComponent<TileUnitLayerComp>();
+			//m_builder.CreateActor(m_unitLayer);
+
+
+			m_debugLayer = gameObject.GetOrCreateComponent<TileDebugLayerComp>();
+			m_debugLayer.SetStarGrid(TMap.Instance.WalkableGrid);
+			m_debugLayer.Draw();
+		}
 
 		private void CreateMapThing()
 		{

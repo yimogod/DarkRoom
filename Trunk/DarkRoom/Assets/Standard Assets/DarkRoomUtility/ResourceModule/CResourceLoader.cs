@@ -39,14 +39,14 @@ namespace DarkRoom.Utility {
 
         private void InternalOnComplete<T>(IAsyncOperation<T> result, Action<T> onComplete)
         {
-            /*string s = Address;
+            string s = Address;
             result.Completed += operation =>
             {
                 if (operation.Status == AsyncOperationStatus.Failed)
                 {
                     Debug.LogWarningFormat("Load {0} Failed", s);
                 }
-            };*/
+            };
 
 
             if (onComplete == null)return;

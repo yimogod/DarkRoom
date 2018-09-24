@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DarkRoom.Game;
 using DarkRoom.PCG;
+using DarkRoom.AI;
 
 namespace Sword
 {
@@ -18,6 +19,20 @@ namespace Sword
 		public void SetAssetGrid(CAssetGrid grid)
 		{
 			m_assetGrid = grid;
+		}
+
+		/// <summary>
+		/// 将本格子不可同行的数据传到寻路数据
+		/// </summary>
+		public void CopyUnWalkableToGrid(CStarGrid targetGrid)
+		{
+			if (m_assetGrid == null)
+			{
+				Debug.LogError("AssetGrid Must Not Null");
+				return;
+			}
+
+			targetGrid.CopyUnWalkableFrom(m_assetGrid);
 		}
 
 		public void Build()

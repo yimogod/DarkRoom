@@ -2,6 +2,7 @@
 using System.Collections;
 using DarkRoom.Game;
 using DarkRoom.PCG;
+using DarkRoom.AI;
 
 namespace Sword
 {
@@ -70,18 +71,32 @@ namespace Sword
 			int width = m_data.heightmapWidth;
 			int height = m_data.heightmapHeight;
 			m_heightsList = m_data.GetHeights(0, 0, width, height);
-			Debug.Log(width + "  " + height);
+			//Debug.Log(width + "  " + height);
 
 			width = m_data.alphamapWidth;
 			height = m_data.alphamapHeight;
 			m_alphasList = m_data.GetAlphamaps(0, 0, width, height);
-			Debug.Log(LayerNum);
-			Debug.Log(width + "  " + height);
+			//Debug.Log(LayerNum);
+			//Debug.Log(width + "  " + height);
 		}
 
 		public void SetAssetGrid(CAssetGrid grid)
 		{
 			m_assetGrid = grid;
+		}
+
+		/// <summary>
+		/// 将本格子不可同行的数据传到寻路数据
+		/// </summary>
+		public virtual void CopyUnWalkableToGrid(CStarGrid targetGrid)
+		{
+			if (m_assetGrid == null)
+			{
+				Debug.LogError("AssetGrid Must Not Null");
+				return;
+			}
+
+			targetGrid.CopyUnWalkableFrom(m_assetGrid);
 		}
 
 		public void Build()
@@ -102,7 +117,7 @@ namespace Sword
 
 		public void CreateTerrain()
 		{
-			CMapUtil.PrintGird(m_assetGrid.RawData);
+			//CMapUtil.PrintGird(m_assetGrid.RawData);
 			for (int col = 0; col < m_assetGrid.NumCols; col++)
 			{
 				for (int row = 0; row < m_assetGrid.NumRows; row++)
@@ -200,29 +215,6 @@ namespace Sword
 				}
 			}
 		}
-
-		IEnumerator CoroutineBuild()
-		{
-			for (int i = 0; i < m_assetGrid.NumCols; i++)
-			{
-				yield return new WaitForEndOfFrame();
-				for (int j = 0; j < m_assetGrid.NumRows; j++)
-				{
-					var tile = m_assetGrid.GetNodeSubType(i, j);
-					//var prefab = GetPrefabBySubType(tile);
-
-					//var pos = CMapUtil.GetTileCenterPosByColRow(i, j);
-					//LoadAndCreateTile(prefab, pos);
-				}
-			}
-
-			yield return new WaitForEndOfFrame();
-		}
-
-		//private void LoadAndCreateTile(string prefab, Vector3 pos)
-		//{
-		//	AssetManager.LoadTilePrefab("map_forest", prefab, m_tran, pos);
-		//}
 
 		//end class
 	}
