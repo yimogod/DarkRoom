@@ -19,12 +19,14 @@ namespace DarkRoom.PCG
 		public float BlockPercent = 0.06f;
 
 		public float TreeHeight = 0.5f;
+		public float RockHeight = 0.6f;
+		public float PlantHeight = 0.7f;
 
-		public float RockHeight1 = 0.6f;
-		public float RockHeight2 = 0.8f;
-
-		public float PlantHeight1 = 0.85f;
-		public float PlantHeight2 = 0.94f;
+		public float PropHeight_1 = 0.75f;
+		public float PropHeight_2 = 0.80f;
+		public float PropHeight_3 = 0.85f;
+		public float PropHeight_4 = 0.90f;
+		public float PropHeight_5 = 0.95f;
 
 		public CForestGenerator_Block()
 		{
@@ -96,10 +98,6 @@ namespace DarkRoom.PCG
 					m_grid.FillData(col, row, type, (int)subType, false);
 				}
 			}
-
-			Debug.Log("------------------------------------");
-			Debug.Log(a);
-			Debug.Log(b);
 		}
 
 		/// <summary>
@@ -108,12 +106,14 @@ namespace DarkRoom.PCG
 		private CForestBlockSubType GetSubTypeAtHeight(float height)
 		{
 			if (height <= TreeHeight)return CForestBlockSubType.Tree;
+			if (height <= RockHeight) return CForestBlockSubType.Rock;
+			if (height <= PlantHeight) return CForestBlockSubType.Plant;
 
-			if (height <= RockHeight1) return CForestBlockSubType.Rock1;
-			if (height <= RockHeight2) return CForestBlockSubType.Rock2;
-
-			if (height <= PlantHeight1) return CForestBlockSubType.Plant1;
-			if (height <= PlantHeight2) return CForestBlockSubType.Plant2;
+			if (height <= PropHeight_1) return CForestBlockSubType.Prop1;
+			if (height <= PropHeight_2) return CForestBlockSubType.Prop2;
+			if (height <= PropHeight_3) return CForestBlockSubType.Prop3;
+			if (height <= PropHeight_4) return CForestBlockSubType.Prop4;
+			if (height <= PropHeight_5) return CForestBlockSubType.Prop5;
 
 			return CForestBlockSubType.Tree;
 		}
@@ -136,7 +136,7 @@ namespace DarkRoom.PCG
 					if(subType != tree)continue;
 
                     m_grid.FillData(col - 1, row + 1, type, newSubType, false);
-                    m_grid.FillData(col,     row + 1,     type, newSubType, false);
+                    m_grid.FillData(col,     row + 1, type, newSubType, false);
                     m_grid.FillData(col + 1, row + 1, type, newSubType, false);
                     m_grid.FillData(col + 1, row,     type, newSubType, false);
                     m_grid.FillData(col + 1, row - 1, type, newSubType, false);

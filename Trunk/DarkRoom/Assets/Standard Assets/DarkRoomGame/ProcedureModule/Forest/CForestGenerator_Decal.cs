@@ -109,12 +109,6 @@ namespace DarkRoom.PCG
 		{
 			if (height <= TreeHeight)return CForestBlockSubType.Tree;
 
-			if (height <= RockHeight1) return CForestBlockSubType.Rock1;
-			if (height <= RockHeight2) return CForestBlockSubType.Rock2;
-
-			if (height <= PlantHeight1) return CForestBlockSubType.Plant1;
-			if (height <= PlantHeight2) return CForestBlockSubType.Plant2;
-
 			return CForestBlockSubType.Tree;
 		}
 

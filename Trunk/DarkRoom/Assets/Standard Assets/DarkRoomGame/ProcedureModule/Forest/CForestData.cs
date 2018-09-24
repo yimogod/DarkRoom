@@ -41,10 +41,13 @@ namespace DarkRoom.PCG
 	{
 		None = 0,
 		Tree,
-		Rock1,
-		Rock2,
-		Plant1,
-		Plant2,
+		Rock,
+		Plant,
+		Prop1,
+		Prop2,
+		Prop3,
+		Prop4,
+		Prop5,
 	}
 
 	public class CForestUtil
