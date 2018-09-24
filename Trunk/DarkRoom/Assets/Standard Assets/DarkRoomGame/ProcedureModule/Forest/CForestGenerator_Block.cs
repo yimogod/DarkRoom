@@ -11,12 +11,12 @@ namespace DarkRoom.PCG
 	/// 注意, 树会占用3x3的不可通行的格子
 	/// 我们在产生树之后清理他周围的东西
 	/// </summary>
-	public class CForestGenerator_Tree : CTileMapGeneratorBase
+	public class CForestGenerator_Block : CTileMapGeneratorBase
 	{
 		/// <summary>
 		/// 障碍物的比例
 		/// </summary>
-		public float TreePercent = 0.3f;
+		public float BlockPercent = 0.06f;
 
 		public float TreeHeight = 0.5f;
 
@@ -26,7 +26,7 @@ namespace DarkRoom.PCG
 		public float PlantHeight1 = 0.85f;
 		public float PlantHeight2 = 0.94f;
 
-		public CForestGenerator_Tree()
+		public CForestGenerator_Block()
 		{
 		}
 
@@ -64,17 +64,17 @@ namespace DarkRoom.PCG
 			BreatheTree();
 		}
 
-		/// <summary>
-		/// 柏林噪声产生地形数据, 
-		/// </summary>
 		private void GenerateTree()
 		{
-			var perlin = new CPerlinMap(m_numCols, m_numRows);
+			var perlin = new CUnityRandomMap(m_numCols, m_numRows);
 			perlin.Generate();
 
 			var type = (int) CPCGLayer.Block;
-			var scaleHeight = 1.0f / (1.0f - TreePercent);
+			var scaleHeight = 1.0f / (1.0f - BlockPercent);
 			var noneType = (int)CForestBlockSubType.None;
+
+			int a = 0;
+			int b = 0;
 
 			for (int col = 0; col < m_numCols; col++)
 			{
@@ -83,17 +83,23 @@ namespace DarkRoom.PCG
 					var height = perlin[col, row];
 
 					//不是树
-					if (height > TreePercent)
+					if (height > BlockPercent)
 					{
 						m_grid.FillData(col, row, type, noneType, true);
+						a++;
 						continue;
 					}
 
-					height = (height - TreePercent) * scaleHeight;
+					b++;
+					height = (height - BlockPercent) * scaleHeight;
 					var subType = GetSubTypeAtHeight(height);
 					m_grid.FillData(col, row, type, (int)subType, false);
 				}
 			}
+
+			Debug.Log("------------------------------------");
+			Debug.Log(a);
+			Debug.Log(b);
 		}
 
 		/// <summary>
