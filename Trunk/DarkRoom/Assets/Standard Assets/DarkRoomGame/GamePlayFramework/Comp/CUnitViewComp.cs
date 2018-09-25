@@ -88,7 +88,7 @@ namespace DarkRoom.Game
 		/// </summary>
 		public void PlayClip(string clip, float normalizedTime = 0)
 		{
-			if (m_anim == null)return;
+			//if (m_anim == null)m_anim = unitycli
 			//如果动画一样, 且是循环播放的动画, 就不与处理
 			if (string.Equals(m_anim.CurrClip, clip) && !PlayingOnceClip) {
 				return;
@@ -109,7 +109,7 @@ namespace DarkRoom.Game
 		/// </summary>
 		public void Pause()
 		{
-			if (m_anim != null) m_anim.Pause();
+			m_anim?.Pause();
 		}
 
 		/// <summary>
@@ -117,7 +117,7 @@ namespace DarkRoom.Game
 		/// </summary>
 		public void Resume()
 		{
-			if (m_anim != null)m_anim.Resume();
+			m_anim?.Resume();
 		}
 
 		private void InvokeTrigger()

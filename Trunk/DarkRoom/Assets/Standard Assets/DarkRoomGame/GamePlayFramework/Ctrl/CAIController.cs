@@ -67,12 +67,17 @@ namespace DarkRoom.Game {
 			get { return m_brainComp; }
 		}
 
-		protected override void Start()
+		protected override void Awake()
 		{
-			base.Start();
+			base.Awake();
 			m_pathResult = new CPathResult();
 			m_brainComp = gameObject.GetComponent<CBrainComp>();
 			m_perceptionComp = gameObject.GetComponent<CAIPerceptionComp>();
+		}
+
+		protected override void Start()
+		{
+			base.Start();
 		}
 
 		/// <summary>

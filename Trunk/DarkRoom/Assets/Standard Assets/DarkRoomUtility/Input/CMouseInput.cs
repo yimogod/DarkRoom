@@ -1,3 +1,4 @@
+using System;
 using DarkRoom.Core;
 using DarkRoom.Game;
 using UnityEngine;
@@ -5,11 +6,25 @@ using UnityEngine.EventSystems;
 
 namespace DarkRoom.Utility
 {
+	public class CMouseEvent : CEvent
+	{
+		public static string TYPE = "CMouseClick";
+
+		public CMouseEvent() : base(TYPE)
+		{
+		}
+	}
+
 	public class CMouseInput : CSingleton<CMouseInput>
 	{
 		//鼠标点击的col, row
 		private int m_col;
 		private int m_row;
+
+		public void AddClickListener()
+		{
+			throw new NotImplementedException();
+		}
 
 		private bool m_enabled = true;
 		private bool m_hasDown = false;
@@ -19,6 +34,9 @@ namespace DarkRoom.Utility
 		private Vector3 m_downScreenPos;
 		private Vector3 m_downWorldPos;
 		private Vector3 m_overWorldPos;
+
+		private CEventDispatcher m_dispatcher = new CEventDispatcher();
+		private CMouseEvent m_clickEvent = new CMouseEvent();
 
 		//鼠标按下点击的单位. 如果有的话
 		private Transform m_hitUnit = null;
@@ -43,6 +61,16 @@ namespace DarkRoom.Utility
 			m_enabled = value;
 		}
 
+		public void AddClickListener(Action<CEvent> action)
+		{
+			m_dispatcher.AddEventListener(CMouseEvent.TYPE, action);
+		}
+
+		public void RemoveClickListener(Action<CEvent> action)
+		{
+			m_dispatcher.RemoveEventListener(CMouseEvent.TYPE, action);
+		}
+
 		public void Update()
 		{
 			m_overUnit = null;
@@ -57,11 +85,11 @@ namespace DarkRoom.Utility
 
 			if (!m_enabled) return;
 
-            var cam = Camera.main;
-            if (cam == null) return;
+			var cam = Camera.main;
+			if (cam == null) return;
 
-            //每帧我们都探测鼠标经过terrain的位置
-            m_overWorldPos = Vector3.zero;
+			//每帧我们都探测鼠标经过terrain的位置
+			m_overWorldPos = Vector3.zero;
 			Vector3 mousePos = Input.mousePosition;
 			Ray ray = cam.ScreenPointToRay(mousePos);
 			RaycastHit hit;
@@ -94,19 +122,20 @@ namespace DarkRoom.Utility
 			if (Input.GetMouseButtonUp(0))
 			{
 				m_hasClicked = true;
+				m_dispatcher.DispatchEvent(m_clickEvent);
 
-                //探测鼠标点击到的世界坐标和单位.
-                if (m_overUnit != null)
-                {
-                    m_hitUnit = m_overUnit;
-                    m_downWorldPos = m_hitUnit.position;
-                }
-                else
-                {
-                    //如果没有点击到单位, 那么就直接赋值在terrain上的世界坐标
-                    m_downWorldPos = m_overWorldPos;
-                }
-            }
+				//探测鼠标点击到的世界坐标和单位.
+				if (m_overUnit != null)
+				{
+					m_hitUnit = m_overUnit;
+					m_downWorldPos = m_hitUnit.position;
+				}
+				else
+				{
+					//如果没有点击到单位, 那么就直接赋值在terrain上的世界坐标
+					m_downWorldPos = m_overWorldPos;
+				}
+			}
 		}
 	}
 }

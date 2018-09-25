@@ -4,8 +4,7 @@ using DarkRoom.Game;
 
 namespace Sword
 {
-    public class HeroEntity : ActorEntity
-    {
-        
-    }
+	public class HeroEntity : ActorEntity
+	{
+	}
 }

@@ -65,13 +65,13 @@ namespace Sword
 		}
 
 		/// <summary>
-		/// 创建英雄的GO, 永不销毁
+		/// 创建英雄的GO
 		/// </summary>
 		public void CreateHeroEntity()
 		{
-			GameObject go = new GameObject("__" + Hero.Name);
-			go.AddComponent<CGlobalExistComp>();
+			GameObject go = new GameObject("Hero_" + Hero.Name);
 			var entity = go.AddComponent<HeroEntity>();
+			var ctrl = go.AddComponent<HeroController>();
 			entity.Team = CUnitEntity.TeamSide.Red;
 
 			var attr = entity.AttributeSet;

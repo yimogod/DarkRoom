@@ -16,11 +16,9 @@
 		/// </summary>
 		public bool InCommandToSelectTarget = false;
 
-		/// <summary>
-		/// 初始化player input
-		/// </summary>
-		public virtual void InitInputSystem()
+		protected override void Start()
 		{
+			base.Start();
 			SetupInputComponent();
 		}
 

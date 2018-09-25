@@ -25,8 +25,6 @@ namespace Sword
 
 		private CAssetGrid m_assetGrid;
 
-		private Transform m_tran;
-
 		/// <summary>
 		/// 高度图的尺寸
 		/// </summary>
@@ -54,8 +52,6 @@ namespace Sword
 
 		void Awake()
 		{
-			m_tran = transform;
-
 			int desireLayer = LayerMask.NameToLayer(CWorldLayer.LAYER_NAME_TERRAIN);
 			if (desireLayer == -1)
 			{

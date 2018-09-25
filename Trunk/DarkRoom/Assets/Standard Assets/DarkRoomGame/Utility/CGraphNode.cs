@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DarkRoom.Core;
 
-namespace DarkRoom.AI {
+namespace DarkRoom.Game {
 	/// <summary>
 	/// 图的节点. 可用于寻路(Dijkstra, 盲目深度/广度优先)
 	/// </summary>

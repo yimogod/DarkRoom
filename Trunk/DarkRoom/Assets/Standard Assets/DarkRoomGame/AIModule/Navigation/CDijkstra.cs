@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DarkRoom.Core;
+using DarkRoom.Game;
 
 namespace DarkRoom.AI {
 	/// <summary>
