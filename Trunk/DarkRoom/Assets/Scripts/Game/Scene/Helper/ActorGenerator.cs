@@ -18,6 +18,7 @@ namespace Sword
 		private CAssetGrid m_grid = new CAssetGrid();
 
 		public CAssetGrid Grid => m_grid;
+		public Vector2Int HeroBornPos;
 
 		public void Generate(MapMeta meta, CStarGrid walkableGrid)
 		{
@@ -29,7 +30,7 @@ namespace Sword
 		private void GenerateActor(MapMeta meta)
 		{
 			//我们固定英雄的位置
-			m_tilesData.AddUnitToDict(Vector2Int.one * 5, 5);
+			HeroBornPos = m_tilesData.AddUnitToDict(Vector2Int.one * 5, 5);
 
 			//2. 创建怪物
 			foreach (var m in meta.Monsters)

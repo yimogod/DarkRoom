@@ -17,6 +17,12 @@ namespace Sword
 			m_assetGrid = grid;
 		}
 
+		public void BuildHero(Vector2Int pos)
+		{
+			Vector3 localPos = new Vector3(pos.x, GameConst.DEFAULT_TERRAIN_HEIGHT + 0.1f, pos.y);
+			ProxyPool.HeroProxy.CreateHeroEntity(localPos);
+		}
+
 		public void Build()
 		{
 			if (m_assetGrid == null)

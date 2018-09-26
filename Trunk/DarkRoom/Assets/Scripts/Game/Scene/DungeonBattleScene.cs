@@ -74,6 +74,8 @@ namespace Sword
 			m_terrainLayer.Build();
 			m_blockLayer.Build();
 			m_decalLayer.Build();
+
+			m_actorLayer.BuildHero(m_builder.HeroBornPos);
 			m_actorLayer.Build();
 
 			m_debugLayer.Draw();

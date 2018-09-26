@@ -23,6 +23,8 @@ namespace Sword
 		public CAssetGrid DecalGrid => m_mapGen.DecalGrid;
 		public CAssetGrid ActorGrid => m_actorGen.Grid;
 
+		public Vector2Int HeroBornPos => m_actorGen.HeroBornPos;
+
 		public DungeonMapBuilder(MapMeta meta)
 		{
 			m_mapMeta = meta;

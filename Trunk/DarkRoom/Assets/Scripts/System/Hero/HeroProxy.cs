@@ -67,10 +67,11 @@ namespace Sword
 		/// <summary>
 		/// 创建英雄的GO
 		/// </summary>
-		public HeroEntity CreateHeroEntity()
+		public HeroEntity CreateHeroEntity(Vector3 localPosition)
 		{
-			GameObject go = new GameObject("Hero_" + Hero.Name);
-			var entity = go.AddComponent<HeroEntity>();
+			var entity = CWorld.Instance.SpawnUnit<HeroEntity>("Hero_" + Hero.Name, localPosition);
+			var go = entity.gameObject;
+
 			var ctrl = go.AddComponent<HeroController>();
 			entity.Team = CUnitEntity.TeamSide.Red;
 
