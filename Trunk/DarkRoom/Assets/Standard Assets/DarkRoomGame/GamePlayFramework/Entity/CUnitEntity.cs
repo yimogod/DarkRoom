@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
 
-namespace DarkRoom.Game{
+namespace DarkRoom.Game
+{
 	/// <summary>
 	/// 放置在场景中所有单位的基类, 等同于UE的actor
 	/// Unit关联了很多组件. 比如移动和长啥样(也有可能没样子).
@@ -12,12 +13,14 @@ namespace DarkRoom.Game{
 	/// </summary>
 	[RequireComponent(typeof(CUnitSpacialComp))]
 	[RequireComponent(typeof(CUnitViewComp))]
-	public class CUnitEntity : MonoBehaviour{
+	public class CUnitEntity : MonoBehaviour
+	{
 		private static int UnitCounter = 0;
 
 		//red我方, blue敌方, green为第三方中立友善
 
-		public enum TeamSide {
+		public enum TeamSide
+		{
 			Red = 1,
 			Blue = 2,
 			Green = 3,
@@ -28,17 +31,16 @@ namespace DarkRoom.Game{
 		/// <summary>
 		/// 我属于哪边?
 		/// </summary>
-		[HideInInspector, NonSerialized]
-		public TeamSide Team;
+		[HideInInspector, NonSerialized] public TeamSide Team;
 
 		/// <summary>
 		/// 我是否会收到伤害. true才会产生伤害事件 (比如 ReceiveDamage() 的调用)
 		/// </summary>
-		[HideInInspector, NonSerialized]
-		public bool CanBeDamaged = true;
+		[HideInInspector, NonSerialized] public bool CanBeDamaged = true;
 
-	    //unit position info
+		//unit position info
 		protected CUnitSpacialComp m_spacial;
+
 		//单位的视图, 可能是sprite, 也可能是mesh
 		protected CUnitViewComp m_view;
 
@@ -51,32 +53,39 @@ namespace DarkRoom.Game{
 		//该单位是否暂时无效
 		protected bool m_invalid = false;
 
+		protected Transform m_tran;
+
 		/// <summary>
 		/// 客户端每个单位的唯一id, 也有可能由服务器传入
 		/// </summary>
 		public int CId { get; set; }
 
-		public CUnitViewComp View{
+		public CUnitViewComp View
+		{
 			get { return m_view; }
 		}
 
-		public CUnitSpacialComp SpacialComp {
+		public CUnitSpacialComp SpacialComp
+		{
 			get { return m_spacial; }
 		}
 
 		/// <summary>
 		/// 本单位的位置. 因为用的地方很多. 所以做了个引用
 		/// </summary>
-		public Vector3 LocalPosition {
+		public Vector3 LocalPosition
+		{
 			get { return m_spacial.localPosition; }
 		}
 
-		public virtual bool Dead {
+		public virtual bool Dead
+		{
 			get { return m_dead; }
 			set { m_dead = value; }
 		}
 
-		public virtual bool Dying {
+		public virtual bool Dying
+		{
 			get { return m_dying; }
 			set { m_dying = value; }
 		}
@@ -94,7 +103,8 @@ namespace DarkRoom.Game{
 		/// <summary>
 		/// 是否濒死或者已经死亡
 		/// </summary>
-		public bool DeadOrDying {
+		public bool DeadOrDying
+		{
 			get { return m_dead || m_dying; }
 		}
 
@@ -107,7 +117,8 @@ namespace DarkRoom.Game{
 		}
 
 		//是否友好同盟, 包含自己和中立
-		public bool IsFriendTeam(TeamSide value) {
+		public bool IsFriendTeam(TeamSide value)
+		{
 			if (Team == TeamSide.Dark && value == TeamSide.Dark)
 				return true;
 
@@ -120,12 +131,14 @@ namespace DarkRoom.Game{
 			return Team == value;
 		}
 
-		public bool IsFriendTeam(CPawnEntity value) {
+		public bool IsFriendTeam(CPawnEntity value)
+		{
 			return IsFriendTeam(value.Team);
 		}
 
 
-		public bool IsEnemyTeam(TeamSide value) {
+		public bool IsEnemyTeam(TeamSide value)
+		{
 			if (Team == TeamSide.Dark && value == TeamSide.Dark)
 				return false;
 
@@ -138,24 +151,27 @@ namespace DarkRoom.Game{
 			return Team != value;
 		}
 
-		public bool IsEnemyTeam(CPawnEntity value) {
+		public bool IsEnemyTeam(CPawnEntity value)
+		{
 			return IsEnemyTeam(value.Team);
 		}
 
-		protected virtual void Awake(){
+		protected virtual void Awake()
+		{
 			UnitCounter++;
 			CId = UnitCounter;
 
+			m_tran = transform;
 			RegisterAllComponents();
 			PostRegisterAllComponents();
 		}
 
-	    protected virtual void Start(){
-			
+		protected virtual void Start()
+		{
 		}
 
-		protected virtual void Update(){
-			
+		protected virtual void Update()
+		{
 		}
 
 		/// <summary>
@@ -166,13 +182,15 @@ namespace DarkRoom.Game{
 			//初始化CUnitSpacialComp, 在awake中实现是为了防止时序问题
 			//给别的类在start中做一些事情留有机会
 			m_spacial = GetComponent<CUnitSpacialComp>();
-			if (m_spacial == null) {
+			if (m_spacial == null)
+			{
 				m_spacial = gameObject.AddComponent<CUnitSpacialComp>();
 			}
-			
+
 			//初始化CUnitViewComp
 			m_view = GetComponent<CUnitViewComp>();
-			if (m_view == null) {
+			if (m_view == null)
+			{
 				m_view = gameObject.AddComponent<CUnitViewComp>();
 			}
 		}
@@ -182,7 +200,6 @@ namespace DarkRoom.Game{
 		/// </summary>
 		protected virtual void PostRegisterAllComponents()
 		{
-			
 		}
 
 		/// <summary>
@@ -190,7 +207,8 @@ namespace DarkRoom.Game{
 		/// </summary>
 		public void PlayAction(string action, float normalizedTime = 0)
 		{
-			if (String.IsNullOrEmpty(action)) {
+			if (String.IsNullOrEmpty(action))
+			{
 				m_view.Pause();
 				return;
 			}
@@ -209,22 +227,24 @@ namespace DarkRoom.Game{
 		/// <returns></returns>
 		//public virtual float TakeDamage(float damageAmount, CDamageEvent damageEvent, CController eventInstigator, CUnitEntity damageCauser)
 		//{
-			//if (!CanBeDamaged) return 0;
-			//return damageAmount;
+		//if (!CanBeDamaged) return 0;
+		//return damageAmount;
 		//}
-
 		/// <summary>
 		/// 主体的半径, 读取的是空间组件的半径
 		/// </summary>
-		public float Radius {
+		public float Radius
+		{
 			get { return m_spacial.Radius; }
 		}
 
-		public virtual void Die(){
+		public virtual void Die()
+		{
 			m_dead = true;
 		}
 
-		protected virtual void OnDestroy(){
+		protected virtual void OnDestroy()
+		{
 			m_spacial = null;
 			m_view = null;
 		}

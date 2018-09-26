@@ -70,10 +70,11 @@ namespace Sword
 		public HeroEntity CreateHeroEntity(Vector3 localPosition)
 		{
 			var entity = CWorld.Instance.SpawnUnit<HeroEntity>("Hero_" + Hero.Name, localPosition);
-			var go = entity.gameObject;
-
-			var ctrl = go.AddComponent<HeroController>();
+			entity.Address = Hero.Address;
 			entity.Team = CUnitEntity.TeamSide.Red;
+
+			var go = entity.gameObject;
+			var ctrl = go.AddComponent<HeroController>();
 
 			var attr = entity.AttributeSet;
 			attr.InitAttr(Hero.ClassEnum, Hero.RaceEnum);

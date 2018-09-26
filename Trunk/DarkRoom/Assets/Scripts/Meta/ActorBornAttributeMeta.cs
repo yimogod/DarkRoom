@@ -70,6 +70,11 @@ namespace Sword
 
 		public static ActorBornAttributeMeta GetMeta(int id)
 		{
+			if (!m_dict.ContainsKey(id))
+			{
+				Debug.LogError($"{id} not in RaceMetaManager");
+				return null;
+			}
 			return m_dict[id];
 		}
 	}
@@ -111,6 +116,11 @@ namespace Sword
 
 		public static ActorBornAttributeMeta GetMeta(int id)
 		{
+			if (!m_dict.ContainsKey(id))
+			{
+				Debug.LogError($"{id} not in ClassMetaManager");
+				return null;
+			}
 			return m_dict[id];
 		}
 	}

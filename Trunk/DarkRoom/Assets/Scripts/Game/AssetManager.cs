@@ -24,6 +24,9 @@ namespace Sword
 			return $"Icon_{actorRace}_{actorClass}";
 		}
 
+		/// <summary>
+		/// 通过职业和种族, 获取英雄模型地址
+		/// </summary>
 		public static string GetHeroModelAddress(ActorRace actorRace, ActorClass actorClass)
 		{
 			string rn = SwordUtil.GetRaceName(actorRace);
@@ -37,6 +40,16 @@ namespace Sword
 		public static string GetHeroModelAddress(string actorRace, string actorClass)
 		{
 			return $"Hero_{actorRace}_{actorClass}";
+		}
+
+		/// <summary>
+		/// 加载actor的模型, 我们的模型都是独立的. 且都是simply化的字符串
+		/// 注意, hero的address是不需要prefab后缀的, 
+		/// 因为在address工具里面, 如果使用了simple功能产生的名字是没用prefab后缀
+		/// </summary>
+		public static void LoadActorPrefab(string address, Transform parent, Vector3 localPosition)
+		{
+			CResourceManager.InstantiatePrefab(address, parent, localPosition);
 		}
 
 		public static void LoadItemIcon(string name)

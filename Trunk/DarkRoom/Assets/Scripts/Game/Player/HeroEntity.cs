@@ -7,9 +7,9 @@ namespace Sword
 {
 	public class HeroEntity : ActorEntity
 	{
-		protected override void PostRegisterAllComponents()
+		protected override void Start()
 		{
-			base.PostRegisterAllComponents();
+			base.Start();
 
 			var go = new GameObject("MoveRange");
 			go.transform.SetParent(transform);

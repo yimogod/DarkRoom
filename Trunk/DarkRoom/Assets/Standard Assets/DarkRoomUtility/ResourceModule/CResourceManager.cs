@@ -4,16 +4,18 @@ using DarkRoom.Core;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace DarkRoom.Utility{
-	public class CResourceManager{
-
+namespace DarkRoom.Utility
+{
+	public class CResourceManager
+	{
 		public static string GetStreamAssetsPath(RuntimePlatform platform)
 		{
-		    var result = Addressables.LoadAsset<GameObject>("path");
+			var result = Addressables.LoadAsset<GameObject>("path");
 
 			string path = string.Empty;
 
-			switch (platform) {
+			switch (platform)
+			{
 				case RuntimePlatform.Android:
 					path = string.Format("jar:file://{0}!/assets/", Application.dataPath);
 					break;
@@ -29,63 +31,65 @@ namespace DarkRoom.Utility{
 			}
 
 			return path;
-        }
-
-        /// <summary>
-        /// 实例化address prefab, 且放在parent下面
-        /// </summary>
-		public static void InstantiatePrefab(string address, Transform parent, Vector3 localPosition, Action<GameObject> onComplete = null)
-		{
-            CResourceLoader loader = new CResourceLoader();
-            loader.InstantiateGameObject(address, parent, localPosition, onComplete);
 		}
-
-	    public static void InstantiatePrefab(string address, Transform parent, Action<GameObject> onComplete = null)
-	    {
-	        CResourceLoader loader = new CResourceLoader();
-	        loader.InstantiateGameObject(address, parent, Vector3.zero, onComplete);
-	    }
-
-        /// <summary>
-        /// Loads the prefab.
-        /// </summary>
-        public static void LoadPrefab(string address, Action<GameObject> onComplete = null){
-            CResourceLoader loader = new CResourceLoader();
-            loader.LoadGameObject(address, onComplete);
-        }
-
-        public static void InstantiateSprite(string address)
-        {
-			
-		}
-
-        /// <summary>
-        /// 加载ui用的sprite
-        /// </summary>
-        public static void LoadSprite(string address, Action<Sprite> onComplete)
-        {
-            CResourceLoader loader = new CResourceLoader();
-            loader.LoadObject<Sprite>(address, onComplete);
-        }
 
 		/// <summary>
-        /// 加载icon之类, 我们会放入image控件
-        /// </summary>
-        /// <param name="address"></param>
+		/// 实例化address prefab, 且放在parent下面
+		/// </summary>
+		public static void InstantiatePrefab(string address, Transform parent, Vector3 localPosition,
+			Action<GameObject> onComplete = null)
+		{
+			CResourceLoader loader = new CResourceLoader();
+			loader.InstantiateGameObject(address, parent, localPosition, onComplete);
+		}
+
+		public static void InstantiatePrefab(string address, Transform parent, Action<GameObject> onComplete = null)
+		{
+			CResourceLoader loader = new CResourceLoader();
+			loader.InstantiateGameObject(address, parent, Vector3.zero, onComplete);
+		}
+
+		/// <summary>
+		/// Loads the prefab.
+		/// </summary>
+		public static void LoadPrefab(string address, Action<GameObject> onComplete = null)
+		{
+			CResourceLoader loader = new CResourceLoader();
+			loader.LoadGameObject(address, onComplete);
+		}
+
+		public static void InstantiateSprite(string address)
+		{
+		}
+
+		/// <summary>
+		/// 加载ui用的sprite
+		/// </summary>
+		public static void LoadSprite(string address, Action<Sprite> onComplete)
+		{
+			CResourceLoader loader = new CResourceLoader();
+			loader.LoadObject<Sprite>(address, onComplete);
+		}
+
+		/// <summary>
+		/// 加载icon之类, 我们会放入image控件
+		/// </summary>
+		/// <param name="address"></param>
 		public static void LoadTexture2D(string address)
 		{
 		}
 
-        /// <summary>
-        /// 加载文本
-        /// </summary>
-        public static void LoadText(string address, Action<string> onComplete)
-	    {
-            CResourceLoader loader = new CResourceLoader();
-            loader.LoadObject<UnityEngine.Object>(address, o => {
-				if(o == null)Debug.LogWarning(address + "| is null");
-                onComplete(o.ToString());
-            });
-        }
+		/// <summary>
+		/// 加载文本
+		/// </summary>
+		public static void LoadText(string address, Action<string> onComplete)
+		{
+			CResourceLoader loader = new CResourceLoader();
+			loader.LoadObject<UnityEngine.Object>(address, o =>
+			{
+				if (o == null) Debug.LogWarning(address + "| is null");
+				onComplete(o.ToString());
+			});
+		}
 	}
 }

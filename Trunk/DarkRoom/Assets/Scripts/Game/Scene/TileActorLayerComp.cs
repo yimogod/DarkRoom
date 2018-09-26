@@ -32,7 +32,7 @@ namespace Sword
 			}
 
 			m_parent = CWorld.Instance.Layer.UnitLayer;
-			StartCoroutine("CoroutineBuild");
+			//StartCoroutine("CoroutineBuild");
 		}
 
 		private IEnumerator CoroutineBuild()

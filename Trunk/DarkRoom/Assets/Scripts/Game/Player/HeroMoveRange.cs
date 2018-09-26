@@ -12,10 +12,9 @@ namespace Sword
 		void Awake()
 		{
 			m_tran = transform;
-			CreateRangeTile();
 		}
 
-		private void CreateRangeTile()
+		void Start()
 		{
 			for (int c = 0; c < 5; c++)
 			{
