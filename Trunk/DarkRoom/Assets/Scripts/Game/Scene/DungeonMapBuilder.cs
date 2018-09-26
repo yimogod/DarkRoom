@@ -19,7 +19,7 @@ namespace Sword
 		private CForestGenerator m_mapGen;
 
 		public CAssetGrid TerrainGrid => m_mapGen.TerrainGrid;
-        public CAssetGrid BlockGrid => m_mapGen.BlockGrid;
+		public CAssetGrid BlockGrid => m_mapGen.BlockGrid;
 		public CAssetGrid DecalGrid => m_mapGen.DecalGrid;
 
 		public DungeonMapBuilder(MapMeta meta)
@@ -33,28 +33,32 @@ namespace Sword
 		/// </summary>
 		public void CreateMap()
 		{
-            m_mapGen = new CForestGenerator();
-            m_mapGen.Generate();
+			m_mapGen = new CForestGenerator();
+			m_mapGen.Generate();
 		}
 
-
-		public void CreateActor(TilePropsLayerComp unitLayer)
+		/// <summary>
+		/// 根据地图配置, 随机放置角色
+		/// </summary>
+		public void CreateActor()
 		{
-			m_actorGen = unitLayer.GetOrCreateComponentOnGameObject<ActorGenerator>();
-			m_actorGen.Generate(m_mapMeta, TerrainGrid);
+			m_actorGen = new ActorGenerator();
+			m_actorGen.Generate();
 		}
 
 		/// <summary>
 		/// 讲生成器的通行数据拷贝到我们的tmap中
 		/// </summary>
-		public void CopyData(CStarGrid targetGrid)
+		public void CopyUnWalkableToGrid(CStarGrid targetGrid)
 		{
-			targetGrid.Init(m_mapMeta.Cols, m_mapMeta.Rows, true);
-
 			//不可通行的来源有很多地方
 			//1 terrain的湖水
-			targetGrid.CopyUnWalkableFrom(m_mapGen.TerrainGrid);
+			targetGrid.CopyUnWalkableFrom(TerrainGrid);
+
 			//2 单位层的房子
+
+			//3 障碍物
+			targetGrid.CopyUnWalkableFrom(BlockGrid);
 		}
 	}
 }

@@ -13,10 +13,12 @@ namespace Sword
 		/// </summary>
 		public int LevelId;
 
-		private DungeonMapBuilder m_builder;
+		private DungeonMapBuilder m_builder = null;
 		private TileTerrainLayerComp m_terrainLayer = null;
 		private TileBlockLayerComp m_blockLayer = null;
 		private TileDecalLayerComp m_decalLayer = null;
+
+		private TileActorLayerComp m_actorLayer = null;
 
 		private TileDebugLayerComp m_debugLayer = null;
 
@@ -42,41 +44,41 @@ namespace Sword
 
 			TMap.Instance.Init(m_mapMeta);
 			m_builder = new DungeonMapBuilder(m_mapMeta);
-            m_builder.CreateMap();
+			m_builder.CreateMap();
+			m_builder.CreateActor();
 
 			//读取加载地形数据, 并组装terrain3d comp
 			m_terrainLayer = gameObject.GetOrCreateComponent<TileTerrainLayerComp>();
-            m_terrainLayer.SetAssetGrid(m_builder.TerrainGrid);
-			m_terrainLayer.CopyUnWalkableToGrid(TMap.Instance.WalkableGrid);
+			m_terrainLayer.SetAssetGrid(m_builder.TerrainGrid);
 
-            //读取加载没有逻辑的障碍
-            m_blockLayer = gameObject.GetOrCreateComponent<TileBlockLayerComp>();
-            m_blockLayer.SetAssetGrid(m_builder.BlockGrid);
-			m_blockLayer.CopyUnWalkableToGrid(TMap.Instance.WalkableGrid);
+			//读取加载没有逻辑的障碍
+			m_blockLayer = gameObject.GetOrCreateComponent<TileBlockLayerComp>();
+			m_blockLayer.SetAssetGrid(m_builder.BlockGrid);
 
 			//加载没有逻辑的贴花
 			m_decalLayer = gameObject.GetOrCreateComponent<TileDecalLayerComp>();
 			m_decalLayer.SetAssetGrid(m_builder.DecalGrid);
 
-			//创建并读取unit数据. 并组装unit layer comp
-			//var unitTran = CWorld.Instance.Layer.UnitLayer;
-			//m_unitLayer = unitTran.gameObject.GetOrCreateComponent<TileUnitLayerComp>();
-			//m_builder.CreateActor(m_unitLayer);
+			//拷贝不可通行数据
+			m_builder.CopyUnWalkableToGrid(TMap.Instance.WalkableGrid);
 
+			//加载角色数据
+			m_actorLayer = gameObject.GetOrCreateComponent<TileActorLayerComp>();
+			m_actorLayer.SetAssetGrid(null);
 
+			//创建可通行debug层
 			m_debugLayer = gameObject.GetOrCreateComponent<TileDebugLayerComp>();
 			m_debugLayer.SetStarGrid(TMap.Instance.WalkableGrid);
-			m_debugLayer.Draw();
 		}
 
 		private void CreateMapThing()
 		{
 			m_terrainLayer.Build();
-            m_blockLayer.Build();
+			m_blockLayer.Build();
 			m_decalLayer.Build();
-			//m_unitLayer.Build();
+			m_actorLayer.Build();
 
-			//m_builder.CopyData(TMap.Instance.WalkableGrid);
+			m_debugLayer.Draw();
 		}
 
 		void Update()

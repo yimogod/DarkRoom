@@ -21,20 +21,6 @@ namespace Sword
 			m_assetGrid = grid;
 		}
 
-		/// <summary>
-		/// 将本格子不可同行的数据传到寻路数据
-		/// </summary>
-		public void CopyUnWalkableToGrid(CStarGrid targetGrid)
-		{
-			if (m_assetGrid == null)
-			{
-				Debug.LogError("AssetGrid Must Not Null");
-				return;
-			}
-
-			targetGrid.CopyUnWalkableFrom(m_assetGrid);
-		}
-
 		public void Build()
 		{
 			if (m_assetGrid == null)
