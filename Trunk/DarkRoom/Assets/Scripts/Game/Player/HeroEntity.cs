@@ -7,6 +7,8 @@ namespace Sword
 {
 	public class HeroEntity : ActorEntity
 	{
+		private HeroMoveRange m_rangeTile;
+
 		protected override void Start()
 		{
 			base.Start();
@@ -14,7 +16,7 @@ namespace Sword
 			var go = new GameObject("MoveRange");
 			go.transform.SetParent(transform);
 			go.transform.localPosition = Vector3.zero;
-			go.AddComponent<HeroMoveRange>();
+			m_rangeTile = go.AddComponent<HeroMoveRange>();
 		}
 	}
 }

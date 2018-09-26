@@ -19,7 +19,8 @@ namespace Sword
 
 		public void BuildHero(Vector2Int pos)
 		{
-			Vector3 localPos = new Vector3(pos.x, GameConst.DEFAULT_TERRAIN_HEIGHT + 0.1f, pos.y);
+			Vector3 localPos = CMapUtil.GetTileCenterPosByColRow(pos);
+			localPos.y = GameConst.DEFAULT_TERRAIN_HEIGHT + 0.1f;
 			ProxyPool.HeroProxy.CreateHeroEntity(localPos);
 		}
 
