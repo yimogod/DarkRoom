@@ -13,7 +13,7 @@ namespace Sword{
 
         //x = id, y = lv  z = num
         public List<Vector3Int> Monsters = new List<Vector3Int>();
-	    public List<Vector3Int> Bosses = new List<Vector3Int>();
+	    public List<Vector3Int> Boss = new List<Vector3Int>();
 	    public List<Vector3Int> Triggers = new List<Vector3Int>();
         //第一个应该是黄金宝箱, 在boss旁边
         //x=id y=num

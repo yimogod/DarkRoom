@@ -67,7 +67,7 @@ namespace Sword
 		/// <summary>
 		/// 创建英雄的GO
 		/// </summary>
-		public void CreateHeroEntity()
+		public HeroEntity CreateHeroEntity()
 		{
 			GameObject go = new GameObject("Hero_" + Hero.Name);
 			var entity = go.AddComponent<HeroEntity>();
@@ -86,6 +86,8 @@ namespace Sword
 			//目前我们仅仅英雄会有不同的武器
 			//gameObject.AddComponent<HeroFSMComp>();
 			//gameObject.AddComponent<HeroControlKeyboard>();
+			Hero.Entity = entity;
+			return entity;
 		}
 	}
 }

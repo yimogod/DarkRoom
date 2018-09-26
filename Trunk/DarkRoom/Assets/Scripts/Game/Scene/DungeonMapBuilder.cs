@@ -21,6 +21,7 @@ namespace Sword
 		public CAssetGrid TerrainGrid => m_mapGen.TerrainGrid;
 		public CAssetGrid BlockGrid => m_mapGen.BlockGrid;
 		public CAssetGrid DecalGrid => m_mapGen.DecalGrid;
+		public CAssetGrid ActorGrid => m_actorGen.Grid;
 
 		public DungeonMapBuilder(MapMeta meta)
 		{
@@ -40,10 +41,10 @@ namespace Sword
 		/// <summary>
 		/// 根据地图配置, 随机放置角色
 		/// </summary>
-		public void CreateActor()
+		public void CreateActor(CStarGrid walkableGrid)
 		{
 			m_actorGen = new ActorGenerator();
-			m_actorGen.Generate();
+			m_actorGen.Generate(m_mapMeta, walkableGrid);
 		}
 
 		/// <summary>

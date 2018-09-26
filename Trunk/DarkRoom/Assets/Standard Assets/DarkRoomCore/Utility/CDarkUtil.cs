@@ -1,60 +1,76 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+
 namespace DarkRoom.Core
 {
-    public class CDarkUtil{
-		public static void AddChild(Transform parent, Transform child, Vector3 pos){
+	public class CDarkUtil
+	{
+		public static void AddChild(Transform parent, Transform child, Vector3 pos)
+		{
 			child.SetParent(parent, false);
 			child.localScale = Vector3.one;
 			child.localPosition = pos;
 		}
 
-		public static void AddChildWorld(Transform parent, Transform child, Vector3 pos){
+		public static void AddChildWorld(Transform parent, Transform child, Vector3 pos)
+		{
 			child.SetParent(parent, false);
 			child.localScale = Vector3.one;
 			child.position = pos;
 		}
 
-		public static void AddChild(Transform parent, Transform child, Vector3 pos, Vector3 scale, Vector3 euler){
+		public static void AddChild(Transform parent, Transform child, Vector3 pos, Vector3 scale, Vector3 euler)
+		{
 			child.SetParent(parent, false);
 			child.localScale = scale;
 			child.localPosition = pos;
 			child.localEulerAngles = euler;
 		}
 
-		public static void AddChild(Transform parent, Transform child){
+		public static void AddChild(Transform parent, Transform child)
+		{
 			child.SetParent(parent, false);
 			child.localScale = Vector3.one;
 			child.localPosition = Vector3.zero;
 		}
 
-		public static void DestroyChildren(Transform parent){
+		public static void DestroyChildren(Transform parent)
+		{
 			int num = parent.childCount;
-			if (num == 0)return;
+			if (num == 0) return;
 
-			for (int i = num - 1; i >= 0; i--){
+			for (int i = num - 1; i >= 0; i--)
+			{
 				Transform child = parent.GetChild(i);
 				GameObject.Destroy(child.gameObject);
 			}
 		}
 
-		public static Quaternion GetRotationByDirection(Vector3 dir){
+		public static Quaternion GetRotationByDirection(Vector3 dir)
+		{
 			Vector3 r = Vector3.zero;
-			if(dir.z == 0){
+			if (dir.z == 0)
+			{
 				r.y = dir.x > 0 ? 0f : 180f;
-			}if(dir.x == 0){
+			}
+
+			if (dir.x == 0)
+			{
 				r.y = dir.z > 0 ? -90f : 90f;
 			}
+
 			return Quaternion.Euler(r);
 		}
 
-		public static int GetKeyFromVec3(Vector3 value){
-			return 10000 * (int)value.z + (int)value.x;
+		public static int GetKeyFromVec3(Vector3 value)
+		{
+			return 10000 * (int) value.z + (int) value.x;
 		}
 
-		public static Vector3 GetVec3FromKey(int key){
-			int row = (int)(key / 10000);
+		public static Vector3 GetVec3FromKey(int key)
+		{
+			int row = (int) (key / 10000);
 			int col = key % 10000;
 			return new Vector3(col, 0, row);
 		}
@@ -62,7 +78,8 @@ namespace DarkRoom.Core
 		/// <summary>
 		/// 从格式为x,y,z的字符串中获取矢量
 		/// </summary>
-		public static Vector3 GetVec3FromStr(string str){
+		public static Vector3 GetVec3FromStr(string str)
+		{
 			Vector3 v = Vector3.zero;
 			string[] list = str.Split(',');
 			v.x = float.Parse(list[0]);
@@ -74,65 +91,67 @@ namespace DarkRoom.Core
 		/// <summary>
 		/// 去除列表中的重复元素
 		/// </summary>
-		public static void UniqueList<T>(List<T> list){
+		public static void UniqueList<T>(List<T> list)
+		{
 			List<T> newList = new List<T>();
 			newList.AddRange(list);
 			list.Clear();
 
-			foreach(T t in newList) {
+			foreach (T t in newList)
+			{
 				int i = newList.IndexOf(t);
-				if(i == -1)continue;
+				if (i == -1) continue;
 
 				list.Add(t);
 			}
 		}
 
-        /// <summary>
-        /// 非法的Vector3Int
-        /// </summary>
-        public static bool IsInvalidVec3(Vector3 vec)
-        {
-            return false;
-        }
+		/// <summary>
+		/// 非法的Vector3Int
+		/// </summary>
+		public static bool IsInvalidVec3(Vector3 vec)
+		{
+			return false;
+		}
 
-        /// <summary>
-        /// 合法的Vector3Int
-        /// </summary>
-        public static bool IsValidVec3(Vector3 vec)
-        {
-            return false;
-        }
+		/// <summary>
+		/// 合法的Vector3Int
+		/// </summary>
+		public static bool IsValidVec3(Vector3 vec)
+		{
+			return false;
+		}
 
-        /// <summary>
-        /// 合法的Vector3Int
-        /// </summary>
-        public static bool IsValidVec3Int(Vector3Int vec)
-        {
-            return vec != CDarkConst.INVALID_VEC3INT;
-        }
+		/// <summary>
+		/// 合法的Vector3Int
+		/// </summary>
+		public static bool IsValidVec3Int(Vector3Int vec)
+		{
+			return vec != CDarkConst.INVALID_VEC3INT;
+		}
 
-        /// <summary>
-        /// 非法的Vector3Int
-        /// </summary>
-        public static bool IsInvalidVec3Int(Vector3Int vec)
-        {
-            return vec == CDarkConst.INVALID_VEC3INT;
-        }
+		/// <summary>
+		/// 非法的Vector3Int
+		/// </summary>
+		public static bool IsInvalidVec3Int(Vector3Int vec)
+		{
+			return vec == CDarkConst.INVALID_VEC3INT;
+		}
 
-        /// <summary>
-        /// 合法的Vector3Int
-        /// </summary>
-        public static bool IsValidVec2Int(Vector2Int vec)
-        {
-            return vec != CDarkConst.INVALID_VEC2INT;
-        }
+		/// <summary>
+		/// 合法的Vector3Int
+		/// </summary>
+		public static bool IsValidVec2Int(Vector2Int vec)
+		{
+			return vec != CDarkConst.INVALID_VEC2INT;
+		}
 
-        /// <summary>
-        /// 非法的Vector3Int
-        /// </summary>
-        public static bool IsInvalidVec2Int(Vector2Int vec)
-        {
-            return vec == CDarkConst.INVALID_VEC2INT;
-        }
-    }
+		/// <summary>
+		/// 非法的Vector3Int
+		/// </summary>
+		public static bool IsInvalidVec2Int(Vector2Int vec)
+		{
+			return vec == CDarkConst.INVALID_VEC2INT;
+		}
+	}
 }

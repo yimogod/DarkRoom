@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
 using DarkRoom.Core;
 using DarkRoom.Game;
 using UnityEngine;
@@ -7,11 +7,10 @@ namespace Sword
 {
 	public class TileActorLayerComp : MonoBehaviour
 	{
-		private MapMeta m_mapMeta;
-		private DungeonMapPlaceholder m_tilesData;
-		private ActorEntityCreator m_creator;
-
 		private CAssetGrid m_assetGrid;
+		private Transform m_parent;
+
+		private ActorEntityCreator m_creator = new ActorEntityCreator();
 
 		public void SetAssetGrid(CAssetGrid grid)
 		{
@@ -25,42 +24,48 @@ namespace Sword
 				Debug.LogError("AssetGrid Must Not Null");
 				return;
 			}
+
+			m_parent = CWorld.Instance.Layer.UnitLayer;
+			StartCoroutine("CoroutineBuild");
 		}
 
-		public void Generate(MapMeta meta, CAssetGrid assetGrid)
+		private IEnumerator CoroutineBuild()
 		{
-			m_tilesData = new DungeonMapPlaceholder(assetGrid);
-			m_mapMeta = meta;
-		}
-
-		//创建单位, 英雄和怪物
-		private void CreateUnit()
-		{
-			//1. BornHero
-			CreateHero(10001, Vector2Int.down);
-
-			//2. 创建怪物
-			foreach (var m in m_mapMeta.Monsters)
+			for (int row = 0; row < m_assetGrid.NumRows; row++)
 			{
-				CreateMonster(m.x, m.y, m.z);
+				yield return new WaitForEndOfFrame();
+				for (int col = 0; col < m_assetGrid.NumCols; col++)
+				{
+					var mid = m_assetGrid.GetNodeType(col, row);
+					if (mid <= 0) continue;
+
+					var subType = m_assetGrid.GetNodeSubType(col, row);
+					if(subType <= 0)continue;
+
+					var pos = CMapUtil.GetTileCenterPosByColRow(col, row);
+					pos.y = GameConst.DEFAULT_TERRAIN_HEIGHT + 0.1f;
+
+
+				}
 			}
-
-			//CreateMonster(m_mapMeta.boss_1, m_mapMeta.boss_1_lv, m_mapMeta.boss_1_ai, 1);
-
-
-			//3. 创建boss, 在宝箱附近
-			//if (m_mapMeta.boss_0 != -1)
-			// {
-			//Vector3 pos = _helper.FindFreeTileNear(_mapGen.importTile_1);
-			//UnitBornData bornData =
-			//    UnitBornData.CreateUnitBornData(_mapMeta.boss_0, CUnitEntity.TeamSide.Blue, pos);
-			//CreateMonsterAtPos(bornData, _mapMeta.boss_0_lv, _mapMeta.boss_0_ai);
-			//  }
 		}
+
+		protected void LoadAndCreateModel(string prefab, Vector3 pos)
+		{
+			AssetManager.LoadTilePrefab("map_forest", prefab, m_parent, pos);
+		}
+
+
+
+
+
 
 		//创建英雄, 固定位置, 其实更好的设计应该是祭坛~~~~
-		private void CreateHero(int metaId, Vector2Int tile)
+		/*private void CreateHero(Vector2Int tile)
 		{
+			var entity = ProxyPool.HeroProxy.CreateHeroEntity();
+
+
 			var meta = ActorMetaManager.GetMeta(metaId);
 			HeroVO vo = new HeroVO();
 			//var vo = ProxyPool.UserProxy.Hero;
@@ -71,18 +76,7 @@ namespace Sword
 			m_creator.CreateAttachGO(entity);
 
 			m_tilesData.AddUnitToDict(entity.LocalPosition, 5);
-		}
-
-		//根据meta配置数据创建单个魔物
-		private void CreateMonster(int metaId, int lv, int num)
-		{
-			if (metaId <= 0 || num == 0) return;
-
-			for (int i = 0; i < num; ++i)
-			{
-				CreateMonsterAtPos(metaId, lv, Vector3.zero);
-			}
-		}
+		}*/
 
 		//在固定位置创建怪物
 		private void CreateMonsterAtPos(int metaId, int lv, Vector3 pos)
@@ -95,8 +89,6 @@ namespace Sword
 			var entity = CWorld.Instance.SpawnUnit<BotEntity>("Bot_" + metaId, pos);
 			m_creator.CreateMonsterAddon(entity);
 			m_creator.CreateAttachGO(entity);
-
-			m_tilesData.AddUnitToDict(entity.LocalPosition);
 		}
 
 

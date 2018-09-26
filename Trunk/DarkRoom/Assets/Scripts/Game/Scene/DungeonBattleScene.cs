@@ -45,7 +45,8 @@ namespace Sword
 			TMap.Instance.Init(m_mapMeta);
 			m_builder = new DungeonMapBuilder(m_mapMeta);
 			m_builder.CreateMap();
-			m_builder.CreateActor();
+			m_builder.CopyUnWalkableToGrid(TMap.Instance.WalkableGrid);
+			m_builder.CreateActor(TMap.Instance.WalkableGrid);
 
 			//读取加载地形数据, 并组装terrain3d comp
 			m_terrainLayer = gameObject.GetOrCreateComponent<TileTerrainLayerComp>();
@@ -59,12 +60,9 @@ namespace Sword
 			m_decalLayer = gameObject.GetOrCreateComponent<TileDecalLayerComp>();
 			m_decalLayer.SetAssetGrid(m_builder.DecalGrid);
 
-			//拷贝不可通行数据
-			m_builder.CopyUnWalkableToGrid(TMap.Instance.WalkableGrid);
-
 			//加载角色数据
 			m_actorLayer = gameObject.GetOrCreateComponent<TileActorLayerComp>();
-			m_actorLayer.SetAssetGrid(null);
+			m_actorLayer.SetAssetGrid(m_builder.ActorGrid);
 
 			//创建可通行debug层
 			m_debugLayer = gameObject.GetOrCreateComponent<TileDebugLayerComp>();

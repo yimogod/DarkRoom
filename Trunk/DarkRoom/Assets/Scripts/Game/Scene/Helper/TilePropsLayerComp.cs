@@ -30,7 +30,6 @@ namespace Sword
 			}
 
 			m_parent = CWorld.Instance.Layer.TerrainLayer;
-
 			StartCoroutine("CoroutineBuild");
 		}
 
