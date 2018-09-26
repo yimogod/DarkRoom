@@ -138,7 +138,7 @@ namespace DarkRoom.Utility
 					m_downWorldPos = m_overWorldPos;
 				}
 
-				m_clickEvent.WorldPosition = mousePos;
+				m_clickEvent.WorldPosition = m_downWorldPos;
 				m_dispatcher.DispatchEvent(m_clickEvent);
 			}
 		}
