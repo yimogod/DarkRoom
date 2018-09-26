@@ -10,6 +10,8 @@ namespace DarkRoom.Utility
 	{
 		public static string TYPE = "CMouseClick";
 
+		public Vector3 WorldPosition;
+
 		public CMouseEvent() : base(TYPE)
 		{
 		}
@@ -20,11 +22,6 @@ namespace DarkRoom.Utility
 		//鼠标点击的col, row
 		private int m_col;
 		private int m_row;
-
-		public void AddClickListener()
-		{
-			throw new NotImplementedException();
-		}
 
 		private bool m_enabled = true;
 		private bool m_hasDown = false;
@@ -40,6 +37,8 @@ namespace DarkRoom.Utility
 
 		//鼠标按下点击的单位. 如果有的话
 		private Transform m_hitUnit = null;
+
+		private long m_lastDownTime = -1;
 
 		//鼠标移动时, 经过的单位
 		private Transform m_overUnit = null;
@@ -114,6 +113,7 @@ namespace DarkRoom.Utility
 					if (clickUI) return;
 				}
 
+				m_lastDownTime = CTimeUtil.GetCurrentMillSecondStamp();
 				m_downScreenPos = mousePos;
 				m_hasDown = true;
 			}
@@ -121,8 +121,10 @@ namespace DarkRoom.Utility
 			//鼠标松开
 			if (Input.GetMouseButtonUp(0))
 			{
+				long delta = CTimeUtil.GetCurrentMillSecondStamp() - m_lastDownTime;
+				if (delta > 200)return;
+
 				m_hasClicked = true;
-				m_dispatcher.DispatchEvent(m_clickEvent);
 
 				//探测鼠标点击到的世界坐标和单位.
 				if (m_overUnit != null)
@@ -135,6 +137,9 @@ namespace DarkRoom.Utility
 					//如果没有点击到单位, 那么就直接赋值在terrain上的世界坐标
 					m_downWorldPos = m_overWorldPos;
 				}
+
+				m_clickEvent.WorldPosition = mousePos;
+				m_dispatcher.DispatchEvent(m_clickEvent);
 			}
 		}
 	}

@@ -64,7 +64,6 @@ namespace Sword
 					var go = m_dict[(r + gap) * 1000 + (c + gap)];
 					var colInWorld = (int)center.x + c - range;
 					var rowInWorld = (int)center.z + r - range;
-					Debug.LogWarning(colInWorld + " " + rowInWorld);
 					var w = grid.IsWalkable(colInWorld, rowInWorld);
 					go.SetActive(w);
 				}

@@ -13,6 +13,8 @@ namespace Sword
 		private SwordGameState gameState =>
 			CWorld.Instance.GetGameState<SwordGameState>();
 
+		private HeroEntity m_entity => m_pawn as HeroEntity;
+
 		protected override void Start()
 		{
 			base.Start();
@@ -28,12 +30,14 @@ namespace Sword
 		protected override void Update()
 		{
 			base.Update();
-
 		}
 
-		private void OnClickMap(CEvent e)
+		private void OnClickMap(CEvent evt)
 		{
 			if (!gameState.InHeroRound) return;
+
+			CMouseEvent e = evt as CMouseEvent;
+			MoveToLocation(e.WorldPosition);
 		}
 	}
 }

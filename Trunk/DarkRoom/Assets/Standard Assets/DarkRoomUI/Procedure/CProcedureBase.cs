@@ -108,7 +108,7 @@ namespace DarkRoom.UI
 		{
 			if (string.IsNullOrEmpty(m_targetSceneName))
 			{
-				Debug.LogErrorFormat("{0} Procedure Should override m_targetSceneName Method", Name);
+				Debug.LogError($"{Name} Procedure Should override m_targetSceneName Method");
 				return;
 			}
 
