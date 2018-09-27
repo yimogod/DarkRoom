@@ -197,7 +197,7 @@ namespace DarkRoom.AI
 			}
 
 			//或者我们走过去
-			CPathResult data = GetWayPointBetween(me.LocalPosition, goal);
+			CPathResult data = GetWayPointBetween(me.LocalPosition.GetVector2Int(), goal.GetVector2Int());
 			follower.RequestMove(data);
 		}
 
@@ -205,9 +205,9 @@ namespace DarkRoom.AI
 		/// 获取起点和终点寻路后的路径点
 		/// 记住, 如果寻路采用多线程, 则本方法返回为空列表
 		/// </summary>
-		private List<Vector3> m_wayPoints = new List<Vector3>();
+		private List<Vector2Int> m_wayPoints = new List<Vector2Int>();
 
-		private List<Vector3> FindPath(Vector3 start, Vector3 goal)
+		private List<Vector2Int> FindPath(Vector2Int start, Vector2Int goal)
 		{
 			m_wayPoints.Clear();
 			if (m_space)
@@ -226,9 +226,9 @@ namespace DarkRoom.AI
 		/// <summary>
 		/// 同步获取起点和终点寻路后的路径点
 		/// </summary>
-		public CPathResult GetWayPointBetween(Vector3 start, Vector3 goal)
+		public CPathResult GetWayPointBetween(Vector2Int start, Vector2Int goal)
 		{
-			List<Vector3> wayPoints = FindPath(start, goal);
+			var wayPoints = FindPath(start, goal);
 			CPathResult data = new CPathResult();
 			data.SetWayPoints(wayPoints);
 			return data;

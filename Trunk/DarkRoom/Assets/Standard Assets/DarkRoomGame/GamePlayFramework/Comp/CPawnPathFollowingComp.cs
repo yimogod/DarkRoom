@@ -87,6 +87,12 @@ namespace DarkRoom.Game
 		//现在走到了第几个折点
 		private int m_pathStep = 0;
 
+		//之前折点的tile数据
+		private Vector2Int m_lastStep;
+
+		//当前折点的tile数据
+		private Vector2Int m_currStep;
+
 		//行走的下一个目的地, 也就是当前折点的坐标
 		private Vector3 m_stepPos;
 
@@ -139,9 +145,8 @@ namespace DarkRoom.Game
 			get {
 				if(m_status == PathFollowingStatus.Idle)return Vector3.zero;
 
-				//TODO 3d漫游
-				Vector3 force = m_stepPos - m_spacial.localPosition;
-				force.y = 0;
+				var delta = m_currStep - m_lastStep;
+				Vector3 force = new Vector3(delta.x, 0, delta.y);
 				//Vector3 now = m_spacial.localPosition;
 				//Vector3 force = new Vector3(m_stepPos.x - now.x, 0, m_stepPos.z - now.z);
 				return force.normalized;
@@ -159,6 +164,7 @@ namespace DarkRoom.Game
 			m_status = PathFollowingStatus.Moving;
 
 			m_pathStep = wayPoints.StartIndex;
+			m_currStep = wayPoints.StartPos;
 			GotoNode(m_pathStep);
         }
 
@@ -310,13 +316,16 @@ namespace DarkRoom.Game
 
 		//基于node的行走方式
 		public void GotoNode(int nodeIndex) {
+			m_lastStep = m_currStep;
 			m_lastDist = float.MaxValue;
 			if (nodeIndex > m_wayPoints.EndIndex) {
 				Finish();
 				return;
 			}
 
-			m_stepPos = m_wayPoints.WayPoints[nodeIndex];
+			//注意, 这里获取到路经点是格子的索引, 换算成需要换算成坐标
+			m_currStep = m_wayPoints.WayPoints[nodeIndex];
+			m_stepPos = CMapUtil.GetTileCenterPosByColRow(m_currStep);
 			m_mover.Move(ForceVector);
 		}
 

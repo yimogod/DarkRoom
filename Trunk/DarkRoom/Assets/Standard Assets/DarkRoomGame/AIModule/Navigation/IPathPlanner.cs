@@ -8,7 +8,7 @@ namespace DarkRoom.AI
 		/// <summary>
 		/// 同步寻路
 		/// </summary>
-		List<Vector3> FindPath(Vector3 start, Vector3 end);
+		List<Vector2Int> FindPath(Vector2Int start, Vector2Int end);
 
 		/// <summary>
 		/// 异步寻路

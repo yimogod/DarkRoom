@@ -25,13 +25,13 @@ namespace DarkRoom.Game
 		protected CPawnEntity m_owner;
 
 		//移动方式
-		private MoveType m_moveType = MoveType.Unknow;
+		private MoveType m_moveType = MoveType.Direct;
 
 		//临时让本组件停止运动
 		private bool m_notControlMove = false;
 
 		//运动时的速率
-		private float m_speed;
+		private float m_speed = 10f;
 
 		private CUnitSpacialComp m_spacial;
 

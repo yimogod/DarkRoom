@@ -11,12 +11,12 @@ namespace DarkRoom.AI
 		/// <summary>
 		/// 开始坐标
 		/// </summary>
-		public Vector3 StartPos;
+		public Vector2Int StartPos;
 
 		/// <summary>
 		/// 结束坐标
 		/// </summary>
-		public Vector3 EndPos;
+		public Vector2Int EndPos;
 
 		/// <summary>
 		/// 跟随开始的节点
@@ -31,7 +31,7 @@ namespace DarkRoom.AI
 		/// <summary>
 		/// 路径节点的所有数据
 		/// </summary>
-		public List<Vector3> WayPoints;
+		public List<Vector2Int> WayPoints;
 
 		/// <summary>
 		/// 随身携带的数据
@@ -47,7 +47,7 @@ namespace DarkRoom.AI
 		/// </summary>
 		/// <param name="start"></param>
 		/// <param name="end"></param>
-		public void Reset(Vector3 start, Vector3 end)
+		public void Reset(Vector2Int start, Vector2Int end)
 		{
 			StartPos = start;
 			EndPos = end;
@@ -56,7 +56,7 @@ namespace DarkRoom.AI
 			WayPoints = null;
 		}
 
-		public Vector3 FirstWayPoint
+		public Vector2Int FirstWayPoint
 		{
 			get { return WayPoints[StartIndex]; }
 		}
@@ -66,14 +66,14 @@ namespace DarkRoom.AI
 			get { return EndIndex - StartIndex + 1; }
 		}
 
-		public void SetWayPoints(List<Vector3> value)
+		public void SetWayPoints(List<Vector2Int> value)
 		{
 			WayPoints = value;
 			StartIndex = 0;
 			EndIndex = value.Count - 1;
 		}
 
-		public void SetWayPoints(List<Vector3> value, int start, int end)
+		public void SetWayPoints(List<Vector2Int> value, int start, int end)
 		{
 			WayPoints = value;
 			StartIndex = start;
@@ -84,7 +84,7 @@ namespace DarkRoom.AI
 		{
 			if (WayPoints == null)return;
 			for (int i = 1; i < WayPoints.Count; i++) {
-				Debug.DrawLine(WayPoints[i - 1], WayPoints[i]);
+				//Debug.DrawLine(WayPoints[i - 1].get, WayPoints[i]);
 			}
 		}
 

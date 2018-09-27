@@ -15,6 +15,11 @@ namespace DarkRoom.Game
 			return new Vector2Int(col, row);
 		}
 
+		public static Vector3 GetTileCenterPosByColRow(Vector3 position)
+		{
+			return GetTileCenterPosByColRow((int)position.x, (int)position.z);
+		}
+
 		/* for 2d, 左下角原点 */
 		public static Vector3 GetTileCenterPosByColRow(int col, int row)
 		{

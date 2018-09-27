@@ -16,7 +16,7 @@ namespace DarkRoom.AI
 		private CStarGrid m_starGrid = null;
 
 		//存储的路径列表. 外部只读. 不能修改
-		private List<Vector3> m_wayPoints = new List<Vector3>();
+		private List<Vector2Int> m_wayPoints = new List<Vector2Int>();
 
 		/// <summary>
 		/// 传入地图可通行数据构建寻路对象
@@ -32,9 +32,9 @@ namespace DarkRoom.AI
 		/// 这里的坐标是全局坐标, 会根据实际坐标和通行地图的偏移做处理
 		/// 如果找不到结果就返回 null
 		/// </summary>
-		public List<Vector3> FindPath(Vector3 start, Vector3 end)
+		public List<Vector2Int> FindPath(Vector2Int start, Vector2Int end)
 		{
-			return FindPath((int) start.x, (int) start.z, (int) end.x, (int) end.z);
+			return FindPath(start.x, start.y, end.x, end.y);
 		}
 
 		public void FindPathAsyn(CPathResult result)
@@ -48,7 +48,7 @@ namespace DarkRoom.AI
 		/// 这里的坐标是全局坐标, 会根据实际坐标和通行地图的偏移做处理
 		/// 如果找不到结果就返回 null
 		/// </summary>
-		private List<Vector3> FindPath(int startCol, int startRow, int endCol, int endRow)
+		private List<Vector2Int> FindPath(int startCol, int startRow, int endCol, int endRow)
 		{
 			//Debug.Log($"{startCol}_{startRow}");
 			//Debug.Log($"{endCol}_{endRow}");
@@ -80,7 +80,7 @@ namespace DarkRoom.AI
 				while (astarPath.Count > 0)
 				{
 					var node = astarPath.Pop();
-					m_wayPoints.Add(new Vector3(node.Col, 0, node.Row));
+					m_wayPoints.Add(new Vector2Int(node.Col, node.Row));
 				}
 			}
 

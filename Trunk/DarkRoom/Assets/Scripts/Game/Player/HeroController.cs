@@ -38,7 +38,8 @@ namespace Sword
 
 			CMouseEvent e = evt as CMouseEvent;
 			Debug.Log("click " + e.WorldPosition.x + " " + e.WorldPosition.z);
-			MoveToLocation(e.WorldPosition);
+			var target = CMapUtil.GetTileCenterPosByColRow(e.WorldPosition);
+			MoveToLocation(target);
 		}
 	}
 }
