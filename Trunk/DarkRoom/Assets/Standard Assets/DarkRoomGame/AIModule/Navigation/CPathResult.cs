@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using DarkRoom.Core;
 
 namespace DarkRoom.AI
 {
@@ -83,9 +84,15 @@ namespace DarkRoom.AI
 		public void Draw()
 		{
 			if (WayPoints == null)return;
+			string str = string.Empty;
 			for (int i = 1; i < WayPoints.Count; i++) {
-				//Debug.DrawLine(WayPoints[i - 1].get, WayPoints[i]);
+				var start = WayPoints[i - 1];
+				str += start.ToString() + " : ";
+				var end = WayPoints[i];
+				Debug.DrawLine(start.GetVector3(), end.GetVector3());
 			}
+			str += WayPoints[WayPoints.Count - 1].ToString() + " : ";
+			Debug.Log(str);
 		}
 
 		/// <summary>

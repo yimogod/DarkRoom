@@ -263,7 +263,7 @@ namespace DarkRoom.PCG
 			m_starGrid.SetStartNode(a.DoorForTunnel);
 			m_starGrid.SetEndNode(b.DoorForTunnel);
 			m_astar.FindPath(m_starGrid);
-			var path = m_astar.path;
+			var path = m_astar.Path;
 			foreach (var node in path)
 			{
 				SetTileData(node.Col, node.Row, "-1", CForestRoomTileType.OuterRoad);

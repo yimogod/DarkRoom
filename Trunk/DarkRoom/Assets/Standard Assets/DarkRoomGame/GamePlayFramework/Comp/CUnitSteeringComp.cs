@@ -153,7 +153,7 @@ namespace DarkRoom.Game
 		{
 			if (m_flags == 0) return Vector3.zero;
 
-			Vector3 target = m_pathFollower.TargetForNow;
+			Vector3 target = m_pathFollower.StepDestinationForNow;
 			m_steeringForce = Vector3.zero;
 			m_steeringForce = CalculatePrioritized(target, neighbors);
 			m_steeringForce = Vector3.ClampMagnitude(m_steeringForce, m_maxForce);

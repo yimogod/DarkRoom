@@ -51,7 +51,7 @@ namespace DarkRoom.AI {
 		/// 获取寻路结果. 在调用FindPath方法后再使用此结果
 		/// </summary>
 		/// <value>The path.</value>
-		public Stack<CStarNode> path{
+		public Stack<CStarNode> Path{
 			get { return m_path; }
 		}
 

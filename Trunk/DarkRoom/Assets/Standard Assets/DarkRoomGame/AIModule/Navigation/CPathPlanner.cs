@@ -10,7 +10,7 @@ namespace DarkRoom.AI
 	/// 2017/03/30/v1 实现chunk内的局部寻路
 	/// Author. liuzhibin
 	/// </summary>
-	public class CPathPlanner : IPathPlanner
+	public class CPathPlanner
 	{
 		private CAStar m_astar = new CAStar(CAStar.Connection.Four);
 		private CStarGrid m_starGrid = null;
@@ -76,7 +76,7 @@ namespace DarkRoom.AI
 			//Debug.Log($"search result is {result}");
 			if (result)
 			{
-				var astarPath = m_astar.path;
+				var astarPath = m_astar.Path;
 				while (astarPath.Count > 0)
 				{
 					var node = astarPath.Pop();

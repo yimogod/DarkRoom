@@ -96,14 +96,18 @@ namespace DarkRoom.Game{
 		public void SetPosY(float y){
 			Vector3 local = localPosition;
 			Vector3 pos = new Vector3(local.x, y, local.z);
-			if(m_trans != null)
-				m_trans.localPosition = pos;
+			m_trans.localPosition = pos;
 		}
 
-		public void SetLocalPos(Vector3 p){
+		public void SetLocalPos(Vector3 value){
 			m_lastPos = m_trans.localPosition;
-            if (m_trans != null)
-				m_trans.localPosition = p;
+			m_trans.localPosition = value;
+		}
+
+		public void SetLocalPosInXZ(Vector3 value){
+			m_lastPos = m_trans.localPosition;
+			value.y = m_lastPos.y;
+			m_trans.localPosition = value;
 		}
 
 		/// <summary>

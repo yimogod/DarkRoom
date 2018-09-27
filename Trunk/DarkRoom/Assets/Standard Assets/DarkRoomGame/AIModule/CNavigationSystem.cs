@@ -16,10 +16,7 @@ namespace DarkRoom.AI
 		private CStarGrid m_mapWalkableData = null;
 
 		//同步寻路对象
-		private IPathPlanner m_pathPlanner = null;
-
-		//异步寻路对象
-		private IPathPlanner m_pathPlannerAsyn = null;
+		private CPathPlanner m_pathPlanner = null;
 
 		//是否是空旷的空间
 		private bool m_space = false;
@@ -74,17 +71,6 @@ namespace DarkRoom.AI
 			m_mapWalkableData = new CStarGrid();
 			m_mapWalkableData.Init(mapNumCols, mapNumRows);
 			m_pathPlanner = new CPathPlanner(m_mapWalkableData);
-		}
-
-		/// <summary>
-		/// 初始化整个系统
-		/// </summary>
-		public void Initialize(int mapNumCols, int mapNumRows, IPathPlanner asynPlanner)
-		{
-			m_mapWalkableData = new CStarGrid();
-			m_mapWalkableData.Init(mapNumCols, mapNumRows);
-			m_pathPlanner = new CPathPlanner(m_mapWalkableData);
-			m_pathPlannerAsyn = asynPlanner;
 		}
 
 		/// <summary>
@@ -226,28 +212,17 @@ namespace DarkRoom.AI
 		/// <summary>
 		/// 同步获取起点和终点寻路后的路径点
 		/// </summary>
-		public CPathResult GetWayPointBetween(Vector2Int start, Vector2Int goal)
+		public CPathResult GetWayPointBetween(Vector2Int startTile, Vector2Int goalTile)
 		{
-			var wayPoints = FindPath(start, goal);
+			//Debug.Log($"get way point between {start} and {goal}");
+			var wayPoints = FindPath(startTile, goalTile);
 			CPathResult data = new CPathResult();
+			data.StartPos = startTile;
+			data.EndPos = goalTile;
 			data.SetWayPoints(wayPoints);
 			return data;
 		}
 
-
-		/// <summary>
-		/// 计算路径, 并根据路径进行回调
-		/// </summary>
-		public void GetWayPointBetweenAsyn(CPathResult result)
-		{
-			if (result == null)
-			{
-				Debug.LogError("result is null");
-				return;
-			}
-
-			m_pathPlannerAsyn.FindPathAsyn(result);
-		}
 
 		public void PrintGrid()
 		{

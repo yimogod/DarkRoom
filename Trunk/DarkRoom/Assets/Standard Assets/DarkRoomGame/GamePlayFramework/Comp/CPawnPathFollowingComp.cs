@@ -84,17 +84,14 @@ namespace DarkRoom.Game
 		//路径折点列表
 		private CPathResult m_wayPoints;
 
-		//现在走到了第几个折点
-		private int m_pathStep = 0;
-
-		//之前折点的tile数据
+		//之前折点的tile的索引坐标
 		private Vector2Int m_lastStep;
 
-		//当前折点的tile数据
+		//当前折点的tile的索引坐标
 		private Vector2Int m_currStep;
 
-		//行走的下一个目的地, 也就是当前折点的坐标
-		private Vector3 m_stepPos;
+		//现在走到了第几个折点
+		private int m_pathStepIndex = 0;
 
 		//当前的位置和下一步目标点的距离,
 		//如果距离在变大, 说明在远离, 那么就是到了
@@ -133,8 +130,8 @@ namespace DarkRoom.Game
 		/// <summary>
 		/// 当前走向的阶段目标
 		/// </summary>
-		public Vector3 TargetForNow {
-			get { return m_stepPos; }
+		public Vector3 StepDestinationForNow {
+			get { return CMapUtil.GetTileCenterPosByColRow(m_currStep); }
 		}
 
 		/// <summary>
@@ -163,9 +160,9 @@ namespace DarkRoom.Game
 			m_result = FinishResultType.Default;
 			m_status = PathFollowingStatus.Moving;
 
-			m_pathStep = wayPoints.StartIndex;
+			m_pathStepIndex = wayPoints.StartIndex;
 			m_currStep = wayPoints.StartPos;
-			GotoNode(m_pathStep);
+			GotoNode(m_pathStepIndex);
         }
 
 		/// <summary>
@@ -262,7 +259,7 @@ namespace DarkRoom.Game
 			if (!m_arriveNode) return;
 
 			//走到了终点
-			if (m_pathStep >= m_wayPoints.EndIndex) {
+			if (m_pathStepIndex >= m_wayPoints.EndIndex) {
 				Finish();
                 return;
 			}
@@ -276,6 +273,8 @@ namespace DarkRoom.Game
 			m_result = FinishResultType.Success;
 			//跟随到了终点, 我们就停止了跟随
 			m_mover.Stop();
+			var dest = StepDestinationForNow;
+			m_spacial.SetLocalPosInXZ(StepDestinationForNow);
 			//Debug.Log("Path Follow Finished! At " + m_spacial.localPosition);
 
 			m_wayPoints = null;
@@ -288,12 +287,7 @@ namespace DarkRoom.Game
 				//如果沿着圆的切线,也会先进后远
 				Vector3 pos = m_spacial.localPosition;
 				pos.y = 0;
-                float dist = Vector3.SqrMagnitude(m_stepPos - pos);
-
-				//TODO 3d漫游需要考虑y的数据
-				//float dx = m_stepPos.x - pos.x;
-				//float dz = m_stepPos.z - pos.z;
-				//float dist = dx * dx + dz * dz;
+                float dist = Vector3.SqrMagnitude(StepDestinationForNow - pos);
 
 				//我们新距离1要小于m_lastDist 或则2 大于1米
 				if (dist <= m_lastDist || dist > 1f) {
@@ -309,8 +303,8 @@ namespace DarkRoom.Game
 		//走向下一个折点
 		private void GotoNextNode()
 		{
-			m_pathStep += 1;
-			GotoNode(m_pathStep);
+			m_pathStepIndex += 1;
+			GotoNode(m_pathStepIndex);
 			OnSegmentFinished();
 		}
 
@@ -325,7 +319,6 @@ namespace DarkRoom.Game
 
 			//注意, 这里获取到路经点是格子的索引, 换算成需要换算成坐标
 			m_currStep = m_wayPoints.WayPoints[nodeIndex];
-			m_stepPos = CMapUtil.GetTileCenterPosByColRow(m_currStep);
 			m_mover.Move(ForceVector);
 		}
 
