@@ -204,7 +204,8 @@ namespace DarkRoom.AI
 			}
 			else
 			{
-				m_wayPoints.AddRange(m_pathPlanner.FindPath(start, goal));
+				var result = m_pathPlanner.FindPath(start, goal);
+				if(result.Count > 0)m_wayPoints.AddRange(result);
 			}
 
 			return m_wayPoints;

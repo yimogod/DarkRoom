@@ -37,11 +37,6 @@ namespace DarkRoom.AI
 			return FindPath(start.x, start.y, end.x, end.y);
 		}
 
-		public void FindPathAsyn(CTilePathResult result)
-		{
-			Debug.LogError("CPathPlanner do not have FindPathAsyn");
-		}
-
 		/// <summary>
 		/// 寻路, 大地图只有一个chunk. 直接进行内部寻路即可
 		/// 比如说战斗地图

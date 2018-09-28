@@ -37,8 +37,6 @@ namespace Sword
 		/// </summary>
 		public string Address;
 
-
-
 		/// <summary>
 		/// 掌握的技能列表, 除了出生的数据, 也包含后天学习的
 		/// </summary>
@@ -60,9 +58,6 @@ namespace Sword
 		/// </summary>
 		public ActorRace RaceEnum => (ActorRace)Race;
 
-		//角色元数据
-		protected float m_speedBase;
-
 		public ActorVO()
 		{
 		}
@@ -81,15 +76,6 @@ namespace Sword
 		public bool Dead
 		{
 			get { return false; }
-		}
-
-		/// <summary>
-		/// 人物的基础速度
-		/// </summary>
-		public float SpeedBase
-		{
-			get { return m_speedBase; }
-			set { m_speedBase = value; }
 		}
 	}
 }

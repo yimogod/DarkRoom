@@ -5,10 +5,14 @@ using DarkRoom.Game;
 
 namespace Sword
 {
+	/// <summary>
+	/// 注意, 这里所有的属性都是增加或减少的值
+	/// 是种族或者职业对属性数据的修正
+	/// </summary>
 	public class ActorBornAttributeMeta : CBaseMeta
 	{
-		public ActorRace Race => (ActorRace) Id;
-		public ActorClass Class => (ActorClass) Id;
+		public ActorRace Race => (ActorRace)Id;
+		public ActorClass Class => (ActorClass)Id;
 
 		public float Strength;
 
@@ -27,6 +31,8 @@ namespace Sword
 		public float Health;
 
 		public float HealthRating;
+
+		public int MoveRange;
 
 		/// <summary>
 		/// 0~1的经验惩罚或者奖励的百分比

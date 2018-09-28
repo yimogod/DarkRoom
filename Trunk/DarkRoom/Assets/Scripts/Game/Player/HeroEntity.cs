@@ -26,7 +26,7 @@ namespace Sword
 		{
 			if (value)
 			{
-				m_rangeTile.Show(5, TMap.Instance.WalkableGrid, LocalPosition);
+				m_rangeTile.Show(3, TMap.Instance.WalkableGrid, LocalPosition);
 			}
 			else
 			{

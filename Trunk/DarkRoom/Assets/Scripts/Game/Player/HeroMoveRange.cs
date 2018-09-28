@@ -57,14 +57,18 @@ namespace Sword
 		{
 			int len = range * 2 + 1;
 			int gap = m_maxView - range;
+			Vector2Int pos = new Vector2Int((int)center.x, (int)center.z);
 			for (int c = 0; c < len; c++)
 			{
 				for (int r = 0; r < len; r++)
 				{
+					int dist = Math.Abs(c - range) + Math.Abs(r - range);
+					if (dist > range) continue;
+
+					var tile = new Vector2Int(pos.x + c - range, pos.y + r - range);
+					var w = grid.IsWalkable(tile.x, tile.y);
+
 					var go = m_dict[(r + gap) * 1000 + (c + gap)];
-					var colInWorld = (int)center.x + c - range;
-					var rowInWorld = (int)center.z + r - range;
-					var w = grid.IsWalkable(colInWorld, rowInWorld);
 					go.SetActive(w);
 				}
 			}

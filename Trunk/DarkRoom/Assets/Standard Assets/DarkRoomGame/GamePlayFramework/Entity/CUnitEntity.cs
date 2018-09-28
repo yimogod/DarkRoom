@@ -56,18 +56,12 @@ namespace DarkRoom.Game
 		/// </summary>
 		public int CId { get; set; }
 
-		public CUnitSpacialComp SpacialComp
-		{
-			get { return m_spacial; }
-		}
+		public CUnitSpacialComp SpacialComp => m_spacial;
 
 		/// <summary>
 		/// 本单位的位置. 因为用的地方很多. 所以做了个引用
 		/// </summary>
-		public Vector3 LocalPosition
-		{
-			get { return m_spacial.localPosition; }
-		}
+		public Vector3 LocalPosition => m_spacial.localPosition;
 
 		public virtual bool Dead
 		{
@@ -94,18 +88,12 @@ namespace DarkRoom.Game
 		/// <summary>
 		/// 是否濒死或者已经死亡
 		/// </summary>
-		public bool DeadOrDying
-		{
-			get { return m_dead || m_dying; }
-		}
+		public bool DeadOrDying => m_dead || m_dying;
 
 		/// <summary>
 		/// 是否濒死或者已经死亡或者无效化
 		/// </summary>
-		public bool DeadOrDyingOrInvalid
-		{
-			get { return m_dead || m_dying || m_invalid; }
-		}
+		public bool DeadOrDyingOrInvalid => m_dead || m_dying || m_invalid;
 
 		//是否友好同盟, 包含自己和中立
 		public bool IsFriendTeam(TeamSide value)
@@ -191,7 +179,6 @@ namespace DarkRoom.Game
 		/// </summary>
 		public virtual void PlayAction(string action, float normalizedTime = 0)
 		{
-
 		}
 
 		/// <summary>
