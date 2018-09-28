@@ -10,7 +10,7 @@ namespace DarkRoom.AI
 	/// 2017/03/30/v1 实现chunk内的局部寻路
 	/// Author. liuzhibin
 	/// </summary>
-	public class CPathPlanner
+	public class CTilePathPlanner
 	{
 		private CAStar m_astar = new CAStar(CAStar.Connection.Four);
 		private CStarGrid m_starGrid = null;
@@ -21,7 +21,7 @@ namespace DarkRoom.AI
 		/// <summary>
 		/// 传入地图可通行数据构建寻路对象
 		/// </summary>
-		public CPathPlanner(CStarGrid map)
+		public CTilePathPlanner(CStarGrid map)
 		{
 			m_starGrid = map;
 		}
@@ -37,7 +37,7 @@ namespace DarkRoom.AI
 			return FindPath(start.x, start.y, end.x, end.y);
 		}
 
-		public void FindPathAsyn(CPathResult result)
+		public void FindPathAsyn(CTilePathResult result)
 		{
 			Debug.LogError("CPathPlanner do not have FindPathAsyn");
 		}

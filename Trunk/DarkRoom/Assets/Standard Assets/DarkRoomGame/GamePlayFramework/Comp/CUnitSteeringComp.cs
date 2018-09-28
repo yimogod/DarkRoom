@@ -129,7 +129,7 @@ namespace DarkRoom.Game
 			m_weightCohesion = weight * 0.33f;
 		}
 
-		public void TurnOnPathFollow(CPathResult wayPoints, float weight)
+		public void TurnOnPathFollow(CTilePathResult wayPoints, float weight)
 		{
 			m_flags |= (int)(SteeringType.PathFollow);
 			m_weightFollowPath = weight;

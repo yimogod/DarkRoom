@@ -44,7 +44,7 @@ namespace DarkRoom.Game {
 		/// <summary>
 		/// 寻路的结果
 		/// </summary>
-		protected CPathResult m_pathResult;
+		protected CTilePathResult m_pathResult;
 
 		/// <summary>
 		/// 我自己的黑板, 跟世界黑板不是一个东西
@@ -70,7 +70,7 @@ namespace DarkRoom.Game {
 		protected override void Awake()
 		{
 			base.Awake();
-			m_pathResult = new CPathResult();
+			m_pathResult = new CTilePathResult();
 			m_brainComp = gameObject.GetComponent<CBrainComp>();
 			m_perceptionComp = gameObject.GetComponent<CAIPerceptionComp>();
 		}

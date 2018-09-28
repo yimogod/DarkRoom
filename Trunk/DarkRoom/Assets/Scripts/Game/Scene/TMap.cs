@@ -9,7 +9,7 @@ namespace Sword {
 	public class TMap : CSingleton<TMap> {
 
 		//不可通过的地图数据, 包含山脉, 沼泽, 树, 小桌子等导致的不可通过
-		public CStarGrid WalkableGrid => CNavigationSystem.Instance.WalkableGrid;
+		public CStarGrid WalkableGrid => CTileNavigationSystem.Instance.WalkableGrid;
 
 		public TileTerrainLayerComp Terrain = null;
 
@@ -19,7 +19,7 @@ namespace Sword {
 
 		public void Init(MapMeta meta) {
 			m_mapMeta = meta;
-			CNavigationSystem.Instance.Initialize(meta.Cols, meta.Rows);
+			CTileNavigationSystem.Instance.Initialize(meta.Cols, meta.Rows);
 		}
 
 		/*格子是否可以通行*/

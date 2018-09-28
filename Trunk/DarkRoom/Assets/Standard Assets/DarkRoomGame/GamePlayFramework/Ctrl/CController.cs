@@ -127,14 +127,14 @@ namespace DarkRoom.Game
 		/// <param name="goal"></param>
 		public virtual void MoveToLocation(Vector3 goal)
 		{
-			CNavigationSystem.Instance.SimpleMoveToLocation(this, goal);
+			CTileNavigationSystem.Instance.SimpleMoveToLocation(this, goal);
 		}
 
 		/// <summary>
 		/// 跟随路径点行走
 		/// </summary>
 		/// <param name="wayPoints"></param>
-		public virtual void MoveWithPath(CPathResult wayPoints)
+		public virtual void MoveWithPath(CTilePathResult wayPoints)
 		{
 			m_pawn.Follower.RequestMove(wayPoints);
 		}

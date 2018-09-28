@@ -82,7 +82,7 @@ namespace DarkRoom.Game
 		private CPawnMovementComp m_mover;
 
 		//路径折点列表
-		private CPathResult m_wayPoints;
+		private CTilePathResult m_wayPoints;
 
 		//之前折点的tile的索引坐标
 		private Vector2Int m_lastStep;
@@ -153,7 +153,7 @@ namespace DarkRoom.Game
 		/// <summary>
 		/// 请求移动
 		/// </summary>
-		public void RequestMove(CPathResult wayPoints, CPawnMovementComp.MoveType moveType = CPawnMovementComp.MoveType.Direct)
+		public void RequestMove(CTilePathResult wayPoints, CPawnMovementComp.MoveType moveType = CPawnMovementComp.MoveType.Direct)
 		{
 			m_mover.SetMoveType(moveType);
 			m_wayPoints = wayPoints;
@@ -171,7 +171,7 @@ namespace DarkRoom.Game
 		/// </summary>
 		/// <param name="wayPoints">基于col, row的路径列表</param>
 		/// <param name="finishCallBack">完成的回调</param>
-		public void RequestMove(CPathResult wayPoints, OnPathFinished finishCallBack)
+		public void RequestMove(CTilePathResult wayPoints, OnPathFinished finishCallBack)
 		{
 			m_onPathFinishedCallBack = finishCallBack;
 			RequestMove(wayPoints);

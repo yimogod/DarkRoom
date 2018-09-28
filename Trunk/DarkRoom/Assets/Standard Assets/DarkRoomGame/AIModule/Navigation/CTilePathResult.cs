@@ -7,7 +7,7 @@ namespace DarkRoom.AI
 	/// <summary>
 	/// 用于跟随路径行走的数据
 	/// </summary>
-	public class CPathResult
+	public class CTilePathResult
 	{
 		/// <summary>
 		/// 开始坐标
@@ -39,7 +39,7 @@ namespace DarkRoom.AI
 		/// </summary>
 		public System.Object Data;
 
-		public CPathResult()
+		public CTilePathResult()
 		{
 		}
 

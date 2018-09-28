@@ -8,15 +8,15 @@ namespace DarkRoom.AI
 	/// <summary>
 	/// 导航系统, 所有单位行走的总接口
 	/// </summary>
-	public class CNavigationSystem
+	public class CTileNavigationSystem
 	{
-		private static CNavigationSystem s_instance = null;
+		private static CTileNavigationSystem s_instance = null;
 
 		//地图可通行数据
 		private CStarGrid m_mapWalkableData = null;
 
 		//同步寻路对象
-		private CPathPlanner m_pathPlanner = null;
+		private CTilePathPlanner m_pathPlanner = null;
 
 		//是否是空旷的空间
 		private bool m_space = false;
@@ -27,20 +27,20 @@ namespace DarkRoom.AI
 		public CStarGrid WalkableGrid => m_mapWalkableData;
 
 		//私有的默认构造函数
-		private CNavigationSystem()
+		private CTileNavigationSystem()
 		{
 		}
 
 		/// <summary>
 		/// 获取 CNavigationSystem 的单例接口
 		/// </summary>
-		public static CNavigationSystem Instance
+		public static CTileNavigationSystem Instance
 		{
 			get
 			{
 				if (s_instance == null)
 				{
-					s_instance = new CNavigationSystem();
+					s_instance = new CTileNavigationSystem();
 				}
 
 				return s_instance;
@@ -70,7 +70,7 @@ namespace DarkRoom.AI
 		{
 			m_mapWalkableData = new CStarGrid();
 			m_mapWalkableData.Init(mapNumCols, mapNumRows);
-			m_pathPlanner = new CPathPlanner(m_mapWalkableData);
+			m_pathPlanner = new CTilePathPlanner(m_mapWalkableData);
 		}
 
 		/// <summary>
@@ -183,7 +183,7 @@ namespace DarkRoom.AI
 			}
 
 			//或者我们走过去
-			CPathResult data = GetWayPointBetween(me.LocalPosition.GetVector2Int(), goal.GetVector2Int());
+			CTilePathResult data = GetWayPointBetween(me.LocalPosition.GetVector2Int(), goal.GetVector2Int());
 			follower.RequestMove(data);
 		}
 
@@ -212,11 +212,11 @@ namespace DarkRoom.AI
 		/// <summary>
 		/// 同步获取起点和终点寻路后的路径点
 		/// </summary>
-		public CPathResult GetWayPointBetween(Vector2Int startTile, Vector2Int goalTile)
+		public CTilePathResult GetWayPointBetween(Vector2Int startTile, Vector2Int goalTile)
 		{
 			//Debug.Log($"get way point between {start} and {goal}");
 			var wayPoints = FindPath(startTile, goalTile);
-			CPathResult data = new CPathResult();
+			CTilePathResult data = new CTilePathResult();
 			data.StartPos = startTile;
 			data.EndPos = goalTile;
 			data.SetWayPoints(wayPoints);

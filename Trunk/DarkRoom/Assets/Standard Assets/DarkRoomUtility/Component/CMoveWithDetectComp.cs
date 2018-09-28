@@ -68,10 +68,10 @@ namespace DarkRoom.Utility
 			}
 
 		    Vector2Int leftTile = CMapUtil.GetTileByPos(left.x, left.z);
-			bool canLeft = CNavigationSystem.Instance.IsWalkable(leftTile.x, leftTile.y);
+			bool canLeft = CTileNavigationSystem.Instance.IsWalkable(leftTile.x, leftTile.y);
 
 		    Vector2Int rightTile = CMapUtil.GetTileByPos(right.x, right.z);
-			bool canRight = CNavigationSystem.Instance.IsWalkable(rightTile.x, rightTile.y);
+			bool canRight = CTileNavigationSystem.Instance.IsWalkable(rightTile.x, rightTile.y);
 
 			//Debug.Log("canleft -----" + canLeft.ToString() + "----- left tile " + leftTile.ToString());
 			//Debug.Log("canRight -----" + canRight.ToString() + "----- right tile " + rightTile.ToString());
