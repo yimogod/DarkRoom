@@ -19,5 +19,21 @@ namespace Sword
 			m_rangeTile = go.AddComponent<HeroMoveRange>();
 		}
 
+		/// <summary>
+		/// 隐藏/显示移动范围的格子
+		/// </summary>
+		public void ShowMoveRange(bool value)
+		{
+			if (value)
+			{
+				m_rangeTile.Show(5, TMap.Instance.WalkableGrid, LocalPosition);
+			}
+			else
+			{
+				m_rangeTile.Hide();
+			}
+		}
+
+
 	}
 }

@@ -12,16 +12,6 @@ namespace DarkRoom.Game
 	[RequireComponent(typeof(CUnitSpacialComp))]
 	public class CPawnMovementComp : MonoBehaviour
 	{
-		/// <summary>
-		/// 移动方式, 是mover的直接移动， 还是由rvo驱动的移动
-		/// 对于Unknow(默认值), 的意思是外部操控
-		/// </summary>
-		public enum MoveType
-		{
-			Unknow, //外部操控
-			Direct, //直接给速度, 然后移动
-		}
-
 		//本组件挂在谁身上
 		protected CPawnEntity m_owner;
 
@@ -30,9 +20,6 @@ namespace DarkRoom.Game
 
 		//临时让本组件停止运动
 		private bool m_notControlMove = false;
-
-		//运动时自身能有的速率
-		private float m_metaSpeed = 10f;
 
 		private CUnitSpacialComp m_spacial;
 
@@ -51,7 +38,7 @@ namespace DarkRoom.Game
 		/// </summary>
 		public void SyncSpeed(float value)
 		{
-			m_metaSpeed = value;
+			MaxSpeed = value;
 			m_currState.SyncSpeed(value);
 		}
 

@@ -84,14 +84,10 @@ namespace DarkRoom.Game
 		/// <summary>
 		/// 如果使用了跟随路径,每帧都会有跟随状态的变化
 		/// </summary>
-		public CPawnPathFollowingComp.FinishResultType PathFinishResult {
-			get { return m_pathFollower.FinishResult; }
-		}
+		public FinishPathResultType PathFinishResult =>m_pathFollower.FinishResult;
 
 		//最大速度
-		private float m_maxSpeed {
-			get { return m_mover.MaxSpeed; }
-		}
+		private float m_maxSpeed => m_mover.MaxSpeed;
 
 		void Awake()
 		{
@@ -133,7 +129,7 @@ namespace DarkRoom.Game
 		{
 			m_flags |= (int)(SteeringType.PathFollow);
 			m_weightFollowPath = weight;
-			m_pathFollower.RequestMove(wayPoints);
+			m_pathFollower.RequestMove(wayPoints, MoveType.Direct);
 		}
 
 		/// <summary>

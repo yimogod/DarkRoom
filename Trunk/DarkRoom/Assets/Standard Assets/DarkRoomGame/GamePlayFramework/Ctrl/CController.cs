@@ -125,9 +125,9 @@ namespace DarkRoom.Game
 		/// 之前遇到bug, 有单位使用他的速度进行更新. 但因为这一帧的停顿.导致位移有累计差错
 		/// </summary>
 		/// <param name="goal"></param>
-		public virtual void MoveToLocation(Vector3 goal)
+		public virtual void MoveToLocation(Vector3 goal, CPawnPathFollowingComp.OnPathFinished onComplete = null)
 		{
-			CTileNavigationSystem.Instance.SimpleMoveToLocation(this, goal);
+			CTileNavigationSystem.Instance.SimpleMoveToLocation(this, goal, onComplete);
 		}
 
 		/// <summary>
@@ -136,7 +136,7 @@ namespace DarkRoom.Game
 		/// <param name="wayPoints"></param>
 		public virtual void MoveWithPath(CTilePathResult wayPoints)
 		{
-			m_pawn.Follower.RequestMove(wayPoints);
+			m_pawn.Follower.RequestMove(wayPoints, MoveType.Direct);
 		}
 
 		/// <summary>

@@ -55,13 +55,13 @@ namespace DarkRoom.Game
 		/// 是否正在跟随路径行走, 实现 nav agent的接口
 		/// </summary>
 		public bool IsFollowingPath =>
-			m_follower.Status == CPawnPathFollowingComp.PathFollowingStatus.Moving;
+			m_follower.Status == PathFollowingStatus.Moving;
 
 		/// <summary>
 		/// 是否完成路径行走
 		/// </summary>
 		public bool FinishedFollowingPath =>
-			m_follower.FinishResult == CPawnPathFollowingComp.FinishResultType.Success;
+			m_follower.FinishResult == FinishPathResultType.Success;
 
 		protected override void RegisterAllComponents()
 		{

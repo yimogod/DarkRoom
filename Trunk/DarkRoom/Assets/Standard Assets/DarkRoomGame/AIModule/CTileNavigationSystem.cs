@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DarkRoom.Core;
 using DarkRoom.Game;
 using UnityEngine;
@@ -166,7 +167,7 @@ namespace DarkRoom.AI
 		/// </summary>
 		/// <param name="me">要移动的角色</param>
 		/// <param name="goal">移动到的目的地</param>
-		public void SimpleMoveToLocation(CController me, Vector3 goal)
+		public void SimpleMoveToLocation(CController me, Vector3 goal, CPawnPathFollowingComp.OnPathFinished onComplete = null)
 		{
 			if (me.Pawn.IsFollowingPath)
 			{
@@ -178,13 +179,14 @@ namespace DarkRoom.AI
 			bool alreadyAtGoal = follower.HasReached(goal, 0.5f);
 			if (alreadyAtGoal)
 			{
-				follower.RequestMoveWithImmediateFinish(CPawnPathFollowingComp.FinishResultType.Success);
+				follower.RequestMoveWithImmediateFinish(FinishPathResultType.Success);
+				onComplete?.Invoke(FinishPathResultType.Success);
 				return;
 			}
 
 			//或者我们走过去
 			CTilePathResult data = GetWayPointBetween(me.LocalPosition.GetVector2Int(), goal.GetVector2Int());
-			follower.RequestMove(data);
+			follower.RequestMove(data, onComplete);
 		}
 
 		/// <summary>

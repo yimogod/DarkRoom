@@ -12,57 +12,9 @@ namespace DarkRoom.Game
 	public class CPawnPathFollowingComp : MonoBehaviour
 	{
 		/// <summary>
-		/// 跟随路径行走完毕的结果
-		/// </summary>
-		public enum FinishResultType
-		{
-			/** nothing was happened */
-			Default,
-
-			/** Reached destination */
-			Success,
-
-			/** Movement was blocked */
-			Blocked,
-
-			/** Agent is not on path */
-			OffPath,
-
-			/** Aborted and stopped (failure) */
-			Aborted,
-
-			/** Request was invalid */
-			Invalid,
-		}
-
-		/// <summary>
-		/// 请求跟随路径的结果
-		/// </summary>
-		public enum RequestResultType
-		{
-			Failed,
-			AlreadyAtGoal,
-			RequestSuccessful
-		}
-
-		public enum PathFollowingStatus {
-			/** No requests */
-			Idle,
-
-			/** Request with incomplete path, will start after UpdateMove() */
-			Waiting,
-
-			/** Request paused, will continue after ResumeMove() */
-			Paused,
-
-			/** Following path */
-			Moving,
-		}
-
-		/// <summary>
 		/// 行走完毕的回调代理原型
 		/// </summary>
-		public delegate void OnPathFinished(FinishResultType result);
+		public delegate void OnPathFinished(FinishPathResultType result);
 
 		/// <summary>
 		/// 跟随路径行走完毕的回调
@@ -73,8 +25,8 @@ namespace DarkRoom.Game
 		private PathFollowingStatus m_status = PathFollowingStatus.Idle;
 
 		//正在行走的状态
-		private FinishResultType m_result = FinishResultType.Default;
-		
+		private FinishPathResultType m_result = FinishPathResultType.Default;
+
 
 		//缓存空间组件
 		private CUnitSpacialComp m_spacial;
@@ -108,29 +60,33 @@ namespace DarkRoom.Game
 		/// 如果success就代表正常完成
 		/// 当然也可以通过回调在完成的时候
 		/// </summary>
-		public FinishResultType FinishResult {
+		public FinishPathResultType FinishResult
+		{
 			get { return m_result; }
 		}
 
 		/// <summary>
 		/// 组件目前的状态, 休息,暂停,等待,移动中
 		/// </summary>
-		public PathFollowingStatus Status {
+		public PathFollowingStatus Status
+		{
 			get { return m_status; }
 		}
 
 		/// <summary>
 		/// 重置本组件的初始状态
 		/// </summary>
-		public void ResetFinishResult() {
-			m_result = FinishResultType.Default;
+		public void ResetFinishResult()
+		{
+			m_result = FinishPathResultType.Default;
 			m_status = PathFollowingStatus.Idle;
 		}
 
 		/// <summary>
 		/// 当前走向的阶段目标
 		/// </summary>
-		public Vector3 StepDestinationForNow {
+		public Vector3 StepDestinationForNow
+		{
 			get { return CMapUtil.GetTileCenterPosByColRow(m_currStep); }
 		}
 
@@ -138,9 +94,11 @@ namespace DarkRoom.Game
 		/// 当前运行的方向,归一化
 		/// 这个是实时计算的
 		/// </summary>
-		public Vector3 ForceVector {
-			get {
-				if(m_status == PathFollowingStatus.Idle)return Vector3.zero;
+		public Vector3 ForceVector
+		{
+			get
+			{
+				if (m_status == PathFollowingStatus.Idle) return Vector3.zero;
 
 				var delta = m_currStep - m_lastStep;
 				Vector3 force = new Vector3(delta.x, 0, delta.y);
@@ -153,17 +111,17 @@ namespace DarkRoom.Game
 		/// <summary>
 		/// 请求移动
 		/// </summary>
-		public void RequestMove(CTilePathResult wayPoints, CPawnMovementComp.MoveType moveType = CPawnMovementComp.MoveType.Direct)
+		public void RequestMove(CTilePathResult wayPoints, MoveType moveType)
 		{
 			m_mover.SetMoveType(moveType);
 			m_wayPoints = wayPoints;
-			m_result = FinishResultType.Default;
+			m_result = FinishPathResultType.Default;
 			m_status = PathFollowingStatus.Moving;
 
 			m_pathStepIndex = wayPoints.StartIndex;
 			m_currStep = wayPoints.StartPos;
 			GotoNode(m_pathStepIndex);
-        }
+		}
 
 		/// <summary>
 		/// 请求移动, 然后回调. 回调是在结算完成时调用
@@ -174,21 +132,23 @@ namespace DarkRoom.Game
 		public void RequestMove(CTilePathResult wayPoints, OnPathFinished finishCallBack)
 		{
 			m_onPathFinishedCallBack = finishCallBack;
-			RequestMove(wayPoints);
+			RequestMove(wayPoints, MoveType.Direct);
 		}
 
 		/// <summary>
 		/// 请求移动, 并且立刻结束
 		/// </summary>
-		public void RequestMoveWithImmediateFinish(FinishResultType result)
+		public void RequestMoveWithImmediateFinish(FinishPathResultType result)
 		{
 			//先强行停止之前的移动
-			if (m_status != PathFollowingStatus.Idle && m_onPathFinishedCallBack != null) {
-				m_onPathFinishedCallBack(FinishResultType.Aborted);
-            }
+			if (m_status != PathFollowingStatus.Idle && m_onPathFinishedCallBack != null)
+			{
+				m_onPathFinishedCallBack(FinishPathResultType.Aborted);
+			}
 
 			//接着通知完成移动, 并告知完成的结果
-			if (m_onPathFinishedCallBack != null) {
+			if (m_onPathFinishedCallBack != null)
+			{
 				m_onPathFinishedCallBack(result);
 			}
 
@@ -201,19 +161,20 @@ namespace DarkRoom.Game
 		public void PauseMove()
 		{
 			m_status = PathFollowingStatus.Paused;
-        }
+		}
 
 		/// <summary>
 		/// 外来原因中止移动
 		/// </summary>
 		public void AbortMove()
 		{
-			m_result = FinishResultType.Aborted;
+			m_result = FinishPathResultType.Aborted;
 			m_status = PathFollowingStatus.Idle;
 
 			m_wayPoints = null;
-			if (m_onPathFinishedCallBack != null) {
-				m_onPathFinishedCallBack(FinishResultType.Aborted);
+			if (m_onPathFinishedCallBack != null)
+			{
+				m_onPathFinishedCallBack(FinishPathResultType.Aborted);
 				m_onPathFinishedCallBack = null;
 			}
 		}
@@ -224,9 +185,10 @@ namespace DarkRoom.Game
 		public void ResumeMove()
 		{
 			//我们需要确认是之前暂停了, 才能恢复现场
-			if (m_status == PathFollowingStatus.Paused) {
+			if (m_status == PathFollowingStatus.Paused)
+			{
 				m_status = PathFollowingStatus.Moving;
-            }
+			}
 		}
 
 		/// <summary>
@@ -246,12 +208,12 @@ namespace DarkRoom.Game
 		/// 路径是由一系列的折点组成, 当更换折点时调用此函数
 		private void OnSegmentFinished()
 		{
-			
 		}
 
 		void Update()
 		{
-			if (m_status != PathFollowingStatus.Moving) {
+			if (m_status != PathFollowingStatus.Moving)
+			{
 				return;
 			}
 
@@ -259,9 +221,10 @@ namespace DarkRoom.Game
 			if (!m_arriveNode) return;
 
 			//走到了终点
-			if (m_pathStepIndex >= m_wayPoints.EndIndex) {
+			if (m_pathStepIndex >= m_wayPoints.EndIndex)
+			{
 				Finish();
-                return;
+				return;
 			}
 
 			GotoNextNode();
@@ -270,9 +233,11 @@ namespace DarkRoom.Game
 		private void Finish()
 		{
 			m_status = PathFollowingStatus.Idle;
-			m_result = FinishResultType.Success;
+			m_result = FinishPathResultType.Success;
 			//跟随到了终点, 我们就停止了跟随
 			m_mover.Stop();
+			m_onPathFinishedCallBack?.Invoke(m_result);
+
 			var dest = StepDestinationForNow;
 			m_spacial.SetLocalPosInXZ(StepDestinationForNow);
 			//Debug.Log("Path Follow Finished! At " + m_spacial.localPosition);
@@ -281,16 +246,19 @@ namespace DarkRoom.Game
 		}
 
 		//每帧都会计算和判断是否到了下一个阶段性的目的地
-		private bool m_arriveNode {
-			get {
+		private bool m_arriveNode
+		{
+			get
+			{
 				//这里通过距离变小会有个隐藏问题
 				//如果沿着圆的切线,也会先进后远
 				Vector3 pos = m_spacial.localPosition;
 				pos.y = 0;
-                float dist = Vector3.SqrMagnitude(StepDestinationForNow - pos);
+				float dist = Vector3.SqrMagnitude(StepDestinationForNow - pos);
 
 				//我们新距离1要小于m_lastDist 或则2 大于1米
-				if (dist <= m_lastDist || dist > 1f) {
+				if (dist <= m_lastDist || dist > 1f)
+				{
 					m_lastDist = dist;
 					return false;
 				}
@@ -309,10 +277,12 @@ namespace DarkRoom.Game
 		}
 
 		//基于node的行走方式
-		public void GotoNode(int nodeIndex) {
+		public void GotoNode(int nodeIndex)
+		{
 			m_lastStep = m_currStep;
 			m_lastDist = float.MaxValue;
-			if (nodeIndex > m_wayPoints.EndIndex) {
+			if (nodeIndex > m_wayPoints.EndIndex)
+			{
 				Finish();
 				return;
 			}
@@ -322,9 +292,9 @@ namespace DarkRoom.Game
 			m_mover.Move(ForceVector);
 		}
 
-		void OnDestroy() {
+		void OnDestroy()
+		{
 			m_onPathFinishedCallBack = null;
 		}
 	}
-
 }
