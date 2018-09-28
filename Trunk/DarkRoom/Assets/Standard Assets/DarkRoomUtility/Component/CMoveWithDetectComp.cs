@@ -81,7 +81,7 @@ namespace DarkRoom.Utility
 			if (!canLeft && !canRight)return false;
 
 			/* 有一侧可以通过,绕着边缘, 挤过去 */
-			float lowspeed = m_mover.Speed * 0.8f;
+			float lowspeed = m_mover.MaxSpeed * 0.8f;
 			Vector3 edge = Vector3.zero;
 			float edgeRight, edgeLeft;
 			if (directionConst == CUnitSpacialComp.DIRECTION_UP) {

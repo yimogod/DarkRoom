@@ -2,13 +2,15 @@
 using DarkRoom.Core;
 using UnityEngine;
 
-namespace DarkRoom.Game {
+namespace DarkRoom.Game
+{
 	public class CPawnMovementBaseState : CBaseState
 	{
 		protected CUnitSpacialComp m_spacial;
 		protected Vector3 m_velocity = Vector3.zero;
 
-		protected GameObject m_go {
+		protected GameObject m_go
+		{
 			get { return m_data as GameObject; }
 		}
 
@@ -19,17 +21,16 @@ namespace DarkRoom.Game {
 
 		public virtual void TurnOn()
 		{
-			
 		}
 
 		public virtual void TurnOff()
 		{
-			
 		}
 
-		public virtual void Stop() {
+		public virtual void Stop()
+		{
 			m_velocity = Vector3.zero;
-        }
+		}
 
 		/// <summary>
 		/// 获取当前运动速度
@@ -52,7 +53,8 @@ namespace DarkRoom.Game {
 		public virtual void SyncSpeed(float value)
 		{
 			Vector3 v = m_velocity;
-			if (!CMathUtil.ZeroVector3(v)) {
+			if (!CMathUtil.ZeroVector3(v))
+			{
 				SetVelicity(value * v.normalized);
 			}
 		}
@@ -68,24 +70,32 @@ namespace DarkRoom.Game {
 	/// 移动器不知道用什么方式来移动. 
 	/// 典型的原因是外部在直接操控transform来移动
 	/// </summary>
-	public class CPawnMovementUnknow : CPawnMovementBaseState {
+	public class CPawnMovementUnknow : CPawnMovementBaseState
+	{
 		public const string STATE = "CPawnMovementUnknow";
 
-		public CPawnMovementUnknow(GameObject go) : base(STATE, go) { }
+		public CPawnMovementUnknow(GameObject go) : base(STATE, go)
+		{
+		}
 	}
 
 	/// <summary>
 	/// 直接移动的状态, 就是传入速度方向. 然后进行移动
 	/// </summary>
-	public class CPawnMovementDirectly : CPawnMovementBaseState {
+	public class CPawnMovementDirectly : CPawnMovementBaseState
+	{
 		public const string STATE = "CPawnMovementDirectly";
 
-		public CPawnMovementDirectly(GameObject go) : base(STATE, go) { }
-
-		public override void Enter(CStateMachine sm) {
+		public CPawnMovementDirectly(GameObject go) : base(STATE, go)
+		{
 		}
 
-		public override void Execute(CStateMachine sm) {
+		public override void Enter(CStateMachine sm)
+		{
+		}
+
+		public override void Execute(CStateMachine sm)
+		{
 			//重新计算v, 因为有可能会更改速度
 			Vector3 v = m_velocity * Time.deltaTime;
 

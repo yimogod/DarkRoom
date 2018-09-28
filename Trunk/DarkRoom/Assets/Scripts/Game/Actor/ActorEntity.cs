@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Sword
 {
+	[RequireComponent(typeof(ActorAnimController))]
 	public class ActorEntity : CPawnEntity
 	{
 		/// <summary>
@@ -31,15 +32,28 @@ namespace Sword
 
 		protected SwordGameMode m_gameMode => m_world.GetGameMode<SwordGameMode>();
 
+		protected ActorAnimController m_anim;
+
 		protected override void Start()
 		{
 			base.Start();
 			LoadModelAsyn();
 		}
 
+		protected override void RegisterAllComponents()
+		{
+			base.RegisterAllComponents();
+			m_anim = gameObject.GetComponent<ActorAnimController>();
+		}
+
 		protected void LoadModelAsyn()
 		{
-			AssetManager.LoadActorPrefab(Address, m_tran, Vector3.zero);
+			AssetManager.LoadActorPrefab(Address, m_tran, OnModelLoaded);
+		}
+
+		protected virtual void OnModelLoaded(GameObject loadedObject)
+		{
+			m_anim.AttachAnimator(loadedObject.GetComponent<Animator>());
 		}
 	}
 }

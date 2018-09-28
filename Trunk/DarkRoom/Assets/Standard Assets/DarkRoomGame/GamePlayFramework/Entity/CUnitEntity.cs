@@ -12,7 +12,6 @@ namespace DarkRoom.Game
 	///  NOTE:所以不要直接用CUnitEntity
 	/// </summary>
 	[RequireComponent(typeof(CUnitSpacialComp))]
-	[RequireComponent(typeof(CUnitViewComp))]
 	public class CUnitEntity : MonoBehaviour
 	{
 		private static int UnitCounter = 0;
@@ -41,9 +40,6 @@ namespace DarkRoom.Game
 		//unit position info
 		protected CUnitSpacialComp m_spacial;
 
-		//单位的视图, 可能是sprite, 也可能是mesh
-		protected CUnitViewComp m_view;
-
 		//该单位是否死亡
 		protected bool m_dead = false;
 
@@ -59,11 +55,6 @@ namespace DarkRoom.Game
 		/// 客户端每个单位的唯一id, 也有可能由服务器传入
 		/// </summary>
 		public int CId { get; set; }
-
-		public CUnitViewComp View
-		{
-			get { return m_view; }
-		}
 
 		public CUnitSpacialComp SpacialComp
 		{
@@ -186,13 +177,6 @@ namespace DarkRoom.Game
 			{
 				m_spacial = gameObject.AddComponent<CUnitSpacialComp>();
 			}
-
-			//初始化CUnitViewComp
-			m_view = GetComponent<CUnitViewComp>();
-			if (m_view == null)
-			{
-				m_view = gameObject.AddComponent<CUnitViewComp>();
-			}
 		}
 
 		/// <summary>
@@ -205,16 +189,9 @@ namespace DarkRoom.Game
 		/// <summary>
 		/// 角色播放动作, 传入null代表暂停当前的动画播放
 		/// </summary>
-		public void PlayAction(string action, float normalizedTime = 0)
+		public virtual void PlayAction(string action, float normalizedTime = 0)
 		{
-			if (String.IsNullOrEmpty(action))
-			{
-				m_view.Pause();
-				return;
-			}
 
-			m_view.Resume();
-			m_view.PlayClip(action, normalizedTime);
 		}
 
 		/// <summary>
@@ -246,7 +223,6 @@ namespace DarkRoom.Game
 		protected virtual void OnDestroy()
 		{
 			m_spacial = null;
-			m_view = null;
 		}
 	}
 }

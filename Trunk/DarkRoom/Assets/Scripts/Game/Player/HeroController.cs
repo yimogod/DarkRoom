@@ -18,12 +18,12 @@ namespace Sword
 		protected override void Start()
 		{
 			base.Start();
-
-
+			m_entity.Mover.MaxSpeed = 2f;
 		}
 
 		protected override void SetupInputComponent()
 		{
+			base.SetupInputComponent();
 			CMouseInput.Instance.AddClickListener(OnClickMap);
 		}
 

@@ -52,6 +52,11 @@ namespace Sword
 			CResourceManager.InstantiatePrefab(address, parent, localPosition);
 		}
 
+		public static void LoadActorPrefab(string address, Transform parent, Action<GameObject> onComplete)
+		{
+			CResourceManager.InstantiatePrefab(address, parent, Vector3.zero, onComplete);
+		}
+
 		public static void LoadItemIcon(string name)
 		{
 			//string path = string.Format("{0}{1}", FOLDER_ROOT_ITEM_ICON, name);
