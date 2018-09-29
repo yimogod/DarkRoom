@@ -17,6 +17,8 @@ namespace Sword
 			go.transform.SetParent(transform);
 			go.transform.localPosition = Vector3.zero;
 			m_rangeTile = go.AddComponent<HeroMoveRange>();
+			ShowMoveRange(false);
+			ShowMoveRange(true);
 		}
 
 		/// <summary>

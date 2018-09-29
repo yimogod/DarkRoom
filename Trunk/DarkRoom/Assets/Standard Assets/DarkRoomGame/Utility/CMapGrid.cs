@@ -107,6 +107,11 @@ namespace DarkRoom.Game
 			return node.Walkable;
 		}
 
+		public bool IsWalkable(Vector2Int pos)
+		{
+			return IsWalkable(pos.x, pos.y);
+		}
+
 		/// <summary>
 		/// 设置合法的格子的可通行性
 		/// </summary>

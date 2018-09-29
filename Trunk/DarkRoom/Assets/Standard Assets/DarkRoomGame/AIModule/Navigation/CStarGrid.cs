@@ -41,7 +41,7 @@ namespace DarkRoom.AI
 			var node = GetNode(col, row);
 			if (node.Invalid)
 			{
-				Debug.LogError($"SetStartNode Error {col} {row}");
+				Debug.LogWarning($"SetStartNode Error {col} {row}");
 				return;
 			}
 
