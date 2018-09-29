@@ -28,6 +28,11 @@ namespace Sword
 			var speed = m_entity.Mover.Velocity.magnitude;
 			m_anim.SetFloat(Move_Key, speed);
 		}
+
+		void LateUpdate()
+		{
+			m_anim.transform.localPosition = Vector3.zero;
+		}
 	}
 }
 
