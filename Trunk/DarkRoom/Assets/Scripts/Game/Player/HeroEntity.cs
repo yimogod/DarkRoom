@@ -36,6 +36,9 @@ namespace Sword
 			}
 		}
 
-
+		public void OnClickMap()
+		{
+			m_anim.PlayerClick();
+		}
 	}
 }

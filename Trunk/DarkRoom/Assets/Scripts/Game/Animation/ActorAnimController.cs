@@ -8,6 +8,7 @@ namespace Sword
 	{
 		public const string Idle_Key = "RandomIdle";
 		public const string Move_Key = "ForwardSpeed";
+		public const string Input_Key = "InputDetected";
 
 		private Animator m_anim;
 		private ActorEntity m_entity;
@@ -20,6 +21,11 @@ namespace Sword
 		public void AttachAnimator(Animator anim)
 		{
 			m_anim = anim;
+		}
+
+		public void PlayerClick()
+		{
+			m_anim.SetTrigger(Input_Key);
 		}
 
 		void Update()

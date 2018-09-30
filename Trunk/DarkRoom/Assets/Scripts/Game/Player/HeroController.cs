@@ -18,7 +18,7 @@ namespace Sword
 		protected override void Start()
 		{
 			base.Start();
-			m_entity.Mover.MaxSpeed = 2f;
+			m_entity.Mover.MaxSpeed = 5f;
 		}
 
 		protected override void SetupInputComponent()
@@ -53,6 +53,7 @@ namespace Sword
 				return;
 			}
 
+			m_entity.OnClickMap();
 			m_entity.ShowMoveRange(false);
 			var target = CMapUtil.GetTileCenterPosByColRow(e.WorldPosition);
 			MoveToLocation(target, result => m_entity.ShowMoveRange(true));
