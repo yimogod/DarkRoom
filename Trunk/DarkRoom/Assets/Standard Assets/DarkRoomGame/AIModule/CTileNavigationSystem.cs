@@ -190,11 +190,37 @@ namespace DarkRoom.AI
 		}
 
 		/// <summary>
-		/// 获取起点和终点寻路后的路径点
-		/// 记住, 如果寻路采用多线程, 则本方法返回为空列表
+		/// 跟随传入路径移动
 		/// </summary>
+		/// <param name="me">要移动的角色</param>
+		/// <param name="goal">移动到的目的地</param>
+		public void SimpleMoveToLocation(CController me, CTilePathResult wayPoint, CPawnPathFollowingComp.OnPathFinished onComplete = null)
+		{
+			if (me.Pawn.IsFollowingPath)
+			{
+				me.Pawn.StopMovement();
+			}
+
+			CPawnPathFollowingComp follower = me.Pawn.Follower;
+			//如果我已经到了目的地, 那么就直接达到
+			bool alreadyAtGoal = follower.HasReached(wayPoint.EndPos.GetVector3(), 0.5f);
+			if (alreadyAtGoal)
+			{
+				follower.RequestMoveWithImmediateFinish(FinishPathResultType.Success);
+				onComplete?.Invoke(FinishPathResultType.Success);
+				return;
+			}
+
+			//或者我们走过去
+			follower.RequestMove(wayPoint, onComplete);
+		}
+
+		//存储路径
 		private List<Vector2Int> m_wayPoints = new List<Vector2Int>();
 
+		/// <summary>
+		/// 获取起点和终点寻路后的路径点
+		/// </summary>
 		private List<Vector2Int> FindPath(Vector2Int start, Vector2Int goal)
 		{
 			m_wayPoints.Clear();

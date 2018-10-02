@@ -9,6 +9,8 @@ namespace Sword
 	{
 		private HeroMoveRange m_rangeTile;
 
+		public Vector2Int TilePosition => new Vector2Int((int)LocalPosition.x, (int)LocalPosition.z);
+
 		protected override void Start()
 		{
 			base.Start();
@@ -28,7 +30,7 @@ namespace Sword
 		{
 			if (value)
 			{
-				m_rangeTile.Show(3, TMap.Instance.WalkableGrid, LocalPosition);
+				m_rangeTile.Show(MoveRange, TMap.Instance.WalkableGrid, LocalPosition);
 			}
 			else
 			{

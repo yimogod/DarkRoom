@@ -130,6 +130,11 @@ namespace DarkRoom.Game
 			CTileNavigationSystem.Instance.SimpleMoveToLocation(this, goal, onComplete);
 		}
 
+		public virtual void MoveToLocation(CTilePathResult waypoints, CPawnPathFollowingComp.OnPathFinished onComplete = null)
+		{
+			CTileNavigationSystem.Instance.SimpleMoveToLocation(this, waypoints, onComplete);
+		}
+
 		/// <summary>
 		/// 跟随路径点行走
 		/// </summary>

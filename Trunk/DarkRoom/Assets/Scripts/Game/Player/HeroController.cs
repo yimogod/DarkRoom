@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DarkRoom.AI;
 using DarkRoom.Core;
 using DarkRoom.Game;
 using DarkRoom.Utility;
@@ -53,10 +54,25 @@ namespace Sword
 				return;
 			}
 
+			var pos = m_entity.TilePosition;
+			var dist = tile.ManhattanMagnitude(pos);
+			if (dist > m_entity.MoveRange)
+			{
+				Debug.Log("<OnClickMap> Click Tile Out Of Range");
+				return;
+			}
+
+			var target = CMapUtil.GetTileByPos(e.WorldPosition);
+			var waypoints = CTileNavigationSystem.Instance.GetWayPointBetween(pos, target);
+			if (dist > waypoints.Count)
+			{
+				Debug.Log("<OnClickMap> Click Tile Out Of Range");
+				return;
+			}
+
 			m_entity.OnClickMap();
 			m_entity.ShowMoveRange(false);
-			var target = CMapUtil.GetTileCenterPosByColRow(e.WorldPosition);
-			MoveToLocation(target, result => m_entity.ShowMoveRange(true));
+			MoveToLocation(waypoints, result => m_entity.ShowMoveRange(true));
 		}
 	}
 }

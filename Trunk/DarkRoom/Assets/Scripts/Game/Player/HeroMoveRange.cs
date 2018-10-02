@@ -77,7 +77,7 @@ namespace Sword
 					var go = m_dict[(r + gap) * 1000 + (c + gap)];
 					bool w =m_star.FindPath(m_grid, true);
 					//如果不可通行, 或者通行的路径大于range
-					if (!w || m_star.Path.Count > range){
+					if (!w || m_star.Path.Count >= range){
 						go.SetActive(false);
 					}else{
 						go.SetActive(true);
