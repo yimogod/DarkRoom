@@ -36,6 +36,21 @@ MonoBehaviour:
     PublicKeyToken=null
   m_processorClass: UnityEditor.AddressableAssets.BundledAssetGroupProcessor
   m_serializeEntries:
+  - m_guid: 9079b792fc2d46b40bf5815f39a4401f
+    m_address: Actor_Grenadier
+    m_readOnly: 0
+    m_serializedLabels:
+    - actor
+  - m_guid: 99ab09020793b4a4dbdb1e23b665bf31
+    m_address: Actor_Gunner
+    m_readOnly: 0
+    m_serializedLabels:
+    - actor
+  - m_guid: a377dc3d8a686194d888c2f312a0020f
+    m_address: Actor_Chomper
+    m_readOnly: 0
+    m_serializedLabels:
+    - actor
   - m_guid: d2cc94e034645754e853a835a500bee9
     m_address: Hero_Cornac_Berserker
     m_readOnly: 0
