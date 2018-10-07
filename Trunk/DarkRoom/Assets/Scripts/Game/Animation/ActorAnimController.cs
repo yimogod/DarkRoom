@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,8 +11,11 @@ namespace Sword
 		public const string Move_Key = "ForwardSpeed";
 		public const string Input_Key = "InputDetected";
 
-		private Animator m_anim;
+		[NonSerialized]
+		public Animator Anim;
 		private ActorEntity m_entity;
+		private Transform m_tran;
+
 
 		void Start()
 		{
@@ -20,24 +24,29 @@ namespace Sword
 
 		public void AttachAnimator(Animator anim)
 		{
-			m_anim = anim;
+			if(anim == null)return;
+			Anim = anim;
+			m_tran = anim.transform;
 		}
 
 		public void PlayerClick()
 		{
-			m_anim.SetTrigger(Input_Key);
+			if (Anim == null) return;
+
+			Anim.SetTrigger(Input_Key);
 		}
 
 		void Update()
 		{
-			if(m_anim==null)return;
+			if(Anim == null)return;
 			var speed = m_entity.Mover.Velocity.magnitude;
-			m_anim.SetFloat(Move_Key, speed);
+			Anim.SetFloat(Move_Key, speed);
 		}
 
 		void LateUpdate()
 		{
-			m_anim.transform.localPosition = Vector3.zero;
+			if (m_tran == null) return;
+			m_tran.localPosition = Vector3.zero;
 		}
 	}
 }

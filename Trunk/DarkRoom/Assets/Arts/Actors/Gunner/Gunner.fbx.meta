@@ -1,9 +1,7 @@
 fileFormatVersion: 2
 guid: b476cabc75adebf4e998f44ada8db684
-timeCreated: 1511972194
-licenseType: Store
 ModelImporter:
-  serializedVersion: 22
+  serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
@@ -12,27 +10,28 @@ ModelImporter:
     3300000: //RootNode
     4300000: Gunner_model
     4300002: Gunner_Model_Final_Keeper
+    9500000: //RootNode
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Gunner_Core_Mat
-    second: {fileID: 2100000, guid: 3fd8e5eb00e4cf64b89394db6164b210, type: 2}
+    second: {fileID: 2100000, guid: 19ee9df38341f9642a25c84fb2ab0cc7, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Gunner_Eye_Mat
-    second: {fileID: 2100000, guid: 2a09e5cff08b19a4492cb741188c9dd5, type: 2}
+    second: {fileID: 2100000, guid: d6c243dd01521594e90dc95ef6d1f4ff, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Gunner_Mat
-    second: {fileID: 2100000, guid: ff139079bd164dc418096157b6182430, type: 2}
+    second: {fileID: 2100000, guid: 20d4e37beb23c7b4ba90e9fe6b540767, type: 2}
   materials:
     importMaterials: 1
     materialName: 1
     materialSearch: 2
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -46,7 +45,8 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
-    animationCompression: 1
+    importConstraints: 0
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -57,19 +57,19 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 0.3
     meshCompression: 0
     addColliders: 0
-    importVisibility: 1
+    importVisibility: 0
     importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
+    importCameras: 0
+    importLights: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
     keepQuads: 0
-    weldVertices: 1
+    weldVertices: 0
     preserveHierarchy: 0
     indexFormat: 0
     secondaryUVAngleDistortion: 8
@@ -77,6 +77,8 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
+    previousCalculatedGlobalScale: 0.005
+    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -101,7 +103,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

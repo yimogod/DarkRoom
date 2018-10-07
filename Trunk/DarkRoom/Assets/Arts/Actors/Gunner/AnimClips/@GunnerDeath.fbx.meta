@@ -172,7 +172,7 @@ ModelImporter:
     13700002: GrenadierMesh
   externalObjects: {}
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -272,7 +272,7 @@ ModelImporter:
     rootMotionBoneName: Grenadier_Root
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 887cc9cbcc10e8c45b6262198cc15ee6,
     type: 3}

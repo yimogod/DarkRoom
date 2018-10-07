@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 887cc9cbcc10e8c45b6262198cc15ee6
 ModelImporter:
-  serializedVersion: 22
+  serializedVersion: 23
   fileIDToRecycleName:
     100000: Greandier_core
     100002: //RootNode
@@ -174,9 +174,11 @@ ModelImporter:
     2300000: Greandier_core
     2300002: //RootNode
     2300004: Grenadier_grenade
+    2300006: Grenadier
     3300000: Greandier_core
     3300002: //RootNode
     3300004: Grenadier_grenade
+    3300006: Grenadier
     4300000: Grenadier
     4300002: Grenadier_grenade
     4300004: Greandier_core
@@ -232,15 +234,14 @@ ModelImporter:
     importMaterials: 1
     materialName: 1
     materialSearch: 2
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    rigImportErrors: "Avatar creation failed:\n\tCannot find root motion transform
-      'Grenadier_Root'.\n"
+    rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
@@ -248,7 +249,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -256,10 +257,10 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 0.3
     meshCompression: 0
     addColliders: 0
     importVisibility: 0
@@ -279,6 +280,8 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
+    previousCalculatedGlobalScale: 0.005
+    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -300,7 +303,7 @@ ModelImporter:
     rootMotionBoneName: Grenadier_Root
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2

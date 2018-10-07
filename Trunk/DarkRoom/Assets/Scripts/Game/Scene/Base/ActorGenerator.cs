@@ -22,6 +22,7 @@ namespace Sword
 
 		public void Generate(MapMeta meta, CStarGrid walkableGrid)
 		{
+			m_grid.Init(meta.Cols, meta.Rows);
 			m_tilesData = new ActorGeneraterPlaceholder(walkableGrid);
 			GenerateActor(meta);
 		}
