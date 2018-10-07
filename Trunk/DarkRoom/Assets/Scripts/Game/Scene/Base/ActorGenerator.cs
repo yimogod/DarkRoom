@@ -39,6 +39,7 @@ namespace Sword
 				{
 					var pos = m_tilesData.FindFreeTileForMonster();
 					pos = m_tilesData.AddUnitToDict(pos, 2);
+					//type = id, subtype = level
 					m_grid.FillData(pos.x, pos.y, m.x, m.y, false);
 				}
 			}

@@ -8,9 +8,6 @@ namespace Sword
 	public class TileActorLayerComp : MonoBehaviour
 	{
 		private CAssetGrid m_assetGrid;
-		private Transform m_parent;
-
-		private ActorEntityCreator m_creator = new ActorEntityCreator();
 
 		public void SetAssetGrid(CAssetGrid grid)
 		{
@@ -32,8 +29,7 @@ namespace Sword
 				return;
 			}
 
-			m_parent = CWorld.Instance.Layer.UnitLayer;
-			//StartCoroutine("CoroutineBuild");
+			StartCoroutine("CoroutineBuild");
 		}
 
 		private IEnumerator CoroutineBuild()
@@ -46,56 +42,42 @@ namespace Sword
 					var mid = m_assetGrid.GetNodeType(col, row);
 					if (mid <= 0) continue;
 
-					var subType = m_assetGrid.GetNodeSubType(col, row);
-					if(subType <= 0)continue;
+					var level = m_assetGrid.GetNodeSubType(col, row);
+					if(level <= 0)continue;
 
 					var pos = CMapUtil.GetTileCenterPosByColRow(col, row);
 					pos.y = GameConst.DEFAULT_TERRAIN_HEIGHT + 0.1f;
 
-
+					CreateMonsterAtPos(mid, level, pos);
 				}
 			}
 		}
-
-		protected void LoadAndCreateModel(string prefab, Vector3 pos)
-		{
-			AssetManager.LoadTilePrefab("map_forest", prefab, m_parent, pos);
-		}
-
-
-
-
-
-
-		//创建英雄, 固定位置, 其实更好的设计应该是祭坛~~~~
-		/*private void CreateHero(Vector2Int tile)
-		{
-			var entity = ProxyPool.HeroProxy.CreateHeroEntity();
-
-
-			var meta = ActorMetaManager.GetMeta(metaId);
-			HeroVO vo = new HeroVO();
-			//var vo = ProxyPool.UserProxy.Hero;
-
-			var pos = CMapUtil.GetTileCenterPosByColRow(tile);
-			var entity = CWorld.Instance.SpawnUnit<HeroEntity>("Hero_" + metaId, pos);
-			m_creator.CreateActor(vo, entity);
-			m_creator.CreateAttachGO(entity);
-
-			m_tilesData.AddUnitToDict(entity.LocalPosition, 5);
-		}*/
 
 		//在固定位置创建怪物
 		private void CreateMonsterAtPos(int metaId, int lv, Vector3 pos)
 		{
 			var meta = ActorMetaManager.GetMeta(metaId);
+
+			var entity = CWorld.Instance.SpawnUnit<BotEntity>("Bot_" + meta.Name, pos);
+			entity.Address = meta.Address;
+			entity.Team = CUnitEntity.TeamSide.Blue;
+
+			var go = entity.gameObject;
+			var ctrl = go.AddComponent<BotController>();
+
+			var attr = entity.AttributeSet;
+			attr.InitAttr(meta.SubClass, meta.SubRace);
+			//attr.SetPrimaryAttrPersistentValue(Hero.Strength, Hero.Dexterity, Hero.Constitution,
+			//	Hero.Magic, Hero.Willpower, Hero.Cunning, Hero.Luck);
+			attr.InitSubAttr();
+			//attr.InitLevel(Hero.Level);
+
+			//attr.InitHealthAndMana();
+
+			
 			ActorVO vo = new ActorVO();
 			//vo.ai = AIMetaManager.GetMeta(ai);
 			//vo.Init(lv);
-
-			var entity = CWorld.Instance.SpawnUnit<BotEntity>("Bot_" + metaId, pos);
-			m_creator.CreateMonsterAddon(entity);
-			m_creator.CreateAttachGO(entity);
 		}
 
 
