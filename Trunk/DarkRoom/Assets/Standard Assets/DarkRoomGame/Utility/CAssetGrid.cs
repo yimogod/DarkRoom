@@ -11,7 +11,7 @@ namespace DarkRoom.Game
 		public void SetNodeType(int col, int row, int value)
 		{
 			CAssetNode node = GetNode(col, row);
-			if (node.Invalid)
+			if (node == null)
 			{
 				Debug.LogError("SetType Error");
 				return;
@@ -23,7 +23,7 @@ namespace DarkRoom.Game
 		public int GetNodeType(int col, int row)
 		{
 			CAssetNode node = GetNode(col, row);
-			if (node.Invalid)
+			if (node == null)
 			{
 				Debug.LogError("SetType Error");
 				return -1;
@@ -47,7 +47,7 @@ namespace DarkRoom.Game
 		public int GetNodeSubType(int col, int row)
 		{
 			CAssetNode node = GetNode(col, row);
-			if (node.Invalid)
+			if (node == null)
 			{
 				Debug.LogError("SetAsset Error");
 				return -1;
@@ -59,7 +59,7 @@ namespace DarkRoom.Game
 		public void FillData(int col, int row, int type, int subType, bool walkable)
 		{
 			CAssetNode node = GetNode(col, row);
-			if (node.Invalid)
+			if (node == null)
 			{
 				//Debug.LogWarning("Set Value and Asset Error");
 				return;
@@ -90,11 +90,6 @@ namespace DarkRoom.Game
 		/// 是否可通行
 		/// </summary>
 		public bool Walkable { get; set; }
-
-		public bool Invalid
-		{
-			get { return Col < 0 || Row < 0; }
-		}
 
 		/// <summary>
 		/// 本格子的类型

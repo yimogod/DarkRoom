@@ -6,6 +6,7 @@ namespace DarkRoom.Game
 {
 	/// <summary>
 	/// 二维表格数据. 用于AStar和直线探测寻路
+	/// 注意, 这里约定T只能是对象, 不能是值或者结构
 	/// </summary>
 	public class CMapGrid<T> : IWalkableGrid where T : IWalkableNode, new()
 	{
@@ -87,9 +88,9 @@ namespace DarkRoom.Game
 		/// </summary>
 		public T GetNode(int col, int row)
 		{
-			if (row < 0 || col < 0) return new T();
-			if (row >= m_size.y) return new T();
-			if (col >= m_size.x) return new T();
+			if (row < 0 || col < 0) return default(T);
+			if (row >= m_size.y) return default(T);
+			if (col >= m_size.x) return default(T);
 			return m_nodes[col, row];
 		}
 
@@ -103,7 +104,7 @@ namespace DarkRoom.Game
 		public bool IsWalkable(int col, int row)
 		{
 			T node = GetNode(col, row);
-			if (node.Invalid) return false;
+			if (node == null) return false;
 			return node.Walkable;
 		}
 
@@ -126,7 +127,7 @@ namespace DarkRoom.Game
 		public void SetWalkable(int col, int row, bool value)
 		{
 			T node = GetNode(col, row);
-			if (node.Invalid)
+			if (node == null)
 			{
 				Debug.LogError("SetWalkable Error");
 				return;
@@ -173,7 +174,7 @@ namespace DarkRoom.Game
 		public Vector2Int FindNearestWalkablePos(Vector2Int pos)
 		{
 			T node = GetNode(pos);
-			if (node != null && node.Walkable) return pos;
+			if (node.Walkable) return pos;
 
 
 			int gap = 1;
@@ -186,23 +187,23 @@ namespace DarkRoom.Game
 				int maxRow = pos.y + gap;
 
 				//1. two rows line
-				for (int i = minCol; i <= maxCol; i++)
+				for (int c = minCol; c <= maxCol; c++)
 				{
-					node = GetNode(maxRow, i);
-					//if (node != null && node.Walkable) return node.vector;
+					node = GetNode(c, maxRow);
+					if (node!= null && node.Walkable) return new Vector2Int(c, maxRow);
 
-					node = GetNode(minRow, i);
-					//if (node != null && node.Walkable) return node.vector;
+					node = GetNode(c, minRow);
+					if (node != null && node.Walkable) return new Vector2Int(c, minRow);
 				}
 
 				//2. two cols line
-				for (int i = minRow + 1; i < maxRow; i++)
+				for (int r = minRow + 1; r < maxRow; r++)
 				{
-					node = GetNode(i, minCol);
-					//if (node != null && node.Walkable) return node.vector;
+					node = GetNode(minCol, r);
+					if (node != null && node.Walkable) return new Vector2Int(minCol, r);
 
-					node = GetNode(i, maxCol);
-					// if (node != null && node.Walkable) return node.vector;
+					node = GetNode(maxCol, r);
+					if (node != null && node.Walkable) return new Vector2Int(maxCol, r);
 				}
 
 				gap++;

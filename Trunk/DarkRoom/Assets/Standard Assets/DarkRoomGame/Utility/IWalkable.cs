@@ -22,10 +22,5 @@
         /// The walkable.
         /// </summary>
         bool Walkable { get; set; }
-
-        /// <summary>
-        /// 本格子是否合法
-        /// </summary>
-        bool Invalid { get; }
     }
 }

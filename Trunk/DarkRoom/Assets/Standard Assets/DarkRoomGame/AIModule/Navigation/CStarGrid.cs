@@ -39,7 +39,7 @@ namespace DarkRoom.AI
 		public void SetStartNode(int col, int row)
 		{
 			var node = GetNode(col, row);
-			if (node.Invalid)
+			if (node == null)
 			{
 				Debug.LogWarning($"SetStartNode Error {col} {row}");
 				return;
@@ -62,7 +62,7 @@ namespace DarkRoom.AI
 		public void SetEndNode(int col, int row)
 		{
 			var node = GetNode(col, row);
-			if (node.Invalid)
+			if (node == null)
 			{
 				Debug.LogError($"SetEndNode Error {col} {row}");
 				return;
@@ -91,11 +91,6 @@ namespace DarkRoom.AI
 		/// The walkable.
 		/// </summary>
 		public bool Walkable { get; set; }
-
-		public bool Invalid
-		{
-			get { return Col < 0 || Row < 0; }
-		}
 
 		/// <summary>
 		/// 经过此点寻路的总代价. f代价

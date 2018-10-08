@@ -2,4 +2,3 @@
 int	string	string	"warrier,ranger,magic"		int
 10001	Chomper	Actor_Chomper	1	1	10
 10002	Grenadier	Actor_Grenadier	2	3	10
-10003	Gunner	Actor_Gunner	3	4	10

@@ -15,7 +15,7 @@ namespace Sword {
 
 		private MapMeta m_mapMeta;
 
-		public MapMeta Meta=>m_mapMeta;
+		public MapMeta Meta => m_mapMeta;
 
 		public void Init(MapMeta meta) {
 			m_mapMeta = meta;
@@ -32,12 +32,12 @@ namespace Sword {
 		public Vector3 FindSurroundWalkablePos(Vector3 pos) {
 			int row = (int)pos.z;
 			int col = (int)pos.x;
-			var node = WalkableGrid.GetNode(row, col);
+			var node = WalkableGrid.GetNode(col, row);
 			if (node != null && node.Walkable) return pos;
 
 			for (int i = -1; i <= 1; i++) {
 				for (int j = -1; j <= 1; j++) {
-					node = WalkableGrid.GetNode(row + 1, col + j);
+					node = WalkableGrid.GetNode(col + j, row + 1);
 					//if (node != null && node.Walkable) return node.vector;
 				}
 			}

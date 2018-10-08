@@ -21,11 +21,9 @@ namespace Rayman{
 			for(int i = 0; i < decoBlockNum; ++i) {
 				int col = CDarkRandom.Next(_numCols);
 				int row = CDarkRandom.Next(_numRows);
-				//if(typeGrid.IsSpecial(row, col))continue;
-				if(!walkGrid.IsWalkable(row, col))continue;
+				if(!walkGrid.IsWalkable(col, row))continue;
 
-				//typeGrid.SetType(row, col, (int)RayConst.TileType.DECO_BLOCK);
-				walkGrid.SetWalkable(row, col, false);
+				walkGrid.SetWalkable(col, row, false);
 
 				int nameIndex = CDarkRandom.Next(1, 6);
 				name = string.Format("Preb_Deco_Block_00{0}", nameIndex);

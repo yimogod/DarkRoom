@@ -31,10 +31,11 @@ namespace Sword
 			{
 				for (int col = 0; col < m_numCols; ++col)
 				{
-					bool w = walkGrid.IsWalkable(row, col);
+					//这里存储不可通行的位置
+					bool w = walkGrid.IsWalkable(col, row);
 					if (w) continue;
 
-					int key = row * 10000 + col;
+					int key = GetKey(col, row);
 					m_unitRangeDict[key] = true;
 					m_unitPosDict[key] = true;
 				}
@@ -47,14 +48,14 @@ namespace Sword
 		/// </summary>
 		public Vector2Int AddUnitToDict(Vector2Int pos, int range = 2)
 		{
-			int key = 10000 * pos.y + pos.x;
+			int key = GetKey(pos.x, pos.y);
 			//如果位置已经被占用, 寻找一个最近的空位
 			if (m_unitRangeDict.ContainsKey(key))
 			{
 				pos = FindFreeTileNear(pos);
 				//如果找不到合适的位置就不添加了
 				if (CDarkUtil.IsInvalidVec2Int(pos))return pos;
-				key = 10000 * pos.y + pos.x;
+				key = GetKey(pos.x, pos.y);
 			}
 
 			m_unitPosDict[key] = true;
@@ -69,7 +70,7 @@ namespace Sword
 			{
 				for (int col = minCol; col <= maxCol; col++)
 				{
-					key = row * 10000 + col;
+					key = GetKey(col, row);
 					m_unitRangeDict[key] = true;
 				}
 			}
@@ -103,12 +104,12 @@ namespace Sword
 				row = pos.y;
 
 				col = pos.x - i;
-				key = 10000 * row + col;
+				key = GetKey(col, row);
 				block = m_unitPosDict.ContainsKey(key);
 				if (!block) return new Vector2Int(col, row);
 
 				col = pos.x + i;
-				key = 10000 * row + col;
+				key = GetKey(col, row);
 				block = m_unitPosDict.ContainsKey(key);
 				if (!block) return new Vector2Int(col, row);
 
@@ -116,13 +117,13 @@ namespace Sword
 				col = pos.x;
 
 				row = pos.y - i;
-				key = 10000 * row + col;
+				key = GetKey(col, row);
 				block = m_unitPosDict.ContainsKey(key);
 				if (!block) return new Vector2Int(col, row);
 
 
 				row = pos.x + i;
-				key = 10000 * row + col;
+				key = GetKey(col, row);
 				block = m_unitPosDict.ContainsKey(key);
 				if (!block) return new Vector2Int(col, row);
 			}
@@ -134,16 +135,16 @@ namespace Sword
 		//创建, 地图中可以空置的位置
 		private Vector2Int FindFreeTileNotInDict(Dictionary<int, bool> dict)
 		{
-			Vector2Int pos = CMapUtil.FindRandomNodeLocation(m_numRows, m_numCols);
-			int key = 10000 * pos.y + pos.x;
+			Vector2Int pos = CMapUtil.FindRandomNodeLocation(m_numCols, m_numRows);
+			int key = GetKey(pos.x, pos.y);
 
 			bool block = dict.ContainsKey(key);
 			int maxTryTimes = 100;
 			int tryTimes = 0;
 			while (block && tryTimes < maxTryTimes)
 			{
-				pos = CMapUtil.FindRandomNodeLocation(m_numRows, m_numCols);
-				key = 10000 * pos.y + pos.x;
+				pos = CMapUtil.FindRandomNodeLocation(m_numCols, m_numRows);
+				key = GetKey(pos.x, pos.y);
 				block = dict.ContainsKey(key);
 				tryTimes++;
 			}
@@ -155,6 +156,10 @@ namespace Sword
 			}
 
 			return pos;
+		}
+
+		private int GetKey(int col, int row){
+			return row * 10000 + col;
 		}
 
 		/*清理辅助数据, 只在创建时做辅助用*/

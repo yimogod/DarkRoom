@@ -2,9 +2,8 @@
 <Catalog>
 	<Map id="10001" name="Forest" cols="64" rows="64">
     <Monsters desc="x=id y=num z=lv">
-      <Monster x="10001" y="1" z="10"/>
-      <Monster x="10002" y="1" z="10"/>
-	  <Monster x="10003" y="1" z="10"/>
+      <Monster x="10001" y="1" z="20"/>
+      <Monster x="10002" y="1" z="20"/>
     </Monsters>
 
   </Map>
