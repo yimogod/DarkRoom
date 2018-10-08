@@ -166,7 +166,7 @@ ModelImporter:
     2100004: Keeper_Eye_Mat
     4300000: GranadierMesh
     4300002: GrenadierMesh
-    7400000: GrenadierDeath
+    7400000: GunnerDeath
     9500000: //RootNode
     13700000: GranadierMesh
     13700002: GrenadierMesh
@@ -199,7 +199,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: GrenadierDeath
+      name: GunnerDeath
       takeName: Take 001
       firstFrame: 1
       lastFrame: 280

@@ -41,6 +41,11 @@ MonoBehaviour:
     m_readOnly: 0
     m_serializedLabels:
     - actor
+  - m_guid: 99ab09020793b4a4dbdb1e23b665bf31
+    m_address: Actor_Gunner
+    m_readOnly: 0
+    m_serializedLabels:
+    - actor
   - m_guid: a377dc3d8a686194d888c2f312a0020f
     m_address: Actor_Chomper
     m_readOnly: 0
