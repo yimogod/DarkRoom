@@ -47,6 +47,7 @@ namespace Sword
 			m_builder.CreateMap();
 			m_builder.CopyUnWalkableToGrid(TMap.Instance.WalkableGrid);
 			m_builder.CreateActor(TMap.Instance.WalkableGrid);
+			m_builder.CopyActorUnWalkableToGrid(TMap.Instance.WalkableGrid);
 
 			//读取加载地形数据, 并组装terrain3d comp
 			m_terrainLayer = gameObject.GetOrCreateComponent<TileTerrainLayerComp>();

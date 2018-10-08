@@ -29,20 +29,20 @@ namespace Sword {
 
 		//寻找四周一圈的可通行的位置
 		//如果自己可以通行, 那么就返回自己
-		public Vector3 FindSurroundWalkablePos(Vector3 pos) {
-			int row = (int)pos.z;
-			int col = (int)pos.x;
-			var node = WalkableGrid.GetNode(col, row);
+		public Vector2Int FindSurroundWalkablePos(Vector2Int pos) {
+			var node = WalkableGrid.GetNode(pos);
 			if (node != null && node.Walkable) return pos;
 
+			int row = pos.y;
+			int col = pos.x;
 			for (int i = -1; i <= 1; i++) {
 				for (int j = -1; j <= 1; j++) {
 					node = WalkableGrid.GetNode(col + j, row + 1);
-					//if (node != null && node.Walkable) return node.vector;
+					if (node != null && node.Walkable) return new Vector2Int(node.Col, node.Row);
 				}
 			}
 
-			return CDarkConst.INVALID_VEC3;
+			return CDarkConst.INVALID_VEC2INT;
 		}
 
 		/*获取所在位置最近的可通行图*/

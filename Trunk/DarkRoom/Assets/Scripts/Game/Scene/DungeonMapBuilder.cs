@@ -63,5 +63,13 @@ namespace Sword
 			//3 障碍物
 			targetGrid.CopyUnWalkableFrom(BlockGrid);
 		}
+
+		/// <summary>
+		/// 拷贝单位占领的不可同行区域
+		/// </summary>
+		public void CopyActorUnWalkableToGrid(CStarGrid targetGrid)
+		{
+			targetGrid.CopyUnWalkableFrom(ActorGrid);
+		}
 	}
 }
