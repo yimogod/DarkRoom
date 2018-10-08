@@ -5,18 +5,18 @@ using PureMVC.Patterns;
 
 namespace Sword
 {
-    public class CharacterChooseMediator : SwordBaseMediator
+    public class HeroInfoMediator : SwordBaseMediator
 	{
-        public new const string NAME = "CharacterChooseMediator";
+        public new const string NAME = "HeroInfoMediator";
 
-        public CharacterChooseMediator() : base(NAME)
+        public HeroInfoMediator() : base(NAME)
         {
         }
 
         public override IList<string> ListNotificationInterests()
         {
             IList<string> list = new List<string>();
-            list.Add(NotiConst.Open_CharacterChoose);
+			list.Add(NotiConst.Open_HeroInfo);
             return list;
         }
 
@@ -24,7 +24,8 @@ namespace Sword
         {
             switch (note.Name)
             {
-                case NotiConst.Open_CharacterChoose:
+                case NotiConst.Open_HeroInfo:
+					OpenPanel<UI_HeroInfo>(ProxyPool.HeroProxy.Hero);
                     break;
             }
         }

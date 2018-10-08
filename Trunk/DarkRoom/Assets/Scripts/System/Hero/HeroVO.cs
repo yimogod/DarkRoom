@@ -22,7 +22,6 @@ namespace Sword
 		/// 玩家用属性点添加到7个主属性的值
 		/// </summary>
 		public int Strength;
-
 		public int Dexterity;
 		public int Constitution;
 		public int Magic;

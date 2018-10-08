@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DarkRoom.UI;
 using PureMVC.Patterns;
 
-namespace Assets.Scripts.System.Common
+namespace Sword
 {
     public class SwordBaseMediator : Mediator
     {
@@ -11,9 +11,9 @@ namespace Assets.Scripts.System.Common
         {
         }
 
-        protected void OpenPanel<T>() where T : CUIWindowBase
+        protected void OpenPanel<T>(params object[] objs) where T : CUIWindowBase
         {
-            CUIManager.Instance.OpenUI<T>(OnOpenComplete);
+            CUIManager.Instance.OpenUI<T>(OnOpenComplete, objs);
         }
 
         protected void OnOpenComplete(CUIWindowBase window, params object[] objs)

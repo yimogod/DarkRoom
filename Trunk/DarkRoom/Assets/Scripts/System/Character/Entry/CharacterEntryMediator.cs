@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Assets.Scripts.System.Common;
 using DarkRoom.UI;
 using PureMVC.Interfaces;
 using PureMVC.Patterns;

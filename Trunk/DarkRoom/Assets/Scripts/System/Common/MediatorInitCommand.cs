@@ -11,7 +11,12 @@ namespace Sword
             Facade.RegisterMediator(new CharacterCreateMediator());
             Facade.RegisterMediator(new CharacterChooseMediator());
 
-            /*Facade.RegisterMediator(new LoginMediator());
+			Facade.RegisterMediator(new HeroInfoMediator());
+
+			Facade.RegisterMediator(new BattleMainMediator());
+
+
+			/*Facade.RegisterMediator(new LoginMediator());
             Facade.RegisterMediator(new CreateHeroMediator());
             Facade.RegisterMediator(new ItemMediator());
             Facade.RegisterMediator(new GamePlayMediator());
@@ -20,7 +25,7 @@ namespace Sword
             Facade.RegisterMediator(new PortalMediator());
 
             Facade.RegisterMediator(new AlchemyMediator());*/
-        }
+		}
     }
 }
 

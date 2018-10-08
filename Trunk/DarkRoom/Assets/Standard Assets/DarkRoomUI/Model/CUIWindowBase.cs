@@ -51,6 +51,9 @@ namespace DarkRoom.UI
             gameObject.SetActive(false);
         }
 
+		/// <summary>
+		/// 隐藏的反义词, 显示出来
+		/// </summary>
         public virtual void OnReveal()
         {
             gameObject.SetActive(true);
