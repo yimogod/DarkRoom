@@ -5,20 +5,20 @@ using PureMVC.Patterns;
 
 namespace Sword
 {
-    public class SwordBaseMediator : Mediator
-    {
-        public SwordBaseMediator(string mediatorName) : base(mediatorName)
-        {
-        }
+	public class SwordBaseMediator : Mediator
+	{
+		public SwordBaseMediator(string mediatorName) : base(mediatorName)
+		{
+		}
 
-        protected void OpenPanel<T>(params object[] objs) where T : CUIWindowBase
-        {
-            CUIManager.Instance.OpenUI<T>(OnOpenComplete, objs);
-        }
+		protected void OpenPanel<T>(params object[] objs) where T : CUIWindowBase
+		{
+			CUIManager.Instance.OpenUI<T>(OnOpenComplete, objs);
+		}
 
-        protected void OnOpenComplete(CUIWindowBase window, params object[] objs)
-        {
-            m_viewComponent = window;
-        }
-    }
+		protected void OnOpenComplete(CUIWindowBase window, params object[] objs)
+		{
+			m_viewComponent = window;
+		}
+	}
 }
