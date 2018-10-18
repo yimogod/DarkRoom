@@ -48,7 +48,6 @@ namespace Sword {
 		//比如火炬之光4职业, 2个性别. 因为他的所有的职业身高一样, 所以就两套骨骼, 一套男的, 一套女的
 		//那么就0/1
 		public string Prefab;
-		public string NameKey;
 		public EquipType Type;
 		public EquipMethod Method;
 

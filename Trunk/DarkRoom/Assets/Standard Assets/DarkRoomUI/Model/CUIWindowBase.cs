@@ -17,6 +17,8 @@ namespace DarkRoom.UI
 		public UIType UIType => m_uiType;
 		public string UIName => m_UIName;
 
+		protected object[] m_args;
+
 		/// <summary>
 		/// 在awake后面, start前面调用
 		/// </summary>
@@ -32,10 +34,12 @@ namespace DarkRoom.UI
 		/// </summary>
 		public void Refresh(params object[] args)
 		{
+			m_args = args;
 		}
 
-		public virtual void OnOpen(params object[] objs)
+		public virtual void OnOpen(params object[] args)
 		{
+			m_args = args;
 			OnBindEvent();
 			OnReveal();
 		}

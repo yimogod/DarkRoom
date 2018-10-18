@@ -30,7 +30,7 @@ namespace Sword
 			Constitution = new CAbilityAttribute((int)PrimaryAttribute.Constitution, v1);
 
 			v1 = classMeta.Magic + raceMeta.Magic;
-			Magic = new CAbilityAttribute((int)PrimaryAttribute.Magic, v1);
+			Magic = new CAbilityAttribute((int)PrimaryAttribute.Intelligence, v1);
 
 			v1 = classMeta.Willpower + raceMeta.Willpower;
 			Willpower = new CAbilityAttribute((int)PrimaryAttribute.Willpower, v1);

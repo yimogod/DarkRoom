@@ -43,7 +43,7 @@ namespace Sword
 
 		public int Exp { get; set; }
 
-		public float Life { get; set; }
+		public float Health { get; set; }
 
 		public float Mana { get; set; }
 

@@ -86,18 +86,18 @@ namespace Sword
 		/// Shrug off criticals chance:  .30 //无视暴击的几率
 		Dexterity,
 
+		/// 魔力增加各种魔法物品的能力, 减少mana消耗
+		/// Gains per point:
+		/// Spell save:  .35
+		/// Spellpower:  1.00
+		Intelligence,
+
 		/// 体质会增加max hp, 减少物理伤害, 增加治疗效果
 		/// Gains per point:
 		/// Max life:       4.00 (*)
 		/// Physical save:  .35
 		/// Healing modification: 0.7%
 		Constitution,
-
-		/// 魔力增加各种魔法物品的能力, 减少mana消耗
-		/// Gains per point:
-		/// Spell save:  .35
-		/// Spellpower:  1.00
-		Magic,
 
 		/// 意志力减少思想和魔法的攻击力
 		/// Gains per point:
@@ -173,6 +173,21 @@ namespace Sword
 		/// 治疗效果的百分比提升
 		/// </summary>
 		HealingModification
+	}
+
+	/// <summary>
+	/// 另外一种平行属性
+	/// </summary>
+	public enum ThirdAttribute
+	{
+		/// <summary>
+		/// 移动能力
+		/// </summary>
+		MoveRange,
+		/// <summary>
+		/// 视野范围
+		/// </summary>
+		ViewRange,
 	}
 
 	/// <summary>
