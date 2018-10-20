@@ -11,8 +11,8 @@ namespace Sword
 	{
 		public CAbilityAttribute Strength;
 		public CAbilityAttribute Dexterity;
+		public CAbilityAttribute Intelligence;
 		public CAbilityAttribute Constitution;
-		public CAbilityAttribute Magic;
 		public CAbilityAttribute Willpower;
 		public CAbilityAttribute Cunning;
 		public CAbilityAttribute Luck;
@@ -24,87 +24,88 @@ namespace Sword
 			Strength = new CAbilityAttribute((int) PrimaryAttribute.Strength, v1);
 
 			v1 = classMeta.Dexterity + raceMeta.Dexterity;
-			Dexterity = new CAbilityAttribute((int)PrimaryAttribute.Dexterity, v1);
+			Dexterity = new CAbilityAttribute((int) PrimaryAttribute.Dexterity, v1);
 
 			v1 = classMeta.Constitution + raceMeta.Constitution;
-			Constitution = new CAbilityAttribute((int)PrimaryAttribute.Constitution, v1);
+			Constitution = new CAbilityAttribute((int) PrimaryAttribute.Constitution, v1);
 
 			v1 = classMeta.Magic + raceMeta.Magic;
-			Magic = new CAbilityAttribute((int)PrimaryAttribute.Intelligence, v1);
+			Intelligence = new CAbilityAttribute((int) PrimaryAttribute.Intelligence, v1);
 
 			v1 = classMeta.Willpower + raceMeta.Willpower;
-			Willpower = new CAbilityAttribute((int)PrimaryAttribute.Willpower, v1);
+			Willpower = new CAbilityAttribute((int) PrimaryAttribute.Willpower, v1);
 
 			v1 = classMeta.Cunning + raceMeta.Cunning;
-			Cunning = new CAbilityAttribute((int)PrimaryAttribute.Cunning, v1);
+			Cunning = new CAbilityAttribute((int) PrimaryAttribute.Cunning, v1);
 
 			v1 = classMeta.Luck + raceMeta.Luck;
-			Luck = new CAbilityAttribute((int)PrimaryAttribute.Luck, v1);
+			Luck = new CAbilityAttribute((int) PrimaryAttribute.Luck, v1);
 		}
 	}
 
 	/// <summary>
 	/// 二级属性合集
-    /// 这里有个注意的点是, 二级属性的初始化值是由一级属性提供的
+	/// 这里有个注意的点是, 二级属性的初始化值是由一级属性提供的
 	/// </summary>
 	public class SwordSubAttributeSet
 	{
-        public class SwordAccuracyAttribute : CAbilityAttribute{
-            private SwordPrimaryAttributeSet m_primary;
+		public class SwordAccuracyAttribute : CAbilityAttribute
+		{
+			private SwordPrimaryAttributeSet m_primary;
 
-            public SwordAccuracyAttribute(SwordPrimaryAttributeSet primary) : base((int)SubAttribute.Accuracy)
-            {
-                m_primary = primary;
-            }
+			public SwordAccuracyAttribute(SwordPrimaryAttributeSet primary) : base((int) SubAttribute.Accuracy)
+			{
+				m_primary = primary;
+			}
 
-            public override float InitialValue {
-                get {
-                    return 4f + (m_primary.Dexterity.Value - 10f) +
-                    m_primary.Luck.Value * 0.4f;
-                }
-            }
+			public override float InitialValue
+			{
+				get
+				{
+					return 4f + (m_primary.Dexterity.Value - 10f) +
+					       m_primary.Luck.Value * 0.4f;
+				}
+			}
+		}
 
-        }
+		public class SwordDefenseAttribute : CAbilityAttribute
+		{
+			private SwordPrimaryAttributeSet m_primary;
 
-        public class SwordDefenseAttribute : CAbilityAttribute
-        {
-            private SwordPrimaryAttributeSet m_primary;
+			public SwordDefenseAttribute(SwordPrimaryAttributeSet primary, SubAttribute id) : base((int) id)
+			{
+				m_primary = primary;
+			}
 
-            public SwordDefenseAttribute(SwordPrimaryAttributeSet primary, SubAttribute id) : base((int)id)
-            {
-                m_primary = primary;
-            }
+			public override float InitialValue
+			{
+				get
+				{
+					return (m_primary.Dexterity.Value - 10f) * 0.35f +
+					       m_primary.Luck.Value * 0.4f;
+				}
+			}
+		}
 
-            public override float InitialValue
-            {
-                get
-                {
-                    return (m_primary.Dexterity.Value - 10f) * 0.35f +
-                    m_primary.Luck.Value * 0.4f;
-                }
-            }
-
-        }
-
-        public SwordAccuracyAttribute Accuracy;
+		public SwordAccuracyAttribute Accuracy;
 		public CAbilityAttribute Encumbrance;
-        public SwordDefenseAttribute Defense;
-        public SwordDefenseAttribute RangedDefense;
+		public SwordDefenseAttribute Defense;
+		public SwordDefenseAttribute RangedDefense;
 		public float CriticalChance;
 		public float ShrugOffCriticalsChance;
 		public float HealingModification;
 
-        public SwordSubAttributeSet(SwordPrimaryAttributeSet primary){
-            Accuracy = new SwordAccuracyAttribute(primary);
-            Encumbrance = new CAbilityAttribute((int)SubAttribute.Encumbrance);
-            Defense = new SwordDefenseAttribute(primary, SubAttribute.Defense);
-            RangedDefense = new SwordDefenseAttribute(primary, SubAttribute.RangedDefense);
+		public SwordSubAttributeSet(SwordPrimaryAttributeSet primary)
+		{
+			Accuracy = new SwordAccuracyAttribute(primary);
+			Encumbrance = new CAbilityAttribute((int) SubAttribute.Encumbrance);
+			Defense = new SwordDefenseAttribute(primary, SubAttribute.Defense);
+			RangedDefense = new SwordDefenseAttribute(primary, SubAttribute.RangedDefense);
 
-            CriticalChance = 0;
-            ShrugOffCriticalsChance = 0;
-            HealingModification = 0;
-        }
-
+			CriticalChance = 0;
+			ShrugOffCriticalsChance = 0;
+			HealingModification = 0;
+		}
 	}
 
 	/// <summary>
@@ -112,81 +113,86 @@ namespace Sword
 	/// </summary>
 	public class SwordResourceAttributeSet
 	{
-        public class SwordHealthAttribute : CAbilityAttribute
-        {
-            private SwordPrimaryAttributeSet m_primary;
-            // 每次升级增加的生命
-            private float m_healthRating;
+		public class SwordHealthAttribute : CAbilityAttribute
+		{
+			private SwordPrimaryAttributeSet m_primary;
 
-            //为npc用的计算生命的系数
-            private float m_healthRank;
+			// 每次升级增加的生命
+			private float m_healthRating;
 
-            //由职业和种族提供的初始化属性
-            private float m_initValueFromClassRace;
+			//为npc用的计算生命的系数
+			private float m_healthRank;
 
-            //由等级获取到初始值
-            private float m_initValueFromLevel;
+			//由职业和种族提供的初始化属性
+			private float m_initValueFromClassRace;
 
-            public SwordHealthAttribute(SwordPrimaryAttributeSet primary) : base((int)Resource.Health)
-            {
-                m_primary = primary;
-            }
+			//由等级获取到初始值
+			private float m_initValueFromLevel;
 
-            public override float InitialValue
-            {
-                get
-                {
-                    return m_initValueFromClassRace + m_initValueFromLevel +
-                        m_primary.Constitution.Value * 4f;
-                }
-            }
+			public SwordHealthAttribute(SwordPrimaryAttributeSet primary) : base((int) Resource.Health)
+			{
+				m_primary = primary;
+			}
+
+			public override float InitialValue
+			{
+				get
+				{
+					return m_initValueFromClassRace + m_initValueFromLevel +
+					       m_primary.Constitution.Value * 4f;
+				}
+			}
 
 
-            public void InitHealthFromClassRace(float classHealth, float raceHealth){
-                m_initValueFromClassRace = classHealth + raceHealth;
-            }
+			public void InitHealthFromClassRace(float classHealth, float raceHealth)
+			{
+				m_initValueFromClassRace = classHealth + raceHealth;
+			}
 
-            public void InitHealthRating(float healthRating, float healthRank)
-            {
-                m_healthRating = healthRating;
-                m_healthRank = healthRank;
-            }
+			public void InitHealthRating(float healthRating, float healthRank)
+			{
+				m_healthRating = healthRating;
+				m_healthRank = healthRank;
+			}
 
-            public void SetLevel(int lv){
-                //每升一级, 增加的血量 Life Rating * (1.1+(current_level/40)) 
-                //相当于lv!来计算血量 lv从2开始计算
+			public void SetLevel(int lv)
+			{
+				//每升一级, 增加的血量 Life Rating * (1.1+(current_level/40)) 
+				//相当于lv!来计算血量 lv从2开始计算
 
-                m_initValueFromLevel = 0;
-                for (int i = 2; i <= lv; i++){
-                    m_initValueFromLevel += i * 0.025f;
-                }
+				m_initValueFromLevel = 0;
+				for (int i = 2; i <= lv; i++)
+				{
+					m_initValueFromLevel += i * 0.025f;
+				}
 
-                m_initValueFromLevel += 1.1f * (lv - 1);
-                m_initValueFromLevel *= m_healthRating;
-            }
-        }
+				m_initValueFromLevel += 1.1f * (lv - 1);
+				m_initValueFromLevel *= m_healthRating;
+			}
+		}
 
-        public SwordHealthAttribute MaxHealth;
+		public SwordHealthAttribute MaxHealth;
 		public CAbilityAttribute MaxMana;
 		public CAbilityAttribute MaxStamina;
 
-        private SwordPrimaryAttributeSet m_primary;
+		private SwordPrimaryAttributeSet m_primary;
 
 
-        public SwordResourceAttributeSet(SwordPrimaryAttributeSet primary)
-        {
-            MaxHealth = new SwordHealthAttribute(m_primary);
-        }
+		public SwordResourceAttributeSet(SwordPrimaryAttributeSet primary)
+		{
+			MaxHealth = new SwordHealthAttribute(m_primary);
+		}
 
 		public void InitClassAndRace(ActorBornAttributeMeta classMeta, ActorBornAttributeMeta raceMeta)
 		{
-            MaxHealth.InitHealthRating(classMeta.HealthRating, raceMeta.HealthRating);
-            MaxHealth.InitHealthFromClassRace(classMeta.Health, raceMeta.Health);
+			MaxHealth.InitHealthRating(classMeta.HealthRating, raceMeta.HealthRating);
+			MaxHealth.InitHealthFromClassRace(classMeta.Health, raceMeta.Health);
 		}
 
-        public void SetLevel(int level){
-            MaxHealth.SetLevel(level);
-        }
+		public void SetLevel(int level)
+		{
+			MaxHealth.SetLevel(level);
+		}
 	}
 
 	public class SwordPowerAttributeSet

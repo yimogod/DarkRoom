@@ -8,8 +8,25 @@ namespace Sword
 {
 	public class SwordAttributeSet : CAbilityAttributeSet
 	{
-		//------------------------------------ 角色当前的属性 ----------------
+		//------------------------------------ 单个属性的get接口 ----------------
+		public int MaxHealth => (int)m_resAttr.MaxHealth.Value;
+		public int MaxMana => (int)m_resAttr.MaxMana.Value;
+		public int MaxStamina => (int)m_resAttr.MaxStamina.Value;
 
+		public int Strength => (int)m_primaryAttr.Strength.Value;
+		public int Dexterity => (int)m_primaryAttr.Dexterity.Value;
+		public int Intelligence => (int)m_primaryAttr.Intelligence.Value;
+		public int Constitution => (int)m_primaryAttr.Constitution.Value;
+		public int Willpower => (int)m_primaryAttr.Willpower.Value;
+		public int Cunning => (int)m_primaryAttr.Cunning.Value;
+
+
+
+		public int Exp { get; set; }
+		public float Health { get; set; }
+		public float Mana { get; set; }
+
+		//------------------------------------ 角色当前的属性 ----------------
 		private SwordPrimaryAttributeSet m_primaryAttr;
 		private SwordSubAttributeSet m_subAttr;
 		private SwordResourceAttributeSet m_resAttr;
@@ -40,13 +57,6 @@ namespace Sword
 		// ------------------buff或者等级对属性的修改------------------------
 		/** 吸血, 按照伤害的百分比 */
 		public float LifeStealAddOn;
-
-		public int Exp { get; set; }
-
-		public float Health { get; set; }
-
-		public float Mana { get; set; }
-
 
 		private SwordGameMode m_gm => CWorld.Instance.GetGameMode<SwordGameMode>();
 
@@ -80,7 +90,7 @@ namespace Sword
 			m_primaryAttr.Strength.AddPersistentValue(strength);
 			m_primaryAttr.Dexterity.AddPersistentValue(dexterity);
 			m_primaryAttr.Constitution.AddPersistentValue(constitution);
-			m_primaryAttr.Magic.AddPersistentValue(magic);
+			m_primaryAttr.Intelligence.AddPersistentValue(magic);
 			m_primaryAttr.Willpower.AddPersistentValue(willpower);
 			m_primaryAttr.Cunning.AddPersistentValue(cunning);
 			m_primaryAttr.Luck.AddPersistentValue(luck);
