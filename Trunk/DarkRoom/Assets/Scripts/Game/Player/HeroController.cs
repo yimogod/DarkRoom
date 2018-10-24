@@ -56,7 +56,7 @@ namespace Sword
 
 			var pos = m_entity.TilePosition;
 			var dist = tile.ManhattanMagnitude(pos);
-			if (dist > m_entity.MoveRange)
+			if (dist > m_entity.AttributeSet.MoveRange)
 			{
 				Debug.Log("<OnClickMap> Click Tile Out Of Range");
 				return;

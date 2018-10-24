@@ -9,18 +9,32 @@ namespace Sword
 	public class SwordAttributeSet : CAbilityAttributeSet
 	{
 		//------------------------------------ 单个属性的get接口 ----------------
-		public int MaxHealth => (int)m_resAttr.MaxHealth.Value;
-		public int MaxMana => (int)m_resAttr.MaxMana.Value;
-		public int MaxStamina => (int)m_resAttr.MaxStamina.Value;
+		public float MaxHealth => m_resAttr.MaxHealth.Value;
+		public float MaxMana => m_resAttr.MaxMana.Value;
+		public float MaxStamina => m_resAttr.MaxStamina.Value;
 
-		public int Strength => (int)m_primaryAttr.Strength.Value;
-		public int Dexterity => (int)m_primaryAttr.Dexterity.Value;
-		public int Intelligence => (int)m_primaryAttr.Intelligence.Value;
-		public int Constitution => (int)m_primaryAttr.Constitution.Value;
-		public int Willpower => (int)m_primaryAttr.Willpower.Value;
-		public int Cunning => (int)m_primaryAttr.Cunning.Value;
+		public float Strength => m_primaryAttr.Strength.Value;
+		public float Dexterity => m_primaryAttr.Dexterity.Value;
+		public float Intelligence => m_primaryAttr.Intelligence.Value;
+		public float Constitution => m_primaryAttr.Constitution.Value;
+		public float Willpower => m_primaryAttr.Willpower.Value;
+		public float Cunning => m_primaryAttr.Cunning.Value;
+		public float Luck => m_primaryAttr.Luck.Value;
 
+		/// <summary>
+		/// 移动力 TODO 移动到side attribute
+		/// </summary>
+		public int MoveRange = 3;
 
+		/// <summary>
+		/// 视野 TODO 移动到side attribute
+		/// </summary>
+		public int ViewRange = 3;
+
+		/// <summary>
+		/// 升级到下级需要的经验
+		/// </summary>
+		public int NextLevelExp => m_gm.GetNextLevelUpExp(m_level);
 
 		public int Exp { get; set; }
 		public float Health { get; set; }
@@ -84,13 +98,13 @@ namespace Sword
 		/// <summary>
 		/// 从数据库读取的, 一级属性的持久化的点数
 		/// </summary>
-		public void SetPrimaryAttrPersistentValue(float strength, float dexterity, float constitution,
-			float magic, float willpower, float cunning, float luck)
+		public void SetPrimaryAttrPersistentValue(float strength, float dexterity, float intelligence, float constitution,
+			float willpower, float cunning, float luck)
 		{
 			m_primaryAttr.Strength.AddPersistentValue(strength);
 			m_primaryAttr.Dexterity.AddPersistentValue(dexterity);
+			m_primaryAttr.Intelligence.AddPersistentValue(intelligence);
 			m_primaryAttr.Constitution.AddPersistentValue(constitution);
-			m_primaryAttr.Intelligence.AddPersistentValue(magic);
 			m_primaryAttr.Willpower.AddPersistentValue(willpower);
 			m_primaryAttr.Cunning.AddPersistentValue(cunning);
 			m_primaryAttr.Luck.AddPersistentValue(luck);
@@ -113,16 +127,11 @@ namespace Sword
 			m_resAttr.SetLevel(value);
 		}
 
-		public void InitHealthAndMana()
-		{
-			//Health = m_resAttr.MaxHealth.Value;
-		}
 
 		public void LevelUp()
 		{
 			InitLevel(m_level + 1);
 			Exp = 0;
-			InitHealthAndMana();
 		}
 
 		public float CalculateDamage()

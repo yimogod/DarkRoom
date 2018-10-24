@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DarkRoom.Game;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Sword
 {
@@ -66,6 +68,24 @@ namespace Sword
 			if (nextLevel > MAX_LEVEL) nextLevel = MAX_LEVEL;
 			int requiredExp = 0; //HeroExpList[nextLevel];
 			return currExp >= requiredExp;
+		}
+
+		/// <summary>
+		/// 计算升到下一级需要的经验
+		/// </summary>
+		public int GetNextLevelUpExp(int level)
+		{
+			float result = 0;
+			//ceil(10 - L(L^2 - 88L + 87)/10)
+			if (level <= 29)
+			{
+				result = 10 - level * (level * level - 88f * level + 87f) * 0.1f;
+			}
+			else //ceil(10 - L(L^2 - 173L + 172)/20)
+			{
+				result = 10 - level * (level * level - 173f * level + 172f) * 0.05f;
+			}
+			return Mathf.CeilToInt(result);
 		}
 
 		//---------------------------------------------------------------------------------

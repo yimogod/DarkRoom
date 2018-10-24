@@ -31,12 +31,6 @@ namespace Sword
 			}
 		}
 
-		private void OnPrefabLoaded(GameObject go)
-		{
-			m_enterSceneAssetLoadedNum++;
-			CheckAllAssetsLoadComplete();
-		}
-
 		protected override void OnEntireLevelComplete()
 		{
 			Facade.instance.SendNotification(NotiConst.Open_CharacterCreate);

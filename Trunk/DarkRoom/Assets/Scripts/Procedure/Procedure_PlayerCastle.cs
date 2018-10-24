@@ -50,12 +50,6 @@ namespace Sword
 			}
 		}
 
-		private void OnPrefabLoaded(GameObject go)
-		{
-			m_enterSceneAssetLoadedNum++;
-			CheckAllAssetsLoadComplete();
-		}
-
 		private void OnMetaLoaded()
 		{
 			m_enterSceneAssetLoadedNum++;

@@ -19,11 +19,6 @@ namespace Sword
 		public string Address;
 
 		/// <summary>
-		/// 移动力
-		/// </summary>
-		public int MoveRange = 3;
-
-		/// <summary>
 		/// 名称
 		/// </summary>
 		//public string Name;

@@ -171,16 +171,21 @@ namespace Sword
 			}
 		}
 
-		public SwordHealthAttribute MaxHealth;
-		public CAbilityAttribute MaxMana;
-		public CAbilityAttribute MaxStamina;
+		public SwordHealthAttribute MaxHealth { private set; get; }
+		public CAbilityAttribute MaxMana { private set; get; }
+		public CAbilityAttribute MaxStamina { private set; get; }
 
 		private SwordPrimaryAttributeSet m_primary;
 
 
 		public SwordResourceAttributeSet(SwordPrimaryAttributeSet primary)
 		{
+			m_primary = primary;
 			MaxHealth = new SwordHealthAttribute(m_primary);
+
+			//TODO 临时
+			MaxMana = new CAbilityAttribute(1000, 100, 10);
+			MaxStamina = new CAbilityAttribute(1001, 200, 20);
 		}
 
 		public void InitClassAndRace(ActorBornAttributeMeta classMeta, ActorBornAttributeMeta raceMeta)

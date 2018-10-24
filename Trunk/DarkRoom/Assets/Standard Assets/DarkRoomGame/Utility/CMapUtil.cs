@@ -104,7 +104,7 @@ namespace DarkRoom.Game
 				for (int col = 0; col < numCols; col++)
 				{
 					T v = gird[col, row];
-					str = string.Format("{0},{1}", str, v);
+					str =$"{str},{v}";
 				}
 
 				str += "\n";

@@ -42,26 +42,28 @@ namespace Sword {
 				Debug.LogError("m_args should not be null when open UI_HeroInfo panel");
 				return;
 			}
+
+			SetAttibute();
 		}
 
 		private void SetAttibute(){
 			NameTxt.text = m_vo.Name;
 			LevelTxt.text = m_vo.Level.ToString();
 
-			var entity = m_vo.Entity.AttributeSet;
-			StrengthItem.SetContent("力量", m_vo.Strength);
-			DexterityItem.SetContent("敏捷", m_vo.Strength);
-			IntellItem.SetContent("智力", m_vo.Strength);
-			ConstitutionItem.SetContent("体质", m_vo.Strength);
-			WillPowerItem.SetContent("意志", m_vo.Strength);
-			CunningItem.SetContent("灵巧", m_vo.Strength);
+			var attr = m_vo.Entity.AttributeSet;
+			StrengthItem.SetContent("力量", attr.Strength);
+			DexterityItem.SetContent("敏捷", attr.Dexterity);
+			IntellItem.SetContent("智力", attr.Intelligence);
+			ConstitutionItem.SetContent("体质", attr.Constitution);
+			WillPowerItem.SetContent("意志", attr.Willpower);
+			CunningItem.SetContent("灵巧", attr.Cunning);
 
-			HealthItem.SetContent("生命", m_vo.Strength);
-			ManaItem.SetContent("法力", m_vo.Strength);
-			ViewRangeItem.SetContent("视野", m_vo.Strength);
-			MoveRangeItem.SetContent("移动", m_vo.Strength);
-			ExpItem.SetContent("经验", m_vo.Strength);
-			NextLevelExpItem.SetContent("下一级", m_vo.Strength);
+			HealthItem.SetContent("生命", attr.Health, attr.MaxHealth);
+			ManaItem.SetContent("法力", attr.Mana, attr.MaxMana);
+			ViewRangeItem.SetContent("视野", attr.ViewRange);
+			MoveRangeItem.SetContent("移动", attr.MoveRange);
+			ExpItem.SetContent("经验", attr.Exp);
+			NextLevelExpItem.SetContent("下一级", attr.NextLevelExp);
 		}
 	}
 }

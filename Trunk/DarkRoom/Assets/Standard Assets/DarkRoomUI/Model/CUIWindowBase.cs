@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 namespace DarkRoom.UI
 {
@@ -9,15 +10,18 @@ namespace DarkRoom.UI
 	[RequireComponent(typeof(Canvas))]
 	public class CUIWindowBase : CUIBase
 	{
+		public Button CloseBtn;
+
 		protected UIType m_uiType = UIType.Normal;
 		private int m_UIID = -1;
 		private string m_UIName;
+		protected object[] m_args;
 
 		public int UIID => m_UIID;
 		public UIType UIType => m_uiType;
 		public string UIName => m_UIName;
 
-		protected object[] m_args;
+		
 
 		/// <summary>
 		/// 在awake后面, start前面调用
@@ -63,7 +67,6 @@ namespace DarkRoom.UI
 			gameObject.SetActive(true);
 		}
 
-
 		public virtual IEnumerator EnterAnim(UIAnimCallBack l_animComplete, UICallBack l_callBack)
 		{
 			//默认无动画
@@ -88,6 +91,15 @@ namespace DarkRoom.UI
 		{
 		}
 
+		protected override void OnBindEvent()
+		{
+			if(CloseBtn != null) CloseBtn.onClick.AddListener(OnClose);
+		}
+
+		protected override void OnUnBindEvent()
+		{
+			if (CloseBtn != null) CloseBtn.onClick.RemoveAllListeners();
+		}
 
 		//------------------------------------新手引导使用
 		/*

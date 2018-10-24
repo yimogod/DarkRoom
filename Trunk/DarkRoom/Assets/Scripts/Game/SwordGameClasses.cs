@@ -151,6 +151,8 @@ namespace Sword
 		/// + (Dexterity - 10) * 0.35 
 		/// + Defense bonuses from talents 
 		/// + Luck * 0.4
+		/// 
+		/// 根据文档, 似乎defense是用来miss近战攻击的
 		/// </summary>
 		Defense,
 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using DarkRoom.Core;
 using DarkRoom.UI;
+using DarkRoom.Utility;
+using PureMVC.Patterns;
 using UnityEngine;
 
 namespace Sword
@@ -18,16 +20,20 @@ namespace Sword
 		protected override void PreEnter(CStateMachine sm)
 		{
 			base.PreEnter(sm);
-			//m_preCreatePrefabAddress.Add("UI_CharacterCreate");
+			m_preCreatePrefabAddress.Add("UI_BattleMain");
 		}
 
 		protected override void StartLoadingPrefab()
 		{
+			foreach (var item in m_preCreatePrefabAddress)
+			{
+				CResourceManager.LoadPrefab(item, OnPrefabLoaded);
+			}
 		}
 
 		protected override void OnEntireLevelComplete()
 		{
-			//Facade.instance.SendNotification(NotiConst.Open_CharacterEntry);
+			Facade.instance.SendNotification(NotiConst.Open_BattleMain);
 
 			DungeonBattleScene scene = GameObject.FindObjectOfType<DungeonBattleScene>();
 			scene.LevelId = 10001;

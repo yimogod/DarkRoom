@@ -68,10 +68,7 @@ namespace Sword
 			var attr = entity.AttributeSet;
 			attr.InitAttr(meta.SubClass, meta.SubRace);
 			attr.InitSubAttr();
-			//attr.InitLevel(Hero.Level);
-
-			//attr.InitHealthAndMana();
-
+			attr.InitLevel(1);
 			
 			ActorVO vo = new ActorVO();
 			//vo.ai = AIMetaManager.GetMeta(ai);

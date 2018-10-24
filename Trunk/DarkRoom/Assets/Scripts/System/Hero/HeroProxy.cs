@@ -83,8 +83,6 @@ namespace Sword
 			attr.InitSubAttr();
 			attr.InitLevel(Hero.Level);
 
-			//attr.InitHealthAndMana();
-
 			//目前我们仅仅英雄会有不同的武器
 			//gameObject.AddComponent<HeroFSMComp>();
 			//gameObject.AddComponent<HeroControlKeyboard>();

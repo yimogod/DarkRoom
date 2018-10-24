@@ -30,7 +30,7 @@ namespace Sword
 		{
 			if (value)
 			{
-				m_rangeTile.Show(MoveRange, TMap.Instance.WalkableGrid, LocalPosition);
+				m_rangeTile.Show(AttributeSet.MoveRange, TMap.Instance.WalkableGrid, LocalPosition);
 			}
 			else
 			{

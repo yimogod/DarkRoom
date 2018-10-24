@@ -93,6 +93,13 @@ namespace DarkRoom.UI
 			StartLoadingPrefab();
 		}
 
+		//单个prefab下载完毕后, 添加下载次数
+		protected virtual void OnPrefabLoaded(GameObject go)
+		{
+			m_enterSceneAssetLoadedNum++;
+			CheckAllAssetsLoadComplete();
+		}
+
 		/// <summary>
 		/// 加载loadingscene
 		/// </summary>
