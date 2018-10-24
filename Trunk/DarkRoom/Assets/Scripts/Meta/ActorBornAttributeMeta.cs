@@ -14,6 +14,9 @@ namespace Sword
 		public ActorRace Race => (ActorRace)Id;
 		public ActorClass Class => (ActorClass)Id;
 
+		/// <summary>
+		/// 角色出生初始化的基础属性
+		/// </summary>
 		public float Strength;
 
 		public float Dexterity;
@@ -28,7 +31,14 @@ namespace Sword
 
 		public float Luck;
 
+		/// <summary>
+		/// 角色出生初始化的资源
+		/// </summary>
 		public float Health;
+
+		public float Mana;
+
+		public float Stamina;
 
 		public float HealthRating;
 
@@ -54,6 +64,8 @@ namespace Sword
 			Cunning = reader.ReadFloat();
 			Luck = reader.ReadFloat();
 			Health = reader.ReadFloat();
+			Mana = reader.ReadFloat();
+			Stamina = reader.ReadFloat();
 			HealthRating = reader.ReadFloat();
 			ExpPenalty = reader.ReadFloat();
 		}

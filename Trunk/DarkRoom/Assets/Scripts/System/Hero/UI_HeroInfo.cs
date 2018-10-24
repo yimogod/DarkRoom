@@ -23,6 +23,7 @@ namespace Sword {
 
 		public UP_HeroAttrLabel HealthItem;
 		public UP_HeroAttrLabel ManaItem;
+		public UP_HeroAttrLabel StaminaItem;
 		public UP_HeroAttrLabel ViewRangeItem;
 		public UP_HeroAttrLabel MoveRangeItem;
 		public UP_HeroAttrLabel ExpItem;
@@ -66,6 +67,7 @@ namespace Sword {
 
 			HealthItem.SetContent("生命", attr.Health, attr.MaxHealth);
 			ManaItem.SetContent("法力", attr.Mana, attr.MaxMana);
+			StaminaItem.SetContent("体力", attr.Stamina, attr.MaxStamina);
 			ViewRangeItem.SetContent("视野", attr.ViewRange);
 			MoveRangeItem.SetContent("移动", attr.MoveRange);
 			ExpItem.SetContent("经验", attr.Exp);
