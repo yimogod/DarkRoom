@@ -77,7 +77,7 @@ namespace Sword
 			var ctrl = go.AddComponent<HeroController>();
 
 			var attr = entity.AttributeSet;
-			attr.InitAttr(Hero.ClassEnum, Hero.RaceEnum);
+			attr.InitAttr(Hero.ClassEnum, Hero.RaceEnum, 1f);
 			attr.SetPrimaryAttrPersistentValue(Hero.Strength, Hero.Dexterity, Hero.Constitution,
 				Hero.Magic, Hero.Willpower, Hero.Cunning, Hero.Luck);
 			attr.InitSubAttr();

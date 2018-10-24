@@ -1,4 +1,4 @@
-﻿id	name	prefab	class	race	exp
-int	string	string	"warrier,ranger,magic"		int
-10001	Chomper	Actor_Chomper	1	1	10
-10002	Grenadier	Actor_Grenadier	2	3	10
+id	name	prefab	class	race	exp	life_rating
+int	string	string	warrier,ranger,magic		int	float
+10001	Chomper	Actor_Chomper	1	1	10	1
+10002	Grenadier	Actor_Grenadier	2	3	10	1

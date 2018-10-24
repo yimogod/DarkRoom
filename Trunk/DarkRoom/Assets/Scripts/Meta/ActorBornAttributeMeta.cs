@@ -18,9 +18,9 @@ namespace Sword
 
 		public float Dexterity;
 
-		public float Constitution;
+		public float Intelligence;
 
-		public float Magic;
+		public float Constitution;
 
 		public float Willpower;
 
@@ -49,7 +49,7 @@ namespace Sword
 			Strength = reader.ReadFloat();
 			Dexterity = reader.ReadFloat();
 			Constitution = reader.ReadFloat();
-			Magic = reader.ReadFloat();
+			Intelligence = reader.ReadFloat();
 			Willpower = reader.ReadFloat();
 			Cunning = reader.ReadFloat();
 			Luck = reader.ReadFloat();

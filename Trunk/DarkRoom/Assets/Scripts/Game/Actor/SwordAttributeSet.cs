@@ -39,6 +39,7 @@ namespace Sword
 		public int Exp { get; set; }
 		public float Health { get; set; }
 		public float Mana { get; set; }
+		public float Stamina { get; set; }
 
 		//------------------------------------ 角色当前的属性 ----------------
 		private SwordPrimaryAttributeSet m_primaryAttr;
@@ -81,7 +82,7 @@ namespace Sword
 		/// <summary>
 		/// 根据种族和职业赋值初始化的属性
 		/// </summary>
-		public void InitAttr(ActorClass actorClass, ActorRace actorRace)
+		public void InitAttr(ActorClass actorClass, ActorRace actorRace, float healthRank)
 		{
 			m_class = actorClass;
 			m_race = actorRace;
@@ -92,7 +93,7 @@ namespace Sword
 			m_primaryAttr.InitFromClassAndRace(classMeta, raceMeta);
 
 			m_resAttr = new SwordResourceAttributeSet(m_primaryAttr);
-			m_resAttr.InitClassAndRace(classMeta, raceMeta);
+			m_resAttr.InitClassAndRace(classMeta, raceMeta, healthRank);
 		}
 
 		/// <summary>
@@ -125,6 +126,9 @@ namespace Sword
 
 			//升级重置最大血量
 			m_resAttr.SetLevel(value);
+			Health = MaxHealth;
+			Mana = MaxMana;
+			Stamina = MaxStamina;
 		}
 
 

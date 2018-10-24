@@ -66,7 +66,7 @@ namespace Sword
 			var ctrl = go.AddComponent<BotController>();
 
 			var attr = entity.AttributeSet;
-			attr.InitAttr(meta.SubClass, meta.SubRace);
+			attr.InitAttr(meta.SubClass, meta.SubRace, meta.HealthRank);
 			attr.InitSubAttr();
 			attr.InitLevel(1);
 			

@@ -19,26 +19,28 @@ namespace Sword
 
 		public void InitFromClassAndRace(ActorBornAttributeMeta classMeta, ActorBornAttributeMeta raceMeta)
 		{
+			//所有一级属性的基础值都是10, 然后根据种族和职业进行修正
+			float baseValue = 10f;
 			float v1 = 0;
-			v1 = classMeta.Strength + raceMeta.Strength;
+			v1 = classMeta.Strength + raceMeta.Strength + baseValue;
 			Strength = new CAbilityAttribute((int) PrimaryAttribute.Strength, v1);
 
-			v1 = classMeta.Dexterity + raceMeta.Dexterity;
+			v1 = classMeta.Dexterity + raceMeta.Dexterity + baseValue;
 			Dexterity = new CAbilityAttribute((int) PrimaryAttribute.Dexterity, v1);
 
-			v1 = classMeta.Constitution + raceMeta.Constitution;
+			v1 = classMeta.Constitution + raceMeta.Constitution + baseValue;
 			Constitution = new CAbilityAttribute((int) PrimaryAttribute.Constitution, v1);
 
-			v1 = classMeta.Magic + raceMeta.Magic;
+			v1 = classMeta.Intelligence + raceMeta.Intelligence + baseValue;
 			Intelligence = new CAbilityAttribute((int) PrimaryAttribute.Intelligence, v1);
 
-			v1 = classMeta.Willpower + raceMeta.Willpower;
+			v1 = classMeta.Willpower + raceMeta.Willpower + baseValue;
 			Willpower = new CAbilityAttribute((int) PrimaryAttribute.Willpower, v1);
 
-			v1 = classMeta.Cunning + raceMeta.Cunning;
+			v1 = classMeta.Cunning + raceMeta.Cunning + baseValue;
 			Cunning = new CAbilityAttribute((int) PrimaryAttribute.Cunning, v1);
 
-			v1 = classMeta.Luck + raceMeta.Luck;
+			v1 = classMeta.Luck + raceMeta.Luck + baseValue;
 			Luck = new CAbilityAttribute((int) PrimaryAttribute.Luck, v1);
 		}
 	}
@@ -58,14 +60,8 @@ namespace Sword
 				m_primary = primary;
 			}
 
-			public override float InitialValue
-			{
-				get
-				{
-					return 4f + (m_primary.Dexterity.Value - 10f) +
-					       m_primary.Luck.Value * 0.4f;
-				}
-			}
+			public override float BaseValue => base.BaseValue + 4f + 
+				(m_primary.Dexterity.Value - 10f) + m_primary.Luck.Value * 0.4f;
 		}
 
 		public class SwordDefenseAttribute : CAbilityAttribute
@@ -77,14 +73,8 @@ namespace Sword
 				m_primary = primary;
 			}
 
-			public override float InitialValue
-			{
-				get
-				{
-					return (m_primary.Dexterity.Value - 10f) * 0.35f +
+			public override float BaseValue => base.BaseValue + (m_primary.Dexterity.Value - 10f) * 0.35f +
 					       m_primary.Luck.Value * 0.4f;
-				}
-			}
 		}
 
 		public SwordAccuracyAttribute Accuracy;
@@ -121,7 +111,7 @@ namespace Sword
 			private float m_healthRating;
 
 			//为npc用的计算生命的系数
-			private float m_healthRank;
+			private float m_healthRank = 1f;
 
 			//由职业和种族提供的初始化属性
 			private float m_initValueFromClassRace;
@@ -134,22 +124,15 @@ namespace Sword
 				m_primary = primary;
 			}
 
-			public override float InitialValue
-			{
-				get
-				{
-					return m_initValueFromClassRace + m_initValueFromLevel +
-					       m_primary.Constitution.Value * 4f;
-				}
-			}
-
+			public override float BaseValue => base.BaseValue + m_healthRank * 
+				(m_initValueFromClassRace + m_initValueFromLevel + m_primary.Constitution.Value * 4f);
 
 			public void InitHealthFromClassRace(float classHealth, float raceHealth)
 			{
 				m_initValueFromClassRace = classHealth + raceHealth;
 			}
 
-			public void InitHealthRating(float healthRating, float healthRank)
+			public void InitHealthRatingRank(float healthRating, float healthRank)
 			{
 				m_healthRating = healthRating;
 				m_healthRank = healthRank;
@@ -188,9 +171,9 @@ namespace Sword
 			MaxStamina = new CAbilityAttribute(1001, 200, 20);
 		}
 
-		public void InitClassAndRace(ActorBornAttributeMeta classMeta, ActorBornAttributeMeta raceMeta)
+		public void InitClassAndRace(ActorBornAttributeMeta classMeta, ActorBornAttributeMeta raceMeta, float healthRank)
 		{
-			MaxHealth.InitHealthRating(classMeta.HealthRating, raceMeta.HealthRating);
+			MaxHealth.InitHealthRatingRank(classMeta.HealthRating + raceMeta.HealthRating, healthRank);
 			MaxHealth.InitHealthFromClassRace(classMeta.Health, raceMeta.Health);
 		}
 

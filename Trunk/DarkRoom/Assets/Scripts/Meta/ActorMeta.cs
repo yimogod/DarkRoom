@@ -27,6 +27,11 @@ namespace Sword
 		/// </summary>
 		public int DeadExp;
 
+		/// <summary>
+		/// 血量的量度, 一般普通npc是1, boss是4
+		/// </summary>
+		public float HealthRank = 1f;
+
 		public ActorMeta(int id) : base(id)
 		{
 		}
@@ -68,6 +73,7 @@ namespace Sword
 				meta.SubClass = (ActorClass) m_reader.ReadInt();
 				meta.SubRace = (ActorRace) m_reader.ReadInt();
 				meta.DeadExp = m_reader.ReadInt();
+				meta.HealthRank = m_reader.ReadFloat(); 
 
 				ActorMetaManager.AddMeta(meta);
 			}

@@ -15,10 +15,11 @@ namespace DarkRoom.GamePlayAbility
 		//属性当前的值
 		public float Value => BaseValue + AddOnValue;
 
-		public float BaseValue => InitialValue + PersistentValue;
+		//属性的基础值， 一般由自身的成长和分配的成长属性点获取的属性
+		public virtual float BaseValue => InitialValue + PersistentValue;
 
 		//属性的初始值
-		public virtual float InitialValue { get; private set; }
+		public float InitialValue { get; private set; }
 
 		//属性持久化增加的值, 玩家分配的属性点
 		public float PersistentValue { get; private set; }

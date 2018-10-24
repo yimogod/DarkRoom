@@ -10,6 +10,9 @@ namespace Sword {
 		public Text NameTxt;
 		public Text LevelTxt;
 
+		public UP_HeroAttrLabel RaceItem;
+		public UP_HeroAttrLabel ClassItem;
+
 		public UP_HeroAttrLabel StrengthItem;
 		public UP_HeroAttrLabel DexterityItem;
 		public UP_HeroAttrLabel IntellItem;
@@ -49,6 +52,9 @@ namespace Sword {
 		private void SetAttibute(){
 			NameTxt.text = m_vo.Name;
 			LevelTxt.text = m_vo.Level.ToString();
+
+			RaceItem.SetContent("种族", m_vo.RaceEnum.ToString());
+			ClassItem.SetContent("职业", m_vo.ClassEnum.ToString());
 
 			var attr = m_vo.Entity.AttributeSet;
 			StrengthItem.SetContent("力量", attr.Strength);
