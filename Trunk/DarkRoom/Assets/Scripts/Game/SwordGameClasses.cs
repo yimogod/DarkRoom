@@ -110,14 +110,6 @@ namespace Sword
 		/// Accuracy:       .35 (only when using Psi combat)
 		Willpower,
 
-		/// 灵巧影响学习思考和交互. 提高暴击率, 和抛射物的伤害, 
-		/// Gains per point:
-		/// Critical hit chance:  .30
-		/// Mental save:          .35
-		/// Mindpower:            .40
-		/// Accuracy:             .35 (only when using Psi combat)
-		Cunning,
-
 		/// 运气对很多战斗属性都有加成, luck是个隐藏属性
 		/// Gains per point:
 		/// Accuracy:             .40

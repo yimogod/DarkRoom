@@ -26,7 +26,6 @@ namespace Sword
 		public int Constitution;
 		public int Magic;
 		public int Willpower;
-		public int Cunning;
 		public int Luck;
 
 		public HeroEntity Entity;

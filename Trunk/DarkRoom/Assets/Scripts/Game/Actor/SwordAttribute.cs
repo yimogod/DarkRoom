@@ -14,7 +14,6 @@ namespace Sword
 		public CAbilityAttribute Intelligence;
 		public CAbilityAttribute Constitution;
 		public CAbilityAttribute Willpower;
-		public CAbilityAttribute Cunning;
 		public CAbilityAttribute Luck;
 
 		public void InitFromClassAndRace(ActorBornAttributeMeta classMeta, ActorBornAttributeMeta raceMeta)
@@ -36,9 +35,6 @@ namespace Sword
 
 			v1 = classMeta.Willpower + raceMeta.Willpower + baseValue;
 			Willpower = new CAbilityAttribute((int) PrimaryAttribute.Willpower, v1);
-
-			v1 = classMeta.Cunning + raceMeta.Cunning + baseValue;
-			Cunning = new CAbilityAttribute((int) PrimaryAttribute.Cunning, v1);
 
 			v1 = classMeta.Luck + raceMeta.Luck + baseValue;
 			Luck = new CAbilityAttribute((int) PrimaryAttribute.Luck, v1);

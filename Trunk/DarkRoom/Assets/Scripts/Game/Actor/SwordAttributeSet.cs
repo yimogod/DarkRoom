@@ -18,7 +18,6 @@ namespace Sword
 		public float Intelligence => m_primaryAttr.Intelligence.Value;
 		public float Constitution => m_primaryAttr.Constitution.Value;
 		public float Willpower => m_primaryAttr.Willpower.Value;
-		public float Cunning => m_primaryAttr.Cunning.Value;
 		public float Luck => m_primaryAttr.Luck.Value;
 
 		/// <summary>
@@ -100,14 +99,13 @@ namespace Sword
 		/// 从数据库读取的, 一级属性的持久化的点数
 		/// </summary>
 		public void SetPrimaryAttrPersistentValue(float strength, float dexterity, float intelligence, float constitution,
-			float willpower, float cunning, float luck)
+			float willpower, float luck)
 		{
 			m_primaryAttr.Strength.AddPersistentValue(strength);
 			m_primaryAttr.Dexterity.AddPersistentValue(dexterity);
 			m_primaryAttr.Intelligence.AddPersistentValue(intelligence);
 			m_primaryAttr.Constitution.AddPersistentValue(constitution);
 			m_primaryAttr.Willpower.AddPersistentValue(willpower);
-			m_primaryAttr.Cunning.AddPersistentValue(cunning);
 			m_primaryAttr.Luck.AddPersistentValue(luck);
 		}
 

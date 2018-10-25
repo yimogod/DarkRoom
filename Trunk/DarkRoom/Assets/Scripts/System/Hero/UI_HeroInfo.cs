@@ -18,8 +18,6 @@ namespace Sword {
 		public UP_HeroAttrLabel IntellItem;
 		public UP_HeroAttrLabel ConstitutionItem;
 		public UP_HeroAttrLabel WillPowerItem;
-		public UP_HeroAttrLabel CunningItem;
-
 
 		public UP_HeroAttrLabel HealthItem;
 		public UP_HeroAttrLabel ManaItem;
@@ -63,7 +61,6 @@ namespace Sword {
 			IntellItem.SetContent("智力", attr.Intelligence);
 			ConstitutionItem.SetContent("体质", attr.Constitution);
 			WillPowerItem.SetContent("意志", attr.Willpower);
-			CunningItem.SetContent("灵巧", attr.Cunning);
 
 			HealthItem.SetContent("生命", attr.Health, attr.MaxHealth);
 			ManaItem.SetContent("法力", attr.Mana, attr.MaxMana);

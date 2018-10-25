@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ES3Types
 {
-	[ES3PropertiesAttribute("AttributePoint", "SkillPoint", "Strength", "Dexterity", "Constitution", "Magic", "Willpower", "Cunning", "Luck", "Name", "Level", "Class", "Race", "Address")]
+	[ES3PropertiesAttribute("AttributePoint", "SkillPoint", "Strength", "Dexterity", "Constitution", "Magic", "Willpower", "Luck", "Name", "Level", "Class", "Race", "Address")]
 	public class ES3Type_HeroVO : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -21,7 +21,6 @@ namespace ES3Types
 			writer.WriteProperty("Constitution", instance.Constitution, ES3Type_int.Instance);
 			writer.WriteProperty("Magic", instance.Magic, ES3Type_int.Instance);
 			writer.WriteProperty("Willpower", instance.Willpower, ES3Type_int.Instance);
-			writer.WriteProperty("Cunning", instance.Cunning, ES3Type_int.Instance);
 			writer.WriteProperty("Luck", instance.Luck, ES3Type_int.Instance);
 			writer.WriteProperty("Name", instance.Name, ES3Type_string.Instance);
 			writer.WriteProperty("Level", instance.Level, ES3Type_int.Instance);
@@ -58,9 +57,6 @@ namespace ES3Types
 						break;
 					case "Willpower":
 						instance.Willpower = reader.Read<System.Int32>(ES3Type_int.Instance);
-						break;
-					case "Cunning":
-						instance.Cunning = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
 					case "Luck":
 						instance.Luck = reader.Read<System.Int32>(ES3Type_int.Instance);

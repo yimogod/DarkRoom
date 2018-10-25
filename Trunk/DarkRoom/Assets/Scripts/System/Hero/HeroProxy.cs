@@ -79,7 +79,7 @@ namespace Sword
 			var attr = entity.AttributeSet;
 			attr.InitAttr(Hero.ClassEnum, Hero.RaceEnum, 1f);
 			attr.SetPrimaryAttrPersistentValue(Hero.Strength, Hero.Dexterity, Hero.Constitution,
-				Hero.Magic, Hero.Willpower, Hero.Cunning, Hero.Luck);
+				Hero.Magic, Hero.Willpower, Hero.Luck);
 			attr.InitSubAttr();
 			attr.InitLevel(Hero.Level);
 

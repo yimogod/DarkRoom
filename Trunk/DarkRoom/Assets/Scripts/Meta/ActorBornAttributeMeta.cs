@@ -27,8 +27,6 @@ namespace Sword
 
 		public float Willpower;
 
-		public float Cunning;
-
 		public float Luck;
 
 		/// <summary>
@@ -61,7 +59,6 @@ namespace Sword
 			Constitution = reader.ReadFloat();
 			Intelligence = reader.ReadFloat();
 			Willpower = reader.ReadFloat();
-			Cunning = reader.ReadFloat();
 			Luck = reader.ReadFloat();
 			Health = reader.ReadFloat();
 			Mana = reader.ReadFloat();
