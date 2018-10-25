@@ -71,48 +71,45 @@ namespace Sword
 	/// </summary>
 	public enum PrimaryAttribute
 	{
-		/// 力量会增加你的近战武器物理攻击和物理防御和负重
+		/// 力量会增加你的武器物理攻击和暴击伤害
 		/// Gains per point:
-		/// Physical power:   1.00
+		/// Physical power:   0.5%
 		/// Max encumbrance:  1.80
-		/// Physical save:     .35
+		/// 0.4%的暴击伤害
 		Strength,
 
-		/// 敏捷会增加你的敏捷度和命中率, 闪避率. 提高匕首和远程武器的伤害
+		/// 敏捷会增加暴击几率和闪避几率
 		/// Gains per point:
-		/// Defense:                     .35
-		/// Ranged defense:              .35
-		/// Accuracy:                   1.00
-		/// Shrug off criticals chance:  .30 //无视暴击的几率
+		/// Crit chance: 0.2%
+		/// Dodge chance: 0.2%
 		Dexterity,
 
-		/// 魔力增加各种魔法物品的能力, 减少mana消耗
+		/// 魔力增加各种魔法物品的能力, 增加mp, 增加猛击几率
 		/// Gains per point:
-		/// Spell save:  .35
-		/// Spellpower:  1.00
+		/// Spell Power:  0.5%
+		/// Smash chance: 0.2%
+		/// mp 1.00
 		Intelligence,
 
-		/// 体质会增加max hp, 减少物理伤害, 增加治疗效果
+		/// 体质会增加max hp, 减少物理伤害, 增加治疗效果, 增加格挡几率
 		/// Gains per point:
 		/// Max life:       4.00 (*)
-		/// Physical save:  .35
+		/// Physical save:  2.5%
 		/// Healing modification: 0.7%
+		/// Parry Chance: 0.2% (如果有盾牌的话)
 		Constitution,
 
 		/// 意志力减少思想和魔法的攻击力
 		/// Gains per point:
-		/// Max Mana:       5.00
 		/// Max Stamina:    2.50
 		/// Max Psi:        1.00 (*)
 		/// Mindpower:      .70
 		/// Mental save:    .35
 		/// Spell save:     .35
-		/// Accuracy:       .35 (only when using Psi combat)
 		Willpower,
 
 		/// 运气对很多战斗属性都有加成, luck是个隐藏属性
 		/// Gains per point:
-		/// Accuracy:             .40
 		/// Defense:              .40
 		/// Critical hit chance:  .30
 		/// Physical save:        .175
@@ -123,14 +120,7 @@ namespace Sword
 
 	public enum SubAttribute
 	{
-		/// 精度, 属于防御的部分属性
-		/// 4 
-		/// + (Dexterity - 10) * 1.00 
-		/// + Luck * 0.40 
-		/// + Accuracy bonuses from Combat Accuracy
-		/// + Accuracy bonuses from equipment 
-		/// + Accuracy bonuses or penalties from effects
-		Accuracy,
+
 
 		/// <summary>
 		/// 负重
@@ -138,30 +128,15 @@ namespace Sword
 		Encumbrance,
 
 		/// <summary>
-		/// 防御和穿透防御不同, 但公式一样
+		/// 防御
 		/// Defense bonuses from equipment
 		/// + (Dexterity - 10) * 0.35 
 		/// + Defense bonuses from talents 
 		/// + Luck * 0.4
-		/// 
-		/// 根据文档, 似乎defense是用来miss近战攻击的
 		/// </summary>
 		Defense,
 
-		/// <summary>
-		/// 远程攻击防御
-		/// </summary>
-		RangedDefense,
 
-		/// <summary>
-		/// 暴击几率
-		/// </summary>
-		CriticalChance,
-
-		/// <summary>
-		/// 无视暴击的几率
-		/// </summary>
-		ShrugOffCriticalsChance,
 
 		/// <summary>
 		/// 治疗效果的百分比提升
@@ -185,26 +160,76 @@ namespace Sword
 	}
 
 	/// <summary>
-	/// 攻击力和豁免
+	/// 攻击力
 	/// </summary>
-	public enum PowerAndSave
+	public enum AttackPower
 	{
-		Physical,
-		Spell,
-		Mind,
-		PhysicalSave,
-		SpellSave,
-		MentalSave,
+		/// <summary>
+		/// 暴击几率
+		/// </summary>
+		CriticalChance,
+
+		/// <summary>
+		/// 暴击伤害加成
+		/// </summary>
+		CriticalMultiplierr,
+
+		/// <summary>
+		/// 猛击几率
+		/// </summary>
+		SmashChance,
+
+		/// <summary>
+		/// 物理伤害加成, 又技能,武器获得
+		/// 非属性点加成
+		/// </summary>
+		PhysicalPowerMultiplier,
+
+		/// <summary>
+		/// 元素伤害加成, 又技能,武器获得
+		/// 非属性点加成
+		/// </summary>
+		SpellPowerMultiplier,
+
+		/// <summary>
+		/// 意念伤害加成, 又技能,武器获得
+		/// 非属性点加成
+		/// </summary>
+		MindPowerMultiplier,
+
+		/// <summary>
+		/// 护甲穿透
+		/// </summary>
+		ArmorPenetration,
 	}
 
 	/// <summary>
-	/// 护甲抵抗, 减少的伤害值=min( (target.Armour - attacker.APR), (target.Hardiness * damage) )
+	/// 防御
 	/// </summary>
-	public enum ArmourAndHardness
+	public enum DefencePower
 	{
-		Armour,
-		ArmourPenetration,
-		ArmourHardiness
+		//物防
+		PhysicalSave,
+		//法防
+		SpellSave,
+		//意念防
+		MindSave,
+
+		//物理伤害减免百分比
+		PhysicalHardiness,
+		//法伤伤害减免百分比
+		SpellHardiness,
+		//意念伤害减免百分比
+		MindHardiness,
+		
+		//格挡几率
+		ParryChance,
+
+		//反弹伤害几率
+		DamageReflectChance,
+
+		//反弹伤害的伤害比例, 反弹伤害是混乱伤害
+		DamageReflectMultiplier,
 	}
 
 	/// <summary>
@@ -241,7 +266,6 @@ namespace Sword
 		Cold,
 		Lightning,
 		Nature,
-		BLight,
 		Light,
 		Darkness,
 		Mind,
@@ -287,17 +311,22 @@ namespace Sword
 	public enum DamageType
 	{
 		Physical,
+		Ice,
 		Fire,
-		Cold,
 		Lightning,
-		Nature,
-		BLight,
-		Light,
-		Darkness,
+		Poison,
 		Mind,
-		Temporal,
 	}
 
+	public struct DamageTypePacket
+	{
+		public float Physical;
+		public float Ice;
+		public float Fire;
+		public float Lightning;
+		public float Poison;
+		public float Mind;
+	}
 
 	/// <summary>
 	/// 伤害包

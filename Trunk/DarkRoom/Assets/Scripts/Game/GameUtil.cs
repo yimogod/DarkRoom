@@ -21,6 +21,7 @@ namespace Sword
 
 		/// <summary>
 		/// 战斗属性的最终计算要把值做个重计算. 体现出边际效益
+		/// 增加策略性， 避免无脑堆积数据进行等级压制
 		/// </summary>
 		public static float GetScaledBattleAttribute(float rawValue)
 		{
