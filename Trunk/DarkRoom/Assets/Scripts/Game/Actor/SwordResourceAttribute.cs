@@ -52,7 +52,7 @@ namespace Sword
 		//为npc用的计算生命的系数
 		private float m_healthRank = 1f;
 
-		public override float BaseValue => m_healthRank *
+		public override float InitialValue => m_healthRank *
 					(m_initValueFromClassRace + m_initValueFromLevel + m_primary.Constitution.Value * 4f);
 
 		public SwordHealthAttribute(SwordPrimaryAttributeSet primary) : 
@@ -87,7 +87,7 @@ namespace Sword
 	/// </summary>
 	public class SwordStaminaAttribute : SwordActorResource
 	{
-		public override float BaseValue => base.BaseValue + m_primary.Willpower.Value * 2.5f;
+		public override float InitialValue => m_primary.Willpower.Value * 2.5f;
 
 		public SwordStaminaAttribute(SwordPrimaryAttributeSet primary) :
 			base(primary, Resource.Stamina)
@@ -107,7 +107,7 @@ namespace Sword
 	/// </summary>
 	public class SwordManaAttribute : SwordActorResource
 	{
-		public override float BaseValue => base.BaseValue + m_primary.Willpower.Value * 5f;
+		public override float InitialValue => m_primary.Willpower.Value * 5f;
 
 		public SwordManaAttribute(SwordPrimaryAttributeSet primary):
 			base(primary, Resource.Mana)
@@ -134,7 +134,7 @@ namespace Sword
 		//由职业和种族提供的初始化属性
 		protected float m_initValueFromClassRace = 0;
 
-		public override float BaseValue => base.BaseValue + m_initValueFromClassRace + m_initValueFromLevel;
+		public override float InitialValue =>m_initValueFromClassRace + m_initValueFromLevel;
 
 		public SwordActorResource(SwordPrimaryAttributeSet primary, Resource id, 
 			float initialValue = 0, float persistentValue = 0) : base((int)id, initialValue, persistentValue)

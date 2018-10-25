@@ -175,25 +175,17 @@ namespace Sword
 		CriticalMultiplierr,
 
 		/// <summary>
-		/// 猛击几率
-		/// </summary>
-		SmashChance,
-
-		/// <summary>
-		/// 物理伤害加成, 又技能,武器获得
-		/// 非属性点加成
+		/// 物理伤害加成
 		/// </summary>
 		PhysicalPowerMultiplier,
 
 		/// <summary>
-		/// 元素伤害加成, 又技能,武器获得
-		/// 非属性点加成
+		/// 元素伤害加成
 		/// </summary>
 		SpellPowerMultiplier,
 
 		/// <summary>
-		/// 意念伤害加成, 又技能,武器获得
-		/// 非属性点加成
+		/// 意念伤害加成
 		/// </summary>
 		MindPowerMultiplier,
 
@@ -201,6 +193,11 @@ namespace Sword
 		/// 护甲穿透
 		/// </summary>
 		ArmorPenetration,
+
+		/// <summary>
+		/// 猛击几率
+		/// </summary>
+		SmashChance,
 	}
 
 	/// <summary>
@@ -227,7 +224,6 @@ namespace Sword
 
 		//反弹伤害几率
 		DamageReflectChance,
-
 		//反弹伤害的伤害比例, 反弹伤害是混乱伤害
 		DamageReflectMultiplier,
 	}

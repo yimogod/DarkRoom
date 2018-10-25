@@ -80,7 +80,6 @@ namespace Sword
 			attr.InitAttr(Hero.ClassEnum, Hero.RaceEnum, 1f);
 			attr.SetPrimaryAttrPersistentValue(Hero.Strength, Hero.Dexterity, Hero.Constitution,
 				Hero.Magic, Hero.Willpower, Hero.Luck);
-			attr.InitSubAttr();
 			attr.InitLevel(Hero.Level);
 
 			//目前我们仅仅英雄会有不同的武器

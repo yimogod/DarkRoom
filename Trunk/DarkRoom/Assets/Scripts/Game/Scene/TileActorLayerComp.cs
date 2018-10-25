@@ -67,7 +67,6 @@ namespace Sword
 
 			var attr = entity.AttributeSet;
 			attr.InitAttr(meta.SubClass, meta.SubRace, meta.HealthRank);
-			attr.InitSubAttr();
 			attr.InitLevel(1);
 			
 			ActorVO vo = new ActorVO();

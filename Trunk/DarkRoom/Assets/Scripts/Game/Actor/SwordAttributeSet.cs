@@ -42,7 +42,6 @@ namespace Sword
 
 		//------------------------------------ 角色当前的属性 ----------------
 		private SwordPrimaryAttributeSet m_primaryAttr;
-		private SwordSubAttributeSet m_subAttr;
 		private SwordResourceAttributeSet m_resAttr;
 		private SwordPowerAttributeSet m_powerAttr;
 		private SwordArmorAttributeSet m_armorAttr;
@@ -91,6 +90,10 @@ namespace Sword
 			m_primaryAttr = new SwordPrimaryAttributeSet();
 			m_primaryAttr.InitFromClassAndRace(classMeta, raceMeta);
 
+			m_powerAttr = new SwordPowerAttributeSet(m_primaryAttr);
+
+			m_armorAttr = new SwordArmorAttributeSet(m_primaryAttr);
+
 			m_resAttr = new SwordResourceAttributeSet(m_primaryAttr);
 			m_resAttr.InitClassAndRace(classMeta, raceMeta, healthRank);
 		}
@@ -107,14 +110,6 @@ namespace Sword
 			m_primaryAttr.Constitution.AddPersistentValue(constitution);
 			m_primaryAttr.Willpower.AddPersistentValue(willpower);
 			m_primaryAttr.Luck.AddPersistentValue(luck);
-		}
-
-		/// <summary>
-		/// 由主属性计算出的二级属性的初始值
-		/// </summary>
-		public void InitSubAttr()
-		{
-			m_subAttr = new SwordSubAttributeSet(m_primaryAttr);
 		}
 
 		public void InitLevel(int value)
