@@ -23,7 +23,7 @@ namespace DarkRoom.Game
 	/// </summary>
 
 	[RequireComponent(typeof(CPawnPathFollowingComp))]
-	public class CController : MonoBehaviour, IHaveLocalPosition, ICanSearchUnits
+	public class CController : MonoBehaviour, IHaveLocalPosition
 	{
 		/// <summary>
 		/// 创建pawn成功后的回调
@@ -45,16 +45,12 @@ namespace DarkRoom.Game
 		/// <summary>
 		/// controller持有的view对象
 		/// </summary>
-		public CPawnEntity Pawn {
-			get { return m_pawn; }
-		}
+		public CPawnEntity Pawn => m_pawn;
 
 		/// <summary>
 		/// 返回controller的位置. 快捷引用
 		/// </summary>
-		public virtual Vector3 LocalPosition {
-			get { return m_pawn.LocalPosition; }
-		}
+		public virtual Vector3 LocalPosition =>m_pawn.LocalPosition;
 
 		protected virtual void Awake()
 		{
@@ -93,22 +89,6 @@ namespace DarkRoom.Game
 		/// </summary>
 		public virtual void InstigatedAnyDamage(float damage, CDamagePacket damageType, CController instigatedBy, CController damageCauser)
 		{
-		}
-
-		/// <summary>
-		/// 搜索在center周围radius范围内的单位
-		/// </summary>
-		public virtual List<CController> SearchUnits(Vector3 center, float radius)
-		{
-			return new List<CController>();
-		}
-
-		/// <summary>
-		/// 寻找我整个团队的成员
-		/// </summary>
-		public virtual List<CController> SearchUnits()
-		{
-			return new List<CController>();
 		}
 
 		/// <summary>

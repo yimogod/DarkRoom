@@ -9,45 +9,15 @@ namespace Sword
 	/// 武器配表, 从目前看来跟abilityeffect有相当一部分重合
 	/// 先这么干着. 然后再看如何合并
 	/// </summary>
-	public class CWeaponMeta : EquipmentMeta
+	public class WeaponMeta : EquipmentMeta
 	{
-		/// <summary>
-		/// 武器的射击间隔, cd时间, 基于秒
-		/// </summary>
-		public float Period = 0.5f;
-
-		/// <summary>
-		/// 射程,基于米
-		/// </summary>
-		public float Range = 5f;
-
-		/// <summary>
-		/// 最短射程. 小于这个距离也不能攻击
-		/// 比如箭, 太近就不能射了. 就必须后退.
-		/// 但moba里面没这个设定. 我们可以将MinRange设为0
-		/// </summary>
-		public float MinRange = 0;
-
-		/// <summary>
-		/// 武器前摇, 英文是back也是前摇
-		/// </summary>
-		public float Backswing = 0.2f;
-
-		/// <summary>
-		/// 攻击期间是否允许移动
-		/// </summary>
-		public bool AllowMovement = false;
+		public WeaponType WeaponType;
 
 		/// <summary>
 		/// 武器自身提供的伤害值.
 		/// 如果武器发射飞行物. 那么这个值会覆盖飞行物效果的伤害
 		/// </summary>
 		public int Damage = 0;
-
-		/// <summary>
-		/// 是否是近战武器. 还是靠发射发射物或者魔法的武器
-		/// </summary>
-		public bool Melee = false;
 
 		/// <summary>
 		/// 武器开火或者使用产生的效果
@@ -63,13 +33,42 @@ namespace Sword
 		/// </summary>
 		public string OnEquipedEffect;
 
-		/// <summary>
-		/// 武器开始攻击的视觉效果
-		/// 可以理解为动作播放第一帧时产生的效果
-		/// </summary>
-		public string LaunchVFX;
 
-		public CWeaponMeta(int id) : base(id) { }
+		/// <summary>
+		/// 射程,基于米
+		/// TODO 改为根据weapontype来定义
+		/// </summary>
+		public float AtkRange
+		{
+			get { return 5f; }
+		}
+
+		/// <summary>
+		/// 是否射击武器
+		/// </summary>
+		public bool RangedWeapon
+		{
+			get { return false; }
+		}
+
+		/// <summary>
+		/// 是否魔法武器
+		/// </summary>
+		public bool MagaWeapon
+		{
+			get { return false; }
+		}
+
+		/// <summary>
+		/// 是否双手武器
+		/// </summary>
+		public bool TwoHand
+		{
+			get { return false; }
+		} 
+
+
+		public WeaponMeta(int id) : base(id) { }
 	}
 
 	public class WeaponMetaParser : CMetaParser
@@ -81,13 +80,10 @@ namespace Sword
 				m_reader.MarkRow(i);
 				if (i == 0) continue;
 
-				CWeaponMeta meta = new CWeaponMeta(m_reader.ReadInt());
+				WeaponMeta meta = new WeaponMeta(m_reader.ReadInt());
 				meta.NameKey = m_reader.ReadString();
+				meta.WeaponType = (WeaponType)m_reader.ReadInt();
 				meta.Prefab = m_reader.ReadString();
-				meta.Period = m_reader.ReadInt() * 0.001f;
-				meta.Range = m_reader.ReadFloat();
-				meta.Backswing = m_reader.ReadFloat();
-				meta.AllowMovement = m_reader.ReadBool();
 				meta.Effect = m_reader.ReadString();
 				meta.OnEquipedEffect = m_reader.ReadString();
 				meta.Damage = m_reader.ReadInt();

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using DarkRoom.Game;
+﻿using DarkRoom.Game;
 using UnityEngine;
 
 namespace Sword
@@ -17,11 +15,6 @@ namespace Sword
 		/// 资源地址, 生成对象的时候赋值
 		/// </summary>
 		public string Address;
-
-		/// <summary>
-		/// 名称
-		/// </summary>
-		//public string Name;
 
 		/// <summary>
 		/// actor的属性,包含蓝,红,攻,防

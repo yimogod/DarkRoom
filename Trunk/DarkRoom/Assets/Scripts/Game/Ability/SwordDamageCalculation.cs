@@ -4,7 +4,7 @@ using DarkRoom.GamePlayAbility;
 
 namespace Sword
 {
-    public class DefaultPhysicalCalculation : CAbilityAttributeExecutionCalculation
+    public class SwordDamageCalculation : CAbilityAttributeExecutionCalculation
     {
         public override void Execute(IGameplayAbilityUnit instigator, IGameplayAbilityUnit victim)
         {

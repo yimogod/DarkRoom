@@ -5,6 +5,8 @@ using DarkRoom.Game;
 
 namespace Sword
 {
+
+	//--------------------- Hero Attribute ----------------
 	/// <summary>
 	/// 基础职业
 	/// </summary>
@@ -314,6 +316,123 @@ namespace Sword
 		Mind,
 	}
 
+	//--------------------- item ----------------------
+
+	public enum ItemType
+	{
+		/// <summary>
+		/// 道具(血瓶, 饼干)
+		/// </summary>
+		Props = 1,
+
+		/// <summary>
+		/// 材料(宝石,毛皮)
+		/// </summary>
+		Material,
+
+		/// <summary>
+		/// 装备
+		/// </summary>
+		Equipment,
+	}
+
+	//Slot 和 type是多对多的关系, 所以不能通过slot获得type, 反之亦然
+	public enum EquipSlot
+	{
+		Head,//头盔
+		Neck,//项链
+		Chest,//盔甲
+		Waist,//腰带
+		Hand, //手套
+		LeftRing,
+		RightRing,
+		Leg,
+		Feet,//鞋
+		PrimaryWeapon,
+		SecondaryWeapon,
+		Count,
+	}
+
+	public enum EquipType
+	{
+		Null,
+		Cap,
+		Necklace,
+		Armor,
+		Belt,
+		Glove, //手套
+		Ring,
+		Trouser,
+		Shoe,
+		Weapon,
+		Sheild,
+		Count
+	}
+
+	public enum EquipMethod
+	{
+		Null,
+		LinkAsChild,
+		ReplaceSkinMesh,
+		UseSelfAnimator,
+	}
+
+	public enum WeaponHand
+	{
+		/// <summary>
+		/// 单手武器
+		/// </summary>
+		SingleHand,
+
+		/// <summary>
+		/// 双手武器
+		/// </summary>
+		TwoHand,
+	}
+
+	/// <summary>
+	/// 武器类型
+	/// 武器类型定了, 意味着单双手, 基础攻击距离定了就
+	/// </summary>
+	public enum WeaponType
+	{
+		//赤手空拳
+		Fist = 0,
+		//单手剑
+		Sword,
+		//爪
+		Claw,
+		//匕首
+		Dagger,
+		//盾牌
+		Shield,
+
+		//大剑, 一般双手
+		GreateSword,
+		//枪之类的长柄武器, 一般双手
+		Polearm,
+
+		//弓箭, 一般双手
+		Bow,
+		//弩, 一般单手
+		Crossbow,
+		//手枪
+		Pistol,
+		//散弹枪
+		Shotgun,
+		//大炮, 双手
+		Cannon,
+		//魔杖, 单手
+		Wand,
+		//法杖, 双手
+		Staff,
+	}
+
+	//---------------------- damage -----------------------
+	/// <summary>
+	/// 包含6中属性的结构体包
+	/// 用于攻击, 防御, 抗性
+	/// </summary>
 	public struct DamageTypePacket
 	{
 		public float Physical;
@@ -325,22 +444,27 @@ namespace Sword
 	}
 
 	/// <summary>
-	/// 伤害包
+	/// 平铺开所有计算伤害需要的属性
+	/// 估计最后会有几十个属性
 	/// </summary>
 	public class SwordDamagePacket : CDamagePacket
 	{
+		// ------------------计算后的伤害数值-------------------
 		public float OutDamage;
 
 		public float OutLifeSteal;
 
 		public bool OutIsDodged;
 
+		// ------------- 攻击者的属性 --------------
 		public float SourceOriginalDamage;
 
 		public float SourceCritChance;
 
 		public float SourceCritMultiplier;
 
+
+		// ------------ 受害者的属性 -------------
 		public float TargetDodgeChance;
 
 		public float TargetArmorReduction;

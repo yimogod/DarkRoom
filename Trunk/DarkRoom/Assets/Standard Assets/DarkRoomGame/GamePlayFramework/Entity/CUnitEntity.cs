@@ -63,6 +63,11 @@ namespace DarkRoom.Game
 		/// </summary>
 		public Vector3 LocalPosition => m_spacial.localPosition;
 
+		/// <summary>
+		/// 主体的半径, 读取的是空间组件的半径
+		/// </summary>
+		public float Radius => m_spacial.Radius;
+
 		public virtual bool Dead
 		{
 			get { return m_dead; }
@@ -110,7 +115,7 @@ namespace DarkRoom.Game
 			return Team == value;
 		}
 
-		public bool IsFriendTeam(CPawnEntity value)
+		public bool IsFriendTeam(CUnitEntity value)
 		{
 			return IsFriendTeam(value.Team);
 		}
@@ -130,7 +135,7 @@ namespace DarkRoom.Game
 			return Team != value;
 		}
 
-		public bool IsEnemyTeam(CPawnEntity value)
+		public bool IsEnemyTeam(CUnitEntity value)
 		{
 			return IsEnemyTeam(value.Team);
 		}
@@ -179,27 +184,6 @@ namespace DarkRoom.Game
 		/// </summary>
 		public virtual void PlayAction(string action, float normalizedTime = 0)
 		{
-		}
-
-		/// <summary>
-		/// 应用伤害到本actor
-		/// </summary>
-		/// <param name="damageAmount">受到的伤害数值</param>
-		/// <param name="damageEvent">对伤害进行二次处理的伤害事件打包</param>
-		/// <param name="eventInstigator">谁(人/机关/trigger)造成的伤害</param>
-		/// <param name="damageCauser">直接造成伤害的物品, 比如飞行物</param>
-		/// <returns></returns>
-		//public virtual float TakeDamage(float damageAmount, CDamageEvent damageEvent, CController eventInstigator, CUnitEntity damageCauser)
-		//{
-		//if (!CanBeDamaged) return 0;
-		//return damageAmount;
-		//}
-		/// <summary>
-		/// 主体的半径, 读取的是空间组件的半径
-		/// </summary>
-		public float Radius
-		{
-			get { return m_spacial.Radius; }
 		}
 
 		public virtual void Die()

@@ -131,11 +131,6 @@ namespace Sword
 			Exp = 0;
 		}
 
-		public float CalculateDamage()
-		{
-			return 0f;
-		}
-
 		/** 力量 */
 		//public float Strength => StrengthBase + StrengthAddOn;
 		// public float StrengthBase=> m_gm.GetStrengthBase(m_class, m_level);

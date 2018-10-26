@@ -2,52 +2,13 @@ using System.Collections.Generic;
 using DarkRoom.Game;
 
 namespace Sword {
-	public class EquipmentMeta : CBaseMeta{
-		//Slot 和 type是多对多的关系, 所以不能通过slot获得type, 反之亦然
-		public enum EquipSlot{
-			Head,//头盔
-			Neck,//项链
-			Chest,//盔甲
-			Waist,//腰带
-			Hand, //手套
-			LeftRing,
-			RightRing,
-			Leg,
-			Feet,//鞋
-			PrimaryWeapon,
-			SecondaryWeapon,
-			Count,
-		}
-
-		public enum EquipType{
-			Null,
-			Cap,
-			Necklace,
-			Armor,
-			Belt,
-			Glove, //手套
-			Ring,
-			Trouser,
-			Shoe,
-			Weapon,
-			Sheild,
-			Count
-		}
-
-		public enum EquipMethod {
-			Null,
-			LinkAsChild,
-			ReplaceSkinMesh,
-			UseSelfAnimator,
-		}
-
+	public class EquipmentMeta : ItemMeta{
 		//prefab命名规范
 		//Preb_Armor_001_0(1)(2)
 		//001是id, 最后的0/1/2是对应的标准骨骼数
 		//比如所有参与换装的角色总共有10种, 那么就是0-9
 		//比如火炬之光4职业, 2个性别. 因为他的所有的职业身高一样, 所以就两套骨骼, 一套男的, 一套女的
 		//那么就0/1
-		public string Prefab;
 		public EquipType Type;
 		public EquipMethod Method;
 
@@ -152,8 +113,8 @@ namespace Sword {
 				EquipmentMeta meta = new EquipmentMeta(m_reader.ReadInt());
 				meta.NameKey = m_reader.ReadString();
 				meta.Prefab = m_reader.ReadString();
-				meta.Type = (EquipmentMeta.EquipType)m_reader.ReadInt();
-				meta.Method = (EquipmentMeta.EquipMethod)m_reader.ReadInt();
+				meta.Type = (EquipType)m_reader.ReadInt();
+				meta.Method = (EquipMethod)m_reader.ReadInt();
 
 				EquipmentMetaManager.AddMeta(meta);
 			}

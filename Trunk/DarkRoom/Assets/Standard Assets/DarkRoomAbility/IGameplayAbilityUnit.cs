@@ -17,20 +17,30 @@ namespace DarkRoom.GamePlayAbility
 
         Vector3 LocalPosition { get; }
 
-        /// <summary>
-        /// 两者是否朋友 
-        /// </summary>
-        bool IsFriendTeam(IGameplayAbilityUnit target);
+		/// <summary>
+		/// 本类是否合法, 比如死亡就不合法
+		/// </summary>
+		bool InValid { get; }
+
+		/// <summary>
+		/// 放至效果go的transform
+		/// </summary>
+		GameObject EffectLayer { get; }
+
+		/// <summary>
+		/// 放至buff go的transform
+		/// </summary>
+		GameObject BuffLayer { get; }
+
+		/// <summary>
+		/// 两者是否朋友 
+		/// </summary>
+		bool IsFriendTeam(IGameplayAbilityUnit target);
 
         /// <summary>
         /// 两者是否敌人
         /// </summary>
         bool IsEnemyTeam(IGameplayAbilityUnit target);
-
-        /// <summary>
-        /// 本类是否合法, 比如死亡就不合法
-        /// </summary>
-        bool InValid { get; }
 
         //------------------- for aiblity ---------------------------------
         CAbilitySystem AbilitySystem { get; }
@@ -39,7 +49,6 @@ namespace DarkRoom.GamePlayAbility
         //------------------- for aiblity end ---------------------------------
 
         //------------------- for effect ---------------------------------
-        GameObject EffectLayer { get; }
 
         /// <summary>
         /// 查询符合的对象, 放入列表
@@ -48,7 +57,7 @@ namespace DarkRoom.GamePlayAbility
         //------------------- for effect end ---------------------------------
 
         //------------------- for buff ---------------------------------
-        GameObject BuffLayer { get; }
+        
         //------------------- for effect end ---------------------------------
 
         /// <summary>

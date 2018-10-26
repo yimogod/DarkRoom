@@ -19,13 +19,17 @@ namespace Sword
 	/// 
 	/// 另外这个武器不一定会有真实的可显示
 	/// </summary>
-	public class WeaponEntity : MonoBehaviour{
+	public class WeaponEntity : MonoBehaviour
+	{
+		public DamageTypePacket MinDamage;
+		public DamageTypePacket MaxDamage;
+
 		private int m_meta;
 
 		//武器自带的效果, 只会被创建一次
 		//private CEffect m_effect = null;
 
-		public CWeaponMeta Meta{
+		public WeaponMeta Meta{
 			//get{ return CEquipmentMetaManager.GetWeapon(m_meta); }
 			get { return null; }
 		}

@@ -9,11 +9,8 @@ using UnityEngine;
 namespace Sword
 {
 	[RequireComponent(typeof(HeroEntity))]
-	public class HeroController : CPlayerController
+	public class HeroController : ActorController
 	{
-		private SwordGameState gameState =>
-			CWorld.Instance.GetGameState<SwordGameState>();
-
 		private HeroEntity m_entity => m_pawn as HeroEntity;
 
 		protected override void Start()
