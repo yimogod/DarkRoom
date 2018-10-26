@@ -47,18 +47,18 @@ namespace Sword
 				return;
 			}
 
-			float value = damagePacket.SourceOriginalDamage;
+			/*float value = damagePacket.SourceOriginalDamage;
 			float randCrit = Random.Range(0.0f, 100.0f);
 			if (randCrit < damagePacket.SourceCritChance)
 			{
 				if (damagePacket.SourceCritMultiplier < 1.5f) damagePacket.SourceCritMultiplier = 1.5f;
 				value *= damagePacket.SourceCritMultiplier;
-			}
+			}*/
 
-			float minDamage = value * 0.1f;
-			float modifyDamage = value - damagePacket.TargetArmorReduction;
-			if (modifyDamage < minDamage) modifyDamage = minDamage;
-			damagePacket.OutDamage = modifyDamage;
+			//float minDamage = value * 0.1f;
+			//float modifyDamage = 0;//value - damagePacket.TargetArmorReduction;
+			//if (modifyDamage < minDamage) modifyDamage = minDamage;
+			//damagePacket.OutDamage = modifyDamage;
 		}
 
 		/** 当前的经验是否可以升级 */

@@ -46,7 +46,7 @@ namespace DarkRoom.PCG
 	                //初始化数据为全部死亡
                     m_pondMap[x, y] = 0;
 
-	                float perlin = CDarkRandom.NextPerlinValueNoise(x, y, 0.4f);
+	                float perlin = CPerlinNoise.NextPerlinValueNoise(x, y, 0.4f);
 	                m_perlinMap[x, y] = perlin;
 
 	                if (perlin > m_lowestValue) continue;
