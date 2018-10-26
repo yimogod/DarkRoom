@@ -28,6 +28,9 @@ namespace Sword
 		public int Willpower;
 		public int Luck;
 
+		public int PrimaryWeapon;
+		public int SecondryWeapon;
+
 		public HeroEntity Entity;
 	}
 }

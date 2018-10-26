@@ -13,54 +13,6 @@ namespace Sword
 		/// </summary>
 		public const int MAX_LEVEL = 9;
 
-		/// <summary>
-		/// 行凶者伤害受害者
-		/// </summary>
-		public void CalDamage(ActorEntity instigator, ActorEntity victim)
-		{
-			var attr1 = instigator.AttributeSet;
-			var attr2 = victim.AttributeSet;
-
-
-		}
-
-
-		public void ModifyDamage(SwordDamagePacket damagePacket)
-		{
-			if (damagePacket.TargetDodgeChance > 50.0f)
-			{
-				Debug.LogWarning("Target DodgeChance is bigger than 0.5f");
-				return;
-			}
-
-			float randDoage = Random.Range(0.0f, 100.0f);
-			if (randDoage < damagePacket.TargetDodgeChance)
-			{
-				damagePacket.OutDamage = 0;
-				damagePacket.OutIsDodged = true;
-				return;
-			}
-
-			if (damagePacket.SourceCritChance > 90.0f)
-			{
-				Debug.LogWarning("Source CritChance is bigger than 0.9f");
-				return;
-			}
-
-			/*float value = damagePacket.SourceOriginalDamage;
-			float randCrit = Random.Range(0.0f, 100.0f);
-			if (randCrit < damagePacket.SourceCritChance)
-			{
-				if (damagePacket.SourceCritMultiplier < 1.5f) damagePacket.SourceCritMultiplier = 1.5f;
-				value *= damagePacket.SourceCritMultiplier;
-			}*/
-
-			//float minDamage = value * 0.1f;
-			//float modifyDamage = 0;//value - damagePacket.TargetArmorReduction;
-			//if (modifyDamage < minDamage) modifyDamage = minDamage;
-			//damagePacket.OutDamage = modifyDamage;
-		}
-
 		/** 当前的经验是否可以升级 */
 		public bool CanLevelUp(int currLevel, int currExp)
 		{
@@ -86,6 +38,15 @@ namespace Sword
 				result = 10 - level * (level * level - 173f * level + 172f) * 0.05f;
 			}
 			return Mathf.CeilToInt(result);
+		}
+
+		public void PrintExpList(int maxLevel = 10)
+		{
+			for (int i = 1; i <= maxLevel; i++)
+			{
+				int exp = GetNextLevelUpExp(i);
+				Debug.Log($"{i} lv = {exp}");
+			}
 		}
 
 		//---------------------------------------------------------------------------------

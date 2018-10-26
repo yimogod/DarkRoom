@@ -94,7 +94,7 @@ namespace DarkRoom.PCG
 		/// 产生一个根据柏林噪声生成的参数
 		/// </summary>
 		/// <returns>The perlin value noise.</returns>
-		public static float NextPerlinValueNoise(int col, int row, float div)
+		public static float NextPerlinNoiseValue(int col, int row, float div)
 		{
 			int xf = Random.Range(0, 100);
 			int yf = Random.Range(0, 100);
