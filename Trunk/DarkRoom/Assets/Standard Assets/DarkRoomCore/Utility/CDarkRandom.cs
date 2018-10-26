@@ -2,7 +2,7 @@ using System;
 namespace DarkRoom.Core
 {
 	/// <summary>
-	/// 自定义的全局random
+	/// 自定义的全局random,用于框架内部, GamePlay尽量不用
 	/// </summary>
 	public class CDarkRandom {
 		private static Random m_rand = new Random();
@@ -57,17 +57,6 @@ namespace DarkRoom.Core
 		public static bool SmallerThan(float value) {
 			float noise = Next();
 			return noise < value;
-		}
-
-		/// <summary>
-		/// 产生一个根据柏林噪声生成的参数
-		/// </summary>
-		/// <returns>The perlin value noise.</returns>
-		public static float NextPerlinValueNoise(int col, int row, float div) {
-			int xf = CDarkRandom.Next(0, 100);
-			int yf = CDarkRandom.Next(0, 100);
-			float noise = UnityEngine.Mathf.PerlinNoise((col + xf) / div, (row + yf) / div);
-			return noise;
 		}
 	}
 }

@@ -223,6 +223,8 @@ namespace Sword
 		
 		//格挡几率
 		ParryChance,
+		//闪避几率
+		DodgeChance,
 
 		//反弹伤害几率
 		DamageReflectChance,
@@ -457,7 +459,10 @@ namespace Sword
 		public bool OutIsDodged;
 
 		// ------------- 攻击者的属性 --------------
-		public float SourceOriginalDamage;
+		//攻击来源的原始攻击力合集
+		//比如裸武器或者裸技能提供的攻击力数据
+		public DamageTypePacket MinRawAttackPower;
+		public DamageTypePacket MaxRawAttackPower;
 
 		public float SourceCritChance;
 
@@ -465,8 +470,12 @@ namespace Sword
 
 
 		// ------------ 受害者的属性 -------------
+		public DamageTypePacket DefencePower;
+
+
+		//闪避几率
 		public float TargetDodgeChance;
 
-		public float TargetArmorReduction;
+
 	}
 }

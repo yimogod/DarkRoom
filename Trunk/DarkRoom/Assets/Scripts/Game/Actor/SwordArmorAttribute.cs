@@ -15,6 +15,8 @@ namespace Sword
 
 		//格挡几率
 		public ParryChanceAttribute ParryChance;
+		//闪避几率
+		public ParryChanceAttribute DodgeChance;
 
 		//物理伤害减免百分比
 		public PhysicalHardinessAttribute PhysicalHardiness;
@@ -34,6 +36,7 @@ namespace Sword
 			SpellSave = new SpellSaveAttribute(primary);
 			MindSave = new MindSaveAttribute(primary);
 			ParryChance = new ParryChanceAttribute(primary);
+			DodgeChance = new ParryChanceAttribute(primary);
 			PhysicalHardiness = new PhysicalHardinessAttribute(primary);
 			SpellHardiness = new SpellHardinessAttribute(primary);
 			MindHardiness = new MindHardinessAttribute(primary);
@@ -86,6 +89,16 @@ namespace Sword
 		public override float InitialValue => m_primary.Constitution.Value * 0.002f;
 
 		public ParryChanceAttribute(SwordPrimaryAttributeSet primary) : base(primary, DefencePower.ParryChance)
+		{
+		}
+	}
+
+	/// <summary>
+	/// 格挡几率
+	/// </summary>
+	public class DodgeChanceAttribute : SwordArmorAttribute
+	{
+		public DodgeChanceAttribute(SwordPrimaryAttributeSet primary) : base(primary, DefencePower.ParryChance)
 		{
 		}
 	}

@@ -8,17 +8,26 @@ namespace Sword
 {
 	public class SwordAttributeSet : CAbilityAttributeSet
 	{
-		//------------------------------------ 单个属性的get接口 ----------------
+		//----------------------- 单个属性的get接口 ----------------------
+		//--------------------- 这里我们平铺所有的属性--------------------
+		//资源
 		public float MaxHealth => m_resAttr.MaxHealth.Value;
 		public float MaxMana => m_resAttr.MaxMana.Value;
 		public float MaxStamina => m_resAttr.MaxStamina.Value;
 
+		//主属性
 		public float Strength => m_primaryAttr.Strength.Value;
 		public float Dexterity => m_primaryAttr.Dexterity.Value;
 		public float Intelligence => m_primaryAttr.Intelligence.Value;
 		public float Constitution => m_primaryAttr.Constitution.Value;
 		public float Willpower => m_primaryAttr.Willpower.Value;
 		public float Luck => m_primaryAttr.Luck.Value;
+
+		//攻击属性
+
+
+		//防御属性
+		public float DodgeChance => m_armorAttr.DodgeChance.Value;
 
 		/// <summary>
 		/// 移动力 TODO 移动到side attribute

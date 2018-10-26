@@ -14,7 +14,10 @@ namespace DarkRoom.GamePlayAbility
             get { return GetType().FullName; }
         }
 
-        public virtual void Execute(IGameplayAbilityUnit instigator, IGameplayAbilityUnit victim)
+		/// <summary>
+		/// victim 攻击 instigator
+		/// </summary>
+		public virtual void Execute(IGameplayAbilityUnit instigator, IGameplayAbilityUnit victim)
         {
 
         }

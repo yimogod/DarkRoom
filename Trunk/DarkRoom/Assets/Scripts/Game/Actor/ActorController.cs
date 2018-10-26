@@ -9,6 +9,7 @@ namespace Sword
 {
 	public class ActorController : CPlayerController, IGameplayAbilityUnit
 	{
+
 		protected SwordGameState gameState =>
 			CWorld.Instance.GetGameState<SwordGameState>();
 
@@ -18,6 +19,7 @@ namespace Sword
 		public GameObject BuffLayer { get; }
 		public GameObject EffectLayer { get; }
 		public bool InValid => m_pawn.DeadOrDying;
+		//-----------------------------------------------
 
 		public bool IsFriendTeam(IGameplayAbilityUnit target)
 		{
